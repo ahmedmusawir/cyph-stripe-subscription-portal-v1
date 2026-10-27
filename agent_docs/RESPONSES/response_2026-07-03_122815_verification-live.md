@@ -5,7 +5,7 @@
 
 ## How this was verified (real, not proxy)
 - **Supabase is reachable** (my earlier "unreachable" was a flawed test — corrected).
-- **Real super-admin login** with the operator-provided credential `superadmin@email.com` (corrected from the "suparadmin" typo) → `/api/auth/login` returns a real Supabase session with `role: "superadmin"`.
+- **Real super-admin login** with the operator-provided credential `[REDACTED-2026-10-26]` (corrected from the "suparadmin" typo) → `/api/auth/login` returns a real Supabase session with `role: "superadmin"`.
 - **Real browser walk** via Playwright driving the **system Google Chrome** (`/usr/bin/google-chrome-stable`) against `npm run dev` — logged in as super-admin, walked all 9 screens, fired a GREEN action, captured screenshots in **dark + light + 375px**, inspected the live DOM. Screenshots reviewed visually.
 
 ## Per-gate results (all PASS, live)

@@ -4,12 +4,12 @@ import "./globals.scss";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "./providers/ThemeProvider";
 
-// MissionControl typeface (Metro Warm). Replaces the kit's Inter app-wide.
+// Cyber Pharma typeface (Metro Warm): Saira, app-wide.
 const saira = Saira({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export const metadata: Metadata = {
-  title: "MissionControl — Super Admin",
-  description: "Cyber Pharma platform operations console (PHI-free).",
+  title: "Cyber Pharma — Subscription Portal",
+  description: "Cyber Pharma subscription portal (foundation).",
 };
 
 export default function RootLayout({

@@ -1,64 +1,21 @@
-# Deployment Checklist — Cyph Mission Control
+# Deployment — NOT CONFIGURED
 
-**App:** `cyph-mission-ctrl` · **Service:** `cyph-mission-ctrl-prod` · **Project:** `cyberize-nextjs-staging` · **Region:** `us-east1` · **Domain:** `mission-portal.cyberizedev.com`
+**App:** `cyph-stripe-subscription-portal-v1` · **Status (2026-10-26):** no cloud target.
 
----
+This repo was cloned from the Mission Control FFM, whose `deploy.sh`, `cloudbuild.yaml`,
+`init-app.sh` and checklist pointed at that app's **live** Cloud Run service. Those files
+were replaced with fail-safe stubs (each prints "NOT CONFIGURED" and exits 1) so nothing
+in this repo can deploy to, or reconfigure, the Mission Control service.
 
-## 1. Pre-Flight
+What remains:
+- `Dockerfile` — generic multi-stage Next.js standalone image (unchanged, target-agnostic).
+- `next.config.js` — `output: "standalone"` (required by the Dockerfile).
 
-- [ ] Files in project root: `Dockerfile`, `cloudbuild.yaml`, `deploy.sh`, `init-app.sh`
-- [ ] `output: "standalone"` present in `next.config.js` (required by Dockerfile Stage 3)
-- [ ] Scripts executable: `chmod +x deploy.sh init-app.sh`
-- [ ] Authenticated: `gcloud auth list`
-- [ ] Correct project: `gcloud config get-value project` → should show `cyberize-nextjs-staging`
+What does **not** exist yet (and must not be invented ad hoc):
+- GCP project / region, Cloud Run service name, runtime service account
+- Secret Manager entries, custom domain, DNS
+- CI trigger
 
-## 2. One-Time Setup
-
-- [ ] Run `./init-app.sh`
-- [ ] Update the secret with the real value (paste the actual Supabase secret key from `.env.local`):
-  ```bash
-  echo -n 'REAL_SUPABASE_SECRET_KEY' | gcloud secrets versions add cyph-mission-ctrl-supabase-secret-key --data-file=- --project cyberize-nextjs-staging
-  ```
-- [ ] Verify secret exists:
-  ```bash
-  gcloud secrets list --project cyberize-nextjs-staging --filter="name:cyph-mission-ctrl"
-  ```
-
-## 3. First Deploy
-
-- [ ] Run `./deploy.sh`
-- [ ] Custom domain is known upfront → `NEXT_PUBLIC_APP_URL` / `NEXT_PUBLIC_SITE_URL` are already `https://mission-portal.cyberizedev.com` — NO two-deploy dance needed
-- [ ] Note the auto-assigned `*.run.app` URL from output (works immediately, before DNS)
-- [ ] Verify app loads at the `*.run.app` URL (login page; cookies need the custom domain + HTTPS to be fully correct)
-
-## 4. DNS + SSL
-
-- [ ] Create domain mapping:
-  ```bash
-  gcloud run domain-mappings create --service cyph-mission-ctrl-prod --domain mission-portal.cyberizedev.com --region us-east1 --project cyberize-nextjs-staging
-  ```
-- [ ] Get DNS records:
-  ```bash
-  gcloud run domain-mappings describe --domain mission-portal.cyberizedev.com --region us-east1 --project cyberize-nextjs-staging
-  ```
-- [ ] Add CNAME in DigitalOcean: hostname=`mission-portal`, value=`ghs.googlehosted.com.`, TTL=3600
-- [ ] Wait 15–30 min for Google-managed SSL
-- [ ] Verify: `curl -I https://mission-portal.cyberizedev.com`
-
-## 5. Invoker Policy (PUBLIC)
-
-- [ ] Set access:
-  ```bash
-  gcloud run services add-iam-policy-binding cyph-mission-ctrl-prod --project cyberize-nextjs-staging --region us-east1 --member="allUsers" --role="roles/run.invoker"
-  ```
-- [ ] Verify:
-  ```bash
-  gcloud run services get-iam-policy cyph-mission-ctrl-prod --project cyberize-nextjs-staging --region us-east1 --format="yaml(bindings)"
-  ```
-
-## 6. Done
-
-- [ ] App loads at `https://mission-portal.cyberizedev.com` with valid SSL
-- [ ] Login works with real Supabase (super-admin gate)
-- [ ] All 9 Mission Control screens work
-- [ ] Runtime secret accessible (Phase-2 infra — `SUPABASE_SECRET_KEY` mapped; unused by code today, verified by deploy success)
+When the Subscription Portal reaches its deploy phase, author the pipeline fresh with the
+cloud-deployment skill under `_SKILLS/CLOUD_DEPLOYMENT_SKILLS/`, with an explicitly approved
+target. Do not resurrect the Mission Control values.

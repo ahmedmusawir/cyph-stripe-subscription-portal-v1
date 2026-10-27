@@ -35,7 +35,7 @@ Gate: tsc clean. ✓
 | W1 | anonymous `/` | 307 → `/dashboard` ✓ |
 | W2 | anonymous `/dashboard` | 307 → `/login` ✓ |
 | W3 | `/login` renders | 200; "Forgot password" count = 0; "No PHI" badge present ✓ |
-| W4 | POST `api/auth/login` (superadmin@email.com, real Supabase) | 200 + session cookies ✓ |
+| W4 | POST `api/auth/login` ([REDACTED-2026-10-26], real Supabase) | 200 + session cookies ✓ |
 | W5 | authed `/` | 307 → `/dashboard` ✓ |
 | W6 | `/dashboard /owners /stores /onboarding /audit-log` authed | all 200 ✓ |
 | W7 | `/owners/own-marcus`, `/stores/sto-cedar`, `/onboarding/reg-101` authed | all 200 ✓ |

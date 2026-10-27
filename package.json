@@ -1,5 +1,5 @@
 {
-  "name": "cyph-mission-control-v1",
+  "name": "cyph-stripe-subscription-portal-v1",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,9 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:integration": "jest --testPathPatterns=__tests__/api",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:integration": "jest --testPathPatterns=__tests__/api"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",

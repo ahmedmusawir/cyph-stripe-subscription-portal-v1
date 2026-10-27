@@ -5,11 +5,10 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ShieldCheck } from "lucide-react";
 
-// REAL Supabase auth (kit /api/auth/login), gated on the super-admin role. This
-// is the operator's own login — the ONLY password field in the app (managing
-// other users never exposes one). Non-super-admins are denied and signed out.
+// REAL Supabase auth (kit /api/auth/login).
+// TEMPORARY GATE (cleanup 2026-10-26): still gated on the super-admin role —
+// non-super-admins are signed out. Customer sign-in policy arrives with the FFM.
 export function LoginPageContent() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -45,10 +44,10 @@ export function LoginPageContent() {
       return;
     }
 
-    // Real role from the auth response. Console is super-admin only.
+    // Real role from the auth response. TEMPORARY: super-admin only.
     if (result.data?.role !== "superadmin") {
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
-      setError("This console is restricted to super admins.");
+      setError("Sign-in is restricted to super admins during foundation work.");
       setLoading(false);
       return;
     }
@@ -68,10 +67,10 @@ export function LoginPageContent() {
           <img src="/logo-color.svg" alt="Cyber Pharma" className="h-10 w-10" />
           <div className="leading-tight">
             <p className="text-sm font-bold uppercase tracking-wide text-foreground">
-              Cyber Pharma v1
+              Cyber Pharma
             </p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
-              Mission Control
+              Subscription Portal
             </p>
           </div>
         </div>
@@ -108,13 +107,6 @@ export function LoginPageContent() {
             {loading ? "Signing in…" : "Sign in"}
           </Button>
         </form>
-
-        <div className="mt-4 flex items-center justify-end text-[11px] text-muted-foreground">
-          <span className="inline-flex items-center gap-1">
-            <ShieldCheck className="h-3 w-3" />
-            No PHI in this console
-          </span>
-        </div>
       </div>
     </div>
   );

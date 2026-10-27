@@ -52,7 +52,7 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // MissionControl semantic-four (Metro Warm). Coral stays --primary (brand,
+        // Cyber Pharma semantic-four (Metro Warm, shared). Coral stays --primary (brand,
         // never a status). Pills use tinted bg + colored text, e.g. bg-success/15 text-success.
         success: {
           DEFAULT: "hsl(var(--success))",

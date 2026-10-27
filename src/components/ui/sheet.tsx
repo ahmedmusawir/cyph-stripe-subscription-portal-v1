@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
  * - 1024px (lg): no change; callers hide the trigger where a rail persists.
  * - Touch targets: close button is a 44px hit area.
  *
- * Left-side only by design (MissionControl needs nothing else). Reconcile with
+ * Left-side only by design (the shell drawer needs nothing else). Reconcile with
  * the starter kit's blessed sheet.tsx at the next kit-sync (ledger note).
  */
 const Sheet = DialogPrimitive.Root;

@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* MissionControl — Metro Warm token layer (Mist = light, Slate = dark).
-   Values are the delivered design ground truth (_design .../style_tile.html).
-   Coral (--primary) is brand only, never a status. Flat corners (--radius: 0).
-   Installed here because the token block was absent on disk although the
-   COMPONENT_MANIFEST listed it delivered (doc-vs-disk drift). */
+/* Cyber Pharma — shared Metro Warm token layer (Mist = light, Slate = dark).
+   Inherited unchanged from the Mission Control FFM; the Subscription Portal
+   drinks from the same token well. Coral (--primary) is brand only, never a
+   status. Semantic four: success / warning / destructive / info. Flat corners
+   (--radius: 0). The Designer extends these tokens; nothing hardcodes colors. */
 @layer base {
   :root {
     --background: 217 16% 90%;
@@ -76,57 +76,4 @@
 
 body {
   scroll-behavior: smooth;
-}
-
-@layer base {
-  h1 {
-    @apply text-4xl font-bold text-gray-900 dark:text-white;
-  }
-
-  h2 {
-    @apply text-3xl font-bold text-gray-800 dark:text-white;
-  }
-
-  h3 {
-    @apply text-2xl font-bold text-gray-700 dark:text-white;
-  }
-
-  h4 {
-    @apply text-xl font-bold text-gray-600 dark:text-white;
-  }
-
-  h5 {
-    @apply text-lg font-bold text-gray-500 dark:text-white;
-  }
-
-  h6 {
-    @apply text-base font-bold text-gray-400 dark:text-white;
-  }
-}
-
-.strapiMarkdownRichText {
-  margin-top: 2rem;
-  // border: 1rem dotted pink;
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
-    margin-bottom: 1rem;
-  }
-  p {
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
-  }
-
-  ul {
-    list-style-type: disc;
-    padding-left: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  li {
-    margin-bottom: 0.5rem;
-  }
 }

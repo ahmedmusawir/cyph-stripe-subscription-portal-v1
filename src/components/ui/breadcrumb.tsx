@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Dependency-free (semantic nav + @radix-ui/react-slot, already installed).
-// Powers the always-visible context locks on store detail + onboarding detail.
+// Context locks for detail screens (no consumers until the FFM adds them).
 const Breadcrumb = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<"nav">

@@ -26,7 +26,7 @@ whether or not this repo ever goes public.
 **`RECOVERY.md:99` publishes a working superadmin login to a live public site.**
 
 ```
-## Verification credential (test): superadmin@email.com / pass1234
+## Verification credential (test): [REDACTED-2026-10-26] / [REDACTED-2026-10-26]
    (real Supabase, role superadmin)
 ```
 
@@ -235,7 +235,7 @@ superadmin path. `docs/` has 13 tracked files, all present, no dead links found.
 ## REQUIRED BEFORE PART 2 / PART 3
 
 **Immediate, independent of showcase:**
-1. Rotate `superadmin@email.com` password on the live Supabase project. Remove the
+1. Rotate `[REDACTED-2026-10-26]` password on the live Supabase project. Remove the
    credential line from `RECOVERY.md:99`.
 
 **Decision needed from operator — the showcase blocker:**
