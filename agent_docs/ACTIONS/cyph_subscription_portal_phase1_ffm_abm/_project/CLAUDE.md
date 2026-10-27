@@ -1,0 +1,2 @@
+# Project spine
+Read the parent FFM_ENTRY.md, then this directory's APP_BRIEF.md, DATA_CONTRACT.md, portal-contract.ts, IMPLEMENTATION_CONTRACT.md and UI_SPEC.md. RULINGS.md records the Director-approved adaptation and design errata. Real auth is inherited; all billing business services are mock. Do not wrap or rebuild auth to satisfy historical frontend-first examples. No database/Stripe/email/SSO/deployment work. The parent playbook describes internal execution tasks, not separate approval rounds.

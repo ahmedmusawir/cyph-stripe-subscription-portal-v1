@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="leaving"
+  data-states="leaving:Handing off to Stripe (busy),preview:Hosted Checkout stand-in (preview),declined:Declined on Stripe (reference),portal_preview:Customer Portal stand-in (preview)">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Secure payment — Pharmacy Books</title>
+<meta name="description" content="C05 External Stripe reference: handoff page before Stripe Checkout, a labelled stand-in for the hosted page with demo outcomes, and the Customer Portal stand-in. We do not design Stripe's pages.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+
+  <!-- Our page: the handoff moment -->
+  <div data-variant="leaving" class="mx-auto max-w-xl text-center">
+    <svg class="mx-auto h-8 w-8 animate-spin text-muted-foreground"><use href="#i-spin"/></svg>
+    <h1 class="mt-4 text-[26px] font-bold leading-tight md:text-[32px]">Opening Stripe's secure checkout…</h1>
+    <p class="mt-2 text-sm text-muted-foreground">You're leaving Pharmacy Books for a moment. Stripe handles the card details; we never see your card number. Standard plan · 2 pharmacies · $148.00 due today (illustrative).</p>
+    <div class="mt-6 border border-border bg-card p-4 text-left text-sm">
+      <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">What happens next</p>
+      <ol class="mt-2 list-inside list-decimal space-y-1 text-muted-foreground">
+        <li>Stripe's page opens in this tab.</li>
+        <li>Pay, or use Stripe's back link to return here with everything saved.</li>
+        <li>After payment you come back to an activation page and we email your access link.</li>
+      </ol>
+    </div>
+    <p class="mt-4 text-xs text-muted-foreground">Not redirected? <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Continue to Stripe</a> · <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Back to review</a></p>
+  </div>
+
+  <!-- Stand-in for Stripe Checkout (reference only) -->
+  <div data-variant="preview">
+    <div class="mb-4 flex flex-wrap items-center gap-2">
+      <span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Preview · external surface</span>
+      <p class="text-sm text-muted-foreground">Stand-in for <span class="font-medium text-foreground">Stripe Checkout</span>. Stripe draws the real page; we don't design it. Shown so the demo journey is complete.</p>
+    </div>
+    <div class="border-2 border-dashed border-border bg-card">
+      <div class="flex items-center justify-between gap-3 border-b border-border px-4 py-3 text-xs text-muted-foreground"><span>checkout.stripe.com · hosted by Stripe</span><span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5"><use href="#i-lock"/></svg>Secure</span></div>
+      <div class="grid gap-6 p-4 sm:grid-cols-2 sm:p-6">
+        <div class="space-y-3 text-sm">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Order (sent by Pharmacy Books)</p>
+          <p class="font-semibold">Standard plan</p>
+          <p class="text-muted-foreground">1 included + 1 additional pharmacy · monthly</p>
+          <p class="text-2xl font-semibold tabular-nums">$148.00 <span class="text-sm font-normal text-muted-foreground">due today · illustrative</span></p>
+          <p class="text-xs text-muted-foreground">We pass: plan, store count, any approved code, the owner's email and a return reference. Stripe can show the Pharmacy Books logo and brand color through its own branding settings.</p>
+        </div>
+        <div class="space-y-3 text-sm" aria-hidden="true">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Stripe's form (not ours)</p>
+          <div class="h-11 border border-border bg-muted"></div>
+          <div class="h-11 border border-border bg-muted"></div>
+          <div class="grid grid-cols-2 gap-3"><div class="h-11 border border-border bg-muted"></div><div class="h-11 border border-border bg-muted"></div></div>
+          <div class="h-11 bg-foreground/80"></div>
+          <p class="text-xs text-muted-foreground">No editable card fields are reproduced in this design.</p>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 border border-border bg-card p-4">
+      <p class="text-sm font-medium">Demo outcome (review control — chooses which return state the mock journey plays)</p>
+      <div class="mt-2 flex flex-wrap gap-2">
+        <button type="button" class="inline-flex h-11 items-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Payment succeeds → activation</button>
+        <button type="button" class="inline-flex h-11 items-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Owner clicks Back → review (saved)</button>
+        <button type="button" class="inline-flex h-11 items-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Owner closes tab → checkout not completed</button>
+        <button type="button" data-goto="declined" class="inline-flex h-11 items-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Card declined → stays on Stripe</button>
+      </div>
+      <p class="mt-2 text-xs text-muted-foreground">Access is never granted from the browser return alone. The app waits for Stripe's signed payment confirmation before provisioning.</p>
+    </div>
+  </div>
+
+  <!-- Declined: happens on Stripe; we only reference it -->
+  <div data-variant="declined">
+    <div class="mb-4 flex flex-wrap items-center gap-2"><span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Preview · external surface</span><p class="text-sm text-muted-foreground">A declined card is handled on Stripe's page. Nothing in Pharmacy Books changes.</p></div>
+    <div class="border-2 border-dashed border-border bg-card p-4 sm:p-6">
+      <div class="border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm"><p class="font-semibold">Your card was declined (Stripe)</p><p class="text-muted-foreground">Stripe asks for another card on its own page. Reference <span class="font-mono text-foreground">demo_decline_01</span>.</p></div>
+      <p class="mt-4 text-sm text-muted-foreground">If the owner gives up here, the next thing they see from us is <span class="font-medium text-foreground">Checkout not completed</span> (C14) — with the payment status reported honestly, never "nothing charged" asserted from a browser return alone.</p>
+    </div>
+  </div>
+
+  <!-- Stand-in for Stripe Customer Portal (reference only) -->
+  <div data-variant="portal_preview">
+    <div class="mb-4 flex flex-wrap items-center gap-2"><span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Preview · external surface</span><p class="text-sm text-muted-foreground">Stand-in for the <span class="font-medium text-foreground">Stripe Customer Portal</span> reached from "Manage billing in Stripe". Stripe owns payment method, invoices, plan changes and cancellation.</p></div>
+    <div class="border-2 border-dashed border-border bg-card">
+      <div class="flex items-center justify-between gap-3 border-b border-border px-4 py-3 text-xs text-muted-foreground"><span>billing.stripe.com · hosted by Stripe</span><span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5"><use href="#i-lock"/></svg>Secure</span></div>
+      <div class="grid gap-4 p-4 sm:grid-cols-2 sm:p-6" aria-hidden="true">
+        <div class="space-y-2"><p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Stripe sections (not ours)</p><div class="h-10 border border-border bg-muted"></div><div class="h-10 border border-border bg-muted"></div><div class="h-10 border border-border bg-muted"></div></div>
+        <div class="space-y-2"><p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Return</p><p class="text-sm text-muted-foreground">Stripe's "Return to Pharmacy Books" link brings the owner back to Account &amp; Billing, which refreshes and shows one of: unchanged · refreshing · cancellation scheduled · canceled · past due resolved.</p></div>
+      </div>
+    </div>
+    <p class="mt-3 text-xs text-muted-foreground">Exactly which Customer Portal features are enabled is verified at integration, not decided by this design.</p>
+  </div>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>window.PAGE_STATES = { leaving: { show: ["leaving"] }, preview: { show: ["preview"] }, declined: { show: ["declined"] }, portal_preview: { show: ["portal_preview"] } };</script>
+<!--__RUNTIME__-->
+</body>
+</html>

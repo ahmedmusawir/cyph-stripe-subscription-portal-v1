@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="owner"
+  data-states="owner:Owner access email (default),store_admin:Store-admin invitation email,checkout_unfinished:Checkout unfinished reminder,expired_resend:New link after expiry">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email previews — Pharmacy Books (reference)</title>
+<meta name="description" content="C07 Email previews (reference, no sending): owner access email, nominated store-admin invitation, checkout-unfinished reminder, new link after expiry. Masked recipients, placeholders visible.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <div class="mb-4 flex flex-wrap items-center gap-2">
+    <span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Reference · email preview</span>
+    <p class="text-sm text-muted-foreground">Rendered preview only. The FFM never sends mail; links are illustrative. Email clients ignore most CSS — the build uses a table-based template; this preview shows content and hierarchy.</p>
+  </div>
+
+  <!-- Envelope -->
+  <div class="border border-border bg-card">
+    <dl class="grid grid-cols-[5rem_1fr] gap-x-3 gap-y-1 border-b border-border p-4 text-sm sm:grid-cols-[6rem_1fr]">
+      <dt class="text-muted-foreground">From</dt><dd class="break-all">Pharmacy Books &lt;[SENDING ADDRESS TBD]&gt;</dd>
+      <dt class="text-muted-foreground">To</dt><dd class="break-all" data-bind="to">j•••@demo-pharmacy.example</dd>
+      <dt class="text-muted-foreground">Subject</dt><dd class="font-medium" data-bind="subject">Your Pharmacy Books access is ready</dd>
+    </dl>
+
+    <!-- Body (max 600px like an email) -->
+    <div class="mx-auto max-w-[600px] p-5 sm:p-8">
+      <div class="flex items-center gap-2.5">
+        <img src="data:image/svg+xml;utf8,%3Csvg width='128' height='128' viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='128' height='128' fill='%23F9704F'/%3E%3Cpath d='M64 26c-16 16-32 24-32 48a32 32 0 0 0 64 0c0-24-16-32-32-48z' fill='%23FFFFFF'/%3E%3C/svg%3E" alt="" class="h-8 w-8">
+        <span class="text-sm font-bold uppercase tracking-wide">Pharmacy Books</span>
+      </div>
+
+      <div data-variant="owner">
+        <h1 class="mt-6 text-xl font-bold">Welcome, Jordan. Your account is ready.</h1>
+        <p class="mt-3 text-sm text-muted-foreground">Your payment went through and <span class="font-medium text-foreground">Example Main Street Pharmacy</span> and <span class="font-medium text-foreground">Example Riverside Pharmacy</span> are set up in OwedBook. Use the button below to sign in for the first time; you'll then set up your account in the next step.</p>
+        <a href="#" class="mt-5 inline-flex h-11 items-center justify-center border border-foreground/25 bg-primary px-5 text-sm font-semibold uppercase tracking-wide text-primary-foreground">Set up my account</a>
+        <p class="mt-3 text-xs text-muted-foreground">This link works once and expires in <span class="font-medium text-foreground">[LINK LIFETIME TBD]</span>. If it has expired, <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1">request a new one</a>.</p>
+        <div class="mt-6 border border-border p-4 text-sm">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Your subscription</p>
+          <p class="mt-1">Standard plan · 2 pharmacies · $148.00 / month (illustrative)</p>
+          <p class="text-muted-foreground">You're the billing owner. Manage billing any time from Account &amp; Billing. Sam Ortiz received a separate invitation to administer Example Riverside Pharmacy.</p>
+        </div>
+      </div>
+
+      <div data-variant="store_admin">
+        <h1 class="mt-6 text-xl font-bold">Sam, you've been invited to manage Example Riverside Pharmacy</h1>
+        <p class="mt-3 text-sm text-muted-foreground"><span class="font-medium text-foreground">Jordan Ellis</span> set you up as the store admin for Example Riverside Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.</p>
+        <a href="#" class="mt-5 inline-flex h-11 items-center justify-center border border-foreground/25 bg-primary px-5 text-sm font-semibold uppercase tracking-wide text-primary-foreground">Accept invitation</a>
+        <p class="mt-3 text-xs text-muted-foreground">This link works once and expires in <span class="font-medium text-foreground">[LINK LIFETIME TBD]</span>. Didn't expect this? You can ignore it; nothing happens unless you accept.</p>
+        <div class="mt-6 border border-border p-4 text-sm">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">What a store admin does</p>
+          <p class="mt-1 text-muted-foreground">Manages Example Riverside Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.</p>
+        </div>
+      </div>
+
+      <div data-variant="checkout_unfinished">
+        <h1 class="mt-6 text-xl font-bold">Jordan, your Pharmacy Books signup is waiting</h1>
+        <p class="mt-3 text-sm text-muted-foreground">You entered details for 2 pharmacies but didn't complete payment, so nothing has been charged and your account isn't active yet. Pick up where you left off — your details are saved until <span class="font-medium text-foreground">[HOLD PERIOD TBD]</span>.</p>
+        <a href="#" class="mt-5 inline-flex h-11 items-center justify-center border border-foreground/25 bg-primary px-5 text-sm font-semibold uppercase tracking-wide text-primary-foreground">Finish signing up</a>
+        <p class="mt-3 text-xs text-muted-foreground">If your card was declined, try another card or contact your bank, then use the link above. Didn't start a signup? Ignore this email.</p>
+      </div>
+
+      <div data-variant="expired_resend">
+        <h1 class="mt-6 text-xl font-bold">Here's a new access link</h1>
+        <p class="mt-3 text-sm text-muted-foreground">You asked for a new link to set up your Pharmacy Books account. Your account and pharmacies are unchanged.</p>
+        <a href="#" class="mt-5 inline-flex h-11 items-center justify-center border border-foreground/25 bg-primary px-5 text-sm font-semibold uppercase tracking-wide text-primary-foreground">Set up my account</a>
+        <p class="mt-3 text-xs text-muted-foreground">This link works once and expires in <span class="font-medium text-foreground">[LINK LIFETIME TBD]</span>. Earlier links no longer work. Didn't request this? Ignore it, or contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>.</p>
+      </div>
+
+      <div class="mt-8 border-t border-border pt-4 text-xs text-muted-foreground">
+        <p>You received this because of a Pharmacy Books account activity for this address. Questions? Write to <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>.</p>
+        <p class="mt-2">[COMPANY MAILING ADDRESS TBD] · Pharmacy Books is a Cyber Pharma product</p>
+      </div>
+    </div>
+  </div>
+</main>
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = {
+  owner:              { show: ["owner"], text: { to: "j•••@demo-pharmacy.example", subject: "Your Pharmacy Books access is ready" } },
+  store_admin:        { show: ["store_admin"], text: { to: "s•••@demo-pharmacy.example", subject: "Jordan Ellis invited you to manage Example Riverside Pharmacy" } },
+  checkout_unfinished:{ show: ["checkout_unfinished"], text: { to: "j•••@demo-pharmacy.example", subject: "Finish setting up Pharmacy Books — nothing has been charged" } },
+  expired_resend:     { show: ["expired_resend"], text: { to: "j•••@demo-pharmacy.example", subject: "Your new Pharmacy Books access link" } },
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

@@ -1,0 +1,4 @@
+/* REVIEW ONLY — the inherited fleet values, scoped so the artifacts can show
+   "before" next to the portal tokens. Not part of the deliverable token file. */
+[data-tokens="fleet"] { --primary-foreground: 0 0% 100%; --success: 131 54% 40%; --warning: 41 93% 47%; --info: 214 74% 53%; }
+.dark[data-tokens="fleet"] { --primary-foreground: 0 0% 100%; --success: 142 69% 58%; --warning: 41 93% 55%; --info: 214 74% 64%; --destructive: 351 95% 71%; }

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="default"
+  data-states="default:Sign in,session_expired:Session expired notice,error:Wrong email or password,busy:Signing in (busy)">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — Pharmacy Books</title>
+<meta name="description" content="Supporting state: sign-in visual adaptation of the kit login (email + password), session-expired notice. No password-reset or MFA flows are assumed to exist.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-md px-5 py-10 md:py-14">
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Account &amp; Billing</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]">Sign in</h1>
+  <p class="mt-1 text-sm text-muted-foreground">Same sign-in as OwedBook. Billing owners see their subscription; store admins are directed to their owner.</p>
+
+  <div data-variant="expired" class="mt-5 border-l-[3px] border-info bg-info/10 p-3 text-sm" role="status"><p class="font-semibold">Your session expired</p><p class="text-muted-foreground">Sign in again to continue. Nothing you did on Stripe's page is lost — your summary refreshes after sign-in.</p></div>
+  <div data-variant="err" class="mt-5 border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm" role="alert"><p class="font-semibold">That email and password don't match</p><p class="text-muted-foreground">Check both and try again.</p></div>
+
+  <form class="mt-6 space-y-5 border border-border bg-card p-4 sm:p-5" novalidate>
+    <div class="space-y-1.5"><label for="email" class="text-sm font-medium">Work email</label><input id="email" type="email" autocomplete="email" value="jordan@demo-pharmacy.example" data-bind-invalid="x" class="flex h-11 w-full border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card aria-[invalid=true]:border-destructive"></div>
+    <div class="space-y-1.5"><label for="pw" class="text-sm font-medium">Password</label><input id="pw" type="password" autocomplete="current-password" value="••••••••••" data-bind-invalid="x" class="flex h-11 w-full border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card aria-[invalid=true]:border-destructive"></div>
+    <div data-variant="cta"><button type="submit" class="inline-flex h-11 w-full items-center justify-center border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card">Sign in</button></div>
+    <div data-variant="cta_busy"><button type="submit" disabled aria-busy="true" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground"><svg class="h-4 w-4 animate-spin"><use href="#i-spin"/></svg>Signing in…</button></div>
+    <p class="text-xs text-muted-foreground">Forgot your password? <span class="font-medium text-foreground">[RESET FLOW — not in this portal's scope]</span> · Contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span></p>
+  </form>
+  <p class="mt-4 text-center text-xs text-muted-foreground">New pharmacy? <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Start a subscription</a></p>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = { default: { show: ["cta"] }, session_expired: { show: ["cta", "expired"] }, error: { show: ["cta", "err"] }, busy: { show: ["cta_busy"] } };
+window.PAGE_HOOK = function (s) { document.querySelectorAll("[data-bind-invalid]").forEach(function (el) { el.setAttribute("aria-invalid", String(s === "error")); }); };
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

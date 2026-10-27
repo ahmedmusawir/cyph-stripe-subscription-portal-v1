@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="owner"
+  data-states="owner:C08 Subscription entry · owner (default),non_owner:C08 Subscription entry · store admin / member,owner_past_due:C15 Billing issue · owner,member_past_due:C15 Billing issue · team member">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OwedBook boundary panels — reference</title>
+<meta name="description" content="C08 and C15 reference: the Subscription entry panel inside OwedBook and the payment-failed notices for owner vs team member. OwedBook's shell is a neutral frame, not a rebuild.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<main id="main" class="mx-auto min-w-0 max-w-5xl px-5 py-6 md:py-8">
+  <div class="mb-4 flex flex-wrap items-center gap-2">
+    <span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Reference · external surface (OwedBook)</span>
+    <p class="text-sm text-muted-foreground">Only the <span class="font-medium text-foreground">panel</span> is designed here. The surrounding frame stands in for OwedBook's existing shell and is not a rebuild; exact navbar parity needs current OwedBook evidence.</p>
+  </div>
+
+  <!-- Neutral OwedBook frame -->
+  <div class="border-2 border-dashed border-border bg-background">
+    <div class="flex items-center justify-between gap-3 border-b border-border bg-card px-4 py-3">
+      <div class="flex items-center gap-2.5"><span class="h-7 w-7 bg-primary"></span><span class="text-sm font-bold uppercase tracking-wide">OwedBook</span><span class="hidden text-xs text-muted-foreground sm:inline">· Store: Example Main Street Pharmacy</span></div>
+      <span class="text-xs text-muted-foreground">existing shell (not designed here)</span>
+    </div>
+    <div class="grid min-w-0 grid-cols-1 md:grid-cols-[12rem_minmax(0,1fr)]">
+      <nav class="hidden border-r border-border bg-card p-3 text-sm md:block" aria-label="OwedBook (stand-in)">
+        <ul class="space-y-1 text-muted-foreground"><li class="px-3 py-2">Home</li><li class="px-3 py-2">Claims</li><li class="px-3 py-2">Reports</li><li class="px-3 py-2">Team</li><li class="border-l-[3px] border-primary bg-primary/10 px-3 py-2 font-medium text-foreground">Subscription</li></ul>
+      </nav>
+      <div class="min-w-0 p-4 sm:p-6">
+
+        <!-- C15 banners (owner / member) -->
+        <div data-variant="banner_owner" class="mb-5 border-l-[3px] border-warning bg-warning/10 p-4" role="status">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div><p class="font-semibold">We couldn't charge your card on 26 Oct 2026</p><p class="mt-0.5 text-sm text-muted-foreground">Update your payment method to keep both pharmacies active. Access during this period: <span class="font-medium text-foreground">[GRACE POLICY TBD]</span>.</p></div>
+            <a href="#" class="inline-flex h-11 shrink-0 items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90">Update payment method <svg class="h-4 w-4"><use href="#i-ext"/></svg></a>
+          </div>
+          <p class="mt-2 text-xs text-muted-foreground">Opens Account &amp; Billing, which hands off to Stripe's secure billing page.</p>
+        </div>
+        <div data-variant="banner_member" class="mb-5 border-l-[3px] border-warning bg-warning/10 p-4" role="status">
+          <p class="font-semibold">There's a billing issue on this account</p>
+          <p class="mt-0.5 text-sm text-muted-foreground">Your account owner, Jordan Ellis, has been notified. No action is needed from you. What you can do in the meantime: <span class="font-medium text-foreground">[MEMBER ACCESS DURING GRACE PERIOD TBD]</span>.</p>
+        </div>
+
+        <h1 class="text-xl font-bold">Subscription</h1>
+
+        <!-- C08 owner panel -->
+        <div data-variant="panel_owner" class="mt-4 min-w-0 border border-border bg-card p-4 sm:p-5">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-2"><p class="font-semibold">Standard plan</p><span data-bind="pill" class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Active</span></div>
+              <p class="mt-1 text-sm text-muted-foreground" data-bind="line">2 pharmacies · Next payment 26 Nov 2026 · $148.00 / month (illustrative)</p>
+              <p class="mt-1 text-sm text-muted-foreground">Billing owner: Jordan Ellis <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide">Owner</span></p>
+            </div>
+            <div class="flex shrink-0 flex-col gap-2 sm:items-end">
+              <a href="#" class="inline-flex h-11 items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90">Manage billing <svg class="h-4 w-4"><use href="#i-ext"/></svg></a>
+              <a href="#" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Add a store</a>
+            </div>
+          </div>
+          <div class="mt-4 border-t border-border pt-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Your pharmacies</p>
+            <ul class="mt-2 divide-y divide-border text-sm">
+              <li class="flex flex-wrap items-center justify-between gap-2 py-2"><span>Example Main Street Pharmacy <span class="text-muted-foreground">· NCPDP 0000000 · Jordan Ellis</span></span><span class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Active</span></li>
+              <li class="flex flex-wrap items-center justify-between gap-2 py-2"><span>Example Riverside Pharmacy <span class="text-muted-foreground">· NCPDP 0000001 · Sam Ortiz</span></span><span class="inline-flex items-center whitespace-nowrap border border-warning bg-warning/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Invitation pending</span></li>
+            </ul>
+          </div>
+          <p class="mt-3 text-xs text-muted-foreground">Plan changes, payment methods, invoices and cancellation are handled in Account &amp; Billing (opens in Pharmacy Books; you stay signed in <span class="font-medium text-foreground">[SSO — not proven by this design]</span>).</p>
+        </div>
+
+        <!-- C08 non-owner panel -->
+        <div data-variant="panel_non_owner" class="mt-4 min-w-0 border border-border bg-card p-4 sm:p-5">
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2"><p class="font-semibold">Standard plan</p><span class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Active</span></div>
+          <p class="mt-1 text-sm text-muted-foreground">This store is covered by the account's subscription.</p>
+          <div class="mt-4 border-t border-border pt-4 text-sm">
+            <p class="font-medium">Billing is managed by the account owner</p>
+            <p class="mt-1 text-muted-foreground">You're signed in as Sam Ortiz <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide">Store admin</span>. Store admins who are not the billing owner cannot manage billing. For plan or payment questions, contact <span class="font-medium text-foreground">Jordan Ellis</span> (<span class="break-all">jordan@demo-pharmacy.example</span>).</p>
+            <a href="mailto:jordan@demo-pharmacy.example" class="mt-3 inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Email the owner</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = {
+  owner:           { show: ["panel_owner"], pill: { pill: ["success", "Active"] }, text: { line: "2 pharmacies · Next payment 26 Nov 2026 · $148.00 / month (illustrative)" } },
+  non_owner:       { show: ["panel_non_owner"] },
+  owner_past_due:  { show: ["banner_owner", "panel_owner"], pill: { pill: ["warning", "Payment past due"] }, text: { line: "2 pharmacies · $148.00 due since 26 Oct 2026 (illustrative)" } },
+  member_past_due: { show: ["banner_member", "panel_non_owner"] },
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

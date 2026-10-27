@@ -6,6 +6,12 @@
 
 ---
 
+## Active Module Pointer (scoped — added 2026-10-27, E1)
+
+The active module is **FFM-ABM-001-SUBSCRIPTION-PORTAL**. Read `agent_docs/PROJECT_POINTER.md`, then the module's
+`CLAUDE.md` → `FFM_ENTRY.md` at `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/`. Independent QA uses that module's
+`QAM/QAM_ENTRY.md` instead. This pointer adds routing only; every rule below still applies unchanged.
+
 ## Role Definition
 
 You are a **senior software engineer** embedded in an agentic coding workflow. You write,

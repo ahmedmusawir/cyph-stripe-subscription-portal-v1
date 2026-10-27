@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-states="tile:Style tile" data-default-state="tile">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscription Portal — Style tile</title>
+<meta name="description" content="Token-driven style tile for the Cyber Pharma Subscription Portal (Metro Warm · Mist/Slate). Reads tokens/globals.scss; nothing is hardcoded.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+
+<!-- ───────────────────────── Header ───────────────────────── -->
+<header class="border-b border-border bg-card">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-4">
+    <div class="flex items-center gap-3">
+      <img src="data:image/svg+xml;utf8,%3Csvg width='128' height='128' viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='128' height='128' fill='%23F9704F'/%3E%3Cpath d='M64 26c-16 16-32 24-32 48a32 32 0 0 0 64 0c0-24-16-32-32-48z' fill='%23FFFFFF'/%3E%3C/svg%3E" alt="" class="h-9 w-9">
+      <div class="leading-tight">
+        <p class="text-sm font-bold uppercase tracking-wide">Pharmacy Books</p>
+        <p class="text-[10px] uppercase tracking-widest text-muted-foreground">Subscription Portal · Style tile v1.0</p>
+      </div>
+    </div>
+    <dl class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] uppercase tracking-wide text-muted-foreground sm:grid-cols-4">
+      <div><dt class="font-semibold text-foreground">Direction</dt><dd>Metro Warm</dd></div>
+      <div><dt class="font-semibold text-foreground">Typeface</dt><dd>Saira</dd></div>
+      <div><dt class="font-semibold text-foreground">Corners</dt><dd>0px · flat</dd></div>
+      <div><dt class="font-semibold text-foreground">Mode</dt><dd data-mode-label>Slate</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="mx-auto max-w-6xl space-y-12 px-5 py-8">
+
+  <!-- ───────────────────────── Palette ───────────────────────── -->
+  <section aria-labelledby="pal">
+    <h2 id="pal" class="mb-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Palette — every token, with its role</h2>
+    <p class="mb-4 text-sm text-muted-foreground">Hex values are read live from the rendered page. Coral is brand only; status meaning never changes between modes.</p>
+
+    <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide">Brand</h3>
+    <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+      <div class="border border-border bg-card"><div class="h-14 bg-primary" data-swatch="primary"></div><div class="p-2"><p class="text-xs font-semibold">Primary</p><p class="text-[11px] text-muted-foreground">--primary · CTAs, selected, focus</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="primary"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 bg-ring" data-swatch="ring"></div><div class="p-2"><p class="text-xs font-semibold">Ring</p><p class="text-[11px] text-muted-foreground">--ring · focus outline</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="ring"></p></div></div>
+    </div>
+
+    <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide">Status — fixed meaning across themes</h3>
+    <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="border border-border bg-card"><div class="h-14 bg-success" data-swatch="success"></div><div class="p-2"><p class="text-xs font-semibold">Success</p><p class="text-[11px] text-muted-foreground">active · added · paid</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="success"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 bg-warning" data-swatch="warning"></div><div class="p-2"><p class="text-xs font-semibold">Warning</p><p class="text-[11px] text-muted-foreground">pending · past due · invited</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="warning"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 bg-destructive" data-swatch="destructive"></div><div class="p-2"><p class="text-xs font-semibold">Destructive</p><p class="text-[11px] text-muted-foreground">failed · canceled · error</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="destructive"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 bg-info" data-swatch="info"></div><div class="p-2"><p class="text-xs font-semibold">Info</p><p class="text-[11px] text-muted-foreground">neutral notes · demo labels</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="info"></p></div></div>
+    </div>
+
+    <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide">Neutral surface stack — the only thing that changes between Mist and Slate</h3>
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-background" data-swatch="background"></div><div class="p-2"><p class="text-xs font-semibold">Background</p><p class="text-[11px] text-muted-foreground">page</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="background"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-card" data-swatch="card"></div><div class="p-2"><p class="text-xs font-semibold">Card</p><p class="text-[11px] text-muted-foreground">panels, top bar</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="card"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-secondary" data-swatch="secondary"></div><div class="p-2"><p class="text-xs font-semibold">Secondary</p><p class="text-[11px] text-muted-foreground">quiet buttons</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="secondary"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-muted" data-swatch="muted"></div><div class="p-2"><p class="text-xs font-semibold">Muted</p><p class="text-[11px] text-muted-foreground">table head, zebra</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="muted"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-accent" data-swatch="accent"></div><div class="p-2"><p class="text-xs font-semibold">Accent</p><p class="text-[11px] text-muted-foreground">hover</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="accent"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-border" data-swatch="border"></div><div class="p-2"><p class="text-xs font-semibold">Border</p><p class="text-[11px] text-muted-foreground">hairlines, inputs</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="border"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-muted-foreground" data-swatch="muted-foreground"></div><div class="p-2"><p class="text-xs font-semibold">Muted fg</p><p class="text-[11px] text-muted-foreground">labels, help</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="muted-foreground"></p></div></div>
+      <div class="border border-border bg-card"><div class="h-14 border-b border-border bg-foreground" data-swatch="foreground"></div><div class="p-2"><p class="text-xs font-semibold">Foreground</p><p class="text-[11px] text-muted-foreground">text</p><p class="font-mono text-[11px] text-muted-foreground" data-hex="foreground"></p></div></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Typography ───────────────────────── -->
+  <section aria-labelledby="typ">
+    <h2 id="typ" class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Typography — Saira 400 / 500 / 600 / 700</h2>
+    <div class="grid gap-x-8 gap-y-4 border border-border bg-card p-5 sm:grid-cols-[9rem_1fr] sm:items-baseline">
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Display · 32 / 700</span><p class="text-[32px] font-bold leading-tight">Account &amp; Billing</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">H1 · 26 / 700</span><p class="text-[26px] font-bold leading-tight">Add a pharmacy to your account</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">H2 · 20 / 700</span><p class="text-xl font-bold">Pharmacies on this plan</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">H3 · 16 / 600</span><p class="text-base font-semibold">Payment method</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Body · 15 / 400</span><p class="text-[15px]" data-probe="body-on-card">One subscription covers your pharmacy account. You can add more stores later from inside the app.</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Small · 13 / muted</span><p class="text-[13px] text-muted-foreground" data-probe="muted-on-card">Prices shown are illustrative fixtures. Final pricing is pending.</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Label · 11 / 600 / up</span><p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Next payment</p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Amount · 24 / 600 / tabular</span><p class="text-2xl font-semibold tabular-nums">$148.00 <span class="text-sm font-normal text-muted-foreground">/ month</span></p>
+      <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Eyebrow · 11 / 700 / muted</span><p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground" data-probe="eyebrow">Account &amp; Billing</p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Buttons ───────────────────────── -->
+  <section aria-labelledby="btn">
+    <h2 id="btn" class="mb-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Buttons — kit <code>Button</code> variants, 44px touch height</h2>
+    <p class="mb-4 text-sm text-muted-foreground">Primary = coral fill with dark ink (<code>--primary-foreground</code>, portal-scoped, 6.0:1). Portal buttons use <code>h-11</code> (44px); the kit default is <code>h-10</code>. Outline shown at 1px — the kit variant ships <code>border-4</code> (see deltas).</p>
+    <div class="flex flex-wrap items-center gap-3 border border-border bg-card p-5">
+      <button class="inline-flex h-11 items-center justify-center whitespace-nowrap border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" data-probe="btn-primary">Add a store</button>
+      <button class="inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Manage billing in Stripe <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+      <button class="inline-flex h-11 items-center justify-center whitespace-nowrap bg-secondary px-4 text-sm font-semibold uppercase tracking-wide text-secondary-foreground transition-colors hover:bg-secondary/80">Back</button>
+      <button class="inline-flex h-11 items-center justify-center whitespace-nowrap px-4 text-sm font-semibold uppercase tracking-wide text-foreground transition-colors hover:bg-accent">Cancel</button>
+      <button class="inline-flex h-11 items-center justify-center whitespace-nowrap border border-destructive px-4 text-sm font-semibold uppercase tracking-wide text-destructive transition-colors hover:bg-destructive/10" data-probe="btn-destructive-outline">Cancel in Stripe</button>
+      <button class="inline-flex h-11 items-center justify-center whitespace-nowrap border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground opacity-50" disabled aria-disabled="true">Continue</button>
+      <button class="inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground" aria-busy="true" disabled><svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.2-8.56" stroke-linecap="round"/></svg>Confirming…</button>
+      <a href="#" class="inline-flex h-11 items-center px-1 text-sm font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary" data-probe="link-primary">Sign in</a>
+    </div>
+    <div class="mt-3 flex flex-wrap items-center gap-3 border border-dashed border-border bg-card p-4" data-tokens="fleet">
+      <span class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Fleet baseline (before) →</span>
+      <button class="inline-flex h-11 items-center justify-center whitespace-nowrap border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground" data-probe="btn-primary-fleet">Add a store</button>
+      <span class="inline-flex items-center whitespace-nowrap bg-warning/15 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-warning" data-probe="pill-fleet-warning">Invitation pending</span>
+      <span class="text-xs text-muted-foreground">White on coral 2.8:1 and the old tinted pill — kept here only for comparison.</span>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Fields ───────────────────────── -->
+  <section aria-labelledby="fld">
+    <h2 id="fld" class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Form fields — labeled, required markers, inline errors, native controls</h2>
+    <div class="grid gap-6 border border-border bg-card p-5 md:grid-cols-2">
+      <div class="space-y-1.5">
+        <label for="f1" class="text-sm font-medium">Work email <span class="text-destructive" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+        <input id="f1" type="email" value="jordan@demo-pharmacy.example" class="flex h-11 w-full border border-input bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+        <p class="text-xs text-muted-foreground">Your access link goes here. Use an inbox you check daily.</p>
+      </div>
+      <div class="space-y-1.5">
+        <label for="f2" class="text-sm font-medium">NCPDP number <span class="text-destructive" aria-hidden="true">*</span></label>
+        <input id="f2" inputmode="numeric" value="00000" aria-invalid="true" aria-describedby="f2e" class="flex h-11 w-full border border-destructive bg-background px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2">
+        <p id="f2e" class="flex items-center gap-1.5 text-xs font-medium text-destructive" data-probe="error-text"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg>Enter the 7-digit NCPDP number.</p>
+      </div>
+      <div class="space-y-1.5">
+        <label for="f3" class="text-sm font-medium">Pharmacy software <span class="text-destructive" aria-hidden="true">*</span></label>
+        <div class="relative">
+          <select id="f3" class="flex h-11 w-full appearance-none border border-input bg-background px-3 pr-9 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+            <option>Liberty</option><option>Pioneer</option><option>Other</option>
+          </select>
+          <svg class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="text-xs text-muted-foreground">Native <code>select</code>; no <code>Select</code> primitive exists locally.</p>
+      </div>
+      <div class="space-y-1.5">
+        <span class="text-sm font-medium">Consent</span>
+        <label class="flex cursor-pointer items-start gap-3 text-sm">
+          <input type="checkbox" class="mt-0.5 h-5 w-5 shrink-0 border border-input" checked>
+          <span>I agree to the <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Terms of Service [LINK TBD]</a> and <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Privacy Policy [LINK TBD]</a>.</span>
+        </label>
+        <label class="flex cursor-pointer items-start gap-3 text-sm">
+          <input type="checkbox" class="mt-0.5 h-5 w-5 shrink-0 border border-input">
+          <span>I authorize Pharmacy Books to charge my card each month until I cancel. <span class="text-muted-foreground">[CANCELLATION TERMS TBD]</span></span>
+        </label>
+      </div>
+
+      <div class="md:col-span-2">
+        <span class="mb-2 block text-sm font-medium">Radio cards — plan selector (Pattern A: one-of-N)</span>
+        <div class="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Plan">
+          <label class="relative flex cursor-pointer flex-col gap-2 border-2 border-primary bg-card p-4 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+            <input type="radio" name="plan" class="sr-only" checked>
+            <span class="flex items-center justify-between"><span class="text-sm font-semibold">Standard</span><span class="inline-flex items-center whitespace-nowrap bg-primary px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary-foreground">Selected</span></span>
+            <span class="text-2xl font-semibold tabular-nums">$99.00 <span class="text-sm font-normal text-muted-foreground">/ month</span></span>
+            <span class="text-xs text-muted-foreground">Includes 1 pharmacy · additional stores $49.00 / month</span>
+          </label>
+          <label class="relative flex cursor-pointer flex-col gap-2 border border-border bg-card p-4 opacity-70 focus-within:ring-2 focus-within:ring-ring">
+            <input type="radio" name="plan" class="sr-only" disabled>
+            <span class="flex items-center justify-between"><span class="text-sm font-semibold">[Second plan TBD]</span><span class="inline-flex items-center whitespace-nowrap border border-border bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Pending</span></span>
+            <span class="text-2xl font-semibold tabular-nums">[PRICE TBD]</span>
+            <span class="text-xs text-muted-foreground">No tier names are invented; one plan is a fixture.</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <span class="mb-2 block text-sm font-medium">Store-count control</span>
+        <div class="inline-flex items-stretch border border-input">
+          <button class="grid h-11 w-11 place-items-center text-lg hover:bg-accent" aria-label="Fewer pharmacies">−</button>
+          <output class="grid w-14 place-items-center border-x border-input text-base font-semibold tabular-nums" aria-live="polite">2</output>
+          <button class="grid h-11 w-11 place-items-center text-lg hover:bg-accent" aria-label="More pharmacies">+</button>
+        </div>
+        <p class="mt-1.5 text-xs text-muted-foreground">Reducing the count asks before discarding an entered pharmacy.</p>
+      </div>
+      <div>
+        <span class="mb-2 block text-sm font-medium">Code field — applied state</span>
+        <div class="flex gap-2">
+          <input value="DEMO10" class="flex h-11 w-full border border-input bg-background px-3 text-sm uppercase tracking-wide">
+          <button class="inline-flex h-11 shrink-0 items-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Remove</button>
+        </div>
+        <p class="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-success" data-probe="success-text"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Code applied: −$10.00 on today's payment. Demo code; no APA claim.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Pills, roles, alerts ───────────────────────── -->
+  <section aria-labelledby="pil">
+    <h2 id="pil" class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Status pills (kit <code>Pill</code>) · role labels · alerts</h2>
+    <div class="grid gap-6 border border-border bg-card p-5 lg:grid-cols-2">
+      <div>
+        <p class="mb-2 text-sm font-medium">Status — foreground text, status border + 10% tint; one axis per pill</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground" data-probe="pill-success">Active</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-warning bg-warning/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground" data-probe="pill-warning">Invitation pending</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-warning bg-warning/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Past due</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-warning bg-warning/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Provisioning</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-destructive bg-destructive/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground" data-probe="pill-destructive">Canceled</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-destructive bg-destructive/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Needs attention</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground" data-probe="pill-info">Cancellation scheduled</span>
+          <span class="inline-flex items-center whitespace-nowrap border border-border bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground" data-probe="pill-muted">Not required</span>
+        </div>
+        <p class="mt-4 mb-2 text-sm font-medium">Role labels — neutral text, not pills, not status tokens</p>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+          <span>Jordan Ellis <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Owner</span></span>
+          <span>Sam Ortiz <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Store admin</span></span>
+          <span>Jordan Ellis <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Owner · Store admin</span></span>
+        </div>
+        <p class="mt-2 text-xs text-muted-foreground">Store admins who are not the billing owner cannot manage billing; an owner can also be a store admin. No <code>--role-*</code> tokens exist; neutral labels avoid implying an authorization system.</p>
+      </div>
+      <div class="space-y-3">
+        <p class="text-sm font-medium">Alerts — 3px status edge + 10% tint, text stays <code>foreground</code></p>
+        <div class="border-l-[3px] border-info bg-info/10 p-3 text-sm" role="note"><p class="font-semibold">Demo · Illustrative pricing</p><p class="text-muted-foreground">Amounts are engineering fixtures, not proposed commercial pricing.</p></div>
+        <div class="border-l-[3px] border-warning bg-warning/10 p-3 text-sm" role="status"><p class="font-semibold">We couldn't collect your last payment</p><p class="text-muted-foreground">Update your payment method in Stripe to keep both pharmacies active. [GRACE POLICY TBD]</p></div>
+        <div class="border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm" role="alert"><p class="font-semibold">Price unavailable</p><p class="text-muted-foreground">We couldn't load a quote. Nothing has been charged. <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Try again</a></p></div>
+        <div class="border-l-[3px] border-success bg-success/10 p-3 text-sm" role="status"><p class="font-semibold">Example Riverside Pharmacy added</p><p class="text-muted-foreground">Your plan now covers 2 pharmacies. Subscription active; store admin invitation pending.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Table → cards, progress, handoff ───────────────────────── -->
+  <section aria-labelledby="tbl">
+    <h2 id="tbl" class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Table row (≥ md) and its 375px card reflow (kit <code>DataTable</code> pattern)</h2>
+    <div class="grid gap-6 lg:grid-cols-[1fr_22rem]">
+      <div class="overflow-hidden border border-border bg-card">
+        <table class="w-full text-sm">
+          <thead class="bg-muted text-left text-[11px] uppercase tracking-wide text-muted-foreground"><tr><th class="px-4 py-2.5 font-semibold">Pharmacy</th><th class="px-4 py-2.5 font-semibold">Store admin</th><th class="px-4 py-2.5 text-right font-semibold">Monthly</th><th class="px-4 py-2.5 font-semibold">Activation</th><th class="px-4 py-2.5 font-semibold">Invitation</th></tr></thead>
+          <tbody class="divide-y divide-border">
+            <tr><td class="px-4 py-3"><p class="font-semibold">Example Main Street Pharmacy</p><p class="text-xs text-muted-foreground tabular-nums">NCPDP 0000000</p></td><td class="px-4 py-3">Jordan Ellis <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Owner</span></td><td class="px-4 py-3 text-right tabular-nums">Included</td><td class="px-4 py-3"><span class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Active</span></td><td class="px-4 py-3"><span class="inline-flex items-center whitespace-nowrap border border-border bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Not required</span></td></tr>
+            <tr><td class="px-4 py-3"><p class="font-semibold">Example Riverside Pharmacy</p><p class="text-xs text-muted-foreground tabular-nums">NCPDP 0000001</p></td><td class="px-4 py-3">Sam Ortiz <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Store admin</span></td><td class="px-4 py-3 text-right tabular-nums">$49.00</td><td class="px-4 py-3"><span class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Active</span></td><td class="px-4 py-3"><span class="inline-flex items-center whitespace-nowrap border border-warning bg-warning/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="border border-border bg-card p-4">
+        <div class="flex items-start justify-between gap-2"><div><p class="font-semibold">Example Riverside Pharmacy</p><p class="text-xs text-muted-foreground tabular-nums">NCPDP 0000001</p></div><span class="inline-flex items-center whitespace-nowrap border border-success bg-success/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Active</span></div>
+        <dl class="mt-3 grid grid-cols-2 gap-3 text-sm">
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Store admin</dt><dd>Sam Ortiz</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Monthly</dt><dd class="tabular-nums">$49.00</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Invitation</dt><dd><span class="inline-flex items-center whitespace-nowrap border border-warning bg-warning/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Pending</span></dd></div>
+          <div class="self-end"><a href="#" class="text-xs font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Resend invitation</a></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="mt-6 grid gap-6 lg:grid-cols-2">
+      <div class="border border-border bg-card p-5">
+        <p class="mb-3 text-sm font-medium">Wizard progress — desktop labels, mobile count + bar</p>
+        <ol class="hidden items-center gap-2 text-sm sm:flex" aria-label="Progress">
+          <li class="flex items-center gap-2 text-success"><span class="grid h-6 w-6 place-items-center bg-success text-success-foreground"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Plan</li>
+          <li class="h-px w-8 bg-border" aria-hidden="true"></li>
+          <li class="flex items-center gap-2 font-semibold text-foreground" aria-current="step"><span class="grid h-6 w-6 place-items-center bg-primary text-[11px] font-bold text-primary-foreground">2</span>Owner</li>
+          <li class="h-px w-8 bg-border" aria-hidden="true"></li>
+          <li class="flex items-center gap-2 text-muted-foreground"><span class="grid h-6 w-6 place-items-center border border-border text-[11px] font-bold">3</span>Pharmacy</li>
+          <li class="h-px w-8 bg-border" aria-hidden="true"></li>
+          <li class="flex items-center gap-2 text-muted-foreground"><span class="grid h-6 w-6 place-items-center border border-border text-[11px] font-bold">4</span>Review &amp; pay</li>
+        </ol>
+        <div class="sm:hidden"><p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Step 2 of 4 · <span class="text-foreground">Owner</span></p><div class="mt-2 h-1 w-full bg-muted"><div class="h-1 w-2/4 bg-primary"></div></div></div>
+        <p class="mt-3 text-xs text-muted-foreground">Mobile never squeezes four labels into one row; it shows “Step 2 of 4 · Owner” and a bar.</p>
+      </div>
+      <div class="border border-dashed border-border bg-card p-5">
+        <div class="mb-3 flex items-center justify-between"><p class="text-sm font-medium">External handoff panel</p><span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Preview</span></div>
+        <div class="border border-border bg-background p-4">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Leaving Pharmacy Books</p>
+          <p class="mt-1 text-base font-semibold">Stripe's secure checkout opens next</p>
+          <p class="mt-1 text-sm text-muted-foreground">Stripe draws that page; we send the plan, store count, your email and any approved code. You return here when it's done.</p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs"><span class="text-muted-foreground">Demo outcome:</span><button class="border border-input px-2 py-1 hover:bg-accent">Succeeds</button><button class="border border-input px-2 py-1 hover:bg-accent">Back</button><button class="border border-input px-2 py-1 hover:bg-accent">Closed</button><button class="border border-input px-2 py-1 hover:bg-accent">Declined</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Contrast proof ───────────────────────── -->
+  <section aria-labelledby="con">
+    <h2 id="con" class="mb-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Live contrast proof — measured from rendered elements in this mode</h2>
+    <p class="mb-4 text-sm text-muted-foreground">Switch mode or token set in the review bar; the table recomputes. Small text needs 4.5:1; large/bold ≥ 18.66px and UI edges need 3:1.</p>
+    <div class="overflow-x-auto border border-border bg-card">
+      <table class="w-full text-sm">
+        <thead class="bg-muted text-left text-[11px] uppercase tracking-wide text-muted-foreground"><tr><th class="px-4 py-2.5 font-semibold">Combination</th><th class="px-4 py-2.5 font-semibold">Text</th><th class="px-4 py-2.5 font-semibold">Surface</th><th class="px-4 py-2.5 text-right font-semibold">Ratio</th><th class="px-4 py-2.5 font-semibold">AA small</th></tr></thead>
+        <tbody id="contrast-rows" class="divide-y divide-border tabular-nums"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="border-t border-border pt-6 text-xs text-muted-foreground">
+    <p>Pharmacy Books is the provisional customer-facing brand (configurable text). Destination app: OwedBook. Tokens: <code>tokens/globals.scss</code> (portal-scoped v0.2; six values annotated). Fleet "before" values: <code>tokens/fleet-baseline.css</code>, review only. Font: Saira embedded (no network needed).</p>
+  </footer>
+</main>
+
+<!--@include review-bar-->
+<script>
+(function () {
+
+  function parse(c) { var m = c.match(/[\d.]+/g).map(Number); return { r: m[0], g: m[1], b: m[2], a: m.length > 3 ? m[3] : 1 }; }
+  function over(fg, bg) { var a = fg.a; return { r: fg.r * a + bg.r * (1 - a), g: fg.g * a + bg.g * (1 - a), b: fg.b * a + bg.b * (1 - a), a: 1 }; }
+  function lum(c) { function f(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); } return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b); }
+  function ratio(a, b) { var la = lum(a), lb = lum(b); var hi = Math.max(la, lb), lo = Math.min(la, lb); return (hi + 0.05) / (lo + 0.05); }
+  function hex(c) { return "#" + [c.r, c.g, c.b].map(function (v) { return Math.round(v).toString(16).padStart(2, "0"); }).join(""); }
+  function bgOf(el) { // walk up until an opaque background is found, compositing alphas
+    var stack = []; var n = el;
+    while (n && n !== document) { var bg = parse(getComputedStyle(n).backgroundColor); if (bg.a > 0) { stack.push(bg); if (bg.a === 1) break; } n = n.parentNode; }
+    var out = stack.length && stack[stack.length - 1].a === 1 ? stack.pop() : { r: 255, g: 255, b: 255, a: 1 };
+    while (stack.length) out = over(stack.pop(), out);
+    return out;
+  }
+  function measure() {
+    document.querySelectorAll("[data-hex]").forEach(function (p) { var sw = document.querySelector('[data-swatch="' + p.dataset.hex + '"]'); if (sw) p.textContent = hex(parse(getComputedStyle(sw).backgroundColor)); });
+    var probes = [
+      ["Body text on card", "body-on-card"],
+      ["Muted text on card", "muted-on-card"],
+      ["Primary button label on coral", "btn-primary"],
+      ["Link text on card (foreground, underlined)", "link-primary"],
+      ["Eyebrow label on card (muted-foreground)", "eyebrow"],
+      ["Pill · success text on success tint", "pill-success"],
+      ["Pill · warning text on warning tint", "pill-warning"],
+      ["Pill · destructive text on destructive tint", "pill-destructive"],
+      ["Pill · info text on info tint", "pill-info"],
+      ["Pill · muted text on muted", "pill-muted"],
+      ["Inline error text on card", "error-text"],
+      ["Inline success text on card", "success-text"],
+      ["Destructive outline button text", "btn-destructive-outline"],
+      ["BEFORE · fleet white on coral", "btn-primary-fleet"],
+      ["BEFORE · fleet warning pill text", "pill-fleet-warning"],
+    ];
+    var borderProbes = [["Pill border · success vs tint", "pill-success"], ["Pill border · warning vs tint", "pill-warning"], ["Pill border · destructive vs tint", "pill-destructive"], ["Pill border · info vs tint", "pill-info"], ["Coral button fill vs card (edge)", "btn-primary"]];
+    var tb = document.getElementById("contrast-rows"); if (!tb) return; tb.innerHTML = "";
+    probes.forEach(function (p) {
+      var el = p[2] || document.querySelector('[data-probe="' + p[1] + '"]'); if (!el) return;
+      var fg = parse(getComputedStyle(el).color); var bg = bgOf(el); if (fg.a < 1) fg = over(fg, bg);
+      var r = ratio(fg, bg); var pass = r >= 4.5; var large = r >= 3;
+      var tr = document.createElement("tr");
+      tr.innerHTML = '<td class="px-4 py-2">' + p[0] + '</td><td class="px-4 py-2 font-mono text-xs">' + hex(fg) + '</td><td class="px-4 py-2 font-mono text-xs">' + hex(bg) + '</td><td class="px-4 py-2 text-right font-semibold">' + r.toFixed(2) + ':1</td><td class="px-4 py-2"><span class="inline-flex items-center whitespace-nowrap border px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground ' + (pass ? "border-success bg-success/10" : large ? "border-warning bg-warning/10" : "border-destructive bg-destructive/10") + '">' + (pass ? "Pass" : large ? "Large only" : "Fail") + "</span></td>";
+      tb.appendChild(tr);
+    });
+    borderProbes.forEach(function (p) {
+      var el = document.querySelector('[data-probe="' + p[1] + '"]'); if (!el) return;
+      var cs = getComputedStyle(el); var edge = parse(p[1] === "btn-primary" ? cs.backgroundColor : cs.borderTopColor); var bg = p[1] === "btn-primary" ? bgOf(el.parentNode) : bgOf(el); if (edge.a < 1) edge = over(edge, bg);
+      var r = ratio(edge, bg); var pass = r >= 3;
+      var tr = document.createElement("tr");
+      tr.innerHTML = '<td class="px-4 py-2">' + p[0] + ' <span class="text-xs text-muted-foreground">(non-text, 3:1)</span></td><td class="px-4 py-2 font-mono text-xs">' + hex(edge) + '</td><td class="px-4 py-2 font-mono text-xs">' + hex(bg) + '</td><td class="px-4 py-2 text-right font-semibold">' + r.toFixed(2) + ':1</td><td class="px-4 py-2"><span class="inline-flex items-center whitespace-nowrap border px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground ' + (pass ? "border-success bg-success/10" : "border-destructive bg-destructive/10") + '">' + (pass ? "Pass" : "Fail") + "</span></td>";
+      tb.appendChild(tr);
+    });
+  }
+  window.PAGE_MEASURE = function(){ var ml=document.querySelector("[data-mode-label]"); if(ml) ml.textContent=(document.documentElement.classList.contains("dark")?"Slate":"Mist")+(document.documentElement.getAttribute("data-tokens")==="fleet"?" · fleet before":""); measure(); };
+})();
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

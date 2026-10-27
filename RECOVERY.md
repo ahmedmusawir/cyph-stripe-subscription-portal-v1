@@ -1,17 +1,16 @@
 # Recovery State — cyph-stripe-subscription-portal-v1
 
-Last action (2026-10-26): **BOUNDED CLEANUP COMPLETE** — Mission Control surfaces removed,
-  minimal Subscription Portal foundation left buildable. Report:
-  `agent_docs/RESPONSES/response_2026-10-26_155736_cleanup-result.md` · bundle ZIP `~/Downloads/cyph-subscription-portal_cleanup_2026-10-26.zip`
-  · Recon it executed: `agent_docs/RECON/RECON_cyph-subscription-portal_ffm-intake_2026-10-26.md`
-  · Session: `agent_docs/SESSIONS/session_2026-10-26.md`
-Pending: Director's git review/commit of the cleanup (uncommitted). Operator rulings still open:
-  Supabase project for the portal · customer role model · agent_docs history disposition ·
-  cloud target names. Credential rotation for the inherited Mission Control super-admin login is
-  an OPERATOR action — not done by this repo; its text was redacted from current files only
-  (git history NOT sanitized).
-Next step: Designer works from the reference bundle → Architect authors the portal FFM
-  (APP_BRIEF / DATA_CONTRACT / UI_SPEC) against the recon → Plan Mode build.
+Last action (2026-10-27): **E1 COMPLETE for FFM-ABM-001-SUBSCRIPTION-PORTAL.** Module installed at
+  `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/` (pointer: `agent_docs/PROJECT_POINTER.md`).
+  Plan: that folder's `EXECUTION_PLAN.md` · facts: `EVIDENCE/E1_RECON.md` · state: `STATE.md`
+  · review ZIP: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E1_REVIEW_001.zip` (+ `~/Downloads/` copy)
+  · Session: `agent_docs/SESSIONS/session_2026-10-27.md`
+Pending: Architect review + Director approval of the plan (X1–X3, A-1); blockers B1 branch, B2 Supabase
+  project identity, B3 reviewer identity, B4 PID 40320 on :3457. Credential rotation remains a Director action.
+Next step: on approval, E2 builds continuously from plan §5 step 1 on branch `ffm-abm-001-subscription-portal`.
+
+Previous (2026-10-26): bounded cleanup complete, committed by the Director as `1d15918`. Report:
+  `agent_docs/RESPONSES/response_2026-10-26_155736_cleanup-result.md`.
 
 ## Standing rules
 - Director-only git: Claude never commits, pushes, resets, switches branches or rewrites history.

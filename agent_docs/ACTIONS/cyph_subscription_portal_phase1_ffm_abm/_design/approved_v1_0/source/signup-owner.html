@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="empty"
+  data-states="empty:Empty (first visit),filled:Returning with saved values,errors:Validation errors (summary + fields),existing_email:Email already has an account (C16 branch),saving:Saving draft (busy)">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner details — Pharmacy Books</title>
+<meta name="description" content="C02 Owner details: names, work email, mobile, self-described business role, optional legal name; errors, existing-email branch, retained values.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased" data-step="2">
+<!--@include _icons-->
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground">Skip to content</a>
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+  <!--@include wizard-progress-->
+
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Step 2 · Owner</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]">Tell us about you</h1>
+  <p class="mt-1 text-sm text-muted-foreground">You will be the billing owner for this account. We send your access link to this email after payment.</p>
+
+  <!-- Error summary (focus target on failed submit) -->
+  <div data-variant="summary" class="mt-5 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert" tabindex="-1" id="err-summary">
+    <p class="font-semibold">Please fix 2 fields to continue</p>
+    <ul class="mt-1 list-inside list-disc text-sm">
+      <li><a href="#email" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Work email</a> — enter an email address like name@pharmacy.com</li>
+      <li><a href="#mobile" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Mobile phone</a> — enter a phone number we can text</li>
+    </ul>
+  </div>
+
+  <!-- Existing-email branch (C16 companion; anti-enumeration is implementation work) -->
+  <div data-variant="existing" class="mt-5 border-l-[3px] border-info bg-info/10 p-4" role="status">
+    <p class="font-semibold">This email may already have a Pharmacy Books account</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">If that's you, sign in and use <span class="font-medium text-foreground">Add a store</span> — you won't need a second subscription. Otherwise use a different work email. For security we don't show whose account it is.</p>
+    <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+      <a href="#" class="inline-flex h-11 items-center justify-center border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90">Sign in instead</a>
+      <button type="button" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Use a different email</button>
+    </div>
+  </div>
+
+  <form class="mt-6 space-y-6" novalidate aria-describedby="req-note">
+    <p id="req-note" class="text-xs text-muted-foreground"><span class="text-destructive" aria-hidden="true">*</span> Required</p>
+    <div class="grid min-w-0 gap-5 border border-border bg-card p-4 sm:grid-cols-2 sm:p-5">
+      <div class="space-y-1.5"><label for="first" class="text-sm font-medium">First name <span class="text-destructive" aria-hidden="true">*</span><span class="sr-only">(required)</span></label><input id="first" autocomplete="given-name" data-bind-value="first" class="flex h-11 w-full border border-input bg-background px-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"></div>
+      <div class="space-y-1.5"><label for="last" class="text-sm font-medium">Last name <span class="text-destructive" aria-hidden="true">*</span></label><input id="last" autocomplete="family-name" data-bind-value="last" class="flex h-11 w-full border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"></div>
+      <div class="space-y-1.5 sm:col-span-2">
+        <label for="email" class="text-sm font-medium">Work email <span class="text-destructive" aria-hidden="true">*</span></label>
+        <input id="email" type="email" autocomplete="email" inputmode="email" data-bind-value="email" data-bind-invalid="email" aria-describedby="email-help email-err" class="flex h-11 w-full border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive">
+        <p id="email-help" class="text-xs text-muted-foreground">Your sign-in and access link go here. Use an inbox you check daily.</p>
+        <p id="email-err" data-variant="email_err" class="flex items-center gap-1.5 text-xs font-medium text-destructive"><svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>Enter an email address like name@pharmacy.com.</p>
+      </div>
+      <div class="space-y-1.5">
+        <label for="mobile" class="text-sm font-medium">Mobile phone <span class="text-destructive" aria-hidden="true">*</span></label>
+        <input id="mobile" type="tel" autocomplete="tel" inputmode="tel" data-bind-value="mobile" data-bind-invalid="mobile" aria-describedby="mobile-err" class="flex h-11 w-full border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive">
+        <p id="mobile-err" data-variant="mobile_err" class="flex items-center gap-1.5 text-xs font-medium text-destructive"><svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>Enter a phone number we can text.</p>
+      </div>
+      <div class="space-y-1.5">
+        <label for="role" class="text-sm font-medium">Your role <span class="text-destructive" aria-hidden="true">*</span></label>
+        <div class="relative"><select id="role" data-bind-value="role" class="flex h-11 w-full appearance-none border border-input bg-background px-3 pr-9 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"><option value="">Choose…</option><option>Owner</option><option>Pharmacist in charge</option><option>Manager</option><option>Other</option></select><svg class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"><use href="#i-chev"/></svg></div>
+        <p class="text-xs text-muted-foreground">How you describe your job. This doesn't change what you can do in the app.</p>
+      </div>
+      <div class="space-y-1.5 sm:col-span-2">
+        <label for="legal" class="text-sm font-medium">Legal business name <span class="font-normal text-muted-foreground">(for invoices, optional)</span></label>
+        <input id="legal" autocomplete="organization" data-bind-value="legal" class="flex h-11 w-full border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card">
+        <p class="text-xs text-muted-foreground">The name that should appear on receipts. Leave blank to use your pharmacy's name.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <a href="#" class="inline-flex h-11 items-center justify-center gap-2 border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent sm:justify-start"><svg class="h-4 w-4"><use href="#i-back"/></svg>Back</a>
+      <div data-variant="cta"><button type="submit" class="inline-flex h-11 w-full items-center justify-center border border-foreground/25 bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-w-[12rem]">Continue</button></div>
+      <div data-variant="cta_busy"><button type="submit" disabled aria-busy="true" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary-foreground sm:min-w-[12rem]"><svg class="h-4 w-4 animate-spin"><use href="#i-spin"/></svg>Saving…</button></div>
+    </div>
+    <p class="text-xs text-muted-foreground">Going back keeps what you've entered. We save a draft as you go so you can return to it.</p>
+  </form>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+var V = { first: "Jordan", last: "Ellis", email: "jordan@demo-pharmacy.example", mobile: "(555) 010-0144", role: "Owner", legal: "Main Street Pharmacy LLC" };
+window.PAGE_STATES = {
+  empty:  { show: ["cta"] },
+  filled: { show: ["cta"] },
+  errors: { show: ["cta", "summary", "email_err", "mobile_err"] },
+  existing_email: { show: ["cta", "existing"] },
+  saving: { show: ["cta_busy"] },
+};
+window.PAGE_HOOK = function (s) {
+  var filled = s !== "empty";
+  document.querySelectorAll("[data-bind-value]").forEach(function (el) { var k = el.dataset.bindValue; el.value = filled ? V[k] : ""; });
+  if (s === "errors") { document.getElementById("email").value = "jordan@demo-pharmacy"; document.getElementById("mobile").value = "555"; }
+  document.querySelectorAll("[data-bind-invalid]").forEach(function (el) { el.setAttribute("aria-invalid", String(s === "errors")); });
+  if (s === "existing_email") document.getElementById("email").setAttribute("aria-describedby", "email-help");
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

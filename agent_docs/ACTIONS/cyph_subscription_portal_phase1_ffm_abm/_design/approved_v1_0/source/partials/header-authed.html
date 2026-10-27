@@ -1,0 +1,28 @@
+<header class="sticky top-0 z-30 border-b border-border bg-card">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5">
+    <!--@include _brand-->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Account">
+      <a href="#" class="inline-flex h-11 items-center gap-1.5 px-3 text-sm font-medium text-muted-foreground hover:text-foreground"><svg class="h-4 w-4"><use href="#i-back"/></svg>Back to OwedBook</a>
+      <!--@include _theme-toggle-->
+      <button type="button" class="ml-1 inline-flex h-11 items-center gap-2 border border-border px-2.5 pr-3 text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-haspopup="menu" aria-expanded="false">
+        <span class="grid h-7 w-7 place-items-center bg-primary text-[11px] font-bold text-primary-foreground" aria-hidden="true" data-bind="initials">JE</span>
+        <span class="font-medium" data-bind="displayName">Jordan Ellis</span>
+        <svg class="h-4 w-4 text-muted-foreground"><use href="#i-chev"/></svg>
+      </button>
+    </nav>
+    <div class="flex items-center gap-1 md:hidden">
+      <!--@include _theme-toggle-->
+      <button type="button" class="grid h-11 w-11 place-items-center text-foreground hover:text-primary" data-toggle-menu aria-expanded="false" aria-controls="mobile-menu" aria-label="Open account menu"><svg class="h-6 w-6"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden border-t border-border bg-card md:hidden">
+    <div class="mx-auto max-w-6xl px-5 py-3">
+      <div class="flex items-center gap-3 border-b border-border pb-3">
+        <span class="grid h-9 w-9 place-items-center bg-primary text-xs font-bold text-primary-foreground" aria-hidden="true" data-bind="initials">JE</span>
+        <div class="min-w-0"><p class="truncate text-sm font-semibold" data-bind="displayName">Jordan Ellis</p><p class="truncate text-[11px] uppercase tracking-wide text-muted-foreground" data-bind="roleLabel">Billing owner</p></div>
+      </div>
+      <a href="#" class="flex min-h-[44px] items-center gap-2 py-2 text-sm font-medium">Back to OwedBook</a>
+      <a href="#" class="flex min-h-[44px] items-center gap-2 py-2 text-sm font-medium text-muted-foreground">Sign out</a>
+    </div>
+  </div>
+</header>

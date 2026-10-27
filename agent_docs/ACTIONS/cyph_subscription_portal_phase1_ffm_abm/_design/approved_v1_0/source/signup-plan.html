@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="one"
+  data-states="one:1 pharmacy (default),two:2 pharmacies,reduce_confirm:Reducing count (confirm discard),price_unavailable:Price unavailable">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose your plan — Pharmacy Books</title>
+<meta name="description" content="C01 Choose plan: plan selector, store count, estimated recurring total, sign-in path.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased" data-step="1">
+<!--@include _icons-->
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground">Skip to content</a>
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+  <!--@include wizard-progress-->
+
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Get started</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]">Choose your plan</h1>
+  <p class="mt-1 text-sm text-muted-foreground">One subscription covers your pharmacy account. You can add more stores later from inside the app.</p>
+
+  <form class="mt-6 space-y-6" novalidate>
+    <!-- Plan selector: radio cards (Pattern A) -->
+    <fieldset class="min-w-0">
+      <legend class="mb-2 text-sm font-medium">Plan</legend>
+      <div class="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Plan">
+        <label class="relative flex cursor-pointer flex-col gap-2 border-2 border-primary bg-card p-4 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background">
+          <input type="radio" name="plan" class="sr-only" checked>
+          <span class="flex items-center justify-between gap-2"><span class="text-sm font-semibold">Standard</span><span class="inline-flex items-center whitespace-nowrap bg-primary px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary-foreground">Selected</span></span>
+          <span class="text-2xl font-semibold tabular-nums">$99.00 <span class="text-sm font-normal text-muted-foreground">/ month</span></span>
+          <span class="text-xs text-muted-foreground">Includes 1 pharmacy · each additional store $49.00 / month · <span class="font-medium text-foreground">[What's included: TBD]</span></span>
+          <span class="text-[11px] uppercase tracking-wide text-muted-foreground">Provisional plan · commercial details pending</span>
+        </label>
+        <div class="flex flex-col gap-2 border border-dashed border-border bg-card p-4 text-muted-foreground" aria-hidden="true">
+          <span class="flex items-center justify-between gap-2"><span class="text-sm font-semibold">[Second plan TBD]</span><span class="inline-flex items-center whitespace-nowrap border border-border bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Pending</span></span>
+          <span class="text-2xl font-semibold tabular-nums">[PRICE TBD]</span>
+          <span class="text-xs">No tier names are invented. This slot only shows how a second option would sit.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Store count -->
+    <div class="min-w-0 border border-border bg-card p-4 sm:p-5">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+          <label for="stores" class="text-sm font-medium">How many pharmacies will you manage?</label>
+          <p class="mt-1 text-xs text-muted-foreground">Each additional store is $49.00 / month (illustrative). Start with one if you're unsure — you can add stores any time. You'll enter details for each pharmacy before payment.</p>
+        </div>
+        <div class="inline-flex shrink-0 items-stretch border border-input">
+          <button type="button" class="grid h-11 w-11 place-items-center text-lg hover:bg-accent disabled:opacity-40" aria-label="Fewer pharmacies" data-bind-disabled="minus"><span aria-hidden="true">−</span></button>
+          <output id="stores" class="grid w-14 place-items-center border-x border-input text-base font-semibold tabular-nums" aria-live="polite" data-bind="count">1</output>
+          <button type="button" class="grid h-11 w-11 place-items-center text-lg hover:bg-accent" aria-label="More pharmacies"><span aria-hidden="true">+</span></button>
+        </div>
+      </div>
+      <!-- Reduce-count confirmation (C01 / data contract §5) -->
+      <div data-variant="reduce_confirm" class="mt-4 border-l-[3px] border-warning bg-warning/10 p-3 text-sm" role="alertdialog" aria-labelledby="rc-h" aria-describedby="rc-d">
+        <p id="rc-h" class="font-semibold">Remove Example Riverside Pharmacy from this signup?</p>
+        <p id="rc-d" class="mt-0.5 text-muted-foreground">You already entered details for pharmacy 2 of 2. Reducing the count to 1 discards them. Nothing has been charged.</p>
+        <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+          <button type="button" class="inline-flex h-11 items-center justify-center border border-destructive px-4 text-sm font-semibold uppercase tracking-wide text-destructive hover:bg-destructive/10">Remove and continue with 1</button>
+          <button type="button" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Keep 2 pharmacies</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estimate -->
+    <div class="min-w-0 border border-border bg-card p-4 sm:p-5">
+      <div data-variant="estimate">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div class="min-w-0">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Estimated recurring total</p>
+            <p class="mt-0.5 text-2xl font-semibold tabular-nums"><span data-bind="total">$99.00</span> <span class="text-sm font-normal text-muted-foreground">/ month</span></p>
+            <p class="text-xs text-muted-foreground"><span data-bind="breakdown">Standard, 1 pharmacy</span> · tax calculated at checkout if it applies · illustrative pricing</p>
+          </div>
+          <span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Estimate · not a charge</span>
+        </div>
+      </div>
+      <div data-variant="estimate_error" class="border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm" role="alert">
+        <p class="font-semibold">Price unavailable</p>
+        <p class="mt-0.5 text-muted-foreground">We couldn't load current pricing, so there's no estimate to show. Nothing has been charged. <button type="button" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Try again</button> or continue — you'll see the full price before paying.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs text-muted-foreground">Already a member? <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Sign in</a> and use Add a store instead.</p>
+      <button type="submit" class="inline-flex h-11 items-center justify-center border border-foreground/25 bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-w-[12rem]">Continue</button>
+    </div>
+    <p class="text-xs text-muted-foreground">You will not be charged until the final step. Payment is handled on Stripe's secure checkout page.</p>
+  </form>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = {
+  one:  { show: ["estimate"], text: { count: "1", total: "$99.00", breakdown: "Standard, 1 pharmacy" } },
+  two:  { show: ["estimate"], text: { count: "2", total: "$148.00", breakdown: "Standard, 1 included + 1 additional ($49.00)" } },
+  reduce_confirm: { show: ["estimate", "reduce_confirm"], text: { count: "2", total: "$148.00", breakdown: "Standard, 1 included + 1 additional ($49.00)" } },
+  price_unavailable: { show: ["estimate_error"], text: { count: "1" } },
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

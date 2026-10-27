@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="expired"
+  data-states="valid:Valid link · handing to account setup,expired:Link expired (default),used:Link already used,request_sent:New link requested (neutral),sending:Requesting (busy),error:Request failed">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access link — Pharmacy Books</title>
+<meta name="description" content="C17 Access link states: valid (downstream setup handoff), expired or already used, neutral resend feedback, loading and error. No unauthenticated email change.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-xl px-5 py-10 md:py-14">
+  <div class="border border-border bg-card p-5 sm:p-6">
+    <div data-variant="valid" class="text-center">
+      <svg class="mx-auto h-8 w-8 animate-spin text-muted-foreground"><use href="#i-spin"/></svg>
+      <h1 class="mt-4 text-[26px] font-bold leading-tight">Signing you in for the first time…</h1>
+      <p class="mt-2 text-sm text-muted-foreground">Your link is valid. Next you'll set up your account (password and sign-in protection) in the account setup flow <span class="font-medium text-foreground">[DOWNSTREAM SETUP — not designed here]</span>, then land in OwedBook.</p>
+      <p class="mt-4 text-xs text-muted-foreground">This link works once. If this page doesn't move on, <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">request a new link</a>.</p>
+    </div>
+
+    <div data-variant="form">
+      <span class="grid h-10 w-10 place-items-center border border-border text-muted-foreground"><svg class="h-5 w-5"><use href="#i-lock"/></svg></span>
+      <h1 class="mt-4 text-[26px] font-bold leading-tight" data-bind="h1">This link has expired</h1>
+      <p class="mt-2 text-sm text-muted-foreground" data-bind="sub">For your security, access links work once and only for a limited time. Your account is safe and ready — we just need to send you a fresh link.</p>
+      <div data-variant="err" class="mt-4 border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm" role="alert"><p class="font-semibold">We couldn't send a new link</p><p class="text-muted-foreground">Please try again in a moment. If it keeps failing, contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>.</p></div>
+      <div class="mt-5">
+        <div data-variant="cta"><button type="button" data-goto="request_sent" class="inline-flex h-11 w-full items-center justify-center border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90">Email me a new link</button></div>
+        <div data-variant="cta_busy"><button type="button" disabled aria-busy="true" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground"><svg class="h-4 w-4 animate-spin"><use href="#i-spin"/></svg>Sending…</button></div>
+        <p class="mt-2 text-xs text-muted-foreground">It goes to the email on your account. We don't show or change that address here. Not getting emails? Contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>.</p>
+      </div>
+    </div>
+
+    <div data-variant="sent">
+      <span class="grid h-10 w-10 place-items-center bg-success text-success-foreground"><svg class="h-5 w-5"><use href="#i-check"/></svg></span>
+      <h1 class="mt-4 text-[26px] font-bold leading-tight">Check your email</h1>
+      <p class="mt-2 text-sm text-muted-foreground">If an account matches this link, a new access link is on its way. It works once and for a limited time <span class="font-medium text-foreground">[LINK LIFETIME TBD]</span>.</p>
+      <p class="mt-4 text-xs text-muted-foreground">Nothing after a few minutes? Check spam, then <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">request another</a> or contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>.</p>
+    </div>
+  </div>
+  <p class="mt-4 text-center text-xs text-muted-foreground">Already set up? <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Sign in</a></p>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = {
+  valid:        { show: ["valid"] },
+  expired:      { show: ["form", "cta"], text: { h1: "This link has expired", sub: "For your security, access links work once and only for a limited time. Your account is safe and ready — we just need to send you a fresh link." } },
+  used:         { show: ["form", "cta"], text: { h1: "This link has already been used", sub: "Each access link works once. If you've already set up your account, sign in instead. Otherwise request a fresh link." } },
+  sending:      { show: ["form", "cta_busy"], text: { h1: "This link has expired", sub: "For your security, access links work once and only for a limited time. Your account is safe and ready — we just need to send you a fresh link." } },
+  request_sent: { show: ["sent"] },
+  error:        { show: ["form", "cta", "err"], text: { h1: "This link has expired", sub: "For your security, access links work once and only for a limited time. Your account is safe and ready — we just need to send you a fresh link." } },
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

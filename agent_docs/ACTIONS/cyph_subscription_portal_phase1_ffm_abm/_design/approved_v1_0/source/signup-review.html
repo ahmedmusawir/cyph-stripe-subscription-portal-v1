@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="two_stores"
+  data-states="two_stores:2 pharmacies · no code,one_store:1 pharmacy,code_applying:Code applying (busy),code_applied:Code applied (DEMO10),code_invalid:Code invalid,quote_unavailable:Quote unavailable (retry),quote_expired:Quote expired (refresh + re-consent),consent_missing:Consent missing on submit,leaving:Leaving for Stripe (busy)">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review and pay — Pharmacy Books</title>
+<meta name="description" content="C04 Review, code and consent: editable summary, quote states, optional code states, separate terms and recurring-payment consent, clear Stripe destination.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased" data-step="4">
+<!--@include _icons-->
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground">Skip to content</a>
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-6xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+  <div class="mx-auto max-w-3xl lg:mx-0"><!--@include wizard-progress--></div>
+
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Step 4 · Review &amp; pay</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]">Review and pay</h1>
+  <p class="mt-1 text-sm text-muted-foreground">Check everything, then continue to Stripe's secure checkout. Nothing is charged on this page.</p>
+
+  <div data-variant="consent_err" class="mt-5 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert" tabindex="-1">
+    <p class="font-semibold">Two confirmations are needed before payment</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">Tick <a href="#c1" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">the terms agreement</a> and <a href="#c2" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">the recurring-payment authorization</a> to continue.</p>
+  </div>
+
+  <form class="mt-6 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8" novalidate>
+    <!-- Left: summaries + consent -->
+    <div class="min-w-0 space-y-4">
+      <section class="min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="own-h">
+        <div class="flex items-start justify-between gap-3"><h2 id="own-h" class="text-base font-semibold">Billing owner</h2><a href="#" class="text-sm font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Edit</a></div>
+        <p class="mt-2 text-sm">Jordan Ellis <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Owner</span></p>
+        <p class="text-sm text-muted-foreground"><span class="break-all">jordan@demo-pharmacy.example</span> · <span class="whitespace-nowrap">(555) 010-0144</span> · Owner</p>
+        <p class="text-sm text-muted-foreground">Invoices to: Main Street Pharmacy LLC</p>
+      </section>
+
+      <section class="min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="p1-h">
+        <div class="flex items-start justify-between gap-3"><h2 id="p1-h" class="text-base font-semibold">Pharmacy 1 · Example Main Street Pharmacy</h2><a href="#" class="text-sm font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Edit</a></div>
+        <dl class="mt-2 grid min-w-0 grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
+          <div class="col-span-2 sm:col-span-3"><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Address</dt><dd>120 Main Street, Springfield, Alabama 00000</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">NCPDP</dt><dd class="tabular-nums">0000000</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">NPI</dt><dd class="tabular-nums">0000000000</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Software</dt><dd>Liberty</dd></div>
+          <div class="col-span-2 sm:col-span-3"><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Store admin</dt><dd>Jordan Ellis <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Owner · Store admin</span></dd></div>
+        </dl>
+      </section>
+
+      <section data-variant="p2" class="min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="p2-h">
+        <div class="flex items-start justify-between gap-3"><h2 id="p2-h" class="text-base font-semibold">Pharmacy 2 · Example Riverside Pharmacy</h2><a href="#" class="text-sm font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Edit</a></div>
+        <dl class="mt-2 grid min-w-0 grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
+          <div class="col-span-2 sm:col-span-3"><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Address</dt><dd>45 River Road, Springfield, Alabama 00000</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">NCPDP</dt><dd class="tabular-nums">0000001</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">NPI</dt><dd class="tabular-nums">0000000001</dd></div>
+          <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Software</dt><dd>Pioneer</dd></div>
+          <div class="col-span-2 sm:col-span-3"><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Store admin</dt><dd>Sam Ortiz <span class="ml-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Store admin</span> · <span class="break-all text-muted-foreground">sam@demo-pharmacy.example</span> · invitation sent after payment</dd></div>
+        </dl>
+      </section>
+
+      <fieldset class="min-w-0 border border-border bg-card p-4 sm:p-5">
+        <legend class="text-sm font-medium">Before you pay</legend>
+        <p class="mt-1 text-xs text-muted-foreground">Both boxes are separate and start unticked.</p>
+        <div class="mt-3 space-y-3">
+          <label class="flex cursor-pointer items-start gap-3 text-sm">
+            <input id="c1" type="checkbox" data-bind-check="c1" class="mt-0.5 h-5 w-5 shrink-0" aria-describedby="c1-err">
+            <span>I agree to the <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Terms of Service [LINK TBD]</a> and <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Privacy Policy [LINK TBD]</a>.</span>
+          </label>
+          <p id="c1-err" data-variant="consent_err" class="ml-8 flex items-center gap-1.5 text-xs font-medium text-destructive"><svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>Required to continue.</p>
+          <label class="flex cursor-pointer items-start gap-3 text-sm">
+            <input id="c2" type="checkbox" data-bind-check="c2" class="mt-0.5 h-5 w-5 shrink-0" aria-describedby="c2-err">
+            <span>I authorize Pharmacy Books to charge my card <span data-bind="recurringInline">$148.00</span> each month until I cancel. I can cancel from Account &amp; Billing; what happens after cancellation follows <span class="font-medium text-foreground">[CANCELLATION TERMS TBD]</span>.</span>
+          </label>
+          <p id="c2-err" data-variant="consent_err" class="ml-8 flex items-center gap-1.5 text-xs font-medium text-destructive"><svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>Required to continue.</p>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Right: order summary (sticky on desktop) -->
+    <aside class="min-w-0 lg:sticky lg:top-24 lg:self-start" aria-labelledby="sum-h">
+      <div class="border border-border bg-card p-4 sm:p-5">
+        <div class="flex items-center justify-between gap-2"><h2 id="sum-h" class="text-base font-semibold">Order summary</h2><span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Illustrative</span></div>
+
+        <div data-variant="quote">
+          <dl class="mt-4 space-y-2 text-sm tabular-nums">
+            <div class="flex justify-between gap-3"><dt class="text-muted-foreground">Standard plan, 1 pharmacy</dt><dd>$99.00</dd></div>
+            <div class="flex justify-between gap-3"><dt class="text-muted-foreground">Additional stores (<span data-bind="extraCount">1</span>)</dt><dd data-bind="extraAmt">$49.00</dd></div>
+            <div data-variant="discount_row" class="flex justify-between gap-3"><dt class="text-muted-foreground">Code DEMO10</dt><dd>−$10.00</dd></div>
+            <div class="flex justify-between gap-3 border-t border-border pt-2 text-base font-semibold"><dt>Due today</dt><dd data-bind="dueToday">$148.00</dd></div>
+          </dl>
+          <p class="mt-1 text-xs text-muted-foreground">Then <span data-bind="recurring">$148.00</span> every month. Tax calculated at checkout if it applies.</p>
+        </div>
+        <div data-variant="quote_error" class="mt-4 border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm" role="alert">
+          <p class="font-semibold">Price unavailable</p>
+          <p class="mt-0.5 text-muted-foreground">We couldn't load your quote, so payment is paused. Nothing has been charged and your details are saved. <button type="button" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Try again</button></p>
+        </div>
+        <div data-variant="quote_expired" class="mt-4 border-l-[3px] border-warning bg-warning/10 p-3 text-sm" role="status">
+          <p class="font-semibold">Your quote expired</p>
+          <p class="mt-0.5 text-muted-foreground">Prices are held for a limited time. Refresh to get a current quote; you'll re-confirm the amount before paying.</p>
+          <button type="button" class="mt-2 inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Refresh quote</button>
+        </div>
+
+        <!-- Code -->
+        <div class="mt-4 border-t border-border pt-4">
+          <label for="code" class="text-sm font-medium">Discount or APA member code <span class="font-normal text-muted-foreground">(optional)</span></label>
+          <div class="mt-1.5 flex gap-2">
+            <input id="code" data-bind-value="code" data-bind-invalid="code" aria-describedby="code-msg" class="flex h-11 w-full min-w-0 border border-input bg-background px-3 text-sm uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card aria-[invalid=true]:border-destructive">
+            <button type="button" data-bind="codeBtn" class="inline-flex h-11 shrink-0 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Apply</button>
+          </div>
+          <p id="code-msg" data-variant="code_ok" class="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-success"><svg class="h-3.5 w-3.5"><use href="#i-check"/></svg>Code applied: −$10.00 on today's payment. Demo code; this doesn't establish APA membership.</p>
+          <p data-variant="code_bad" class="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-destructive"><svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>That code isn't valid. Check it or continue without one.</p>
+          <p data-variant="code_busy" class="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground" aria-live="polite"><svg class="h-3.5 w-3.5 animate-spin"><use href="#i-spin"/></svg>Checking code…</p>
+          <p data-variant="code_hint" class="mt-1.5 text-xs text-muted-foreground">Applying a code refreshes the quote.</p>
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-5 space-y-2">
+          <div data-variant="cta"><button type="submit" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card">Continue to secure payment <svg class="h-4 w-4"><use href="#i-ext"/></svg></button></div>
+          <div data-variant="cta_off"><span class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground opacity-50" aria-disabled="true">Continue to secure payment</span><p class="mt-1.5 text-center text-xs text-muted-foreground" data-bind="offReason">Available once the quote loads.</p></div>
+          <div data-variant="cta_busy"><button type="submit" disabled aria-busy="true" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground"><svg class="h-4 w-4 animate-spin"><use href="#i-spin"/></svg>Opening Stripe…</button></div>
+          <p class="flex items-start gap-2 text-xs text-muted-foreground"><svg class="mt-0.5 h-3.5 w-3.5 shrink-0"><use href="#i-lock"/></svg><span>You'll finish on Stripe's secure checkout page. Pharmacy Books never sees your card number. Your access link arrives by email once payment is confirmed.</span></p>
+        </div>
+      </div>
+      <a href="#" class="mt-3 inline-flex h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"><svg class="h-4 w-4"><use href="#i-back"/></svg>Back</a>
+    </aside>
+  </form>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+var TWO = { extraCount: "1", extraAmt: "$49.00", dueToday: "$148.00", recurring: "$148.00", recurringInline: "$148.00" };
+var ONE = { extraCount: "0", extraAmt: "$0.00", dueToday: "$99.00", recurring: "$99.00", recurringInline: "$99.00" };
+window.PAGE_STATES = {
+  two_stores:        { show: ["p2", "quote", "code_hint", "cta"], text: Object.assign({ codeBtn: "Apply" }, TWO) },
+  one_store:         { show: ["quote", "code_hint", "cta"], text: Object.assign({ codeBtn: "Apply" }, ONE) },
+  code_applying:     { show: ["p2", "quote", "code_busy", "cta_off"], text: Object.assign({ codeBtn: "Apply", offReason: "Available once the quote refreshes." }, TWO) },
+  code_applied:      { show: ["p2", "quote", "discount_row", "code_ok", "cta"], text: Object.assign({ codeBtn: "Remove" }, TWO, { dueToday: "$138.00" }) },
+  code_invalid:      { show: ["p2", "quote", "code_bad", "cta"], text: Object.assign({ codeBtn: "Apply" }, TWO) },
+  quote_unavailable: { show: ["p2", "quote_error", "code_hint", "cta_off"], text: Object.assign({ codeBtn: "Apply", offReason: "Available once the quote loads." }, TWO) },
+  quote_expired:     { show: ["p2", "quote_expired", "code_hint", "cta_off"], text: Object.assign({ codeBtn: "Apply", offReason: "Refresh the quote, then re-confirm the amount." }, TWO) },
+  consent_missing:   { show: ["p2", "quote", "code_hint", "cta", "consent_err"], text: Object.assign({ codeBtn: "Apply" }, TWO) },
+  leaving:           { show: ["p2", "quote", "code_hint", "cta_busy"], text: Object.assign({ codeBtn: "Apply" }, TWO) },
+};
+window.PAGE_HOOK = function (s) {
+  var code = document.getElementById("code");
+  code.value = (s === "code_applied" || s === "code_applying") ? "DEMO10" : s === "code_invalid" ? "APA-XYZ" : "";
+  code.setAttribute("aria-invalid", String(s === "code_invalid"));
+  var ticked = s === "leaving" || s === "code_applied";
+  document.getElementById("c1").checked = ticked; document.getElementById("c2").checked = ticked;
+  document.querySelectorAll("[data-bind-check]").forEach(function (el) { el.setAttribute("aria-invalid", String(s === "consent_missing")); });
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

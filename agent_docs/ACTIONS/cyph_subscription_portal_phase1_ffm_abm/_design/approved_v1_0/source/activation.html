@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="ready"
+  data-states="waiting_payment:Waiting for Stripe's confirmation,provisioning:Paid · setting up,ready:Ready · check your email (default),delayed:Paid · setup delayed,email_failed:Paid · email failed (resend),resent:Access email re-sent,payment_failed:Payment not confirmed (retry)">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setting up your account — Pharmacy Books</title>
+<meta name="description" content="C06 Activation status after returning from Stripe: payment, provisioning and email states kept separate; resend feedback; no automatic login.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Activation</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]" data-bind="h1">You're in. Check your email.</h1>
+  <p class="mt-1 text-sm text-muted-foreground" data-bind="sub">Payment is confirmed and your pharmacies are set up. We sent your access link to j•••@demo-pharmacy.example.</p>
+
+  <!-- Three separate tracks: payment · setup · email -->
+  <section class="mt-6 min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="tr-h" aria-live="polite">
+    <h2 id="tr-h" class="sr-only">Activation progress</h2>
+    <ol class="space-y-4 text-sm">
+      <li class="flex items-start gap-3"><span data-bind="i1" class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center bg-success text-success-foreground"><svg class="h-3.5 w-3.5"><use href="#i-check"/></svg></span><div><p class="font-semibold">Payment</p><p class="text-muted-foreground" data-bind="t1">Confirmed by Stripe · $148.00 (illustrative)</p></div></li>
+      <li class="flex items-start gap-3"><span data-bind="i2" class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center bg-success text-success-foreground"><svg class="h-3.5 w-3.5"><use href="#i-check"/></svg></span><div><p class="font-semibold">Pharmacy setup</p><p class="text-muted-foreground" data-bind="t2">Example Main Street Pharmacy and Example Riverside Pharmacy are set up in OwedBook.</p></div></li>
+      <li class="flex items-start gap-3"><span data-bind="i3" class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center bg-success text-success-foreground"><svg class="h-3.5 w-3.5"><use href="#i-check"/></svg></span><div><p class="font-semibold">Access email</p><p class="text-muted-foreground" data-bind="t3">Sent to j•••@demo-pharmacy.example · a separate store invitation went to Sam Ortiz.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- Contextual panels -->
+  <div data-variant="open_email" class="mt-4 border-l-[3px] border-info bg-info/10 p-4">
+    <div class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0"><use href="#i-mail"/></svg><div><p class="font-semibold">Open the email "Your Pharmacy Books access is ready"</p><p class="mt-0.5 text-sm text-muted-foreground">The link signs you in for the first time and hands you to account setup. It works once and for a limited time <span class="font-medium text-foreground">[LINK LIFETIME TBD]</span>. We don't sign you in from this page.</p></div></div>
+  </div>
+  <div data-variant="delayed_panel" class="mt-4 border-l-[3px] border-warning bg-warning/10 p-4" role="status">
+    <p class="font-semibold">Your payment went through; setup is taking longer than usual</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">You don't need to pay again. This page updates by itself; we'll email your access link as soon as setup completes. If nothing arrives, contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span> with reference <span class="font-mono text-foreground">demo_act_01</span>.</p>
+  </div>
+  <div data-variant="email_failed_panel" class="mt-4 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert">
+    <p class="font-semibold">We couldn't send your access email</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">Your payment and setup are fine — only the email failed. Send it again below. If it keeps failing, contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>.</p>
+  </div>
+  <div data-variant="payment_failed_panel" class="mt-4 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert">
+    <p class="font-semibold">We haven't received a payment confirmation</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">Stripe reported the payment didn't complete (reference <span class="font-mono text-foreground">demo_decline_01</span>). Nothing is set up yet and your details are saved. You can try another card on Stripe's page.</p>
+    <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+      <a href="#" class="inline-flex h-11 items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90">Try payment again <svg class="h-4 w-4"><use href="#i-ext"/></svg></a>
+      <a href="#" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Review my details</a>
+    </div>
+  </div>
+  <div data-variant="waiting_panel" class="mt-4 border-l-[3px] border-info bg-info/10 p-4" role="status">
+    <p class="font-semibold">Waiting for Stripe to confirm your payment</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">This usually takes a moment. Keep this page open; it updates by itself. If you closed Stripe's page before finishing, nothing was charged and you can <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">resume checkout</a>.</p>
+  </div>
+
+  <!-- Resend -->
+  <section data-variant="resend" class="mt-6 min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="rs-h">
+    <h2 id="rs-h" class="text-base font-semibold">Didn't get it?</h2>
+    <p class="mt-1 text-sm text-muted-foreground">Give it a few minutes and check your spam folder. Still nothing? Send it again.</p>
+    <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+      <button type="button" data-bind="resendBtn" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Resend access email</button>
+      <p data-variant="resent_ok" class="flex items-center gap-1.5 text-xs font-medium text-success"><svg class="h-3.5 w-3.5"><use href="#i-check"/></svg>Sent again at 10:46. Check your inbox.</p>
+    </div>
+    <p class="mt-3 text-xs text-muted-foreground">Wrong email address? Contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span>. For your security we don't change it from this page.</p>
+  </section>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+var ok = 'mt-0.5 grid h-6 w-6 shrink-0 place-items-center bg-success text-success-foreground', busy = 'mt-0.5 grid h-6 w-6 shrink-0 place-items-center border border-border text-muted-foreground', warn = 'mt-0.5 grid h-6 w-6 shrink-0 place-items-center bg-warning text-warning-foreground', bad = 'mt-0.5 grid h-6 w-6 shrink-0 place-items-center bg-destructive text-destructive-foreground';
+var CHECK = '<svg class="h-3.5 w-3.5"><use href="#i-check"/></svg>', SPIN = '<svg class="h-3.5 w-3.5 animate-spin"><use href="#i-spin"/></svg>', DOT = '<span class="h-1.5 w-1.5 bg-current"></span>', X = '<svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>';
+window.PAGE_STATES = {
+  waiting_payment: { show: ["waiting_panel"], text: { h1: "Finishing up…", sub: "We're waiting for Stripe to confirm your payment. Nothing is set up until it does.", t1: "Waiting for Stripe's confirmation", t2: "Starts after payment is confirmed", t3: "Sent after setup completes" } },
+  provisioning:    { show: ["waiting_panel"], text: { h1: "Payment confirmed — setting up your account", sub: "This usually takes under a couple of minutes. You can keep this page open; it updates by itself.", t1: "Confirmed by Stripe · $148.00 (illustrative)", t2: "Setting up Example Main Street Pharmacy and Example Riverside Pharmacy…", t3: "Sent after setup completes" } },
+  ready:           { show: ["open_email", "resend"], text: { h1: "You're in. Check your email.", sub: "Payment is confirmed and your pharmacies are set up. We sent your access link to j•••@demo-pharmacy.example.", t1: "Confirmed by Stripe · $148.00 (illustrative)", t2: "Example Main Street Pharmacy and Example Riverside Pharmacy are set up in OwedBook.", t3: "Sent to j•••@demo-pharmacy.example · a separate store invitation went to Sam Ortiz.", resendBtn: "Resend access email" } },
+  delayed:         { show: ["delayed_panel"], text: { h1: "Payment confirmed — setup is taking longer", sub: "Your card was charged once. Setup is delayed; don't pay again.", t1: "Confirmed by Stripe · $148.00 (illustrative)", t2: "Delayed — still working on it (reference demo_act_01)", t3: "Sent after setup completes" } },
+  email_failed:    { show: ["email_failed_panel", "resend"], text: { h1: "Set up — but your access email didn't send", sub: "Payment and setup are complete. Only the email failed.", t1: "Confirmed by Stripe · $148.00 (illustrative)", t2: "Example Main Street Pharmacy and Example Riverside Pharmacy are set up in OwedBook.", t3: "Failed to send · try again below", resendBtn: "Send access email" } },
+  resent:          { show: ["open_email", "resend", "resent_ok"], text: { h1: "You're in. Check your email.", sub: "Payment is confirmed and your pharmacies are set up. We sent your access link to j•••@demo-pharmacy.example.", t1: "Confirmed by Stripe · $148.00 (illustrative)", t2: "Example Main Street Pharmacy and Example Riverside Pharmacy are set up in OwedBook.", t3: "Sent again at 10:46 to j•••@demo-pharmacy.example", resendBtn: "Resend access email" } },
+  payment_failed:  { show: ["payment_failed_panel"], text: { h1: "Payment not confirmed", sub: "Stripe reported the payment didn't complete. Your details are saved; nothing is set up yet.", t1: "Not confirmed · card declined on Stripe", t2: "Not started", t3: "Not sent" } },
+};
+var ICONS = {
+  waiting_payment: [[busy, SPIN], [busy, DOT], [busy, DOT]], provisioning: [[ok, CHECK], [busy, SPIN], [busy, DOT]], ready: [[ok, CHECK], [ok, CHECK], [ok, CHECK]],
+  delayed: [[ok, CHECK], [warn, SPIN], [busy, DOT]], email_failed: [[ok, CHECK], [ok, CHECK], [bad, X]], resent: [[ok, CHECK], [ok, CHECK], [ok, CHECK]], payment_failed: [[bad, X], [busy, DOT], [busy, DOT]],
+};
+window.PAGE_HOOK = function (s) { var ic = ICONS[s] || ICONS.ready; ["i1", "i2", "i3"].forEach(function (k, i) { var el = document.querySelector('[data-bind="' + k + '"]'); el.className = ic[i][0]; el.innerHTML = ic[i][1]; }); };
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

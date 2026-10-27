@@ -1,0 +1,2 @@
+# Engineering evidence lane
+No product execution evidence exists at authoring. E1_RECON.md, approved-plan receipts, self-check logs, protected diffs, safe screenshots and engineering exports belong here. Every record distinguishes Engineer claim from independent QA. Never include credential files, unredacted auth payloads or historical secrets. QAM evidence lives separately. Authoring validation is recorded in verification/AUTHORING_CHECKS.md.

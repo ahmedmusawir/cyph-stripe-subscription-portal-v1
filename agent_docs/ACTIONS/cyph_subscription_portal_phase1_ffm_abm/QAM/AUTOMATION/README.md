@@ -1,0 +1,2 @@
+# QA-owned automation lane
+Q1 may author safe recon/packaging/instrument helpers here; product is read-only. Q2 helpers execute only the approved plan. A helper correction retains the failed attempt, diagnoses instrument versus product failure, proves the correction with controls and records which evidence must be rerun. No hidden retries or loosened assertions. Reusable product tests may be read/run but not repaired by QA. Privacy scanners must be checked against synthetic leak and clean fixtures before real evidence is exported.

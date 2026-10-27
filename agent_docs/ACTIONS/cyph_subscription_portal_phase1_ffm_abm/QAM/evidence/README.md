@@ -1,0 +1,2 @@
+# Independent evidence lane
+No execution evidence exists at authoring. Store per-attempt sanitized observations here, with test/AC/candidate/plan/environment/time identities. Keep failed attempts and meaningful helper corrections. Do not persist credentials, cookies, tokens, authenticated browser profiles or unsafe raw traces. Credentials read in memory only. Exports use explicit inclusion lists; see ../../verification/EXPORT_CONTRACT.md.

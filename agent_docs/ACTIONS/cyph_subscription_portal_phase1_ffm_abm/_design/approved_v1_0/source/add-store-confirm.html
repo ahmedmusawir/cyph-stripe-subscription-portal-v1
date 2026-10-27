@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="quote_ready"
+  data-states="quote_loading:Quote loading,quote_ready:Quote ready (default),quote_expired:Quote expired (refresh + re-consent),quote_error:Quote unavailable (retry),consent_missing:Consent missing on submit,confirming:Confirming · payment pending (busy),payment_failed:Card on file declined,change_card:Changing card hands off to Stripe">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirm your new price — Pharmacy Books</title>
+<meta name="description" content="C10 Price change and consent: current vs new monthly cost, proposed count, amount due today, quote loading/expired/error, price consent, payment-pending; changing the card hands off to Stripe.">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<!--@include header-authed-->
+
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+  <p class="mb-4 text-xs text-muted-foreground"><a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Account &amp; Billing</a> › <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Add a store</a> › Confirm</p>
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Add a store · Step 2 of 2</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]">Confirm your new price</h1>
+  <p class="mt-1 text-sm text-muted-foreground">Adding <span class="font-medium text-foreground">Example Riverside Pharmacy</span> · store admin Sam Ortiz (invited after confirmation).</p>
+
+  <div data-variant="consent_err" class="mt-5 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert" tabindex="-1"><p class="font-semibold">Please approve the new price to continue</p><p class="mt-0.5 text-sm text-muted-foreground">Tick <a href="#pc" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">the price approval</a> below.</p></div>
+  <div data-variant="failed_panel" class="mt-5 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert">
+    <p class="font-semibold">Your card on file was declined</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">The store was <span class="font-medium text-foreground">not</span> added and your plan is unchanged (still 1 pharmacy, $99.00). Update the card on Stripe's secure billing page, then confirm again. Reference <span class="font-mono text-foreground">demo_add_decline_01</span>.</p>
+  </div>
+
+  <form class="mt-6 space-y-5" novalidate>
+    <!-- Quote -->
+    <section class="min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="q-h" aria-live="polite">
+      <div class="flex items-center justify-between gap-2"><h2 id="q-h" class="text-base font-semibold">Price change</h2><span data-bind="qpill" class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Illustrative quote</span></div>
+
+      <div data-variant="q_loading" class="mt-4 space-y-3" aria-busy="true">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground"><svg class="h-4 w-4 animate-spin"><use href="#i-spin"/></svg>Getting your quote from the billing system…</div>
+        <div class="h-5 w-3/4 animate-pulse bg-muted"></div><div class="h-5 w-2/3 animate-pulse bg-muted"></div><div class="h-8 w-1/2 animate-pulse bg-muted"></div>
+      </div>
+
+      <div data-variant="q_ready">
+        <dl class="mt-4 space-y-2 text-sm tabular-nums">
+          <div class="flex justify-between gap-3"><dt class="text-muted-foreground">Current monthly price (1 pharmacy)</dt><dd>$99.00</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-muted-foreground">Add Example Riverside Pharmacy</dt><dd>+ $49.00 / mo</dd></div>
+          <div class="flex justify-between gap-3 border-t border-border pt-2 font-semibold"><dt>New monthly price (2 pharmacies)</dt><dd>$148.00</dd></div>
+          <div class="flex justify-between gap-3 border-t border-border pt-2 text-base font-semibold"><dt>Charged today</dt><dd>$24.50</dd></div>
+        </dl>
+        <p class="mt-2 text-xs text-muted-foreground">Today's amount covers the rest of this billing period <span class="font-medium text-foreground">[PRORATION RULE TBD]</span>; it comes from the billing system, not a local formula. The new price starts <span class="font-medium text-foreground">[EFFECTIVE DATE RULE TBD]</span>. Tax applies if applicable. Quote valid until <span data-bind="validUntil">11:15</span>.</p>
+      </div>
+
+      <div data-variant="q_expired" class="mt-4 border-l-[3px] border-warning bg-warning/10 p-3 text-sm" role="status">
+        <p class="font-semibold">This quote expired</p>
+        <p class="mt-0.5 text-muted-foreground">Prices are held for a limited time. Refresh for a current quote — you'll approve the refreshed amount before anything is charged.</p>
+        <button type="button" data-goto="quote_ready" class="mt-2 inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Refresh quote</button>
+      </div>
+      <div data-variant="q_error" class="mt-4 border-l-[3px] border-destructive bg-destructive/10 p-3 text-sm" role="alert">
+        <p class="font-semibold">Price unavailable</p>
+        <p class="mt-0.5 text-muted-foreground">We couldn't get a quote, so nothing can be confirmed. Your store details are saved and nothing has been charged.</p>
+        <button type="button" data-goto="quote_loading" class="mt-2 inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Try again</button>
+      </div>
+    </section>
+
+    <!-- Payment method -->
+    <section class="min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="pm-h">
+      <h2 id="pm-h" class="text-base font-semibold">Payment</h2>
+      <div data-variant="pm_card" class="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-sm">Pay with card on file: <span class="font-medium">Visa ending •••• [LAST 4]</span></p>
+        <button type="button" data-goto="change_card" class="inline-flex h-11 items-center justify-center gap-2 border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Use a different card <svg class="h-4 w-4"><use href="#i-ext"/></svg></button>
+      </div>
+      <p data-variant="pm_card" class="mt-2 text-xs text-muted-foreground">Card changes happen on Stripe's secure billing page; you return here to confirm. We never collect card details in Pharmacy Books.</p>
+      <div data-variant="pm_change" class="mt-3 border border-dashed border-border bg-background p-4">
+        <div class="flex items-center justify-between gap-2"><p class="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Leaving for Stripe</p><span class="inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Preview</span></div>
+        <p class="mt-1 text-sm font-semibold">Update your card on Stripe's billing page</p>
+        <p class="mt-1 text-sm text-muted-foreground">This quote and your store details stay saved. When you return, the quote is checked and you confirm the add here — the store is never added from the Stripe page itself.</p>
+        <div class="mt-3 flex flex-col gap-2 sm:flex-row"><a href="#" class="inline-flex h-11 items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90">Continue to Stripe <svg class="h-4 w-4"><use href="#i-ext"/></svg></a><button type="button" data-goto="quote_ready" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Keep card on file</button></div>
+      </div>
+    </section>
+
+    <!-- Consent + CTA -->
+    <section class="min-w-0 border border-border bg-card p-4 sm:p-5">
+      <label class="flex cursor-pointer items-start gap-3 text-sm">
+        <input id="pc" type="checkbox" data-bind-check="pc" class="mt-0.5 h-5 w-5 shrink-0" aria-describedby="pc-err">
+        <span>I approve the new monthly price of <span class="font-medium">$148.00</span> and today's charge of <span class="font-medium">$24.50</span> to Pharmacy Books (illustrative amounts).</span>
+      </label>
+      <p id="pc-err" data-variant="consent_err" class="ml-8 mt-1 flex items-center gap-1.5 text-xs font-medium text-destructive"><svg class="h-3.5 w-3.5"><use href="#i-alert"/></svg>Required to continue.</p>
+      <div class="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <a href="#" class="inline-flex h-11 items-center justify-center gap-2 border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent sm:justify-start"><svg class="h-4 w-4"><use href="#i-back"/></svg>Back</a>
+        <div data-variant="cta"><button type="submit" class="inline-flex h-11 w-full items-center justify-center border border-foreground/25 bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card sm:min-w-[14rem]">Confirm and add store</button></div>
+        <div data-variant="cta_off"><span class="inline-flex h-11 w-full items-center justify-center border border-foreground/25 bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary-foreground opacity-50 sm:min-w-[14rem]" aria-disabled="true">Confirm and add store</span><p class="mt-1 text-center text-xs text-muted-foreground sm:text-right" data-bind="offReason">Needs a current quote.</p></div>
+        <div data-variant="cta_busy"><button type="submit" disabled aria-busy="true" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary-foreground sm:min-w-[14rem]"><svg class="h-4 w-4 animate-spin"><use href="#i-spin"/></svg>Confirming…</button></div>
+      </div>
+      <p class="mt-3 text-xs text-muted-foreground">If the payment doesn't go through, the store isn't added and nothing changes. Clicking twice can't add the store twice — one confirmation, one operation.</p>
+      <p data-variant="cta_busy" class="mt-1 text-xs text-muted-foreground" aria-live="polite">Payment pending with Stripe. Keep this page open; the store is added only once payment is confirmed.</p>
+    </section>
+  </form>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = {
+  quote_loading:   { show: ["q_loading", "pm_card", "cta_off"], text: { offReason: "Needs a current quote." }, pill: { qpill: ["muted", "Quoting…"] } },
+  quote_ready:     { show: ["q_ready", "pm_card", "cta"], pill: { qpill: ["info", "Illustrative quote"] } },
+  quote_expired:   { show: ["q_expired", "pm_card", "cta_off"], text: { offReason: "Refresh the quote, then approve the refreshed amount." }, pill: { qpill: ["warning", "Expired"] } },
+  quote_error:     { show: ["q_error", "pm_card", "cta_off"], text: { offReason: "Needs a current quote." }, pill: { qpill: ["destructive", "Unavailable"] } },
+  consent_missing: { show: ["q_ready", "pm_card", "cta", "consent_err"], pill: { qpill: ["info", "Illustrative quote"] } },
+  confirming:      { show: ["q_ready", "pm_card", "cta_busy"], pill: { qpill: ["info", "Illustrative quote"] } },
+  payment_failed:  { show: ["q_ready", "pm_card", "cta", "failed_panel"], pill: { qpill: ["info", "Illustrative quote"] } },
+  change_card:     { show: ["q_ready", "pm_change", "cta_off"], text: { offReason: "Confirm after you return from Stripe." }, pill: { qpill: ["info", "Illustrative quote"] } },
+};
+window.PAGE_HOOK = function (s) { var c = document.getElementById("pc"); c.checked = (s === "confirming" || s === "payment_failed"); c.setAttribute("aria-invalid", String(s === "consent_missing")); };
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>

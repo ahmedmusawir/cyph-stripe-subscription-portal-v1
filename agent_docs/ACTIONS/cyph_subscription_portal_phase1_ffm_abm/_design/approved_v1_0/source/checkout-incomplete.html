@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" class="dark" data-tokens="portal" data-default-state="resumable"
+  data-states="resumable:Draft saved · nothing charged (confirmed),payment_unknown:Payment status unknown (checking),declined:Card declined on Stripe,expired:Draft expired">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finish signing up — Pharmacy Books</title>
+<meta name="description" content="C14 Checkout not completed: resume payment or review saved details; payment status reported honestly (unknown vs confirmed not charged).">
+<!--__CSS__-->
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+<!--@include _icons-->
+<!--@include header-public-->
+
+<main id="main" class="mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8">
+  <!--@include demo-notice-->
+  <p class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Signup</p>
+  <h1 class="mt-1 text-[26px] font-bold leading-tight md:text-[32px]" data-bind="h1">Welcome back. Let's finish your signup.</h1>
+  <p class="mt-1 text-sm text-muted-foreground" data-bind="sub">Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.</p>
+
+  <div data-variant="status_ok" class="mt-5 border-l-[3px] border-info bg-info/10 p-4" role="status">
+    <p class="font-semibold">Nothing has been charged</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">Stripe confirmed no payment was taken for this signup. Pick up where you left off whenever you're ready.</p>
+  </div>
+  <div data-variant="status_unknown" class="mt-5 flex items-start gap-3 border-l-[3px] border-warning bg-warning/10 p-4" role="status" aria-live="polite">
+    <svg class="mt-0.5 h-4 w-4 shrink-0 animate-spin"><use href="#i-spin"/></svg>
+    <div><p class="font-semibold">We're checking whether a payment went through</p><p class="mt-0.5 text-sm text-muted-foreground">You returned from Stripe before we got a confirmation. Please don't pay again until this resolves — it usually takes a moment. If it stays here, contact <span class="font-medium text-foreground">[SUPPORT EMAIL]</span> with reference <span class="font-mono text-foreground">demo_ck_01</span>.</p></div>
+  </div>
+  <div data-variant="status_declined" class="mt-5 border-l-[3px] border-destructive bg-destructive/10 p-4" role="alert">
+    <p class="font-semibold">Your card was declined on Stripe's page</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">No payment was taken. Try another card, or contact your bank, then continue below.</p>
+  </div>
+  <div data-variant="status_expired" class="mt-5 border-l-[3px] border-warning bg-warning/10 p-4" role="status">
+    <p class="font-semibold">This saved signup has expired</p>
+    <p class="mt-0.5 text-sm text-muted-foreground">Drafts are kept for a limited time <span class="font-medium text-foreground">[HOLD PERIOD TBD]</span>. Nothing was charged. Start again — it only takes a few minutes.</p>
+  </div>
+
+  <section class="mt-6 min-w-0 border border-border bg-card p-4 sm:p-5" aria-labelledby="sv-h" data-variant="saved">
+    <div class="flex items-start justify-between gap-3"><h2 id="sv-h" class="text-base font-semibold">What we saved</h2><span class="inline-flex items-center whitespace-nowrap border border-border bg-muted px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground">Saved until [HOLD PERIOD TBD]</span></div>
+    <dl class="mt-3 grid min-w-0 grid-cols-1 gap-3 text-sm sm:grid-cols-3">
+      <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Plan</dt><dd>Standard · monthly</dd></div>
+      <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Pharmacies</dt><dd>Example Main Street Pharmacy · Example Riverside Pharmacy</dd></div>
+      <div><dt class="text-[11px] uppercase tracking-wide text-muted-foreground">Due today</dt><dd class="tabular-nums">$148.00 · illustrative</dd></div>
+    </dl>
+    <div class="mt-5 flex flex-col gap-2 sm:flex-row">
+      <div data-variant="cta"><a href="#" class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 sm:w-auto">Continue to payment <svg class="h-4 w-4"><use href="#i-ext"/></svg></a></div>
+      <div data-variant="cta_off"><span class="inline-flex h-11 w-full items-center justify-center gap-2 border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground opacity-50 sm:w-auto" aria-disabled="true">Continue to payment</span></div>
+      <a href="#" class="inline-flex h-11 items-center justify-center border border-input bg-background px-4 text-sm font-semibold uppercase tracking-wide hover:bg-accent">Review my details first</a>
+    </div>
+    <p data-variant="cta_off" class="mt-2 text-xs text-muted-foreground">Payment is paused until we know whether the earlier attempt went through.</p>
+  </section>
+  <section class="mt-6 min-w-0 border border-border bg-card p-4 sm:p-5" data-variant="restart">
+    <a href="#" class="inline-flex h-11 w-full items-center justify-center border border-foreground/25 bg-primary px-4 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 sm:w-auto">Start a new signup</a>
+  </section>
+
+  <p class="mt-4 text-xs text-muted-foreground">We also email this link to the owner when a checkout is left unfinished. Already have an account? <a href="#" class="font-medium text-foreground underline underline-offset-4 decoration-1 hover:text-primary">Sign in</a>.</p>
+</main>
+<!--@include footer-->
+<!--@include review-bar-->
+<script>
+window.PAGE_STATES = {
+  resumable:       { show: ["status_ok", "saved", "cta"], text: { h1: "Welcome back. Let's finish your signup.", sub: "Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet." } },
+  payment_unknown: { show: ["status_unknown", "saved", "cta_off"], text: { h1: "Welcome back — one moment", sub: "Your details are saved. We're confirming the payment status with Stripe before you can continue." } },
+  declined:        { show: ["status_declined", "saved", "cta"], text: { h1: "Payment didn't go through", sub: "Your details for 2 pharmacies are saved. Your account isn't active yet." } },
+  expired:         { show: ["status_expired", "restart"], text: { h1: "This signup link has expired", sub: "The saved details are no longer available." } },
+};
+</script>
+<!--__RUNTIME__-->
+</body>
+</html>
