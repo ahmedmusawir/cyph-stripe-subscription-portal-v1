@@ -2,7 +2,7 @@
 Owner: Engineer; QA independently verifies applicable claims.
 
 - [ ] Exact repo/baseline/branch and unrelated work recorded; approved plan identity known.
-- [ ] Real auth gate preserved; demo/customer personas never used as production authorization.
+- [ ] Public registration works without login; account management behind the real admin/superadmin gate (R-008/R-009); demo/customer personas never used as production authorization.
 - [ ] All mapped routes/states and reference boundaries implemented.
 - [ ] Typed services enforce capabilities, quote freshness, consent and idempotent operation outcomes.
 - [ ] Initial 1/2/3-store and add 1→2/2→3 paths stay consistent; drafts survive edit/reload.

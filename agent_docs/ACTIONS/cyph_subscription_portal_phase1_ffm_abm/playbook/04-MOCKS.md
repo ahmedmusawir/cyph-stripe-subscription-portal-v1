@@ -1,7 +1,7 @@
 # E2 internal task — coherent fixtures
 
 ## Work
-Create labelled deletable synthetic fixtures and scenario registry from UI_SPEC. One/two/three-store paths work dynamically. Wire per-tab persistence behind facade, reset/logout cleanup and reviewer isolation. Use fixed illustrative proration fixture, not a production formula.
+Create labelled deletable synthetic fixtures and scenario registry from UI_SPEC. One/two/three-store paths work dynamically. Wire per-tab persistence behind facade, reset/logout cleanup, and separate public-draft and account namespaces (R-009). Use fixed illustrative proration fixture, not a production formula.
 
 ## Verification gate
 Fixture values satisfy contracts; scenarios deterministic; no component imports fixtures. No operator pause.

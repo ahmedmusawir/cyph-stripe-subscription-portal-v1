@@ -1,0 +1,226 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AlertTriangle, Check, Circle, Loader2, Mail, XCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { Alert, DemoNotice, Placeholder } from "../Alert";
+import { PageContainer, ViewSkeleton } from "../Loading";
+import { PageHeader } from "../PageHeader";
+import { formatCents, formatTime, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+
+type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
+
+function Track({ label, state, text }: { label: string; state: TrackState; text: string }) {
+  const icon = {
+    done: <Check className="h-4 w-4" aria-hidden="true" />,
+    busy: <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />,
+    warn: <AlertTriangle className="h-4 w-4" aria-hidden="true" />,
+    fail: <XCircle className="h-4 w-4" aria-hidden="true" />,
+    idle: <Circle className="h-4 w-4" aria-hidden="true" />,
+  }[state];
+  const tone = { done: "border-success bg-success/10", busy: "border-info bg-info/10", warn: "border-warning bg-warning/10", fail: "border-destructive bg-destructive/10", idle: "border-border bg-muted" }[state];
+  const word = { done: "Done", busy: "In progress", warn: "Delayed", fail: "Failed", idle: "Not started" }[state];
+  return (
+    <li className="flex min-w-0 items-start gap-3 py-3">
+      <span className={`grid h-9 w-9 shrink-0 place-items-center border text-foreground ${tone}`}>{icon}</span>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-foreground">
+          {label} <span className="sr-only">— {word}</span>
+        </p>
+        <p className="text-sm text-muted-foreground">{text}</p>
+      </div>
+    </li>
+  );
+}
+
+// C06 Activation: three independent tracks (payment · setup · email). No
+// automatic customer login; mock payment never creates a user (R-009).
+export function ActivationView() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { state, hydrated } = useRegistration();
+  const [busy, setBusy] = useState<"refresh" | "resend" | null>(null);
+
+  if (!hydrated) return <PageContainer><ViewSkeleton /></PageContainer>;
+
+  const a = state.activation;
+  if (!a) {
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <Alert tone="info" title="There's no payment to track yet">
+          Activation starts after checkout. <Link href="/demo/register/review" className="portal-link">Go to review</Link>
+        </Alert>
+      </PageContainer>
+    );
+  }
+
+  const { draft, quote } = state;
+  const names = draft.pharmacies.slice(0, draft.requestedStoreCount).map((p) => p.name).filter(Boolean) as string[];
+  const nominated = draft.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+  const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
+  const amount = `${formatCents(quote?.dueNowCents ?? initialRecurringCents(draft.requestedStoreCount))} (illustrative)`;
+  const emailTo = a.ownerEmailMasked;
+
+  const pay: TrackState = a.paymentState === "confirmed" ? "done" : a.paymentState === "failed" ? "fail" : "busy";
+  const setup: TrackState = a.provisioningState === "ready" ? "done" : a.provisioningState === "attention" ? "warn" : a.provisioningState === "pending" ? "busy" : "idle";
+  const mail: TrackState = a.emailState === "sent" ? "done" : a.emailState === "failed" ? "fail" : a.emailState === "pending" ? "busy" : "idle";
+
+  const heading =
+    a.paymentState === "failed"
+      ? "Payment didn't go through"
+      : a.paymentState !== "confirmed"
+        ? "Waiting for payment confirmation"
+        : a.provisioningState === "attention"
+          ? "Paid — setup is taking longer"
+          : a.provisioningState !== "ready"
+            ? "Payment confirmed. Setting up your pharmacies…"
+            : a.emailState === "failed"
+              ? "You're set up — the access email didn't send"
+              : "You're in. Check your email.";
+
+  const canRefresh = a.paymentState === "pending" || (a.paymentState === "confirmed" && a.provisioningState !== "ready");
+
+  async function refresh() {
+    setBusy("refresh");
+    await registration.refreshActivation();
+    setBusy(null);
+  }
+  async function resend() {
+    setBusy("resend");
+    const r = await registration.resendAccessEmail();
+    setBusy(null);
+    if (r.ok) toast({ title: "Access email sent again", description: "Simulated — nothing was actually sent." });
+  }
+  async function retryPayment() {
+    registration.resumeSignup();
+    router.push("/demo/register/review");
+  }
+
+  return (
+    <PageContainer>
+      <DemoNotice />
+      <PageHeader eyebrow="Activation" title={heading} lead={a.paymentState === "confirmed" && a.provisioningState === "ready" && a.emailState === "sent" ? `Payment is confirmed and your pharmacies are set up. We sent your access link to ${emailTo}.` : undefined} />
+
+      <section aria-labelledby="tr-h" aria-live="polite" className="mt-6 border border-border bg-card p-4 sm:p-5" data-testid="activation-tracks">
+        <h2 id="tr-h" className="text-base font-semibold text-foreground">Activation progress</h2>
+        <ol className="mt-1 divide-y divide-border">
+          <Track
+            label="Payment"
+            state={pay}
+            text={pay === "done" ? `Confirmed by Stripe · ${amount}` : pay === "fail" ? "Stripe reported the payment didn't complete." : "Waiting for Stripe's confirmation."}
+          />
+          <Track
+            label="Pharmacy setup"
+            state={setup}
+            text={
+              setup === "done"
+                ? `${names.join(" and ")} ${names.length === 1 ? "is" : "are"} set up in OwedBook.`
+                : setup === "warn"
+                  ? "Paid; setup is late. You don't need to pay again."
+                  : setup === "busy"
+                    ? `Setting up ${names.join(" and ")}.`
+                    : "Starts after payment is confirmed."
+            }
+          />
+          <Track
+            label="Access email"
+            state={mail}
+            text={
+              mail === "done"
+                ? `Sent to ${emailTo}${admin ? ` · a separate store invitation went to ${admin.fullName}` : ""}.`
+                : mail === "fail"
+                  ? "Couldn't be sent. Send it again below."
+                  : "Sent once setup finishes."
+            }
+          />
+        </ol>
+        {canRefresh ? (
+          <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-muted-foreground">In the real app this page updates by itself. In this demo, refresh to play the next confirmation.</p>
+            <Button type="button" variant="outline" onClick={refresh} disabled={busy !== null} aria-busy={busy === "refresh" || undefined} data-testid="activation-refresh">
+              {busy === "refresh" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+              Refresh status
+            </Button>
+          </div>
+        ) : null}
+      </section>
+
+      <div className="mt-5 space-y-5">
+        {a.paymentState === "pending" ? (
+          <Alert tone="info" title="Waiting for Stripe to confirm your payment">
+            This usually takes a moment. If you closed Stripe&apos;s page before finishing, nothing was charged and you can{" "}
+            <Link href="/demo/stripe" className="portal-link">resume checkout</Link>.
+          </Alert>
+        ) : null}
+        {a.provisioningState === "attention" ? (
+          <Alert tone="warning" title="Your payment went through; setup is taking longer than usual">
+            You don&apos;t need to pay again. We&apos;ll email your access link as soon as setup completes. If nothing arrives, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
+          </Alert>
+        ) : null}
+        {a.emailState === "failed" ? (
+          <Alert tone="destructive" title="We couldn't send your access email">
+            Your payment and setup are fine — only the email failed. Send it again below. If it keeps failing, contact <Placeholder>[SUPPORT EMAIL]</Placeholder>.
+          </Alert>
+        ) : null}
+        {a.paymentState === "failed" ? (
+          <Alert
+            tone="destructive"
+            title="We haven't received a payment confirmation"
+            action={
+              <>
+                <Button type="button" onClick={retryPayment}>Try payment again</Button>
+                <Button type="button" variant="outline" onClick={retryPayment}>Review my details</Button>
+              </>
+            }
+          >
+            Stripe reported the payment didn&apos;t complete (reference <span className="font-medium text-foreground">demo_decline_01</span>). Nothing is set up yet and your details are saved.
+          </Alert>
+        ) : null}
+        {a.emailState === "sent" ? (
+          <div className="flex gap-3 border border-border bg-card p-4 sm:p-5">
+            <Mail className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground">Open the email &ldquo;Set up your Pharmacy Books account&rdquo;</p>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                The link hands you to account setup. It works once and for a limited time <Placeholder>[LINK LIFETIME TBD]</Placeholder>. We don&apos;t sign you in from this page, and this demo never creates an account.
+              </p>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <Button asChild variant="outline">
+                  <Link href="/demo/references/email?variant=owner">Preview the access email</Link>
+                </Button>
+                {admin ? (
+                  <Button asChild variant="outline">
+                    <Link href="/demo/references/email?variant=store_admin">Preview {admin.fullName}&apos;s invitation</Link>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {a.paymentState === "confirmed" && a.provisioningState === "ready" ? (
+          <section aria-labelledby="rs-h" className="border border-border bg-card p-4 sm:p-5">
+            <h2 id="rs-h" className="text-base font-semibold text-foreground">Didn&apos;t get it?</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Give it a few minutes and check your spam folder. Still nothing? Send it again.</p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <Button type="button" variant={a.emailState === "failed" ? "default" : "outline"} onClick={resend} disabled={busy !== null} aria-busy={busy === "resend" || undefined} data-testid="resend">
+                {busy === "resend" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+                Resend access email
+              </Button>
+              {state.emailResentAt ? (
+                <p className="text-sm text-foreground" role="status">Sent again at {formatTime(state.emailResentAt)} (simulated). Check your inbox.</p>
+              ) : null}
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Wrong email address? Contact <Placeholder>[SUPPORT EMAIL]</Placeholder>. For your security we don&apos;t change it from this page.
+            </p>
+          </section>
+        ) : null}
+      </div>
+    </PageContainer>
+  );
+}

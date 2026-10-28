@@ -1,6 +1,6 @@
 # UI_SPEC — Cyber Pharma Subscription Portal
 
-> **Version:** 1.0 · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** DRAFT for Architect review — approval requires an attributable Director decision on this revision
+> **Version:** 1.0 + R-009 wording · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** approved design (RULINGS R-001/R-004); this active copy applies R-009 sign-in wording. The received design copy under `_design/approved_v1_0/` is preserved unchanged.
 > **Design mode:** Demo (functional clarity; token discipline mandatory) · **Designer:** Fable · **Architect:** JARVIS · **Director:** Tony
 > **Repository baseline:** `cyph-stripe-subscription-portal-v1` foundation commit `1d15918` · **Module:** FFM-ABM-001-SUBSCRIPTION-PORTAL
 > **Inputs:** `APP_BRIEF.md` v1.0, `DATA_CONTRACT.md` v1.0, `DESIGNER_HANDOFF.md` v1.0, Coach's 17-board HTML, Architect feedback 27 Oct (v0.2 corrections, all applied)
@@ -70,7 +70,7 @@
 
 ### C01 Choose plan — `signup-plan.html`
 - **Purpose:** pick the (single, provisional) plan and the number of pharmacies; see an estimate; sign-in path.
-- **Elements:** radio-card plan selector (one real plan + a dashed "[Second plan TBD]" slot, not selectable); store-count control (− / count / +); estimate panel ("Estimate · not a charge"); Continue; "Already a member? Sign in" line; "not charged until the final step" note.
+- **Elements:** radio-card plan selector (one real plan + a dashed "[Second plan TBD]" slot, not selectable); store-count control (− / count / +); estimate panel ("Estimate · not a charge"); Continue; "Already subscribed? Sign in" line → real `/login` (R-009); "not charged until the final step" note.
 - **Gating:** Continue enabled whenever a plan is selected (always). Count ≥ 1; − disabled at 1.
 - **States:** `two` recomputes the estimate (1 included + 1 additional). `reduce_confirm` appears when lowering the count would discard an entered pharmacy: inline `alertdialog` with "Remove and continue with 1" (destructive-outline) / "Keep 2". `price_unavailable` replaces the estimate with a retry alert; Continue stays enabled because the full price is shown again before payment.
 - **Human checkpoint:** the reduce confirmation.
@@ -135,7 +135,7 @@
 ### C17 Access link — `access-link.html`
 - `valid` (spinner → downstream account setup, explicitly not designed here), `expired` / `used` (request a new link; no email shown or editable), `sending`, `request_sent` (neutral "if an account matches"), `error`.
 
-### Sign-in — `sign-in.html`
+### Sign-in — `sign-in.html` (realised on the real `/login`, R-009)
 - Kit login adapted: email + password, Sign in; `session_expired` info banner; `error` alert + `aria-invalid`; `busy`. Password reset and MFA shown as out-of-scope placeholders, not links.
 
 ## 6. Loading, empty and error states (summary)

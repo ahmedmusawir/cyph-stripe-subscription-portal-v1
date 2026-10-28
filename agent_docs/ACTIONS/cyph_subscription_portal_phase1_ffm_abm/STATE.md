@@ -1,7 +1,22 @@
 # Engineering state
 As of: 27 October 2026 · Asia/Dhaka
 Module: FFM-ABM-001-SUBSCRIPTION-PORTAL v1.0 (installed at `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/`, RULINGS R-007)
-State: **E1_PLAN_RETURNED — awaiting Architect review / Director approval**
+State: **E2_RETURNED — engineering handoff complete; candidate pending Director commit**
+Foundation: `1d15918dc20d80476d6a3cb017b10179f3ddf783`. Branch `ffm-abm-001-subscription-portal` @ `b1fbdda` (Director). Candidate = current uncommitted working tree.
+Contract: ACCEPTANCE_SPEC v1.1; APP_BRIEF v1.2; DATA_CONTRACT v1.2; IMPLEMENTATION_CONTRACT v1.1; RULINGS R-001…R-009.
+Writer: Claudy held the E2 slot; **released at E2 return**.
+Owned processes: `next start -p 3001` (PID 420447, cwd = Claude session scratchpad `run-r008/`, build of this tree) — left running for the Director's walk; stop on request. Not owned: PID 40320 (:3457). `.auth/` deleted; scratch copy holds a symlink to `.env.local` only.
+QAM: QAM/QAM_STATE.md — NOT_READY_FOR_Q1 until the Director commits the candidate and creates `qa/ffm-abm-001-subscription-portal`.
+Latest package: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E2_REVIEW_001.zip` (+ Downloads copy).
+Next: Tony reviews + commits (scoped `git add` list in the E2 response) → Cody Q1 at QAM/QAM_ENTRY.md.
+Completed, do not repeat: E1; R-008 fix; R-009 reconciliation; E2 build + self-checks + handoff.
+Safe resume point: if findings come back, start from QAM/FINDINGS.md under an explicit writer handoff.
+
+## History
+# Engineering state
+As of: 27 October 2026 · Asia/Dhaka
+Module: FFM-ABM-001-SUBSCRIPTION-PORTAL v1.0 (installed at `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/`, RULINGS R-007)
+State: **E2 PAUSED — R-008 focused admin-login fix returned; awaiting Tony's manual admin login confirmation** (E1 plan returned earlier; branch `ffm-abm-001-subscription-portal` now exists at `b1fbdda`, Director commit)
 Foundation: `1d15918dc20d80476d6a3cb017b10179f3ddf783` (resolved in E1; HEAD == foundation).
 Current branch/HEAD at E1: `main` @ `1d15918…`, ahead of origin/main by 1. Unrelated dirt: 71 ` D` paths under `agent_docs/CURRENT_APP/super_admin_portal_phase1_ffm/` (Director-side; preserved).
 Engineering branch: ffm-abm-001-subscription-portal — **not yet created** (E2 waits; blocker B1). QA branch: qa/ffm-abm-001-subscription-portal.
@@ -15,3 +30,10 @@ Owned processes/temp paths: none running. Scratch build copy and extract live in
 Next: Architect review → Director approval (record exact instruction in EXECUTION_PLAN approval record) + B1–B4 resolutions → E2 continuous build from plan §5 step 1.
 Completed, do not repeat: foundation cleanup (Director commit), Designer v1.0 review, Tony design approval and FFM release, E1 package verification/install/bridge/plan.
 Safe resume point: if E2 is approved, re-verify branch/HEAD/dirt against this file, then start plan §5 step 1.
+
+## R-008 checkpoint (27 Oct 2026)
+- Director paused broader E2 for a focused fix: admin OR superadmin may enter; member denied (RULINGS R-008).
+- Product files changed (uncommitted, branch `ffm-abm-001-subscription-portal` @ `b1fbdda`): see RULINGS R-008 Implementation. tsc 0; jest 4 suites / 40 tests.
+- Owned process: `next start -p 3001` from the session scratchpad copy `run-r008/` (not the repo `.next`). Not owned: PID 368139 `next dev` :3000 (started 13:23, Tony's), PID 40320 :3457.
+- Next: Tony logs in with his admin account at http://localhost:3001/login and confirms; then E2 resumes from plan §5 step 1.
+- Tony confirmed the real admin login works (27 Oct). My :3001 server is stopped. No owned processes remain. E2 is still paused until the Director says to resume.

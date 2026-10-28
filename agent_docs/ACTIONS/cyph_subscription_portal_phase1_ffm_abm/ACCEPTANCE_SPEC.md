@@ -1,5 +1,5 @@
 # Acceptance specification — FFM-ABM-001-SUBSCRIPTION-PORTAL
-Version 1.0 · 27 October 2026 · Frozen requirement text after package release; append amendments in RULINGS.
+Version 1.1 · 27 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.1 replaces AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
 
 ## Basis and grading
 APP_BRIEF v1.1, DATA_CONTRACT v1.1, IMPLEMENTATION_CONTRACT v1.0, received UI_SPEC v1.0 with R-004. Each AC is required for the declared FFM scope. No arbitrary screen/test count replaces behavior. All mock checks run in a locally served app or isolated service tests; real access checks use only the authorized existing shared-dev auth target. Deployment/live billing/SSO are excluded.
@@ -8,22 +8,22 @@ Missing required evidence is UNVERIFIED/BLOCKED, not PASS or silently N/A. Faile
 
 Every evidence record includes input/precondition, expected result, actual result, method, candidate/HEAD, environment, time and path. Browser screenshots supplement assertions. Q1 independently specifies exact cases, negative controls and coverage reductions.
 
-## AC-01 — Inherited real access gate
-**Requirement:** Signed-out requests to dashboard and every new demo route redirect to actual login; no mock data/control renders before server authorization. Existing authorized staff can enter; actual authenticated non-superadmin remains denied. Forged persona/query/storage cannot bypass it.
+## AC-01 — Public entry and account-management access
+**Requirement:** `/` opens the public plan-selection screen. Registration, owner/pharmacy forms, review, initial mock checkout and its completion/recovery screens work end to end with no login and never redirect to login. Signed-out requests to `/dashboard`, add-store, the OwedBook reference and account-side modes of shared routes redirect to the real `/login`, and no account mock data/control renders (including in the redirect body) before server authorization. Existing `admin` and `superadmin` accounts enter; `member` and role-less accounts stay denied. Forged persona/query/storage/metadata role values cannot grant access.
 
-**Verification:** Real auth browser/direct navigation; source and existing regression tests.
+**Verification:** Anonymous browser journey and direct navigation; real admin login with the one authorized credential; mocked-role automated tests for admin/superadmin allowance and member denial at rule, session, layout, page and login-form layers.
 
-**Evidence:** Auth redirects and sanitized role-specific observations; missing negative identity is BLOCKED.
+**Evidence:** Redirects and bodies, sanitized real-admin observations, mocked-role test results labelled as mocked; missing admin credential makes the live check BLOCKED.
 
 ## AC-02 — Real auth preserved
-**Requirement:** Login/logout/session refresh retain baseline behavior. No auth signup/reset/MFA or role change is added. Actual logout clears demo data. Demo sign-in never submits fake credentials to Supabase.
+**Requirement:** Login/logout/session refresh retain baseline behavior apart from the R-008 role rule. No auth signup/reset/MFA or role change is added. Actual logout clears all demo data. "Already subscribed? Sign in" leads to the real `/login`; mock payment/activation/access links never submit credentials or create a session.
 
 **Verification:** Real login/logout/reload plus network assertions and protected-path diff.
 
 **Evidence:** Baseline comparison, login count, redacted network destinations.
 
 ## AC-03 — Protected demo personas
-**Requirement:** Staff identity and synthetic owner/admin/member/prospective-owner are explicitly distinguished. Nonowner fixtures receive only owner-contact/denied views; financial data and mutations are denied by mock services as well as UI.
+**Requirement:** The real signed-in admin and the synthetic owner/store-admin/member personas are explicitly distinguished; the prospective owner is the anonymous public visitor. Nonowner fixtures receive only owner-contact/denied views; financial data and mutations are denied by mock services as well as UI.
 
 **Verification:** Browser persona change plus direct service negative tests.
 
@@ -51,7 +51,7 @@ Every evidence record includes input/precondition, expected result, actual resul
 **Evidence:** Leading-zero, conditional-field and focus observations.
 
 ## AC-07 — Draft/edit continuity
-**Requirement:** Back/edit navigation and same-tab reload preserve synthetic owner/pharmacy/admin data. Quote invalidates after material edits. Reset/logout/identity change remove the demo state. No secrets/real business data are persisted.
+**Requirement:** Back/edit navigation and same-tab reload preserve synthetic owner/pharmacy/admin data. Quote invalidates after material edits. The public registration draft and the account mock state are separate; reset clears its own namespace, logout clears both, identity change clears account state. No secrets/real business data are persisted.
 
 **Verification:** Browser route, reload and reset tests.
 
@@ -177,14 +177,14 @@ Every evidence record includes input/precondition, expected result, actual resul
 **Evidence:** Import inventory, boundary and state-isolation evidence.
 
 ## AC-25 — No live side effects
-**Requirement:** No new billing/provision/email/database APIs or live SDK calls. No schema/user/role writes, SSO cookies/domain rollout, external product edits or deploy. Only authorized existing dev-auth requests occur; public demo URLs remain gated.
+**Requirement:** No new billing/provision/email/database APIs or live SDK calls. No schema/user/role writes, SSO cookies/domain rollout, external product edits or deploy. Only authorized existing dev-auth requests occur; account-management URLs remain gated while public registration stays public.
 
 **Verification:** Diff/import/network inspection with target validation.
 
 **Evidence:** Actual allowed destinations and no forbidden changes.
 
 ## AC-26 — Foundation regression
-**Requirement:** Removed MC routes stay removed; GET login remains 405; real POST/logout/confirm paths retain baseline behavior. Deploy stubs remain not-configured. Unrelated work/lockfile and provider/session infrastructure preserved.
+**Requirement:** Removed MC routes stay removed; `/` now redirects to the public plan screen (R-009); GET login remains 405; real POST/logout/confirm paths retain baseline behavior. Deploy stubs remain not-configured. Unrelated work/lockfile and provider/session infrastructure preserved.
 
 **Verification:** Existing tests, route probes, protected-file diff.
 
@@ -205,7 +205,7 @@ Every evidence record includes input/precondition, expected result, actual resul
 **Evidence:** Handoff, file index, privacy checks and app-artifact exclusion.
 
 ## AC-29 — Review controls and reset
-**Requirement:** Reviewer can deterministically select required scenarios, reset fixtures and return to baseline without real data changes. Scenario IDs are enumerated, no arbitrary script/HTML or external URLs accepted. All user-entered text renders as text.
+**Requirement:** A reviewer can deterministically select required scenarios (registration scenarios on public pages; account scenarios/personas only inside account management), reset fixtures and return to baseline without real data changes. Scenario IDs are enumerated, no arbitrary script/HTML or external URLs accepted. All user-entered text renders as text.
 
 **Verification:** Browser reset plus hostile-string/service-input negatives.
 

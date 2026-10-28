@@ -3,10 +3,16 @@
 @tailwind utilities;
 
 /* Cyber Pharma — shared Metro Warm token layer (Mist = light, Slate = dark).
-   Inherited unchanged from the Mission Control FFM; the Subscription Portal
-   drinks from the same token well. Coral (--primary) is brand only, never a
-   status. Semantic four: success / warning / destructive / info. Flat corners
-   (--radius: 0). The Designer extends these tokens; nothing hardcodes colors. */
+   Inherited from the Mission Control FFM; the Subscription Portal drinks from
+   the same token well. Coral (--primary) is brand only, never a status.
+   Semantic four: success / warning / destructive / info. Flat corners
+   (--radius: 0). Nothing hardcodes colors.
+
+   SUBSCRIPTION PORTAL v0.2 (2026-10-27) — six values changed, PORTAL-SCOPED,
+   each marked "portal:" with the inherited value. Reason: measured WCAG AA on
+   the rendered screens (see DECISIONS_AND_DELTAS.md §5). Hue/saturation kept;
+   only lightness moved, except primary-foreground (white → dark ink on coral).
+   No fleet-wide rollout is implied; OwedBook / Mission Control keep theirs. */
 @layer base {
   :root {
     --background: 217 16% 90%;
@@ -16,7 +22,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 24% 16%;
     --primary: 12 93% 64%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 220 24% 12%;  /* portal: was 0 0% 100% — dark ink on coral, 6.0:1 */
     --secondary: 216 16% 88%;
     --secondary-foreground: 220 24% 22%;
     --muted: 216 16% 93%;
@@ -28,11 +34,11 @@
     --ring: 12 93% 64%;
     --destructive: 2 67% 51%;
     --destructive-foreground: 0 0% 100%;
-    --success: 131 54% 40%;
+    --success: 131 54% 34%;             /* portal: was 131 54% 40% — small text on card 4.6:1 */
     --success-foreground: 0 0% 100%;
-    --warning: 41 93% 47%;
+    --warning: 41 93% 32%;              /* portal: was 41 93% 47% — small text on card 4.5:1 */
     --warning-foreground: 0 0% 100%;
-    --info: 214 74% 53%;
+    --info: 214 74% 50%;                /* portal: was 214 74% 53% — small text on card 4.6:1 */
     --info-foreground: 0 0% 100%;
     --radius: 0px;
   }
@@ -45,7 +51,7 @@
     --popover: 220 14% 27%;
     --popover-foreground: 218 22% 92%;
     --primary: 12 93% 64%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 220 24% 12%;  /* portal: was 0 0% 100% */
     --secondary: 220 13% 31%;
     --secondary-foreground: 218 22% 92%;
     --muted: 220 13% 31%;
@@ -55,13 +61,13 @@
     --border: 220 12% 38%;
     --input: 220 12% 38%;
     --ring: 12 93% 64%;
-    --destructive: 351 95% 71%;
+    --destructive: 351 95% 77%;         /* portal: was 351 95% 71% — small text on card 4.6:1 */
     --destructive-foreground: 220 24% 12%;
     --success: 142 69% 58%;
     --success-foreground: 220 24% 12%;
     --warning: 41 93% 55%;
     --warning-foreground: 220 24% 12%;
-    --info: 214 74% 64%;
+    --info: 214 74% 72%;                /* portal: was 214 74% 64% — small text on card 4.6:1 */
     --info-foreground: 220 24% 12%;
     --radius: 0px;
   }
@@ -76,4 +82,20 @@
 
 body {
   scroll-behavior: smooth;
+}
+
+/* Portal FFM additions (not tokens). Native form controls read the primary
+   token; links keep foreground text through hover/focus (RULINGS R-004) and
+   signal interaction with underline thickness only. */
+@layer base {
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: hsl(var(--primary));
+  }
+}
+
+@layer components {
+  .portal-link {
+    @apply font-medium text-foreground underline decoration-1 underline-offset-4 hover:decoration-2 focus-visible:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
 }

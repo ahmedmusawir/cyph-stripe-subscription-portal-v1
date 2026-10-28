@@ -1,12 +1,12 @@
 # DATA CONTRACT — Subscription Portal design and mock journeys
 
-> Version: 1.1 · Date: 27 October 2026 (Asia/Dhaka)
+> Version: 1.2 · Date: 27 October 2026 (Asia/Dhaka) · v1.2 applies Director rulings R-008/R-009
 > Status: FFM contract under RULINGS R-001/R-005 · Owner: Architect
 > Purpose: screen fields, mock relationships, transitions and permissions. NOT production SQL or a migration contract.
 
 ## 1. Evidence boundary
 
-The cleaned repo has auth code that reads `user_roles`, a temporary superadmin gate and no subscription domain services. Historical SQL describes `user_roles` and `profiles`, but conflicting trigger definitions have not been reconciled against the live database. No business table is verified by this package. The names below are view models for the FFM and do not instruct anyone to create tables.
+The repo has auth code that reads `user_roles`, an account-management gate that admits `admin` or `superadmin` (R-008) while registration is public (R-009), and no subscription domain services. Historical SQL describes `user_roles` and `profiles`, but conflicting trigger definitions have not been reconciled against the live database. No business table is verified by this package. The names below are view models for the FFM and do not instruct anyone to create tables.
 
 Use one mock service boundary for business behavior. Screens consume consistent view models rather than inventing their own amounts, states or permission rules. Production ownership, Stripe customer mapping, RLS, provisioning and webhook idempotency will be specified in subsequent implementation work.
 
@@ -147,13 +147,13 @@ Coach confirms subscription granularity and commercial policy. Architect/Enginee
 
 ## 10. Implementation binding (v1.1)
 
-`portal-contract.ts` is the concrete type/service contract for these view models. Copy/adapt it into the portal types lane without introducing SDK dependencies. File organization is an implementation choice; field meanings and invariants are not. IMPLEMENTATION_CONTRACT defines routes, reviewer isolation, state persistence and test boundaries.
+`portal-contract.ts` is the concrete type/service contract for these view models. Copy/adapt it into the portal types lane without introducing SDK dependencies. File organization is an implementation choice; field meanings and invariants are not. IMPLEMENTATION_CONTRACT defines routes, public/account isolation, state persistence and test boundaries.
 
 - Quote has a draft revision and a unique ID. Changes to store count, pharmacy details, code or terms invalidate earlier quote consent. Refresh creates a new quote ID and clears relevant price/recurring consent. Confirm requires a matching ready quote, current revision and unexpired injected-clock timestamp.
-- All mock commands enforce persona capabilities at the service boundary; hiding controls alone is insufficient. Errors are discriminated results. Denied responses contain no card/invoice/financial account payload. Real staff-role claims never become customer-ownership grants.
+- All mock commands enforce persona capabilities at the service boundary; hiding controls alone is insufficient. Errors are discriminated results. Denied responses contain no card/invoice/financial account payload. A real admin/superadmin role never becomes a customer-ownership grant, and a synthetic persona never becomes a real role.
 - Store addition uses a stable operation key for retries while pending/succeeded. A repeated request with the same key returns the same result; it never adds/charges twice. A definitive failed attempt can be retried deliberately with a new key. Unknown/pending is not failure and must not open a second payment attempt.
 - Paid/provisioning-attention adds one covered store in pending setup, keeps the financial change, holds invitation and prevents a duplicate addition. Paid amount, coverage and activation cannot contradict one another.
-- Ordinary route navigation retains the draft. FFM sessionStorage stores synthetic data only, namespaced/versioned per reviewer session; reset, actual logout and identity change clear it. Theme storage may remain. A hard reload in the same tab restores the demo. Browser-close retention and cross-tab synchronization are not promises.
+- Ordinary route navigation retains the draft. FFM sessionStorage stores synthetic data only, versioned, in two per-tab namespaces: the anonymous public registration draft and the account mock state keyed to the signed-in admin. A public page never reads the account namespace. Reset clears its namespace; actual logout clears both; identity change clears the account namespace. Theme storage may remain. A hard reload in the same tab restores the demo. Browser-close retention and cross-tab synchronization are not promises.
 - All counter values >=1 are supported by a repeatable form/list, not a hardcoded second-store page. For an illustrative initial quote use 9900 + 4900 * (N - 1) cents; DEMO10 subtracts 1000 from due-now only. Each one-store add uses the fixed illustrative 2450-cent due-now fixture, never a production proration formula. Account counts and names drive downstream screens; the canonical two-store screenshot is one seed, not every account's state.
 - Status changes only through explicit mock service outcomes. URL `success=true`, closing an external preview or viewing a success route cannot grant authentication, confirm payment or activate a store. Deep-link missing context routes back to a safe starting step with an explanation.
 - Access-link and email demonstrations remain inert local previews. Recipients are synthetic. No token, payment SDK, API mutation, real email link or credential is generated.

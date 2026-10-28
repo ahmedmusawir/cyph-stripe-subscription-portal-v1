@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:integration": "jest --testPathPatterns=__tests__/api"
+    "test:integration": "jest --testPathPatterns=__tests__/api",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
