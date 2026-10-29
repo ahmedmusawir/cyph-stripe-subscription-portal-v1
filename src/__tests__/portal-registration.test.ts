@@ -1,6 +1,7 @@
 // Public registration engine (R-009 surface). Expected cents are hard-coded
 // literals (DATA_CONTRACT §8), never computed with the code under test.
 import * as reg from '@/services/portal/registration';
+import * as pricing from '@/services/portal/pricing';
 import type { RegistrationState } from '@/types/portal/state';
 import { REGISTRATION_SCENARIOS } from '@/types/portal/state';
 import type { PharmacyDraft } from '@/types/portal/contract';
@@ -97,6 +98,29 @@ describe('store count and repeat-N', () => {
     const s = reg.createRegistration('fresh');
     expect(reg.setStoreCount(s, 0).result.ok).toBe(false);
     expect(reg.setStoreCount(s, 1.5).result.ok).toBe(false);
+  });
+
+  // REPAIR_001 Q2-G06: repeat-N has no business cap; only unrepresentable counts are rejected.
+  it('accepts counts above 20 and prices them by repeat-N (literal cents)', () => {
+    let s = reg.createRegistration('fresh');
+    s = reg.setStoreCount(s, 21).state;
+    s = reg.saveOwner(s, owner).state;
+    for (let i = 0; i < 21; i++) {
+      const step = reg.savePharmacy(s, i, pharmacy(i + 1, { ncpdp: String(1000000 + i), npi: String(1000000000 + i) }));
+      expect(step.result.ok).toBe(true);
+      s = step.state;
+    }
+    expect(s.draft.requestedStoreCount).toBe(21);
+    expect(value<{ newRecurringCents: number; dueNowCents: number; proposedStoreCount: number }>(reg.requestQuote(s, deps))).toMatchObject({ newRecurringCents: 107900, dueNowCents: 107900, proposedStoreCount: 21 });
+    expect(reg.setStoreCount(reg.createRegistration('fresh'), 25).result.ok).toBe(true);
+  });
+
+  it('rejects unsafe or non-numeric counts explicitly', () => {
+    const s = reg.createRegistration('fresh');
+    for (const bad of [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 2, Infinity, NaN, -1, '3', null]) {
+      expect(reg.setStoreCount(s, bad).result).toMatchObject({ ok: false });
+    }
+    expect(reg.setStoreCount(s, Number.MAX_SAFE_INTEGER).result).toMatchObject({ ok: false, code: 'validation', message: "That many pharmacies can't be priced exactly." });
   });
 
   it('reports which entered pharmacies a reduction would discard', () => {
@@ -317,5 +341,18 @@ describe('scenarios', () => {
       const s = reg.createRegistration(id);
       expect(JSON.stringify(s)).not.toMatch(/@(?!demo-pharmacy\.example)/);
     }
+  });
+});
+
+describe('repeat-N pricing bound (REPAIR_001 Q2-G06)', () => {
+  it('prices 1/2/3/21/1000 stores by 9900 + 4900·(N−1) (literal cents)', () => {
+    expect([1, 2, 3, 21, 1000].map(pricing.initialRecurringCents)).toEqual([9900, 14800, 19700, 107900, 4905000]);
+  });
+  it('the only upper bound keeps the total an exact safe integer', () => {
+    const max = pricing.MAX_REPRESENTABLE_STORES;
+    expect(max).toBeGreaterThan(1_000_000_000);
+    expect(Number.isSafeInteger(pricing.initialRecurringCents(max))).toBe(true);
+    expect(pricing.isValidStoreCount(max + 1)).toBe(false);
+    expect(() => pricing.initialRecurringCents(max + 1)).toThrow(RangeError);
   });
 });

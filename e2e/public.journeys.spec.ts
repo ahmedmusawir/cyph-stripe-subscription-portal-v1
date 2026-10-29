@@ -98,7 +98,7 @@ test("anonymous 1-store registration end to end, never asked to log in, no exter
   // Mock payment never signs anyone in: account management is still gated.
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login$/);
-  expect([...hosts].filter((h) => h !== "localhost:3001")).toEqual([]);
+  expect([...hosts].filter((h) => h !== new URL(test.info().project.use.baseURL!).host)).toEqual([]);
 });
 
 test("3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through", async ({ page }) => {

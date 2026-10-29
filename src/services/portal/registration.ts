@@ -221,7 +221,12 @@ export function storeCountDiscards(state: RegistrationState, n: number): string[
 }
 
 export function setStoreCount(state: RegistrationState, n: unknown): Step<RegistrationDraft> {
-  if (!isValidStoreCount(n)) return fail(state, 'validation', 'Choose at least 1 pharmacy.');
+  if (!isValidStoreCount(n))
+    return fail(
+      state,
+      'validation',
+      typeof n === 'number' && Number.isInteger(n) && n > 1 ? "That many pharmacies can't be priced exactly." : 'Choose at least 1 pharmacy.',
+    );
   const pharmacies = state.draft.pharmacies.slice(0, n);
   while (pharmacies.length < n) pharmacies.push({});
   if (n === state.draft.requestedStoreCount) return ok(state, state.draft);

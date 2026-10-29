@@ -39,6 +39,9 @@ export function DashboardView() {
   const [handoffError, setHandoffError] = useState<BillingPurpose | null>(null);
   const [launching, setLaunching] = useState<BillingPurpose | null>(null);
   const [retrying, setRetrying] = useState(false);
+  const [reloading, setReloading] = useState(false);
+  const [loadedAt, setLoadedAt] = useState<number | null>(null);
+  const [now, setNow] = useState(() => Date.now());
   const seq = useRef(0);
 
   const refreshing = state.returnStatus === "refreshing";
@@ -47,18 +50,45 @@ export function DashboardView() {
   useEffect(() => {
     if (!hydrated) return;
     const mine = ++seq.current;
+    // Returning from Stripe: show the last-known summary under the "refreshing"
+    // banner (approved C13 state) instead of a blank skeleton. REPAIR_001 R1-N01.
+    if (refreshing) {
+      const last = account.peekAccount();
+      if (last.ok) setView(last.value);
+    }
     const run = refreshing ? account.refreshAfterHandoff("account_billing") : account.loadAccount();
     void run.then((r) => {
       if (mine !== seq.current) return;
       setView(r.ok ? r.value : { kind: "error" });
+      if (r.ok) setLoadedAt(Date.now());
     });
   }, [hydrated, state.account, state.persona, state.scenario, refreshing, account]);
 
+  // "Last refreshed just now" ages honestly (approved refresh line, Q2-O04).
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  async function reloadSummary() {
+    setReloading(true);
+    const mine = ++seq.current;
+    const r = await account.loadAccount();
+    setReloading(false);
+    if (mine !== seq.current) return;
+    setView(r.ok ? r.value : { kind: "error" });
+    if (r.ok) {
+      setLoadedAt(Date.now());
+      setNow(Date.now());
+    }
+  }
+
   async function retryLoad() {
     setRetrying(true);
-    const r = await account.loadAccount();
+    const r = await account.retryLoadAccount();
     setRetrying(false);
     setView(r.ok ? r.value : { kind: "error" });
+    if (r.ok) setLoadedAt(Date.now());
   }
 
   async function openBilling(purpose: BillingPurpose) {
@@ -147,6 +177,25 @@ export function DashboardView() {
   const all = covered === 1 ? "your pharmacy" : covered === 2 ? "both pharmacies" : `all ${covered} pharmacies`;
   const busy = refreshing || launching !== null;
 
+  const monthly = (p: PharmacyListItem) =>
+    p.isIncluded ? "Included" : p.monthlyAmountCents !== undefined ? formatCents(p.monthlyAmountCents) : "—";
+  const sentOn = formatDate("2026-10-26").replace(/ \d{4}$/, "");
+  const action = (p: PharmacyListItem) =>
+    p.invitationStatus === "pending" ? (
+      <button
+        type="button"
+        className="portal-link inline-flex min-h-[44px] items-center text-sm"
+        disabled={busy}
+        onClick={() => toast({ title: "Invitation resent", description: `Simulated — nothing was sent to ${p.adminName}.` })}
+      >
+        Resend invitation<span className="sr-only"> to {p.adminName}</span>
+      </button>
+    ) : (
+      <Link href="/demo/references/owedbook" className="portal-link inline-flex min-h-[44px] items-center text-sm">
+        Open in OwedBook<span className="sr-only"> — {p.name}</span>
+      </Link>
+    );
+
   const columns = [
     {
       key: "name",
@@ -168,7 +217,7 @@ export function DashboardView() {
         </span>
       ),
     },
-    { key: "monthly", header: "Monthly", cell: (p: PharmacyListItem) => <span className="tabular-nums">{p.isIncluded ? "Included" : p.monthlyAmountCents !== undefined ? formatCents(p.monthlyAmountCents) : "—"}</span> },
+    { key: "monthly", header: "Monthly", cell: (p: PharmacyListItem) => <span className="tabular-nums">{monthly(p)}</span> },
     { key: "act", header: "Activation", cell: (p: PharmacyListItem) => <StatusPill map={STORE_PILL} value={p.activationStatus} checking={refreshing} /> },
     {
       key: "inv",
@@ -177,31 +226,63 @@ export function DashboardView() {
         <div>
           <StatusPill map={INVITATION_PILL} value={p.invitationStatus} checking={refreshing} />
           {p.invitationStatus === "pending" && p.invitationEmailMasked ? (
-            <p className="mt-1 break-all text-xs text-muted-foreground">Sent {formatDate("2026-10-26").replace(/ \d{4}$/, "")} · {p.invitationEmailMasked}</p>
+            <p className="mt-1 break-all text-xs text-muted-foreground">Sent {sentOn} · {p.invitationEmailMasked}</p>
           ) : null}
         </div>
       ),
     },
-    {
-      key: "action",
-      header: "Actions",
-      cell: (p: PharmacyListItem) =>
-        p.invitationStatus === "pending" ? (
-          <button
-            type="button"
-            className="portal-link inline-flex min-h-[44px] items-center text-sm"
-            disabled={busy}
-            onClick={() => toast({ title: "Invitation resent", description: `Simulated — nothing was sent to ${p.adminName}.` })}
-          >
-            Resend invitation<span className="sr-only"> to {p.adminName}</span>
-          </button>
-        ) : (
-          <Link href="/demo/references/owedbook" className="portal-link inline-flex min-h-[44px] items-center text-sm">
-            Open in OwedBook<span className="sr-only"> — {p.name}</span>
-          </Link>
-        ),
-    },
+    { key: "action", header: "Actions", cell: action },
   ];
+
+  // < md card, as approved (account-billing mobile): activation pill in the
+  // title row; Store admin | Monthly; Invitation | action.
+  const card = (p: PharmacyListItem) => (
+    <div className="min-w-0" data-testid="pharmacy-card">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="font-semibold text-foreground">{p.name}</p>
+          <p className="text-xs tabular-nums text-muted-foreground">{p.ncpdpDisplay}</p>
+        </div>
+        <span className="shrink-0" data-testid="card-activation">
+          <StatusPill map={STORE_PILL} value={p.activationStatus} checking={refreshing} />
+        </span>
+      </div>
+      <dl className="mt-3 grid min-w-0 grid-cols-2 gap-3 text-sm">
+        <div className="min-w-0">
+          <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">Store admin</dt>
+          <dd className="text-foreground">
+            {p.adminName} <RoleLabel>{p.ownerIsAdmin ? "Owner" : "Store admin"}</RoleLabel>
+          </dd>
+        </div>
+        <div className="min-w-0">
+          <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">Monthly</dt>
+          <dd className="tabular-nums text-foreground">{monthly(p)}</dd>
+        </div>
+        <div className="min-w-0">
+          <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">Invitation</dt>
+          <dd>
+            <StatusPill map={INVITATION_PILL} value={p.invitationStatus} checking={refreshing} />
+            {p.invitationStatus === "pending" ? <p className="mt-0.5 text-[11px] text-muted-foreground">Sent {sentOn}</p> : null}
+          </dd>
+        </div>
+        <div className="self-end text-right">{action(p)}</div>
+      </dl>
+    </div>
+  );
+
+  const refreshLine = refreshing ? (
+    <span>Refreshing…</span>
+  ) : (
+    <>
+      {state.returnStatus !== "none" && state.refreshedAt
+        ? `Refreshed ${formatTime(state.refreshedAt)} after returning from Stripe`
+        : `Last refreshed ${loadedAt === null || now - loadedAt < 60_000 ? "just now" : `at ${formatTime(new Date(loadedAt).toISOString())}`}`}
+      {" · "}
+      <button type="button" className="portal-link inline-flex min-h-[44px] items-center" onClick={reloadSummary} disabled={busy || reloading} aria-busy={reloading || undefined}>
+        Refresh
+      </button>
+    </>
+  );
 
   const addStore =
     availability === "allowed" ? (
@@ -223,7 +304,7 @@ export function DashboardView() {
             Billing owner <span className="font-medium text-foreground">{a.ownerName}</span> · <span className="break-all">{a.ownerEmail}</span>
           </>
         }
-        meta={state.refreshedAt ? <>Last refreshed {formatTime(state.refreshedAt)}</> : null}
+        meta={<p className="sm:text-right" data-testid="refresh-line" aria-live="polite">{refreshLine}</p>}
       />
 
       <div className="mt-5 space-y-3" data-testid="dashboard-banners">
@@ -346,20 +427,23 @@ export function DashboardView() {
         </div>
       </section>
 
-      <section aria-labelledby="ph-h" className="mt-5 border border-border bg-card p-4 sm:p-5">
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+      <section aria-labelledby="ph-h" className="mt-8" data-testid="pharmacies-section">
+        <div className="mb-3 flex items-end justify-between gap-3">
           <div className="min-w-0">
-            <h2 id="ph-h" className="text-base font-semibold text-foreground">Pharmacies on this plan</h2>
-            <p className="text-xs text-muted-foreground">Each pharmacy has one store admin. Store admins who are not the billing owner cannot manage billing. An owner can also be a store admin.</p>
+            <h2 id="ph-h" className="text-xl font-bold text-foreground">Pharmacies on this plan</h2>
+            <p className="text-sm text-muted-foreground">Each pharmacy has one store admin. Store admins who are not the billing owner cannot manage billing. An owner can also be a store admin.</p>
           </div>
-          <Pill tone="muted" className="self-start">
+          <span className="shrink-0 text-sm tabular-nums text-muted-foreground" data-testid="pharmacy-count">
             {a.pharmacies.length} of {covered}
-          </Pill>
+          </span>
         </div>
         <DataTable
           columns={columns}
           rows={a.pharmacies}
           getRowKey={(p) => p.id}
+          tableClassName="border border-border bg-card"
+          renderMobileCard={card}
+          mobileLabel="Pharmacies covered by this subscription"
           empty={
             <EmptyState
               icon={Home}
@@ -371,7 +455,7 @@ export function DashboardView() {
         />
       </section>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-2">
+      <div className="mt-8 grid gap-5 lg:grid-cols-2">
         <section aria-labelledby="own-h" className="border border-border bg-card p-4 sm:p-5">
           <h2 id="own-h" className="text-base font-semibold text-foreground">Billing owner</h2>
           <div className="mt-3 flex items-center gap-3">

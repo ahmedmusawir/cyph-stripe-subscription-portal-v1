@@ -1,4 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./auth";
+
+test.use({ allowLogout: true });
 
 // LAST: the inherited logout route calls Supabase signOut() with its default
 // GLOBAL scope, which ends every session of this account. Run once, at the end.

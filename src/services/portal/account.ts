@@ -209,11 +209,21 @@ function denied(): AccountRead {
 
 export type AccountReadModel = { kind: 'account'; account: AccountViewModel } | Extract<AccountRead, { kind: 'denied' }>;
 
+/**
+ * A pending load error is NOT consumed by reading: every load (remount, route
+ * change, reload, a second effect) keeps failing until the user's explicit
+ * "Try again" (`retryLoadAccount`). REPAIR_001 Q2-F02 — a one-shot failure was
+ * silently used up by whichever load ran first.
+ */
 export function loadAccount(state: AccountState): Step<AccountReadModel> {
-  if (state.loadFailuresRemaining > 0)
-    return fail({ ...state, loadFailuresRemaining: state.loadFailuresRemaining - 1 }, 'conflict', "We couldn't load your account.");
+  if (state.loadFailuresRemaining > 0) return fail(state, 'conflict', "We couldn't load your account.");
   if (!capabilitiesFor(state.persona).canViewBilling) return ok(state, denied() as AccountReadModel);
   return ok(state, { kind: 'account', account: toView(state) });
+}
+
+/** The error view's "Try again": one retry clears one simulated failure, then loads. */
+export function retryLoadAccount(state: AccountState): Step<AccountReadModel> {
+  return loadAccount({ ...state, loadFailuresRemaining: Math.max(0, state.loadFailuresRemaining - 1) });
 }
 
 export type AddStoreAvailability = 'allowed' | 'paused_past_due' | 'paused_cancel_scheduled' | 'unavailable_canceled';

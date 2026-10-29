@@ -23,19 +23,12 @@ export default defineConfig({
   projects: [
     { name: "public", testMatch: /public\..*\.spec\.ts/, use: { ...devices["Desktop Chrome"], channel: "chrome" } },
     { name: "gate-m-public", testMatch: /gate-m\.public\.spec\.ts/, use: { channel: "chrome" } },
-    { name: "admin-setup", testMatch: /admin\.setup\.ts/, use: { channel: "chrome" } },
-    {
-      name: "account",
-      testMatch: /account\..*\.spec\.ts/,
-      dependencies: ["admin-setup"],
-      use: { ...devices["Desktop Chrome"], channel: "chrome", storageState: ".auth/admin.json" },
-    },
-    {
-      // Runs after everything else: the inherited logout ends every session of the account.
-      name: "logout",
-      testMatch: /logout\.final\.spec\.ts/,
-      dependencies: ["account"],
-      use: { channel: "chrome", storageState: ".auth/admin.json" },
-    },
+    // Account specs sign in through e2e/auth.ts (real admin, in memory; logout aborted).
+    { name: "account", testMatch: /account\..*\.spec\.ts/, use: { ...devices["Desktop Chrome"], channel: "chrome" } },
+    // Opt-in only (PORTAL_ALLOW_LOGOUT=1): the inherited logout is a GLOBAL
+    // sign-out that ends every session of the account, including the Director's.
+    ...(process.env.PORTAL_ALLOW_LOGOUT === "1"
+      ? [{ name: "logout", testMatch: /logout\.final\.spec\.ts/, use: { channel: "chrome" as const } }]
+      : []),
   ],
 });

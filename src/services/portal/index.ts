@@ -4,7 +4,7 @@ export { registration, registrationHarness, useRegistration } from './registrati
 export { AccountDemoProvider, useAccount } from './accountService';
 export type { AccountFacade } from './accountService';
 export { clearDemoStorage, PUBLIC_STORAGE_KEY } from './storage';
-export { formatCents, initialRecurringCents, ADDITIONAL_STORE_CENTS, BASE_CENTS, DEMO_CODE, QUOTE_TTL_MS, MAX_STORES } from './pricing';
+export { formatCents, initialRecurringCents, ADDITIONAL_STORE_CENTS, BASE_CENTS, DEMO_CODE, QUOTE_TTL_MS } from './pricing';
 export { formatDate, formatTime, maskEmail } from './format';
 export {
   accessEmailPreviews,
@@ -24,6 +24,7 @@ export {
 } from './account';
 export type { AccountReadModel, AccountViewModel, PharmacyListItem, BillingPurpose, AddStoreAvailability } from './account';
 export { PLAN_VIEW, US_STATE_NAMES, DEMO_HINTS } from './catalog';
+export { classifyStripeStandIn } from './stripeRoute';
 export {
   REGISTRATION_SCENARIOS,
   ACCOUNT_SCENARIOS,

@@ -76,7 +76,7 @@ export function PublicDemoControls() {
             <div className="space-y-1.5">
               <label htmlFor="demo-reg-scenario" className="font-medium text-foreground">Registration scenario</label>
               <div className="flex gap-2">
-                <select id="demo-reg-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground">
+                <select id="demo-reg-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <option value="">Choose…</option>
                   {REGISTRATION_SCENARIOS.map((id) => (
                     <option key={id} value={id}>{LABEL[id]}</option>
@@ -91,7 +91,7 @@ export function PublicDemoControls() {
                 id="demo-activation-plan"
                 value={hydrated ? state.activationPlan : "ready"}
                 onChange={(e) => registrationHarness.setActivationPlan(e.target.value as (typeof ACTIVATION_PLANS)[number])}
-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground"
+                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {ACTIVATION_PLANS.map((p) => (
                   <option key={p} value={p}>{p.replace("_", " ")}</option>

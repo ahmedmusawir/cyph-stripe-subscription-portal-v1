@@ -1,9 +1,10 @@
 import { mkdirSync, writeFileSync } from "node:fs";
-import { expect, test, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./auth";
 import { assertGate, checkSheet, measure, record, setTheme, THEMES, WIDTHS, type GateResult } from "./gate-m";
 import { trackHosts } from "./helpers";
 
-// REAL admin session (storage state from admin.setup). The account shown is
+// REAL admin session (in-memory fixture, e2e/auth.ts). The account shown is
 // SYNTHETIC. Never screenshot or log the real identity.
 const gate: GateResult[] = [];
 
@@ -65,7 +66,7 @@ test("real admin reaches account management; synthetic account is labelled", asy
   // /login skips straight in for an admin session.
   await page.goto("/login");
   await expect(page).toHaveURL(/\/dashboard$/);
-  expect([...hosts].filter((h) => h !== "localhost:3001")).toEqual([]);
+  expect([...hosts].filter((h) => h !== new URL(test.info().project.use.baseURL!).host)).toEqual([]);
 });
 
 test("add store 2 → 3: $197.00, three distinct stores, invitation pending", async ({ page }) => {

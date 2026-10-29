@@ -84,6 +84,9 @@ export function createAccountFacade(store: StoreApi<AccountStore>) {
   return {
     ...services,
     loadAccount: () => later((s) => engine.loadAccount(s)),
+    retryLoadAccount: () => later((s) => engine.retryLoadAccount(s)),
+    /** Last-known summary, read synchronously (no latency, no state change). */
+    peekAccount: () => engine.loadAccount(store.getState().s).result,
     refreshAfterHandoff: (context: ReturnContext) => later((s, d) => engine.refreshAfterHandoff(s, context, d)),
     savePharmacy: (pharmacy: Partial<PharmacyDraft>) => later((s) => engine.saveAddStoreDraft(s, pharmacy)),
     keepDraft: (pharmacy: Partial<PharmacyDraft>) => sync((s) => engine.keepAddStoreDraft(s, pharmacy)),

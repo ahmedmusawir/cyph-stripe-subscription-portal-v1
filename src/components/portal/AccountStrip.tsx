@@ -58,7 +58,7 @@ export function AccountStrip({ realName, roleLabel }: { realName: string; roleLa
             <div className="space-y-1.5">
               <label htmlFor="demo-acct-scenario" className="font-medium text-foreground">Account scenario</label>
               <div className="flex gap-2">
-                <select id="demo-acct-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground">
+                <select id="demo-acct-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <option value="">Choose…</option>
                   {ACCOUNT_SCENARIOS.map((id) => (
                     <option key={id} value={id}>{SCENARIO_LABEL[id]}</option>
@@ -83,7 +83,7 @@ export function AccountStrip({ realName, roleLabel }: { realName: string; roleLa
                 id="demo-persona"
                 value={state.persona}
                 onChange={(e) => account.harness.selectPersona(e.target.value)}
-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground"
+                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {ACCOUNT_PERSONAS.map((p) => (
                   <option key={p} value={p}>{PERSONA_PROFILE[p].label} — {PERSONA_PROFILE[p].name}</option>
@@ -96,7 +96,7 @@ export function AccountStrip({ realName, roleLabel }: { realName: string; roleLa
                 id="demo-next-add"
                 value={state.nextAddOutcome}
                 onChange={(e) => account.harness.setNextAddOutcome(e.target.value)}
-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground"
+                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {ADD_OUTCOMES.map((o) => (
                   <option key={o} value={o}>{OUTCOME_LABEL[o]}</option>

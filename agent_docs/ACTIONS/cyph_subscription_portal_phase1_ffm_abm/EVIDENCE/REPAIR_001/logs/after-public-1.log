@@ -1,0 +1,1051 @@
+
+Running 47 tests using 1 worker
+
+[1/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=checkout&mode=portal → /login, no account payload (HTML and RSC)
+[2/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=portal&mode=checkout → /login, no account payload (HTML and RSC)
+[3/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=card&mode=card → /login, no account payload (HTML and RSC)
+[4/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=checkout&mode=card → /login, no account payload (HTML and RSC)
+[5/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=card&mode=portal → /login, no account payload (HTML and RSC)
+[6/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=portal → /login, no account payload (HTML and RSC)
+[7/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=card → /login, no account payload (HTML and RSC)
+[8/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=Portal → /login, no account payload (HTML and RSC)
+[9/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=%20portal%20 → /login, no account payload (HTML and RSC)
+[10/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=CARD&purpose=change_card → /login, no account payload (HTML and RSC)
+[11/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=portal&purpose=cancel&purpose=manage → /login, no account payload (HTML and RSC)
+[12/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=unknown → /login, no account payload (HTML and RSC)
+[13/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode= → /login, no account payload (HTML and RSC)
+[14/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe
+[15/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe?mode=checkout
+[16/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe?mode=checkout&mode=checkout
+[17/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe?mode=CHECKOUT
+[18/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm? → same-origin /login, no session
+[19/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?type=email → same-origin /login, no session
+[20/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash= → same-origin /login, no session
+[21/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=bogus → same-origin /login, no session
+[22/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email → same-origin /login, no session
+[23/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email&next=https://evil.example/ → same-origin /login, no session
+[24/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?type=recovery&next=//evil.example → same-origin /login, no session
+[25/47] [public] › e2e/public.repair.spec.ts:78:5 › G06: plan counter passes 20; 21 stores price by repeat-N
+[26/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [fresh]
+  1) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [fresh] ────────
+
+    Error: /demo/register/plan dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 30
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-demo-register-plan-fresh--public/error-context.md
+
+
+[27/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [quote_unavailable]
+  2) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [quote_unavailable] 
+
+    Error: /demo/register/plan dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-f18dd-ter-plan-quote-unavailable--public/error-context.md
+
+
+[28/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [prefilled_two_store]
+  3) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [prefilled_two_store] 
+
+    Error: /demo/register/owner dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-343a5--owner-prefilled-two-store--public/error-context.md
+
+
+[29/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [fresh]
+  4) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [fresh] ───────
+
+    Error: /demo/register/owner dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-demo-register-owner-fresh--public/error-context.md
+
+
+[30/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/pharmacies?store=2 [prefilled_two_store]
+  5) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/pharmacies?store=2 [prefilled_two_store] 
+
+    Error: /demo/register/pharmacies?store=2 dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-ad6ea-tore-2-prefilled-two-store--public/error-context.md
+
+
+[31/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/review [prefilled_three_store]
+  6) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/review [prefilled_three_store] 
+
+    Error: /demo/register/review dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-3739f-view-prefilled-three-store--public/error-context.md
+
+
+[32/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/stripe [prefilled_one_store]
+  7) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/stripe [prefilled_one_store] ─
+
+    Error: /demo/stripe dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 44
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-demo-stripe-prefilled-one-store--public/error-context.md
+
+
+[33/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_abandoned]
+  8) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_abandoned] 
+
+    Error: /demo/checkout-incomplete dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-4977a-omplete-checkout-abandoned--public/error-context.md
+
+
+[34/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_declined]
+  9) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_declined] 
+
+    Error: /demo/checkout-incomplete dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-6af1e-complete-checkout-declined--public/error-context.md
+
+
+[35/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_unknown]
+  10) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_unknown] 
+
+    Error: /demo/checkout-incomplete dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-cb50b-ncomplete-checkout-unknown--public/error-context.md
+
+
+[36/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_expired]
+  11) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_expired] 
+
+    Error: /demo/checkout-incomplete dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-6d757-ncomplete-checkout-expired--public/error-context.md
+
+
+[37/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_waiting]
+  12) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_waiting] 
+
+    Error: /demo/activation dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-3eeb8-ivation-activation-waiting--public/error-context.md
+
+
+[38/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_delayed]
+  13) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_delayed] 
+
+    Error: /demo/activation dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-ac1a5-ivation-activation-delayed--public/error-context.md
+
+
+[39/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_email_failed]
+  14) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_email_failed] 
+
+    Error: /demo/activation dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-ff333-on-activation-email-failed--public/error-context.md
+
+
+[40/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_payment_failed]
+  15) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_payment_failed] 
+
+    Error: /demo/activation dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-c74bc--activation-payment-failed--public/error-context.md
+
+
+[41/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_ready]
+  16) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_ready] 
+
+    Error: /demo/activation dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-demo-activation-activation-ready--public/error-context.md
+
+
+[42/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_expired]
+  17) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_expired] ──
+
+    Error: /demo/access-link dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-demo-access-link-link-expired--public/error-context.md
+
+
+[43/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_used]
+  18) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_used] ─────
+
+    Error: /demo/access-link dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-demo-access-link-link-used--public/error-context.md
+
+
+[44/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_request_error]
+  19) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_request_error] 
+
+    Error: /demo/access-link dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-1c08c-ss-link-link-request-error--public/error-context.md
+
+
+[45/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/references/email?variant=owner [prefilled_two_store]
+  20) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/references/email?variant=owner [prefilled_two_store] 
+
+    Error: /demo/references/email?variant=owner dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 79
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Owner access",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Store admin invitation",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Checkout unfinished",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "New link after expiry",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Set up my account",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Owner access",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Store admin invitation",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Checkout unfinished",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "New link after expiry",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Set up my account",
+    +     "ratio": 1.88,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-02962--owner-prefilled-two-store--public/error-context.md
+
+
+[46/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login [fresh]
+  21) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login [fresh] ────────────────────
+
+    Error: /login dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-login-fresh--public/error-context.md
+
+
+[47/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login?reason=session_expired [fresh]
+  22) [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login?reason=session_expired [fresh] 
+
+    Error: /login?reason=session_expired dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Skip to content",
+    +     "ratio": 1.55,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    + ]
+
+      151 |       expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
+      152 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
+    > 153 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                 ^
+      154 |     }
+      155 |   });
+      156 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair.spec.ts:153:97
+
+    Error Context: test-results/public.repair-F01-contrast-24729-ason-session-expired-fresh--public/error-context.md
+
+
+  22 failed
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [fresh] ─────────
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [quote_unavailable] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [prefilled_two_store] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [fresh] ────────
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/pharmacies?store=2 [prefilled_two_store] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/review [prefilled_three_store] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/stripe [prefilled_one_store] ──
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_abandoned] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_declined] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_unknown] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_expired] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_waiting] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_delayed] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_email_failed] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_payment_failed] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_ready] ─
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_expired] ────
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_used] ───────
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_request_error] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/references/email?variant=owner [prefilled_two_store] 
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login [fresh] ──────────────────────
+    [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login?reason=session_expired [fresh] 
+  25 passed (2.0m)

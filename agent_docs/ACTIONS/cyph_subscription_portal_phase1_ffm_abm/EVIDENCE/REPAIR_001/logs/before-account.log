@@ -1,0 +1,4260 @@
+
+Running 17 tests using 1 worker
+
+[1/17] [account] › e2e/account.repair.spec.ts:29:5 › F02: load error stays until Retry, survives navigation and reload, Retry recovers
+  1) [account] › e2e/account.repair.spec.ts:29:5 › F02: load error stays until Retry, survives navigation and reload, Retry recovers 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('load-retry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('load-retry')
+
+
+      29 | test("F02: load error stays until Retry, survives navigation and reload, Retry recovers", async ({ page }) => {
+      30 |   await scenario(page, "load_error");
+    > 31 |   await expect(page.getByTestId("load-retry")).toBeVisible();
+         |                                                ^
+      32 |   await page.waitForTimeout(1200); // past any second load the navigation could trigger
+      33 |   await expect(page.getByTestId("load-retry")).toBeVisible();
+      34 |   await expect(page.getByTestId("monthly-total")).toHaveCount(0);
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:31:48
+
+    Error Context: test-results/account.repair-F02-load-er-c23b7-n-and-reload-Retry-recovers-account/error-context.md
+
+
+[2/17] [account] › e2e/account.repair.spec.ts:50:5 › F02: Retry shows a busy state, then a coherent account (both themes)
+  2) [account] › e2e/account.repair.spec.ts:50:5 › F02: Retry shows a busy state, then a coherent account (both themes) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('load-retry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('load-retry')
+
+
+      53 |     await setTheme(page, theme);
+      54 |     const retry = page.getByTestId("load-retry");
+    > 55 |     await expect(retry).toBeVisible();
+         |                         ^
+      56 |     await retry.click();
+      57 |     await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
+      58 |     await expect(page.getByTestId("plan-summary")).toContainText("Active");
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:55:25
+
+    Error Context: test-results/account.repair-F02-Retry-s-4e03a-herent-account-both-themes--account/error-context.md
+
+
+[3/17] [account] › e2e/account.repair.spec.ts:63:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)
+  3) [account] › e2e/account.repair.spec.ts:63:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('pharmacies-section')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('pharmacies-section')
+
+
+      65 |   await page.goto("/dashboard");
+      66 |   const section = page.getByTestId("pharmacies-section");
+    > 67 |   await expect(section).toBeVisible();
+         |                         ^
+      68 |   // No enclosing panel around the section (approved: heading on the page surface).
+      69 |   expect(await section.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe("0px");
+      70 |   // Plain count, right of the description (not a bordered pill).
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:67:25
+
+    Error Context: test-results/account.repair-O04-approve-ba148-efresh-line-mobile-desktop--account/error-context.md
+
+
+[4/17] [account] › e2e/account.repair.spec.ts:107:5 › O04: returned-from-Stripe and refreshing variants of the refresh line
+  4) [account] › e2e/account.repair.spec.ts:107:5 › O04: returned-from-Stripe and refreshing variants of the refresh line 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('refresh-line')
+    Expected pattern: /Refreshing…|after returning from Stripe/
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('refresh-line')
+
+
+      110 |   await page.getByTestId("portal-no-change").click();
+      111 |   await expect(page).toHaveURL(/\/dashboard$/);
+    > 112 |   await expect(page.getByTestId("refresh-line")).toContainText(/Refreshing…|after returning from Stripe/);
+          |                                                  ^
+      113 |   await expect(page.getByTestId("refresh-line")).toContainText("after returning from Stripe");
+      114 | });
+      115 |
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:112:50
+
+    Error Context: test-results/account.repair-O04-returne-abf51-ariants-of-the-refresh-line-account/error-context.md
+
+
+[5/17] [account] › e2e/account.repair.spec.ts:117:5 › transient states are observable: loading, launching, saving, quote loading, confirming
+  5) [account] › e2e/account.repair.spec.ts:117:5 › transient states are observable: loading, launching, saving, quote loading, confirming 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Welcome back from Stripe — refreshing your summary')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('Welcome back from Stripe — refreshing your summary')
+
+
+      125 |   await expect(page).toHaveURL(/mode=portal/);
+      126 |   await page.getByTestId("portal-no-change").click();
+    > 127 |   await expect(page.getByText("Welcome back from Stripe — refreshing your summary")).toBeVisible();
+          |                                                                                      ^
+      128 |   await expect(page.getByText("Nothing changed on this account")).toBeVisible();
+      129 |
+      130 |   await page.goto("/demo/stores/add");
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:127:86
+
+    Error Context: test-results/account.repair-transient-s-0e0a2-ng-quote-loading-confirming-account/error-context.md
+
+
+[6/17] [account] › e2e/account.repair.spec.ts:168:5 › keyboard only: add store → confirm → result with no pointer input
+[7/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard active
+  6) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard active ─────────────────
+
+    Error: dashboard active light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 102
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.82,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.86,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard active light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard active light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard active dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 52
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.52,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Included",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.52,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "$49.00",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.94,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard active dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard active dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-active-account/error-context.md
+
+
+[8/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard past due
+  7) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard past due ───────────────
+
+    Error: dashboard past due light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 142
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "mt-0.5 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.97,
+    +     "required": 4.5,
+    +     "tag": "DIV",
+    +     "text": "$148.00 due since 26 Oct 2026. Update yo",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Update payment method",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.21,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Included",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.21,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "$49.00",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.2,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard past due light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard past due light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard past due dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 42
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.41,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Update payment method",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.41,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.57,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard past due dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard past due dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-past-due-account/error-context.md
+
+
+[9/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard cancel scheduled
+  8) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard cancel scheduled ───────
+
+    Error: dashboard cancel scheduled light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 132
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "mt-0.5 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "DIV",
+    +     "text": "This applies to both pharmacies. When ac",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Resume in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.21,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Included",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.21,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "$49.00",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard cancel scheduled light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard cancel scheduled light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard cancel scheduled dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 32
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.44,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Resume in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.44,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard cancel scheduled dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard cancel scheduled dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-cancel-scheduled-account/error-context.md
+
+
+[10/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard canceled
+  9) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard canceled ───────────────
+
+    Error: dashboard canceled light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 112
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "mt-0.5 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.88,
+    +     "required": 4.5,
+    +     "tag": "DIV",
+    +     "text": "This applies to both pharmacies. Access ",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.82,
+    +     "required": 4.5,
+    +     "tag": "A",
+    +     "text": "Start a new subscription",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.82,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Past invoices in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard canceled light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard canceled light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard canceled dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 52
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "A",
+    +     "text": "Start a new subscription",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Past invoices in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.52,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Included",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.52,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "$49.00",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard canceled dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard canceled dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-canceled-account/error-context.md
+
+
+[11/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard no pharmacies
+  10) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard no pharmacies ─────────
+
+    Error: dashboard no pharmacies light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 112
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.83,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.83,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Add a store",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.86,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard no pharmacies light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard no pharmacies light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard no pharmacies dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 42
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Add a store",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.96,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard no pharmacies dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard no pharmacies dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-no-pharmacies-account/error-context.md
+
+
+[12/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard load error
+  11) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard load error ────────────
+
+    Error: dashboard load error light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 122
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.21,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Included",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.21,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "$49.00",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.2,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard load error light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard load error light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard load error dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 52
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Manage billing in Stripe",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.52,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Included",
+    +   },
+    +   Object {
+    +     "cls": "tabular-nums",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.52,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "$49.00",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.94,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel in Stripe",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard load error dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard load error dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-load-error-account/error-context.md
+
+
+[13/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard handoff error
+  12) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard handoff error ─────────
+
+    Error: dashboard handoff error light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 92
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Account & Billing",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Billing owner Jordan Ellis · jordan@demo",
+    +   },
+    +   Object {
+    +     "cls": "break-all",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "jordan@demo-pharmacy.example",
+    +   },
+    +   Object {
+    +     "cls": "mt-0.5 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.88,
+    +     "required": 4.5,
+    +     "tag": "DIV",
+    +     "text": "Nothing on your account changed. Try aga",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard handoff error light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard handoff error light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: dashboard handoff error dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 12
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: dashboard handoff error dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: dashboard handoff error dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-dashboard-handoff-error-account/error-context.md
+
+
+[14/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: add store draft restored
+  13) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: add store draft restored ────────
+
+    Error: add store draft restored light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 132
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Add a store · Step 1 of 2",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "It joins your existing Standard subscrip",
+    +   },
+    +   Object {
+    +     "cls": "mt-0.5 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "DIV",
+    +     "text": "Details you entered earlier are filled i",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Start over",
+    +   },
+    +   Object {
+    +     "cls": "text-xs text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "* Required",
+    +   },
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Never enter patient names or prescriptio",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.15,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel",
+    +   },
+    +   Object {
+    +     "cls": "text-xs text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Cancel keeps a draft so you can come bac",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: add store draft restored light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 86
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-name",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-street",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-city",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-state",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-zip",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-ncpdp",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-npi",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-phone",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-software",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: add store draft restored light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: add store draft restored dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 32
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.44,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Start over",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 2.44,
+    +     "required": 4.5,
+    +     "tag": "BUTTON",
+    +     "text": "Cancel",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: add store draft restored dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 86
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-name",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-street",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-city",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-state",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-zip",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-ncpdp",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-npi",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-phone",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-software",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: add store draft restored dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-add-store-draft-restored-account/error-context.md
+
+
+[15/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: add store errors
+  14) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: add store errors ────────────────
+
+    Error: add store errors light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 102
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-[11px] font-bold uppercase tracking-widest text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "11px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Add a store · Step 1 of 2",
+    +   },
+    +   Object {
+    +     "cls": "mt-1 text-sm text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "It joins your existing Standard subscrip",
+    +   },
+    +   Object {
+    +     "cls": "text-xs text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "* Required",
+    +   },
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Never enter patient names or prescriptio",
+    +   },
+    +   Object {
+    +     "cls": "text-xs text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Cancel keeps a draft so you can come bac",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: add store errors light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 100
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-name",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-street",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-city",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-state",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-zip",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-ncpdp",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-npi",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-phone",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-software",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-admin-name",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-admin-email",
+    +     "ratio": 1.65,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: add store errors light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: add store errors dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 12
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: add store errors dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 100
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-name",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-street",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-city",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-state",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-zip",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-ncpdp",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-npi",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-phone",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-software",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-admin-name",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "ph-admin-email",
+    +     "ratio": 1.53,
+    +     "required": 3,
+    +     "tag": "INPUT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: add store errors dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-add-store-errors-account/error-context.md
+
+
+[16/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: owedbook
+  15) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: owedbook ────────────────────────
+
+    Error: owedbook light: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 62
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Amounts are engineering fixtures; final ",
+    +   },
+    +   Object {
+    +     "cls": "text-xs text-muted-foreground",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Only the panel is designed here. The fra",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "P",
+    +     "text": "Pharmacy Books · a Cyber Pharma product",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Support · [SUPPORT EMAIL]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Terms [LINK TBD]",
+    +   },
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 4.44,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Privacy [LINK TBD]",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: owedbook light: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.4,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: owedbook light: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 51
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Pharmacy Books — home",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Back to OwedBook",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "A",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Switch to light mode",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "AO[masked]",
+    +     "ratio": 2.82,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "DemoSigned in as [masked] · Admin (re",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "SUMMARY",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Advance 31 minutes",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Reset account demo",
+    +     "ratio": 2.4,
+    +     "required": 3,
+    +     "tag": "BUTTON",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error: owedbook dark: text below threshold
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 22
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "cls": "",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "12px",
+    +     "ratio": 3.95,
+    +     "required": 4.5,
+    +     "tag": "SPAN",
+    +     "text": "Signed in as [masked] · Admin (real a",
+    +   },
+    +   Object {
+    +     "cls": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-se",
+    +     "disabled": false,
+    +     "faded": false,
+    +     "font": "14px",
+    +     "ratio": 1.32,
+    +     "required": 4.5,
+    +     "tag": "A",
+    +     "text": "Manage billing",
+    +   },
+    + ]
+
+      252 |       const rings = await focusRings(page, 10);
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+    > 254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+          |                                                                      ^
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:254:70
+
+    Error: owedbook dark: input boundary
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-acct-scenario",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-persona",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "input-boundary",
+    +     "label": "demo-next-add",
+    +     "ratio": 1.31,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      253 |       recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+    > 255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+          |                                                                                                         ^
+      256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+      257 |     }
+      258 |   });
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:255:105
+
+    Error: owedbook dark: focus ring
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 23
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Choose…Active · 2 pharmaciesActive · 1 p",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Billing owner — Jordan EllisStore admin ",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    +   Object {
+    +     "kind": "focus-ring",
+    +     "label": "Payment succeedsPayment failsPayment sta",
+    +     "ratio": 2.2,
+    +     "required": 3,
+    +     "tag": "SELECT",
+    +   },
+    + ]
+
+      254 |       expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
+      255 |       expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
+    > 256 |       expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
+          |                                                                                                ^
+      257 |     }
+      258 |   });
+      259 | }
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:256:96
+
+    Error Context: test-results/account.repair-F01-contrast-owedbook-account/error-context.md
+
+
+[17/17] [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: portal stand-in
+  16) [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: portal stand-in ─────────────────
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for locator('summary').filter({ hasText: 'Demo controls' })
+
+
+       8 |
+       9 | async function controls(page: Page) {
+    > 10 |   if (!(await page.locator("details[open]").count())) await page.locator("summary", { hasText: "Demo controls" }).click();
+         |                                                                                                                   ^
+      11 | }
+      12 | async function scenario(page: Page, id: string) {
+      13 |   await page.goto("/dashboard");
+        at controls (/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:10:115)
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:248:7
+
+    Error Context: test-results/account.repair-F01-contrast-portal-stand-in-account/error-context.md
+
+
+  16 failed
+    [account] › e2e/account.repair.spec.ts:29:5 › F02: load error stays until Retry, survives navigation and reload, Retry recovers 
+    [account] › e2e/account.repair.spec.ts:50:5 › F02: Retry shows a busy state, then a coherent account (both themes) 
+    [account] › e2e/account.repair.spec.ts:63:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop) 
+    [account] › e2e/account.repair.spec.ts:107:5 › O04: returned-from-Stripe and refreshing variants of the refresh line 
+    [account] › e2e/account.repair.spec.ts:117:5 › transient states are observable: loading, launching, saving, quote loading, confirming 
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard active ──────────────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard past due ────────────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard cancel scheduled ────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard canceled ────────────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard no pharmacies ───────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard load error ──────────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: dashboard handoff error ───────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: add store draft restored ──────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: add store errors ──────────────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: owedbook ──────────────────────────
+    [account] › e2e/account.repair.spec.ts:239:7 › F01 contrast: portal stand-in ───────────────────
+  1 passed (6.0m)

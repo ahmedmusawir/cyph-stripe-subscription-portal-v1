@@ -29,3 +29,9 @@ Engineer appends meaningful checkpoints: time, identity, work, command/result ev
 - Removed a fake-credential e2e test (would have sent a synthetic login to the real auth target); replaced by mocked unit tests.
 - Real auth: `.env.qa.local` appeared 14:44 (Director). 3 real sign-ins, 2 global logouts. Discovered inherited logout = Supabase global scope.
 - Final: build 0, tsc 0, jest 106/106, Playwright 59/59; Gate M 136 + 84 measurements, 0 failures.
+
+### 28 Oct 2026 — REPAIR_001 (Claudy)
+- Reproduced every Q2 finding on an owned `git archive` build of 94251be before changing code. F03 also failed for case/whitespace variants (`mode=Portal`, `mode=%20portal`).
+- F02 root cause: a superseded/second load consumed the one-shot failure; the sequence guard then threw that error away. The old engine test asserted the buggy behaviour.
+- While proving transient states, found R1-N01: the "refreshing" banner after a Stripe return never rendered (skeleton until done). Fixed with a synchronous last-known read.
+- Instrument lessons: theme set after load measures colour transitions; Playwright restarts the worker after each failure, so a worker-scoped real sign-in multiplies (≈22 sign-ins this repair). Error-context snapshots carry the real display name and must be deleted.

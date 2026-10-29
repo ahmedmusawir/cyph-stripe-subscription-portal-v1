@@ -1,0 +1,4459 @@
+{
+  "config": {
+    "configFile": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/playwright.config.ts",
+    "rootDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "public",
+        "name": "public",
+        "testDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\..*\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "gate-m-public",
+        "name": "gate-m-public",
+        "testDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/gate-m\\.public\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "account",
+        "name": "account",
+        "testDir": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/account\\..*\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "public.boundaries.spec.ts",
+      "file": "public.boundaries.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "anonymous /dashboard → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 130,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:40.682Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-12ac4010c196d4c1e907",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stores/add → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 110,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:40.854Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-05e95c983b509df0798c",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stores/confirm → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 80,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:40.983Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-4d9cc7d967a93c7a7dac",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stores/result → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 95,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.074Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-8fc8ae884bd27df1f506",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/references/owedbook → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 58,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.184Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-f6362673ca775ad0874b",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stripe?mode=portal → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 62,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.251Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-213b03ff5690898de753",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stripe?mode=portal&purpose=cancel → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 57,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.324Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-63d1fd68c8893588b7ea",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stripe?mode=card → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.394Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-9f1e71bb4df84c5062b3",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/plan → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.442Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-93ce4414a87600849f46",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/owner → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.480Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-b80f5e1f35376f7f2195",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/pharmacies → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.519Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-311da3ba91834e794acf",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/review → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 28,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.551Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-ed007df2625b5e010ec8",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/stripe → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.586Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-962622c21e3aa939ce58",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/activation → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.600Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-2850c6960c69c09dc66e",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/checkout-incomplete → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.614Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-9612e27c944f715f9897",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/access-link → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.626Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-30f410b7fcfe5ab59580",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/references/email → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 20,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.639Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-f6be768f34977f9c3342",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /login → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.673Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-2a0bc63baaf85719fddc",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "forged role values in query, cookies and storage grant nothing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1116,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:41.697Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-2a1a5426491689c2ac06",
+          "file": "public.boundaries.spec.ts",
+          "line": 58,
+          "column": 5
+        },
+        {
+          "title": "foundation regressions: GET login 405, removed routes 404, /demo/sign-in → /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 99,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:42.992Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-ce9c451c5a2cc4d5e7ff",
+          "file": "public.boundaries.spec.ts",
+          "line": 78,
+          "column": 5
+        },
+        {
+          "title": "session expired banner via enum only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 464,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:43.101Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-3107ea7634b6cc735a23",
+          "file": "public.boundaries.spec.ts",
+          "line": 86,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.journeys.spec.ts",
+      "file": "public.journeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "/ opens the public plan screen with a sign-in path to the real /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 659,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:43.603Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-2ca1912c526d0150173e",
+          "file": "public.journeys.spec.ts",
+          "line": 52,
+          "column": 5
+        },
+        {
+          "title": "anonymous 1-store registration end to end, never asked to log in, no external hosts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6797,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:44.284Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-5364c44e2293104373b5",
+          "file": "public.journeys.spec.ts",
+          "line": 65,
+          "column": 5
+        },
+        {
+          "title": "3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5050,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:51.092Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-94ff66cb8553547e7bc9",
+          "file": "public.journeys.spec.ts",
+          "line": 104,
+          "column": 5
+        },
+        {
+          "title": "count reduction asks before discarding entered pharmacies",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:56.153Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-744ad23b01c200f045ca",
+          "file": "public.journeys.spec.ts",
+          "line": 123,
+          "column": 5
+        },
+        {
+          "title": "validation keeps input, focuses the summary, flags duplicates without naming the owner",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2787,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:06:59.738Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-2844dd0526c71620e700",
+          "file": "public.journeys.spec.ts",
+          "line": 136,
+          "column": 5
+        },
+        {
+          "title": "abandoned checkout resumes with values; unknown payment pauses payment",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8085,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:02.535Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-1111c2d0bddef3ac5cd6",
+          "file": "public.journeys.spec.ts",
+          "line": 156,
+          "column": 5
+        },
+        {
+          "title": "forged success URL or direct visits change nothing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 594,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:10.631Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-a78c8315ba5570b83b01",
+          "file": "public.journeys.spec.ts",
+          "line": 178,
+          "column": 5
+        },
+        {
+          "title": "hostile text renders as text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2427,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:11.237Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-cd6b47250309a6b82025",
+          "file": "public.journeys.spec.ts",
+          "line": 188,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.repair.spec.ts",
+      "file": "public.repair.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "F03 anonymous /demo/stripe?mode=checkout&mode=portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 47,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.684Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-fe5902640925f6cb3618",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=portal&mode=checkout → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 45,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.740Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-5f8b3ce23f13a7b04f9e",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=card&mode=card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.793Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-685983c30c0eccd0c9af",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=checkout&mode=card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 38,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.841Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-e1f0a47bdeddfcf7c3f0",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=card&mode=portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 38,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.893Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-edc4f21a252a3d5f018d",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.942Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-afe74aeb537eaacc6679",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:13.993Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-4c5f58c5c696f29a2ca3",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=Portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 42,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.044Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-08bf2709db3923a96c42",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=%20portal%20 → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 51,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.098Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-09afe583ea3762cdad8d",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=CARD&purpose=change_card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 42,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.158Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-7d86ab4f957f7c79a01e",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=portal&purpose=cancel&purpose=manage → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 53,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.208Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-f0f0fb456bf6a3bd9d0a",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=unknown → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 42,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.269Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-ef1b87681dd0ef9057ab",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode= → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.318Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-c68f4036b5c55134afba",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.363Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-149466fd730818577d74",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe?mode=checkout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.388Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-bcdcdeaac15b1efa2060",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe?mode=checkout&mode=checkout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.412Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-2e6dec00c80f9d537419",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe?mode=CHECKOUT",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.437Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-ffc0b47c57d123f2dd4c",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm? → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.462Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-02cfeff52fc4f99a9672",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?type=email → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.497Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-41a3410d0ecbd959d28c",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash= → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 32,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.533Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-072977938969de9685f0",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=bogus → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2751,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:14.582Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-3aa9fa8f795c300013d6",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 346,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:17.344Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-058c94d98feedfdc0160",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email&next=https://evil.example/ → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 417,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:17.700Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-7392419c253b6c2ad0de",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?type=recovery&next=//evil.example → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:18.123Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-746f713ca25f4526b1a8",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "G06: plan counter passes 20; 21 stores price by repeat-N",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1491,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:18.162Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-d3a739c886c79c103980",
+          "file": "public.repair.spec.ts",
+          "line": 78,
+          "column": 5
+        },
+        {
+          "title": "F01 contrast: /demo/register/plan [fresh]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3841,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:19.663Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-8a53148c349c52a17d7c",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/register/plan [quote_unavailable]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3825,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:23.514Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-80bb8f21925ced621a07",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/register/owner [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4035,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:27.352Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-24250d8fc1a88c6d2735",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/register/owner [fresh]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4007,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:31.396Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-9f6602e064cbdde5e766",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/register/pharmacies?store=2 [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4129,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:35.412Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-3cb5908377ad62f7308d",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/register/review [prefilled_three_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4142,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:39.555Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-4a2ea3e2fa5407f59c6d",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/stripe [prefilled_one_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3862,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:43.713Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-dc94520317d8a52e9860",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/checkout-incomplete [checkout_abandoned]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3961,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:47.590Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-c3d57e2a7eedefb315ac",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/checkout-incomplete [checkout_declined]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3877,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:51.560Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-5dd8acbf8350d1625318",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/checkout-incomplete [checkout_unknown]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4082,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:55.450Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-a734004ecd5ccbd05f88",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/checkout-incomplete [checkout_expired]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3959,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:07:59.542Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-57d27592dec6be230feb",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/activation [activation_waiting]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3958,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:03.512Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-c0191666a0efe6606ad4",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/activation [activation_delayed]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3831,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:07.482Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-3d078b4d24dea6cd5669",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/activation [activation_email_failed]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3954,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:11.339Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-a82601ed1de1c17d66ba",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/activation [activation_payment_failed]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3803,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:15.303Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-cdd8f80de4793736d3fb",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/activation [activation_ready]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3952,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:19.118Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-8bd8eacd1fd7f4fd6000",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/access-link [link_expired]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3844,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:23.082Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-12b4adca63b7fc260ef5",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/access-link [link_used]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3784,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:26.936Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-c2a9bac7f54849c49ecc",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/access-link [link_request_error]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3796,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:30.729Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-b9f682d96b9d627155ee",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /demo/references/email?variant=owner [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4068,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:34.535Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-cb8340016949eb49f9c9",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /login [fresh]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3634,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:38.615Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-90632eeac1bb1c3fa5a4",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: /login?reason=session_expired [fresh]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3686,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:42.258Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-9030e91adc1dc491b959",
+          "file": "public.repair.spec.ts",
+          "line": 133,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "public.zoom.spec.ts",
+      "file": "public.zoom.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "200% zoom emulation /demo/register/plan: no horizontal overflow, primary action reachable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1899,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:45.960Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f86809e9038882c98969-0f4cac4732570bfed50a",
+          "file": "public.zoom.spec.ts",
+          "line": 10,
+          "column": 7
+        },
+        {
+          "title": "200% zoom emulation /demo/register/owner: no horizontal overflow, primary action reachable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1835,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:47.870Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f86809e9038882c98969-605742e14b249edd2cd0",
+          "file": "public.zoom.spec.ts",
+          "line": 10,
+          "column": 7
+        },
+        {
+          "title": "200% zoom emulation /login: no horizontal overflow, primary action reachable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1843,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:49.718Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f86809e9038882c98969-7c3ac3cf6a8ac7f63d8c",
+          "file": "public.zoom.spec.ts",
+          "line": 10,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "gate-m.public.spec.ts",
+      "file": "gate-m.public.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Gate M /demo/register/plan [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10649,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:08:52.310Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-5cd1cb2e884b8e1ef292",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/register/owner [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10534,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:09:03.177Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-8f123a81440535ac2098",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/register/pharmacies?store=2 [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10621,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:09:13.722Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-d3f622b09c5befbf8ed8",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/register/review [prefilled_three_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10937,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:09:24.353Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-04f1b60ac89c14b2caab",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/activation [activation_ready]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10752,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:09:35.304Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-68824a1809f01f33d45d",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/activation [activation_delayed]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10446,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:09:46.077Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-6166ed4a045c64c94051",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/checkout-incomplete [checkout_unknown]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10702,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:09:56.538Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-f7af4909517a76dbdbfe",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/access-link [link_expired]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10341,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:07.255Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-c38d258dc76f1c5fff8a",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /demo/references/email?variant=store_admin [prefilled_two_store]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10745,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:17.607Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-9fbd3a7052d5a8c96301",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M /login [fresh]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10262,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:28.367Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-47d7aa010dd5169584a5",
+          "file": "gate-m.public.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "Gate M checkout stand-in and review split at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3179,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:38.644Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-9c4b8623b67a1f135157",
+          "file": "gate-m.public.spec.ts",
+          "line": 51,
+          "column": 5
+        },
+        {
+          "title": "keyboard: plan → owner form reachable and submittable without a mouse",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1715,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:41.841Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-0d6a8db6ee3f137edec6",
+          "file": "gate-m.public.spec.ts",
+          "line": 78,
+          "column": 5
+        },
+        {
+          "title": "200% zoom proxy: review and plan reflow at half-width without overflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gate-m-public",
+              "projectName": "gate-m-public",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3236,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:43.570Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bede4b2eeea781736727-8bfc8e70767bbf2254a4",
+          "file": "gate-m.public.spec.ts",
+          "line": 99,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "account.journeys.spec.ts",
+      "file": "account.journeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real admin reaches account management; synthetic account is labelled",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8408,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:10:47.570Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-50cf83f7d8368e91a776",
+          "file": "account.journeys.spec.ts",
+          "line": 53,
+          "column": 5
+        },
+        {
+          "title": "add store 2 → 3: $197.00, three distinct stores, invitation pending",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8789,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:11:01.928Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-89a99d137352f3dd1f70",
+          "file": "account.journeys.spec.ts",
+          "line": 72,
+          "column": 5
+        },
+        {
+          "title": "1 → 2 then failure leaves the plan unchanged; unknown blocks a second attempt",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12247,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:11:10.733Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-025cbc8a1d76959c510e",
+          "file": "account.journeys.spec.ts",
+          "line": 88,
+          "column": 5
+        },
+        {
+          "title": "paid but setup needs attention: one increment, invitation held",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10642,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:11:23.002Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-7b99b65982b594360acc",
+          "file": "account.journeys.spec.ts",
+          "line": 111,
+          "column": 5
+        },
+        {
+          "title": "store admin and member personas get the owner-contact view, not billing data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9288,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:11:33.669Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-0809fec6badeae3e0af3",
+          "file": "account.journeys.spec.ts",
+          "line": 123,
+          "column": 5
+        },
+        {
+          "title": "Stripe portal return: refreshing → cancellation scheduled; handoff error retry",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14803,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:11:42.972Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-3ae1bbc5c07d3f194f34",
+          "file": "account.journeys.spec.ts",
+          "line": 135,
+          "column": 5
+        },
+        {
+          "title": "reload keeps the account demo; reset restores baseline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6595,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:11:57.789Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-0d6784bce2d169ee18c1",
+          "file": "account.journeys.spec.ts",
+          "line": 152,
+          "column": 5
+        },
+        {
+          "title": "Gate M account /dashboard [two_store_active]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39286,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:12:04.402Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-11bee113f377d728fb1e",
+          "file": "account.journeys.spec.ts",
+          "line": 170,
+          "column": 7
+        },
+        {
+          "title": "Gate M account /dashboard [past_due]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 34231,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:12:43.711Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-6c728777ff08d86478e3",
+          "file": "account.journeys.spec.ts",
+          "line": 170,
+          "column": 7
+        },
+        {
+          "title": "Gate M account /dashboard [no_pharmacies]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39422,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:13:17.970Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-4682d1768e637f8c3498",
+          "file": "account.journeys.spec.ts",
+          "line": 170,
+          "column": 7
+        },
+        {
+          "title": "Gate M account /demo/stores/add [add_draft_restored]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35748,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:13:57.406Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-6f34a9e19d08a1386eff",
+          "file": "account.journeys.spec.ts",
+          "line": 170,
+          "column": 7
+        },
+        {
+          "title": "Gate M account /demo/references/owedbook [two_store_active]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35099,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:14:33.168Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-66d215e378d3f629fdad",
+          "file": "account.journeys.spec.ts",
+          "line": 170,
+          "column": 7
+        },
+        {
+          "title": "Gate M account /demo/stripe?mode=portal&purpose=manage [two_store_active]",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35810,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:15:08.281Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-4d15061e726f30bf1317",
+          "file": "account.journeys.spec.ts",
+          "line": 170,
+          "column": 7
+        },
+        {
+          "title": "Gate M confirm + table/card switch at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6913,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:15:44.105Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-e3a6c7938d5dca2e0f22",
+          "file": "account.journeys.spec.ts",
+          "line": 188,
+          "column": 5
+        },
+        {
+          "title": "evidence screenshots (real identity masked)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26017,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:15:51.031Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f26bad63de07acff678-7aceeb3cb9894ba0117f",
+          "file": "account.journeys.spec.ts",
+          "line": 207,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "account.repair.spec.ts",
+      "file": "account.repair.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "F02: load error stays until Retry, survives navigation and reload, Retry recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "load-retry-seen-at-least-once",
+                  "description": "true"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11019,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:16:17.095Z",
+                  "annotations": [
+                    {
+                      "type": "load-retry-seen-at-least-once",
+                      "description": "true"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-183cbe369b2b001a3e0a",
+          "file": "account.repair.spec.ts",
+          "line": 30,
+          "column": 5
+        },
+        {
+          "title": "F02: Retry shows a busy state, then a coherent account (both themes)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8225,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:16:28.128Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-89ecc243e0d7843e2533",
+          "file": "account.repair.spec.ts",
+          "line": 57,
+          "column": 5
+        },
+        {
+          "title": "O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3583,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:16:36.368Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-af010ff638be2764f6a1",
+          "file": "account.repair.spec.ts",
+          "line": 70,
+          "column": 5
+        },
+        {
+          "title": "O04: returned-from-Stripe and refreshing variants of the refresh line",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5692,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:16:39.964Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-d8ffedec09e3949fca9e",
+          "file": "account.repair.spec.ts",
+          "line": 115,
+          "column": 5
+        },
+        {
+          "title": "transient states are observable: loading, launching, saving, quote loading, confirming",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12330,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:16:45.669Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-902837f7abbef7e39223",
+          "file": "account.repair.spec.ts",
+          "line": 125,
+          "column": 5
+        },
+        {
+          "title": "keyboard only: add store → confirm → result with no pointer input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7317,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:16:58.017Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-3d92948aa554fc18a75a",
+          "file": "account.repair.spec.ts",
+          "line": 186,
+          "column": 5
+        },
+        {
+          "title": "F01 contrast: dashboard active",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15681,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:17:05.348Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-a4179e527556acd3ce48",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: dashboard past due",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14887,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:17:21.040Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-2e788666a52977c94086",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: dashboard cancel scheduled",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14801,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:17:35.941Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-4a91fe0762dc68fea177",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: dashboard canceled",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15705,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:17:50.755Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-e3436cc4ba55d8583579",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: dashboard no pharmacies",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15653,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:18:06.473Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-b23459bca8a25351f19c",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: dashboard load error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14789,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:18:22.142Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-a34f1b6bab0714d50077",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: dashboard handoff error",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16573,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:18:36.941Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-721796f624c02a141cd3",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: add store draft restored",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15042,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:18:53.526Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-535e99d1876b04da7828",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: add store errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15158,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:19:08.587Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-4e8569494121bfbac139",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: owedbook",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15131,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:19:23.762Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-9a19169f136c2ec6ea49",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "F01 contrast: portal stand-in",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:19:38.908Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-68a7533fa320f99ca496",
+          "file": "account.repair.spec.ts",
+          "line": 257,
+          "column": 7
+        },
+        {
+          "title": "O04 evidence screenshots (real identity masked)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7294,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T10:20:03.232Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-f6e0ced8d585787419da",
+          "file": "account.repair.spec.ts",
+          "line": 302,
+          "column": 5
+        }
+      ],
+      "suites": [
+        {
+          "title": "200% zoom emulation",
+          "file": "account.repair.spec.ts",
+          "line": 281,
+          "column": 6,
+          "specs": [
+            {
+              "title": "dashboard cards and add-store confirm reflow without overflow; actions reachable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "account",
+                  "projectName": "account",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9472,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T10:19:53.749Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "cb8fe59ffdb280e1208c-ed1f175ecee9cdcc7e94",
+              "file": "account.repair.spec.ts",
+              "line": 283,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T10:06:39.693Z",
+    "duration": 810929.3200000001,
+    "expected": 126,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

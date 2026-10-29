@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-10-28 10:24 UTC — [CC] Claude Code
+- **Updated:** `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md` — R-010 direct QA Lead → Engineer repair route.
+- **Added:** `…/EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md`, `…/EVIDENCE/REPAIR_001/` — REPAIR_001 evidence for Q2-F01/F02/F03/O04/G06 (+ R1-N01).
+- **Updated:** `…/STATE.md`, `…/JOURNAL.md`, `RECOVERY.md`, `agent_docs/SESSIONS/session_2026-10-28.md` — repair status.
+- **Reason:** QA Lead repair assignment after Q2 (Gate Q FAIL).
+
 ## 2026-10-27 07:00 UTC — [CC] Claude Code
 - **Updated:** `CLAUDE.md` — added a scoped "Active Module Pointer" section (routing only; all rules unchanged).
 - **Added:** `agent_docs/PROJECT_POINTER.md` — active-module pointer for FFM-ABM-001-SUBSCRIPTION-PORTAL (ACTIONS location).

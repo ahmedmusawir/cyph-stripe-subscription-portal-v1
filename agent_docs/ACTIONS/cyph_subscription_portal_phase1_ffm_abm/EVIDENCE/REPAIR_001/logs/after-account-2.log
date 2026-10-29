@@ -1,0 +1,28 @@
+
+Running 3 tests using 1 worker
+
+[1/3] [account] › e2e/account.repair.spec.ts:70:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)
+[2/3] [account] › e2e/account.repair.spec.ts:125:5 › transient states are observable: loading, launching, saving, quote loading, confirming
+  1) [account] › e2e/account.repair.spec.ts:125:5 › transient states are observable: loading, launching, saving, quote loading, confirming 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      143 |   await page.getByTestId("portal-no-change").click();
+      144 |   await expect(page.getByText("Nothing changed on this account")).toBeVisible();
+    > 145 |   expect(await page.evaluate(() => (window as unknown as { __refreshingSeen?: boolean }).__refreshingSeen)).toBe(true);
+          |                                                                                                             ^
+      146 |   await expect(page.getByText("Nothing changed on this account")).toBeVisible();
+      147 |
+      148 |   await page.goto("/demo/stores/add");
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:145:109
+
+    Error Context: test-results/account.repair-transient-s-0e0a2-ng-quote-loading-confirming-account/error-context.md
+
+
+[3/3] [account] › e2e/account.repair.spec.ts:257:7 › F01 contrast: portal stand-in
+  1 failed
+    [account] › e2e/account.repair.spec.ts:125:5 › transient states are observable: loading, launching, saving, quote loading, confirming 
+  2 passed (39.1s)

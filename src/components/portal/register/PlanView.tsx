@@ -17,7 +17,6 @@ import {
   estimateAvailable,
   formatCents,
   initialRecurringCents,
-  MAX_STORES,
   PLAN_VIEW,
   registration,
   useRegistration,
@@ -110,7 +109,7 @@ export function PlanView({ notice }: { notice: boolean }) {
                 Each additional store is {formatCents(ADDITIONAL_STORE_CENTS)} / month (illustrative). Start with one if you&apos;re unsure — you can add stores any time. You&apos;ll enter details for each pharmacy before payment.
               </p>
             </div>
-            <Counter id="stores" value={confirm ? count : count} max={MAX_STORES} onChange={change} labelledBy="stores-label" />
+            <Counter id="stores" value={confirm ? count : count} onChange={change} labelledBy="stores-label" />
           </div>
           {confirm ? (
             <div className="mt-4 border-l-[3px] border-warning bg-warning/10 p-3 text-sm" role="alertdialog" aria-labelledby="rc-h" aria-describedby="rc-d" data-testid="reduce-confirm">

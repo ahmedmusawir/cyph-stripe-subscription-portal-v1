@@ -1,0 +1,88 @@
+
+Running 17 tests using 1 worker
+
+[1/17] [account] › e2e/account.repair.spec.ts:29:5 › F02: load error stays until Retry, survives navigation and reload, Retry recovers
+[2/17] [account] › e2e/account.repair.spec.ts:56:5 › F02: Retry shows a busy state, then a coherent account (both themes)
+[3/17] [account] › e2e/account.repair.spec.ts:69:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)
+  1) [account] › e2e/account.repair.spec.ts:69:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop) 
+
+    Error: locator.boundingBox: Error: strict mode violation: getByTestId('pharmacy-card').first().getByText('Example Main Street Pharmacy') resolved to 2 elements:
+        1) <p class="font-semibold text-foreground">Example Main Street Pharmacy</p> aka getByLabel('Pharmacies covered by this').getByText('Example Main Street Pharmacy', { exact: true })
+        2) <span class="sr-only"> — Example Main Street Pharmacy</span> aka getByRole('link', { name: 'Open in OwedBook — Example' })
+
+    Call log:
+      - waiting for getByTestId('pharmacy-card').first().getByText('Example Main Street Pharmacy')
+
+
+      85 |   await expect(cards).toHaveCount(2);
+      86 |   const first = cards.nth(0);
+    > 87 |   const name = (await first.getByText("Example Main Street Pharmacy").boundingBox())!;
+         |                                                                       ^
+      88 |   const pill = (await first.getByTestId("card-activation").boundingBox())!;
+      89 |   expect(Math.abs(pill.y - name.y)).toBeLessThan(12);
+      90 |   expect(pill.x).toBeGreaterThan(name.x + 100);
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:87:71
+
+    Error Context: test-results/account.repair-O04-approve-ba148-efresh-line-mobile-desktop--account/error-context.md
+
+
+[4/17] [account] › e2e/account.repair.spec.ts:114:5 › O04: returned-from-Stripe and refreshing variants of the refresh line
+[5/17] [account] › e2e/account.repair.spec.ts:124:5 › transient states are observable: loading, launching, saving, quote loading, confirming
+  2) [account] › e2e/account.repair.spec.ts:124:5 › transient states are observable: loading, launching, saving, quote loading, confirming 
+
+    TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByText('Welcome back from Stripe — refreshing your summary') to be visible
+
+
+      131 |   await expect(manage).toHaveAttribute("aria-busy", "true");
+      132 |   await expect(page).toHaveURL(/mode=portal/);
+    > 133 |   const refreshingSeen = page.getByText("Welcome back from Stripe — refreshing your summary").waitFor({ timeout: 10_000 });
+          |                                                                                               ^
+      134 |   await page.getByTestId("portal-no-change").click();
+      135 |   await refreshingSeen;
+      136 |   await expect(page.getByText("Nothing changed on this account")).toBeVisible();
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:133:95
+
+    Error Context: test-results/account.repair-transient-s-0e0a2-ng-quote-loading-confirming-account/error-context.md
+
+
+[6/17] [account] › e2e/account.repair.spec.ts:176:5 › keyboard only: add store → confirm → result with no pointer input
+[7/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard active
+[8/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard past due
+[9/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard cancel scheduled
+[10/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard canceled
+[11/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard no pharmacies
+[12/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard load error
+[13/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: dashboard handoff error
+[14/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: add store draft restored
+[15/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: add store errors
+[16/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: owedbook
+[17/17] [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: portal stand-in
+  3) [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: portal stand-in ──────────────────
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for locator('summary').filter({ hasText: 'Demo controls' })
+
+
+       8 |
+       9 | async function controls(page: Page) {
+    > 10 |   if (!(await page.locator("details[open]").count())) await page.locator("summary", { hasText: "Demo controls" }).click();
+         |                                                                                                                   ^
+      11 | }
+      12 | async function scenario(page: Page, id: string) {
+      13 |   await page.goto("/dashboard");
+        at controls (/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:10:115)
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/account.repair.spec.ts:257:7
+
+    Error Context: test-results/account.repair-F01-contrast-portal-stand-in-account/error-context.md
+
+
+  3 failed
+    [account] › e2e/account.repair.spec.ts:69:5 › O04: approved pharmacies section, cards, count and refresh line (mobile + desktop) 
+    [account] › e2e/account.repair.spec.ts:124:5 › transient states are observable: loading, launching, saving, quote loading, confirming 
+    [account] › e2e/account.repair.spec.ts:247:7 › F01 contrast: portal stand-in ───────────────────
+  14 passed (5.3m)

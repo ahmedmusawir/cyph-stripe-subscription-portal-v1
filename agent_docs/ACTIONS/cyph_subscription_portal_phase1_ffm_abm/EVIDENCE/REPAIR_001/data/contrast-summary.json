@@ -1,0 +1,99 @@
+{
+ "method": "e2e/contrast.ts \u2014 ancestor-composited WCAG ratio; text 4.5 (3 large), input boundary 3, keyboard focus ring 3 over 30 Tab stops; disabled exempt; theme set before load",
+ "before_public_baseline_94251be": {
+  "light": {
+   "screens": 22,
+   "text_rows": 1015,
+   "text_fail": 196,
+   "boundary_fail": 66,
+   "ring_fail": 466,
+   "min_text": 99,
+   "min_boundary": 1.4,
+   "min_ring": 1.94,
+   "faded_rows": 0
+  },
+  "dark": {
+   "screens": 22,
+   "text_rows": 1015,
+   "text_fail": 39,
+   "boundary_fail": 66,
+   "ring_fail": 151,
+   "min_text": 99,
+   "min_boundary": 1.31,
+   "min_ring": 1.55,
+   "faded_rows": 0
+  }
+ },
+ "before_account_baseline_94251be": {
+  "light": {
+   "screens": 10,
+   "text_rows": 785,
+   "text_fail": 109,
+   "boundary_fail": 50,
+   "ring_fail": 70,
+   "min_text": 99,
+   "min_boundary": 1.4,
+   "min_ring": 2.4,
+   "faded_rows": 0
+  },
+  "dark": {
+   "screens": 10,
+   "text_rows": 785,
+   "text_fail": 33,
+   "boundary_fail": 50,
+   "ring_fail": 30,
+   "min_text": 99,
+   "min_boundary": 1.31,
+   "min_ring": 2.2,
+   "faded_rows": 0
+  }
+ },
+ "after_public_repaired": {
+  "light": {
+   "screens": 22,
+   "text_rows": 1015,
+   "text_fail": 0,
+   "boundary_fail": 0,
+   "ring_fail": 0,
+   "min_text": 99,
+   "min_boundary": 3.62,
+   "min_ring": 3.44,
+   "faded_rows": 0
+  },
+  "dark": {
+   "screens": 22,
+   "text_rows": 1015,
+   "text_fail": 0,
+   "boundary_fail": 0,
+   "ring_fail": 0,
+   "min_text": 99,
+   "min_boundary": 3.05,
+   "min_ring": 3.07,
+   "faded_rows": 0
+  }
+ },
+ "after_account_repaired": {
+  "light": {
+   "screens": 11,
+   "text_rows": 766,
+   "text_fail": 0,
+   "boundary_fail": 0,
+   "ring_fail": 0,
+   "min_text": 99,
+   "min_boundary": 3.62,
+   "min_ring": 3.44,
+   "faded_rows": 0
+  },
+  "dark": {
+   "screens": 11,
+   "text_rows": 766,
+   "text_fail": 0,
+   "boundary_fail": 0,
+   "ring_fail": 0,
+   "min_text": 99,
+   "min_boundary": 3.05,
+   "min_ring": 3.07,
+   "faded_rows": 0
+  }
+ }
+}

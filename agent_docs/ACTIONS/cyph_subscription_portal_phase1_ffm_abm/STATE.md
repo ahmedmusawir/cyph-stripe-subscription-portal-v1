@@ -37,3 +37,10 @@ Safe resume point: if E2 is approved, re-verify branch/HEAD/dirt against this fi
 - Owned process: `next start -p 3001` from the session scratchpad copy `run-r008/` (not the repo `.next`). Not owned: PID 368139 `next dev` :3000 (started 13:23, Tony's), PID 40320 :3457.
 - Next: Tony logs in with his admin account at http://localhost:3001/login and confirms; then E2 resumes from plan §5 step 1.
 - Tony confirmed the real admin login works (27 Oct). My :3001 server is stopped. No owned processes remain. E2 is still paused until the Director says to resume.
+
+## REPAIR_001 — 28 Oct 2026 (RULINGS R-010; direct QA Lead → Engineer route)
+- Base: failed Q2 candidate `94251be` on `qa/ffm-abm-001-subscription-portal`. Repairs Q2-F01, F02, F03, O04, G06 + self-found R1-N01 (refreshing state unreachable). Uncommitted, pending Director commit.
+- Engineering self-checks: build 0 · tsc 0 · jest 11 suites 143/143 · Playwright 126/126 (logout excluded) · Gate M 136 + 84, 0 failures · contrast 33 screens × 2 themes, 0 failures. Not QA certification.
+- Report: `EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md` · ZIP: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_001_REVIEW.zip`.
+- Owned process left running: `next start -p 3103` (scratchpad `r001/app`); stale E2 server :3001 PID 420447 still running; :3457 PID 40320 untouched.
+- Next: Tony commits → Cody retests repairs + regression → JARVIS adjudicates.

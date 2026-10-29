@@ -210,10 +210,25 @@ describe('hosted billing return', () => {
     expect(acct.openBillingPreview(first.state, 'manage').result.ok).toBe(true);
   });
 
-  it('load error then retry succeeds', () => {
-    const s = acct.createAccount('load_error');
-    const first = acct.loadAccount(s);
-    expect(first.result.ok).toBe(false);
-    expect(acct.loadAccount(first.state).result).toMatchObject({ ok: true, value: { kind: 'account' } });
+  it('load error persists across repeated loads until the explicit retry (REPAIR_001 Q2-F02)', () => {
+    let s = acct.createAccount('load_error');
+    // Remounts, navigation and reloads all call loadAccount: none may consume the error.
+    for (let i = 0; i < 3; i++) {
+      const read = acct.loadAccount(s);
+      expect(read.result.ok).toBe(false);
+      s = read.state;
+    }
+    expect(s.loadFailuresRemaining).toBe(1);
+    const retried = acct.retryLoadAccount(s);
+    expect(retried.result).toMatchObject({ ok: true, value: { kind: 'account' } });
+    expect(retried.state.loadFailuresRemaining).toBe(0);
+    // Coherent afterwards: the baseline two-store account, and later loads keep succeeding.
+    const after = acct.loadAccount(retried.state);
+    expect(after.result).toMatchObject({ ok: true, value: { kind: 'account', account: { subscription: { coveredStoreCount: 2, monthlyAmountCents: 14800 } } } });
+  });
+
+  it('retry on a healthy account is a plain load', () => {
+    const s = acct.createAccount('two_store_active');
+    expect(acct.retryLoadAccount(s).result).toMatchObject({ ok: true, value: { kind: 'account' } });
   });
 });
