@@ -23,7 +23,7 @@ export {
   isQuoteExpired as isAddQuoteExpired,
 } from './account';
 export type { AccountReadModel, AccountViewModel, PharmacyListItem, BillingPurpose, AddStoreAvailability } from './account';
-export { PLAN_VIEW, US_STATE_NAMES, DEMO_HINTS } from './catalog';
+export { PLAN_VIEW, US_STATE_NAMES, DEMO_HINTS, OWNER_DECLARATION } from './catalog';
 export { classifyStripeStandIn } from './stripeRoute';
 export {
   REGISTRATION_SCENARIOS,

@@ -1,6 +1,6 @@
 # UI_SPEC — Cyber Pharma Subscription Portal
 
-> **Version:** 1.0 + R-009 wording · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** approved design (RULINGS R-001/R-004); this active copy applies R-009 sign-in wording. The received design copy under `_design/approved_v1_0/` is preserved unchanged.
+> **Version:** 1.0 + R-009 wording + R-011 owner declaration · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** approved design (RULINGS R-001/R-004); this active copy applies R-009 sign-in wording. The received design copy under `_design/approved_v1_0/` is preserved unchanged.
 > **Design mode:** Demo (functional clarity; token discipline mandatory) · **Designer:** Fable · **Architect:** JARVIS · **Director:** Tony
 > **Repository baseline:** `cyph-stripe-subscription-portal-v1` foundation commit `1d15918` · **Module:** FFM-ABM-001-SUBSCRIPTION-PORTAL
 > **Inputs:** `APP_BRIEF.md` v1.0, `DATA_CONTRACT.md` v1.0, `DESIGNER_HANDOFF.md` v1.0, Coach's 17-board HTML, Architect feedback 27 Oct (v0.2 corrections, all applied)
@@ -76,7 +76,7 @@
 - **Human checkpoint:** the reduce confirmation.
 
 ### C02 Owner details — `signup-owner.html`
-- **Fields:** first name*, last name*, work email* (help: access link goes here), mobile*, role* (Owner / Pharmacist in charge / Manager / Other — self-description, explicitly "doesn't change what you can do"), legal business name (optional, for invoices).
+- **Fields:** first name*, last name*, work email* (help: access link goes here), mobile*, legal business name (optional, for invoices), owner declaration* — required checkbox, initially unchecked: "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies." Help text: owner-only registration; a self-declaration; email and payment don't prove ownership. Separate from terms/payment consent. *(R-011, 29 Oct 2026: replaces the retired role select Owner / Pharmacist in charge / Manager / Other; the received design copy under `_design/` is preserved as history.)*
 - **Gating:** Continue always clickable; submit validates → `errors` state (summary + per-field) and focus moves to the summary.
 - **States:** `filled` = returning via Back with retained values. `existing_email` = info alert with "Sign in instead" (primary) / "Use a different email"; copy says "may already have an account" (anti-enumeration is implementation work). `saving` = busy CTA.
 

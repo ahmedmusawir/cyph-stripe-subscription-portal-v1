@@ -37,7 +37,7 @@ const owner = {
   lastName: 'Ellis',
   email: 'jordan@demo-pharmacy.example',
   mobile: '(555) 010-0144',
-  businessRole: 'owner' as const,
+  ownerDeclarationAccepted: true,
 };
 
 /** Walk the real steps: count → owner → N pharmacies → quote. */
@@ -181,9 +181,76 @@ describe('validation', () => {
     expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
   });
 
-  it('job title never grants anything: only the four self-descriptions are accepted', () => {
-    const step = reg.saveOwner(reg.createRegistration('fresh'), { ...owner, businessRole: 'superadmin' as never });
-    expect((step.result as { fieldErrors: Record<string, string> }).fieldErrors).toHaveProperty('businessRole');
+});
+
+// R-011: owner-only registration with an explicit owner declaration (Coach-approved).
+describe('owner declaration (R-011)', () => {
+  const errorsOf = (step: { result: unknown }) => (step.result as { fieldErrors?: Record<string, string> }).fieldErrors ?? {};
+
+  it('a fresh draft starts unaccepted; seeded scenarios carry the synthetic fixture acceptance', () => {
+    expect(reg.createRegistration('fresh').draft.owner.ownerDeclarationAccepted).toBeUndefined();
+    expect(reg.createRegistration('prefilled_two_store').draft.owner.ownerDeclarationAccepted).toBe(true);
+  });
+
+  it.each([[undefined], [false], ['true'], [1], [null]])('declaration %p blocks the owner step at the service', (value) => {
+    const step = reg.saveOwner(reg.createRegistration('fresh'), { ...owner, ownerDeclarationAccepted: value as never });
+    expect(step.result).toMatchObject({ ok: false, code: 'validation' });
+    expect(errorsOf(step)).toEqual({ ownerDeclaration: 'Confirm that you are the pharmacy owner to continue.' });
+  });
+
+  // A quote only prices the store count; the mock SUBMISSION is startCheckout.
+  it('missing declaration blocks review and the mock checkout submission even when every other field is complete', () => {
+    let s = completeDraft(2);
+    s = reg.keepOwner(s, { ...owner, ownerDeclarationAccepted: false }).state;
+    expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'owner' });
+    expect(reg.isDraftComplete(s.draft)).toBe(false);
+    const quoted = reg.requestQuote(completeDraft(2), deps).state;
+    const unaccepted = reg.keepOwner(quoted, { ...owner, ownerDeclarationAccepted: false }).state;
+    const consents = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+    const start = reg.startCheckout(unaccepted, { quoteId: quoted.quote!.id, consents, operationKey: KEY }, deps);
+    expect(start.result).toMatchObject({ ok: false, code: 'missing_context' });
+    expect(start.state.checkout).toBeNull();
+  });
+
+  it('an accepted declaration survives Back (keep) and a reload (JSON round trip)', () => {
+    const saved = reg.saveOwner(reg.createRegistration('fresh'), owner).state;
+    const back = reg.keepOwner(saved, { ...saved.draft.owner, firstName: 'Jordan' }).state;
+    const reloaded = JSON.parse(JSON.stringify(back));
+    expect(reloaded.draft.owner.ownerDeclarationAccepted).toBe(true);
+    expect(reg.saveOwner(reloaded, reloaded.draft.owner).result.ok).toBe(true);
+  });
+
+  it('a pre-R-011 draft (job title, no declaration) is migrated WITHOUT acceptance', () => {
+    const v1 = JSON.parse(JSON.stringify(reg.requestQuote(completeDraft(2), deps).state));
+    delete v1.draft.owner.ownerDeclarationAccepted;
+    v1.draft.owner.businessRole = 'owner';
+    const migrated = reg.migrateRegistration(v1);
+    expect(migrated.draft.owner).not.toHaveProperty('businessRole');
+    expect(migrated.draft.owner.ownerDeclarationAccepted).toBe(false);
+    expect(migrated.quote).toBeNull();
+    expect(reg.firstIncomplete(migrated.draft)).toEqual({ step: 'owner' });
+    expect(migrated.draft.pharmacies).toEqual(v1.draft.pharmacies); // entered details are kept
+    expect(reg.migrateRegistration(null).draft.owner).toEqual({});
+  });
+
+  it('a job title no longer exists or affects registration', () => {
+    const step = reg.saveOwner(reg.createRegistration('fresh'), { ...owner, businessRole: 'superadmin' } as never);
+    expect(step.result.ok).toBe(true);
+    expect(step.state.draft.owner).not.toHaveProperty('businessRole');
+    const without = reg.saveOwner(reg.createRegistration('fresh'), owner);
+    expect(step.state.draft.owner).toEqual(without.state.draft.owner);
+  });
+
+  it('Me / Someone else never moves ownership: the registering owner stays the billing/access recipient', () => {
+    let s = reg.createRegistration('fresh');
+    s = reg.setStoreCount(s, 2).state;
+    s = reg.saveOwner(s, owner).state;
+    s = reg.savePharmacy(s, 0, pharmacy(1)).state; // Me
+    s = reg.savePharmacy(s, 1, pharmacy(2, { adminAssignment: { kind: 'other', fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' } })).state;
+    const previews = reg.accessEmailPreviews(s);
+    expect(previews.owner).toMatchObject({ recipientKind: 'owner', recipientName: 'Jordan Ellis' });
+    expect(previews.store_admin).toMatchObject({ recipientKind: 'store_admin', recipientName: 'Sam Ortiz' });
+    expect(s.draft.owner).toMatchObject({ email: 'jordan@demo-pharmacy.example', ownerDeclarationAccepted: true });
   });
 });
 

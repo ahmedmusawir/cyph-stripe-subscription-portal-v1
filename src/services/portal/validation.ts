@@ -5,12 +5,6 @@ import type { AdminAssignment, OwnerDraft, PharmacyDraft } from '@/types/portal/
 export type FieldErrors = Record<string, string>;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const BUSINESS_ROLES: readonly OwnerDraft['businessRole'][] = [
-  'owner',
-  'pharmacist_in_charge',
-  'manager',
-  'other',
-];
 const SOFTWARE: readonly PharmacyDraft['software'][] = ['Liberty', 'Pioneer', 'Other'];
 
 function blank(value: unknown): boolean {
@@ -32,8 +26,10 @@ export function validateOwner(owner: Partial<OwnerDraft>): FieldErrors {
   if (blank(owner.email)) errors.email = 'Enter your work email.';
   else if (!isEmail(owner.email)) errors.email = 'Enter an email address like name@pharmacy.com.';
   if (phoneDigits(owner.mobile) < 10) errors.mobile = 'Enter a phone number we can text.';
-  if (!owner.businessRole || !BUSINESS_ROLES.includes(owner.businessRole))
-    errors.businessRole = 'Choose the role that best describes you.';
+  // R-011: owner-only registration. The declaration must be exactly `true`;
+  // it is a self-declaration and proves nothing (neither does email or payment).
+  if (owner.ownerDeclarationAccepted !== true)
+    errors.ownerDeclaration = 'Confirm that you are the pharmacy owner to continue.';
   return errors;
 }
 

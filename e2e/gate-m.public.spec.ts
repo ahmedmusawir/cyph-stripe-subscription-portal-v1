@@ -90,7 +90,10 @@ test("keyboard: plan → owner form reachable and submittable without a mouse", 
     await page.keyboard.type(v);
     await page.keyboard.press("Tab");
   }
-  await page.keyboard.press("ArrowDown"); // native select: choose first role
+  await page.keyboard.press("Tab"); // past the optional legal business name
+  await expect(page.locator("#owner-declaration")).toBeFocused(); // R-011 owner declaration
+  await page.keyboard.press("Space");
+  await expect(page.locator("#owner-declaration")).toBeChecked();
   await page.getByRole("button", { name: "Continue" }).focus();
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/pharmacies\?store=1/);

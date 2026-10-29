@@ -38,7 +38,11 @@ export const registrationStore = createStore<RegistrationStore>()(
     }),
     {
       name: PUBLIC_STORAGE_KEY,
-      version: 1,
+      // v2 (R-011): owner declaration replaces the job title; v1 drafts are
+      // migrated WITHOUT accepting the declaration.
+      version: 2,
+      migrate: (persisted, from) =>
+        from < 2 ? { s: engine.migrateRegistration((persisted as { s?: unknown } | null)?.s) } : (persisted as { s: RegistrationState }),
       storage: createJSONStorage(() => sessionStorage),
       partialize: (store) => ({ s: store.s }),
       skipHydration: true,

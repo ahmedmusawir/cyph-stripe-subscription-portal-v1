@@ -9,7 +9,7 @@ async function fillOwner(page: Page) {
   await page.getByLabel("Last name").fill("Ellis");
   await page.getByLabel("Work email").fill("jordan@demo-pharmacy.example");
   await page.getByLabel("Mobile phone").fill("(555) 010-0144");
-  await page.getByLabel("Your role").selectOption("owner");
+  await page.getByRole("checkbox", { name: /I confirm that I am the pharmacy owner/ }).check(); // R-011
 }
 
 async function fillPharmacy(page: Page, n: number, other?: { name: string; email: string }) {

@@ -22,7 +22,10 @@ export const OWNER_JORDAN: OwnerDraft = {
   lastName: 'Ellis',
   email: 'jordan@demo-pharmacy.example',
   mobile: '(555) 010-0144',
-  businessRole: 'owner',
+  // SYNTHETIC demo fixture: the owner declaration is pre-accepted only so the
+  // seeded review scenarios can open on later steps. A real or fresh draft
+  // always starts unaccepted (R-011).
+  ownerDeclarationAccepted: true,
   legalBusinessName: 'Main Street Pharmacy LLC',
 };
 

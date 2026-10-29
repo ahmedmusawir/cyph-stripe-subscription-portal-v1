@@ -1,6 +1,14 @@
 # Recovery State — cyph-stripe-subscription-portal-v1
 
-Last action (2026-10-28 16:24): **REPAIR_001 COMPLETE (engineering) for FFM-ABM-001-SUBSCRIPTION-PORTAL** under RULINGS R-010
+Last action (2026-10-29 10:26): **AMENDMENT_001 COMPLETE (engineering), RULINGS R-011** — owner-only registration: job-title
+  select removed, required owner declaration (UI + mock service), v1 drafts migrate unaccepted, admin/ownership copy clarified.
+  Uncommitted on `qa/ffm-abm-001-subscription-portal` @ 0d43a4c (REPAIR_001 committed). build 0 · tsc 0 · jest 156/156 ·
+  Playwright 131/131 · Gate M 220/0. Report: module `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` · ZIP:
+  `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip` (+ `~/Downloads/`) · Session: `session_2026-10-29.md`.
+Pending: Tony commits. Owned server :3104 stopped (no owned servers running); scratch copy r002 retained until asked. REPAIR_001 scratch deleted.
+Next step: independent QA on the combined candidate (AC-06a + REPAIR_001 retest) → JARVIS adjudicates.
+
+Previous (2026-10-28 16:24): **REPAIR_001 COMPLETE (engineering) for FFM-ABM-001-SUBSCRIPTION-PORTAL** under RULINGS R-010
   (direct QA Lead → Engineer route). Repaired Q2-F01 contrast, F02 load-error/retry, F03 Stripe `mode` classification,
   O04 approved pharmacies section/cards/refresh line, G06 20-store cap; self-found R1-N01 (refreshing state). Uncommitted on
   `qa/ffm-abm-001-subscription-portal` @ 94251be. build 0 · tsc 0 · jest 143/143 · Playwright 126/126 · Gate M 220/0.

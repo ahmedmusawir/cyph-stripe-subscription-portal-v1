@@ -163,7 +163,7 @@ export function DashboardView() {
           </div>
         </div>
         <p className="mt-4 text-xs text-muted-foreground">
-          Think you should be the billing owner? Contact <Placeholder>[SUPPORT EMAIL]</Placeholder>; ownership is verified separately.
+          Think you should be the billing owner? There&apos;s no self-service ownership transfer. Contact <Placeholder>[SUPPORT EMAIL]</Placeholder>; the transfer process is <Placeholder>[OWNERSHIP TRANSFER PROCESS TBD]</Placeholder>.
         </p>
       </PageContainer>
     );
@@ -470,7 +470,7 @@ export function DashboardView() {
             </div>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Only the billing owner can manage billing. You can also be a store admin of your own pharmacies; nominating someone else as store admin never transfers billing ownership. To change the billing owner, contact <Placeholder>[SUPPORT EMAIL]</Placeholder>.
+            Only the billing owner can manage billing. You can also be a store admin of your own pharmacies; appointing someone else as store admin never transfers ownership or billing. There&apos;s no self-service ownership transfer: to change the billing owner, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> (process <Placeholder>[OWNERSHIP TRANSFER PROCESS TBD]</Placeholder>).
           </p>
         </section>
         {sub.status !== "canceled" ? (

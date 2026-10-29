@@ -1,6 +1,6 @@
 # DATA CONTRACT — Subscription Portal design and mock journeys
 
-> Version: 1.2 · Date: 27 October 2026 (Asia/Dhaka) · v1.2 applies Director rulings R-008/R-009
+> Version: 1.3 · Date: 29 October 2026 (Asia/Dhaka) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
 > Status: FFM contract under RULINGS R-001/R-005 · Owner: Architect
 > Purpose: screen fields, mock relationships, transitions and permissions. NOT production SQL or a migration contract.
 
@@ -40,7 +40,7 @@ Mock capability flags determine the visual fixtures. They are never proof of pro
 |---|---|---|
 | PortalSessionView | `signedIn`, `displayName`, `persona`, `accountId?`, `canViewBilling`, `canManageBilling`, `canAddStore`, `isDemo` | Header, permitted actions, denied state |
 | PlanView | `id`, `name`, `interval`, `includedStoreCount`, `baseAmountCents?`, `additionalStoreAmountCents?`, `benefits[]`, `commercialStatus: provisional|approved` | Plan and review panels |
-| OwnerDraft | `firstName`, `lastName`, `email`, `mobile`, `businessRole`, `legalBusinessName?` | Owner form/review |
+| OwnerDraft | `firstName`, `lastName`, `email`, `mobile`, `ownerDeclarationAccepted`, `legalBusinessName?` | Owner form/review |
 | PharmacyDraft | `id`, `name`, `street`, `city`, `state`, `zip`, `ncpdp`, `npi`, `phone`, `software`, `softwareOther?`, `adminAssignment` | Initial and add-store forms |
 | AdminAssignment | `kind: owner|other`, `fullName?`, `email?` | Other-admin fields required only for `other` |
 | RegistrationDraft | `id`, `planId`, `requestedStoreCount`, `owner`, `pharmacies[]`, `code?`, `consents`, `state`, `resumeAvailable` | Wizard progress, edits, abandoned checkout |
@@ -54,16 +54,16 @@ Mock capability flags determine the visual fixtures. They are never proof of pro
 | HandoffView | `destination: stripe_checkout|stripe_portal|owedbook|account_setup`, `purpose`, `returnContext`, `isDemo`, `status` | Clear external destination, return/retry |
 | AccessEmailView | `recipientKind: owner|store_admin`, `recipientName`, `recipientEmailMasked`, `pharmacyNames[]`, `subject`, `linkState`, `expiryLabel` | Email preview; no real token or send |
 
-`businessRole` is a self-described job title (owner, pharmacist in charge, manager, other), not a permission grant. NCPDP/NPI identify a claimed pharmacy; they are not proof of ownership.
+`ownerDeclarationAccepted` records the registering person's explicit owner self-declaration (R-011); it starts unaccepted, must be exactly `true`, is separate from `ConsentView`, and grants no permission. Registration is owner-only. Neither email (control of an inbox) nor payment proves pharmacy ownership or delegated authority; nothing in the FFM verifies ownership. NCPDP/NPI identify a claimed pharmacy; they are not proof of ownership.
 
 ## 5. Field and validation behavior
 
 | Concern | Design/FFM rule |
 |---|---|
-| Owner identity | Require names, email, mobile and business role; legal invoice name optional. Trim email; show ordinary format validation. |
+| Owner identity | Require names, email, mobile and the owner declaration (R-011: required checkbox, initially unchecked, exact label "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies."); legal invoice name optional. Trim email; show ordinary format validation. The mock service rejects a missing declaration and refuses checkout; drafts saved before R-011 are migrated without acceptance. |
 | Pharmacy details | Required business details above; NCPDP 7-digit format, NPI 10-digit format for UI demonstration. Do not label either “ownership verified.” |
 | Software | Liberty / Pioneer / Other from Coach; Other reveals a name field. No software credentials. |
-| Admin assignment | Owner selected by default; Other reveals full name/email. Explain separate billing-owner and store-admin access. |
+| Admin assignment | Me / Someone else; Someone else reveals full name/email. One designated admin per store. The registering owner keeps account ownership and billing either way: "Me" means the owner also manages the store; "Someone else" appoints a store admin and never transfers ownership, billing or permission to buy more stores (R-011). |
 | Multiple initial stores | Proposed resolution: `pharmacies.length === requestedStoreCount` before payment. Repeat the pharmacy form; identify “Pharmacy 1 of N.” Count reduction asks before discarding entered records. |
 | Duplicate pharmacy | Conflict fixture prevents submission; keep data, show sign-in/support routes, disclose no other owner's identity. |
 | Existing owner email | Design sign-in/continue path. Live anti-enumeration and account-linking behavior remain implementation work. |

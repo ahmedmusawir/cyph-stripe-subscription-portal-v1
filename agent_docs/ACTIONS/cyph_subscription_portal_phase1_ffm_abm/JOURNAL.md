@@ -35,3 +35,8 @@ Engineer appends meaningful checkpoints: time, identity, work, command/result ev
 - F02 root cause: a superseded/second load consumed the one-shot failure; the sequence guard then threw that error away. The old engine test asserted the buggy behaviour.
 - While proving transient states, found R1-N01: the "refreshing" banner after a Stripe return never rendered (skeleton until done). Fixed with a synchronous last-known read.
 - Instrument lessons: theme set after load measures colour transitions; Playwright restarts the worker after each failure, so a worker-scoped real sign-in multiplies (≈22 sign-ins this repair). Error-context snapshots carry the real display name and must be deleted.
+
+### 29 Oct 2026 — AMENDMENT_001 (Claudy)
+- Declaration enforced once, in `validateOwner`, so the owner step, deep links and `startCheckout` all inherit it; a quote still prices without it (pricing only).
+- The real risk was old drafts: persisted v1 drafts are migrated with the declaration explicitly false; an allow-list keeps `businessRole` (or any stray key) out of drafts.
+- One test expectation was wrong (expected `requestQuote` to fail); corrected to the mock submission (`startCheckout`). All browser runs passed first time, so 1 sign-in only.

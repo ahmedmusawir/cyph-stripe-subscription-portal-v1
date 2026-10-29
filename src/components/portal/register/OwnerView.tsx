@@ -3,34 +3,27 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { OwnerDraft } from "@/types/portal/contract";
 import { Alert, DemoNotice } from "../Alert";
 import { ErrorSummary, summarize } from "../ErrorSummary";
-import { RequiredNote, SelectField, TextField } from "../FormField";
+import { RequiredNote, TextField } from "../FormField";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { PageHeader } from "../PageHeader";
 import { Stepper } from "../Stepper";
 import { MissingContextNotice } from "./MissingContext";
-import { registration, useRegistration } from "@/services/portal";
-
-const ROLES = [
-  { value: "owner", label: "Owner" },
-  { value: "pharmacist_in_charge", label: "Pharmacist in charge" },
-  { value: "manager", label: "Manager" },
-  { value: "other", label: "Other" },
-] as const;
+import { OWNER_DECLARATION, registration, useRegistration } from "@/services/portal";
 
 const FIELDS = [
   { key: "firstName", fieldId: "first", label: "First name" },
   { key: "lastName", fieldId: "last", label: "Last name" },
   { key: "email", fieldId: "email", label: "Work email" },
   { key: "mobile", fieldId: "mobile", label: "Mobile phone" },
-  { key: "businessRole", fieldId: "role", label: "Your role" },
+  { key: "ownerDeclaration", fieldId: "owner-declaration", label: "Owner declaration" },
 ] as const;
 
-type Form = { firstName: string; lastName: string; email: string; mobile: string; businessRole: string; legalBusinessName: string };
+type Form = { firstName: string; lastName: string; email: string; mobile: string; ownerDeclarationAccepted: boolean; legalBusinessName: string };
 
 // C02 Owner details (+ C16 existing-email branch).
 export function OwnerView({ notice }: { notice: boolean }) {
@@ -52,7 +45,7 @@ export function OwnerView({ notice }: { notice: boolean }) {
         lastName: o.lastName ?? "",
         email: o.email ?? "",
         mobile: o.mobile ?? "",
-        businessRole: o.businessRole ?? "",
+        ownerDeclarationAccepted: o.ownerDeclarationAccepted === true,
         legalBusinessName: o.legalBusinessName ?? "",
       });
     }
@@ -64,7 +57,7 @@ export function OwnerView({ notice }: { notice: boolean }) {
 
   if (!hydrated || !form) return <PageContainer><ViewSkeleton /></PageContainer>;
 
-  const set = (k: keyof Form) => (v: string) => setForm({ ...form, [k]: v });
+  const set = (k: Exclude<keyof Form, "ownerDeclarationAccepted">) => (v: string) => setForm({ ...form, [k]: v });
 
   function toOwner(f: Form): Partial<OwnerDraft> {
     return {
@@ -72,7 +65,7 @@ export function OwnerView({ notice }: { notice: boolean }) {
       lastName: f.lastName,
       email: f.email,
       mobile: f.mobile,
-      businessRole: (f.businessRole || undefined) as OwnerDraft["businessRole"] | undefined,
+      ownerDeclarationAccepted: f.ownerDeclarationAccepted,
       legalBusinessName: f.legalBusinessName || undefined,
     };
   }
@@ -156,16 +149,6 @@ export function OwnerView({ notice }: { notice: boolean }) {
             help="Your sign-in and access link go here. Use an inbox you check daily."
           />
           <TextField id="mobile" type="tel" inputMode="tel" autoComplete="tel" label="Mobile phone" required value={form.mobile} onValue={set("mobile")} error={errors.mobile} />
-          <SelectField
-            id="role"
-            label="Your role"
-            required
-            value={form.businessRole}
-            onValue={set("businessRole")}
-            options={ROLES}
-            error={errors.businessRole}
-            help="How you describe your job. This doesn't change what you can do in the app."
-          />
           <TextField
             id="legal"
             label="Legal business name"
@@ -177,6 +160,34 @@ export function OwnerView({ notice }: { notice: boolean }) {
             help="The name that should appear on receipts. Leave blank to use your pharmacy's name."
           />
         </div>
+        <fieldset className="min-w-0 border border-border bg-card p-4 sm:p-5" data-testid="owner-declaration-panel">
+          <legend className="sr-only">Owner declaration (required)</legend>
+          <label htmlFor="owner-declaration" className="flex min-h-[44px] cursor-pointer items-start gap-3 text-sm text-foreground">
+            <input
+              id="owner-declaration"
+              type="checkbox"
+              className="mt-0.5 h-5 w-5 shrink-0"
+              checked={form.ownerDeclarationAccepted}
+              onChange={(e) => setForm({ ...form, ownerDeclarationAccepted: e.target.checked })}
+              aria-required="true"
+              aria-invalid={errors.ownerDeclaration ? true : undefined}
+              aria-describedby={["owner-declaration-help", errors.ownerDeclaration ? "owner-declaration-err" : null].filter(Boolean).join(" ")}
+            />
+            <span>
+              {OWNER_DECLARATION} <span className="text-destructive" aria-hidden="true">*</span>
+              <span className="sr-only">(required)</span>
+            </span>
+          </label>
+          <p id="owner-declaration-help" className="ml-8 mt-1 text-xs text-muted-foreground">
+            Registration is for pharmacy owners only. This is your own declaration: email and payment don&apos;t prove ownership, and any ownership check happens separately. It is separate from the terms and payment agreements you&apos;ll see before checkout.
+          </p>
+          {errors.ownerDeclaration ? (
+            <p id="owner-declaration-err" className="ml-8 mt-1 flex items-center gap-1.5 text-xs font-medium text-destructive">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              {errors.ownerDeclaration}
+            </p>
+          ) : null}
+        </fieldset>
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button
             type="button"

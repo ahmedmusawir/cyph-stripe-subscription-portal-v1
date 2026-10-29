@@ -23,12 +23,6 @@ import {
   useRegistration,
 } from "@/services/portal";
 
-const ROLE_TEXT: Record<string, string> = {
-  owner: "Owner",
-  pharmacist_in_charge: "Pharmacist in charge",
-  manager: "Manager",
-  other: "Other",
-};
 
 // C04 Review, code and consent. The CTA needs a current quote (same draft
 // revision, unexpired) and both consents; the service re-checks all of it.
@@ -208,7 +202,12 @@ export function ReviewView() {
               {ownerName} <RoleLabel>Owner</RoleLabel>
             </p>
             <p className="text-sm text-muted-foreground">
-              <span className="break-all">{owner.email}</span> · <span className="whitespace-nowrap">{owner.mobile}</span> · {ROLE_TEXT[owner.businessRole ?? ""] ?? ""}
+              <span className="break-all">{owner.email}</span> · <span className="whitespace-nowrap">{owner.mobile}</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground" data-testid="review-owner-declaration">
+              {owner.ownerDeclarationAccepted === true
+                ? "Owner declaration confirmed (your own statement; ownership isn't verified by email or payment)."
+                : "Owner declaration not confirmed — edit the owner step."}
             </p>
             {owner.legalBusinessName ? <p className="text-sm text-muted-foreground">Invoices to: {owner.legalBusinessName}</p> : null}
           </section>

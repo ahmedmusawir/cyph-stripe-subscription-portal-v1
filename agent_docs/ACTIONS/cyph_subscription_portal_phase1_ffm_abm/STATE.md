@@ -44,3 +44,9 @@ Safe resume point: if E2 is approved, re-verify branch/HEAD/dirt against this fi
 - Report: `EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md` · ZIP: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_001_REVIEW.zip`.
 - Owned process left running: `next start -p 3103` (scratchpad `r001/app`); stale E2 server :3001 PID 420447 still running; :3457 PID 40320 untouched.
 - Next: Tony commits → Cody retests repairs + regression → JARVIS adjudicates.
+
+## AMENDMENT_001 — 29 Oct 2026 (RULINGS R-011; Coach decision, Director authorization)
+- Base `0d43a4c` (REPAIR_001 committed). Owner-only registration: job-title select removed; required unchecked owner declaration enforced in UI and mock service; v1 drafts migrate unaccepted; Me/Someone-else and ownership-transfer copy clarified. Uncommitted, pending Director commit.
+- Self-checks: build 0 · tsc 0 · jest 156/156 · Playwright 131/131 · Gate M 220/0 · contrast 0 failures. Not QA certification.
+- Report `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` · ZIP `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip`. Owned server :3104 running.
+- Next: Tony commits → independent QA on the combined candidate (AC-06a + REPAIR_001 retest) → JARVIS.

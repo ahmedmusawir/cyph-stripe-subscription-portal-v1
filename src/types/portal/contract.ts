@@ -1,4 +1,4 @@
-// Portal FFM contract — copied from the module's _project/portal-contract.ts (v1.1).
+// Portal FFM contract — copied from the module's _project/portal-contract.ts (v1.2, R-011).
 // Pure types; no SDK/runtime implementation. Field meanings are owned by DATA_CONTRACT.
 export type Cents = number; // Integer, >=0; validate at mock-service boundary.
 export type ISODate = string;
@@ -18,7 +18,8 @@ export interface PlanView {
 }
 export interface OwnerDraft {
  firstName: string; lastName: string; email: string; mobile: string;
- businessRole: 'owner' | 'pharmacist_in_charge' | 'manager' | 'other'; legalBusinessName?: string;
+ /** R-011: explicit owner self-declaration (initially false; must be exactly true). Not proof of ownership. */
+ ownerDeclarationAccepted: boolean; legalBusinessName?: string;
 }
 export type AdminAssignment = {kind:'owner'} | {kind:'other'; fullName:string; email:string};
 export interface PharmacyDraft {

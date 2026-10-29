@@ -137,7 +137,7 @@ export function AddStoreView() {
                 <li>
                   Check <Link href="/dashboard" className="portal-link">Pharmacies on this plan</Link> in Account &amp; Billing.
                 </li>
-                <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll verify ownership.</li>
+                <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll review it (ownership review process [TBD]).</li>
                 <li>Typo? Check the number and try again.</li>
               </ul>
             </Alert>

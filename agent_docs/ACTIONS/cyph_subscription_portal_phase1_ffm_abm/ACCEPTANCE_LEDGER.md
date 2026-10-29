@@ -1,5 +1,5 @@
 # Engineering acceptance ledger
-Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.1 (R-008/R-009). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
+Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.2 (R-008/R-009/R-011). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
 
 | AC | Engineering claim | Evidence | Independent disposition |
 |---|---|---|---|
@@ -8,7 +8,8 @@ Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANC
 | AC-03 | MET — real admin vs synthetic persona labelled in strip/menu; non-owner payload is `{kind:'denied', ownerContactLabel}` only; service denies add/billing | `portal-account.test.ts` (persona tests); account e2e personas | See matrix |
 | AC-04 | MET — every C01–C17 + sign-in state reachable; missing context returns to a safe step with notice | ER §6; public/account e2e | See matrix |
 | AC-05 | MET — count ≥1, N records required, reduce asks/keeps, 1/2/3 exercised | `portal-registration.test.ts`; e2e count reduction, 3-store journey | See matrix |
-| AC-06 | MET — required fields, NCPDP 7 / NPI 10 as strings, conditional fields, summary focus, job title grants nothing | `portal-registration.test.ts` validation; e2e validation | See matrix |
+| AC-06 | MET — required fields, NCPDP 7 / NPI 10 as strings, conditional fields, summary focus, no job-title field (R-011, AMENDMENT_001) | `portal-registration.test.ts` validation; e2e validation | See matrix |
+| AC-06a | ENGINEERING SELF-CHECK (R-011, AMENDMENT_001) — required unchecked owner declaration with exact label; blocks owner step, deep links and mock checkout at the service; survives Back/reload; v1 drafts migrate unaccepted; Me / Someone else keeps billing with the owner; no ownership-proof claims | `portal-registration.test.ts` "owner declaration (R-011)"; `portal-owner.test.tsx`; `e2e/public.owner-declaration.spec.ts`; `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` | Pending independent QA |
 | AC-07 | MET — back/edit/reload keep drafts; edits invalidate quote+consent; separate public/account namespaces; reset/logout/identity change clear; no secrets stored | e2e reload + storage check; `portal-storage.test.ts` | See matrix |
 | AC-08 | MET — 9900/14800/19700; DEMO10 −1000 due-now only; unavailable ≠ 0; add 2450 | literal-expectation tests in `portal-registration.test.ts`, `portal-account.test.ts`; e2e $197.00/$187.00/$24.50 | See matrix |
 | AC-09 | MET — two consents initial, one add; expired (injected clock)/stale revision rejected without mutation; refresh clears consent; busy disables; consent disabled until a current quote | engine tests; e2e consent error | See matrix |

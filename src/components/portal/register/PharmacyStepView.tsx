@@ -115,7 +115,7 @@ export function PharmacyStepView({ storeParam, notice }: { storeParam: number; n
               <li>
                 Already subscribed? <Link href="/login" className="portal-link">Sign in</Link> and use Add a store.
               </li>
-              <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll verify ownership.</li>
+              <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll review it (ownership review process [TBD]).</li>
               <li>Typo? Check the number and try again.</li>
             </ul>
           </Alert>

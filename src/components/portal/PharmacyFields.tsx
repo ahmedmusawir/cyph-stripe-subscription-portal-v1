@@ -140,7 +140,7 @@ export function PharmacyFields({
           Who will be this store&apos;s admin? <span className="text-destructive">*</span>
         </p>
         <p className="text-xs text-muted-foreground">
-          Each store has one admin who invites the team and manages the store in OwedBook. You stay the billing owner either way — store admins who are not the billing owner cannot manage billing, and you can be both.
+          Each store has one designated admin, who invites the team and manages the store in OwedBook. Either way, you keep account ownership and billing.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           <RadioCard
@@ -149,7 +149,7 @@ export function PharmacyFields({
             checked={form.admin === "owner"}
             onSelect={() => onChange({ ...form, admin: "owner" })}
             title={`Me (${ownerName})`}
-            description="You'll be both billing owner and this store's admin."
+            description="You also manage this store as its admin, in addition to owning the account."
           />
           <RadioCard
             name="admin"
@@ -159,8 +159,8 @@ export function PharmacyFields({
             title="Someone else"
             description={
               context === "signup"
-                ? "We'll ask for their name and email. They get a separate store invitation after payment; you still get your own access link."
-                : "They get a store invitation once the store is added. Billing stays with you."
+                ? "You appoint a store admin and we'll ask for their name and email. They get a separate store invitation after payment; you still get your own access link. This doesn't transfer ownership, billing or permission to buy more stores."
+                : "You appoint a store admin; they get a store invitation once the store is added. Ownership, billing and adding stores stay with you."
             }
           />
         </div>

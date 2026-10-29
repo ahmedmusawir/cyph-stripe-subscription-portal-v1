@@ -10,3 +10,11 @@ export const DEMO_HINTS = {
   existingEmail: EMAIL_EXISTING_ACCOUNT,
   code: 'DEMO10',
 } as const;
+
+/**
+ * R-011 (Coach-approved owner-only registration): exact owner declaration.
+ * Required, starts unchecked, separate from terms/payment consent. A
+ * self-declaration only — not proof of ownership.
+ */
+export const OWNER_DECLARATION =
+  'I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.';

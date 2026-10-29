@@ -234,9 +234,41 @@ export function setStoreCount(state: RegistrationState, n: unknown): Step<Regist
   return ok(next, next.draft);
 }
 
+/**
+ * Owner fields the draft may hold (R-011). Anything else, such as the retired
+ * self-described `businessRole`, is dropped, and the owner declaration is kept
+ * only when it is exactly `true` — it is never inferred.
+ */
+function ownerFields(owner: Partial<OwnerDraft> | undefined): Partial<OwnerDraft> {
+  const o = owner ?? {};
+  const pick = (v: unknown) => (typeof v === 'string' ? v : undefined);
+  const out: Partial<OwnerDraft> = {
+    firstName: pick(o.firstName),
+    lastName: pick(o.lastName),
+    email: pick(o.email),
+    mobile: pick(o.mobile),
+    ownerDeclarationAccepted: o.ownerDeclarationAccepted === true,
+    legalBusinessName: pick(o.legalBusinessName),
+  };
+  for (const k of Object.keys(out) as (keyof OwnerDraft)[]) if (out[k] === undefined) delete out[k];
+  return out;
+}
+
+/**
+ * Persisted public drafts written before R-011 (storage version 1) carried a
+ * job title and no owner declaration. They are kept, but the declaration is NOT
+ * assumed: it stays unaccepted, so the owner step must be completed again
+ * before a quote or checkout. Any held quote is dropped for the same reason.
+ */
+export function migrateRegistration(persisted: unknown): RegistrationState {
+  const old = persisted as Partial<RegistrationState> | null;
+  if (!old || typeof old !== 'object' || !old.draft || typeof old.draft !== 'object') return createRegistration('fresh');
+  return { ...old, draft: { ...old.draft, owner: ownerFields(old.draft.owner) }, quote: null } as RegistrationState;
+}
+
 /** Back/navigation away: keep what was typed without validating. */
 export function keepOwner(state: RegistrationState, owner: Partial<OwnerDraft>): Step<RegistrationDraft> {
-  const next = { ...state, draft: { ...state.draft, owner: { ...owner } } };
+  const next = { ...state, draft: { ...state.draft, owner: ownerFields(owner) } };
   return ok(next, next.draft);
 }
 
@@ -254,7 +286,8 @@ export function keepPharmacy(state: RegistrationState, index: number, pharmacy: 
 }
 
 export function saveOwner(state: RegistrationState, owner: Partial<OwnerDraft>): Step<RegistrationDraft> {
-  const clean: Partial<OwnerDraft> = { ...owner, email: owner.email?.trim() };
+  const picked = ownerFields(owner);
+  const clean: Partial<OwnerDraft> = { ...picked, email: picked.email?.trim() };
   const errors = validateOwner(clean);
   const kept = { ...state, draft: { ...state.draft, owner: clean } };
   if (hasErrors(errors)) return fail(kept, 'validation', 'Some fields need attention.', errors);

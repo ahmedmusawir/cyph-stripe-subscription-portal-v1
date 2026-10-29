@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-10-29 04:26 UTC — [CC] Claude Code
+- **Updated:** `…/RULINGS.md` — R-011 owner-only registration / owner declaration (Coach decision, Director authorization).
+- **Updated:** `…/ACCEPTANCE_SPEC.md` v1.2 (AC-06, new AC-06a), `…/_project/DATA_CONTRACT.md` v1.3, `…/_project/UI_SPEC.md` (C02), `…/_project/portal-contract.ts` v1.2, `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9 — R-011 amendment.
+- **Added:** `…/EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`, `…/EVIDENCE/AMENDMENT_001/` — amendment evidence.
+- **Updated:** `…/STATE.md`, `…/JOURNAL.md`, `RECOVERY.md`, `agent_docs/SESSIONS/session_2026-10-29.md`.
+- **Reason:** Coach-approved owner-only registration before final QA certification.
+
 ## 2026-10-28 10:24 UTC — [CC] Claude Code
 - **Updated:** `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md` — R-010 direct QA Lead → Engineer repair route.
 - **Added:** `…/EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md`, `…/EVIDENCE/REPAIR_001/` — REPAIR_001 evidence for Q2-F01/F02/F03/O04/G06 (+ R1-N01).
