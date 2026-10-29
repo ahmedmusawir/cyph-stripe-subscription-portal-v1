@@ -57,10 +57,17 @@ export type CheckoutStatus =
   | 'expired' // hold period over; start again
   | 'paid';
 
+/**
+ * Why Pharmacy Books closed an unpaid checkout itself (R-012). The record keeps
+ * status 'abandoned' (nothing charged); this says what invalidated it.
+ */
+export type CheckoutClosedReason = 'details_changed' | 'owner_declaration';
+
 export interface CheckoutRecord {
   operationKey: string;
   quoteId: string;
   status: CheckoutStatus;
+  closedReason?: CheckoutClosedReason;
 }
 
 /** What the next activation status check resolves to (demo outcome). */

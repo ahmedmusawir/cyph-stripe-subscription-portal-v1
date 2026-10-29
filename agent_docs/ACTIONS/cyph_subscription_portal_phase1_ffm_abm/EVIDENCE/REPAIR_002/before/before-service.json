@@ -1,0 +1,33 @@
+{
+  "A": {
+    "saveOwnerOk": false,
+    "accepted": false,
+    "checkoutAfterWithdraw": "pending",
+    "sameKeyReplayOk": true,
+    "resolvePaidOk": true,
+    "checkoutAfter": "paid",
+    "payment": "confirmed",
+    "processingThenRefresh": "confirmed"
+  },
+  "B": {
+    "accepted": false,
+    "quoteCleared": true,
+    "checkoutBefore": "pending",
+    "resolvePaidOk": true,
+    "checkoutAfter": "paid"
+  },
+  "unknown": {
+    "accepted": false,
+    "ok": true,
+    "checkoutAfter": "paid",
+    "payment": "confirmed"
+  },
+  "allocation": {
+    "requested": 1000000000,
+    "pushesObserved": 65,
+    "abortedByInstrument": true
+  },
+  "allocation21": {
+    "pharmaciesLength": 21
+  }
+}

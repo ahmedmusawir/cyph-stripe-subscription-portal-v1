@@ -10,7 +10,7 @@ import { DemoOutcomes } from "../ExternalHandoffPanel";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { PageHeader } from "../PageHeader";
 import { Pill } from "../Pill";
-import { formatCents, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+import { checkoutHold, formatCents, initialRecurringCents, registration, useRegistration } from "@/services/portal";
 
 // C14 Checkout not completed: resumable · payment_unknown · declined · expired.
 // Unknown pauses payment ("don't pay again") without declaring no charge.
@@ -41,6 +41,7 @@ export function CheckoutIncompleteView() {
   }
 
   const n = draft.requestedStoreCount;
+  const hold = checkoutHold(draft);
   const names = draft.pharmacies.slice(0, n).map((p) => p.name).filter(Boolean).join(" · ");
   const due = quote?.dueNowCents ?? initialRecurringCents(n);
 
@@ -50,9 +51,9 @@ export function CheckoutIncompleteView() {
   }
   async function resolveUnknown(outcome: "paid" | "not_charged") {
     setBusy(true);
-    await registration.resolveUnknownPayment(outcome);
+    const r = await registration.resolveUnknownPayment(outcome);
     setBusy(false);
-    if (outcome === "paid") router.push("/demo/activation");
+    if (r.ok && outcome === "paid") router.push("/demo/activation");
   }
 
   return (
@@ -64,7 +65,11 @@ export function CheckoutIncompleteView() {
         lead={status === "expired" ? undefined : `Your details for ${n} ${n === 1 ? "pharmacy are" : "pharmacies are"} saved. Payment wasn't completed, so your account isn't active yet.`}
       />
       <div className="mt-5" data-testid={`incomplete-${status}`}>
-        {status === "abandoned" ? (
+        {status === "abandoned" && state.checkout?.closedReason ? (
+          <Alert tone="info" title="Nothing has been charged">
+            {state.checkout.closedReason === "owner_declaration" ? "The owner declaration was withdrawn" : "Your signup details changed"} after checkout opened, so we closed that checkout. Confirm your details and get a fresh quote whenever you&apos;re ready.
+          </Alert>
+        ) : status === "abandoned" ? (
           <Alert tone="info" title="Nothing has been charged">Stripe confirmed no payment was taken for this signup. Pick up where you left off whenever you&apos;re ready.</Alert>
         ) : status === "unknown" ? (
           <Alert tone="warning" live title="We're checking whether a payment went through" icon={<Loader2 className="h-4 w-4 animate-spin text-foreground" aria-hidden="true" />}>
@@ -97,8 +102,14 @@ export function CheckoutIncompleteView() {
           {status === "unknown" ? (
             <>
               <p className="mt-2 text-xs text-muted-foreground">Payment is paused until we know whether the earlier attempt went through.</p>
+              {hold ? (
+                <p className="mt-2 text-xs text-muted-foreground" data-testid="unknown-hold">
+                  Activation also waits for {hold === "owner_declaration" ? "the owner declaration" : "your remaining signup details"}.{" "}
+                  <Link href="/demo/register/review" className="portal-link">Go to my details</Link>
+                </p>
+              ) : null}
               <DemoOutcomes>
-                <Button type="button" variant="outline" disabled={busy} onClick={() => resolveUnknown("paid")} data-testid="unknown-paid">Stripe confirms payment → activation</Button>
+                <Button type="button" variant="outline" disabled={busy || Boolean(hold)} onClick={() => resolveUnknown("paid")} data-testid="unknown-paid">Stripe confirms payment → activation</Button>
                 <Button type="button" variant="outline" disabled={busy} onClick={() => resolveUnknown("not_charged")} data-testid="unknown-not-charged">Stripe confirms nothing charged</Button>
               </DemoOutcomes>
             </>

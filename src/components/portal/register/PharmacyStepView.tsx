@@ -13,7 +13,7 @@ import { Pill } from "../Pill";
 import { PHARMACY_SUMMARY_FIELDS, PharmacyFields, toDraft, toForm, type PharmacyForm } from "../PharmacyFields";
 import { Stepper } from "../Stepper";
 import { MISSING, MissingContextNotice } from "./MissingContext";
-import { firstIncomplete, registration, useRegistration } from "@/services/portal";
+import { firstIncomplete, isPharmacyStep, registration, useRegistration } from "@/services/portal";
 
 // C03 Pharmacy n of N (repeat for every requested store) + C16 duplicate.
 export function PharmacyStepView({ storeParam, notice }: { storeParam: number; notice: boolean }) {
@@ -21,7 +21,8 @@ export function PharmacyStepView({ storeParam, notice }: { storeParam: number; n
   const { state, hydrated } = useRegistration();
   const count = state.draft.requestedStoreCount;
   const index = storeParam - 1;
-  const valid = Number.isInteger(index) && index >= 0 && index < count;
+  // Steps fill in order; a link past the next unentered pharmacy goes back to it (R-012).
+  const valid = isPharmacyStep(state.draft, index);
   const [form, setForm] = useState<PharmacyForm | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [duplicate, setDuplicate] = useState<string | null>(null);

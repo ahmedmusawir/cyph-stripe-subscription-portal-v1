@@ -177,7 +177,9 @@ export function ReviewView() {
       ) : null}
       {checkout?.status === "abandoned" || checkout?.status === "declined" ? (
         <Alert tone="info" className="mt-5" title="Welcome back — your details are saved" action={<Button type="button" variant="outline" onClick={() => registration.resumeSignup()}>Get a fresh quote</Button>}>
-          Payment wasn&apos;t completed. Get a current quote and confirm again to continue.
+          {checkout.closedReason
+            ? "Your details changed after checkout opened, so we closed that checkout. Nothing was charged. Get a current quote and confirm again to continue."
+            : "Payment wasn't completed. Get a current quote and confirm again to continue."}
         </Alert>
       ) : null}
       {consentErr ? (

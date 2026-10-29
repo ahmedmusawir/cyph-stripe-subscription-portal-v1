@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Alert, DemoNotice, Placeholder } from "../Alert";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { PageHeader } from "../PageHeader";
-import { formatCents, formatTime, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+import { checkoutHold, formatCents, formatTime, initialRecurringCents, registration, useRegistration } from "@/services/portal";
 
 type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
 
@@ -83,6 +83,8 @@ export function ActivationView() {
               : "You're in. Check your email.";
 
   const canRefresh = a.paymentState === "pending" || (a.paymentState === "confirmed" && a.provisioningState !== "ready");
+  // R-012: a payment still waiting for confirmation doesn't advance while prerequisites are unmet.
+  const hold = a.paymentState === "pending" ? checkoutHold(draft) : null;
 
   async function refresh() {
     setBusy("refresh");
@@ -141,7 +143,7 @@ export function ActivationView() {
         {canRefresh ? (
           <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-muted-foreground">In the real app this page updates by itself. In this demo, refresh to play the next confirmation.</p>
-            <Button type="button" variant="outline" onClick={refresh} disabled={busy !== null} aria-busy={busy === "refresh" || undefined} data-testid="activation-refresh">
+            <Button type="button" variant="outline" onClick={refresh} disabled={busy !== null || Boolean(hold)} aria-busy={busy === "refresh" || undefined} data-testid="activation-refresh">
               {busy === "refresh" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
               Refresh status
             </Button>
@@ -150,6 +152,14 @@ export function ActivationView() {
       </section>
 
       <div className="mt-5 space-y-5">
+        {hold ? (
+          <div data-testid="activation-hold">
+            <Alert tone="warning" title={hold === "owner_declaration" ? "Confirm the owner declaration to continue" : "Finish your signup details to continue"}>
+              Activation can&apos;t continue until {hold === "owner_declaration" ? "the pharmacy owner confirms the owner declaration" : "every signup step is complete"}.{" "}
+              <Link href="/demo/register/review" className="portal-link">Go to my details</Link>
+            </Alert>
+          </div>
+        ) : null}
         {a.paymentState === "pending" ? (
           <Alert tone="info" title="Waiting for Stripe to confirm your payment">
             This usually takes a moment. If you closed Stripe&apos;s page before finishing, nothing was charged and you can{" "}

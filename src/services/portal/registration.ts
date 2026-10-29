@@ -16,6 +16,7 @@ import type {
   Result,
 } from '@/types/portal/contract';
 import type {
+  CheckoutClosedReason,
   CheckoutRecord,
   RegistrationScenarioId,
   RegistrationState,
@@ -198,10 +199,31 @@ export function selectScenario(state: RegistrationState, id: unknown): Step<Regi
 // Draft
 // ---------------------------------------------------------------------------
 
-/** Material change: new revision, quote dropped, consents cleared. */
-function touch(state: RegistrationState, draft: RegistrationDraft): RegistrationState {
+/**
+ * R-012: a checkout Stripe has not charged and nobody has submitted payment on —
+ * still on the stand-in, or kept there after a decline.
+ */
+function isOpenCheckout(state: RegistrationState): boolean {
+  const status = state.checkout?.status;
+  return (status === 'pending' || status === 'declined') && state.activation?.paymentState !== 'pending';
+}
+
+/**
+ * Material change: new revision, quote dropped, consents cleared. An open
+ * checkout was priced and agreed for the old details, so it is closed
+ * (status 'abandoned', nothing charged, record kept). A submitted or paid
+ * checkout is never closed or reversed here.
+ */
+function touch(
+  state: RegistrationState,
+  draft: RegistrationDraft,
+  reason: CheckoutClosedReason = 'details_changed',
+): RegistrationState {
+  const checkout =
+    state.checkout && isOpenCheckout(state) ? { ...state.checkout, status: 'abandoned' as const, closedReason: reason } : state.checkout;
   return {
     ...state,
+    checkout,
     draft: { ...draft, revision: draft.revision + 1, consents: { ...EMPTY_CONSENTS }, state: 'editing' },
     quote: null,
   };
@@ -227,8 +249,9 @@ export function setStoreCount(state: RegistrationState, n: unknown): Step<Regist
       'validation',
       typeof n === 'number' && Number.isInteger(n) && n > 1 ? "That many pharmacies can't be priced exactly." : 'Choose at least 1 pharmacy.',
     );
+  // Entries are created only as each pharmacy step is filled in (R-012), so the
+  // work here is bounded by what was entered, never by the requested count.
   const pharmacies = state.draft.pharmacies.slice(0, n);
-  while (pharmacies.length < n) pharmacies.push({});
   if (n === state.draft.requestedStoreCount) return ok(state, state.draft);
   const next = touch(state, { ...state.draft, requestedStoreCount: n, pharmacies });
   return ok(next, next.draft);
@@ -263,19 +286,48 @@ function ownerFields(owner: Partial<OwnerDraft> | undefined): Partial<OwnerDraft
 export function migrateRegistration(persisted: unknown): RegistrationState {
   const old = persisted as Partial<RegistrationState> | null;
   if (!old || typeof old !== 'object' || !old.draft || typeof old.draft !== 'object') return createRegistration('fresh');
-  return { ...old, draft: { ...old.draft, owner: ownerFields(old.draft.owner) }, quote: null } as RegistrationState;
+  const migrated = { ...old, quote: null } as RegistrationState;
+  // Storage v1 never recorded the declaration, so none is carried over, and an
+  // open checkout from then was never covered by one (R-012).
+  return withOwner(migrated, { ...ownerFields(old.draft.owner), ownerDeclarationAccepted: false });
+}
+
+/**
+ * Store owner fields. Withdrawing the declaration while a checkout is open
+ * closes that checkout (R-012): it can't be paid until the owner confirms
+ * again and gets a fresh quote.
+ */
+function withOwner(state: RegistrationState, owner: Partial<OwnerDraft>): RegistrationState {
+  const draft = { ...state.draft, owner };
+  return owner.ownerDeclarationAccepted !== true && isOpenCheckout(state)
+    ? touch(state, draft, 'owner_declaration')
+    : { ...state, draft };
 }
 
 /** Back/navigation away: keep what was typed without validating. */
 export function keepOwner(state: RegistrationState, owner: Partial<OwnerDraft>): Step<RegistrationDraft> {
-  const next = { ...state, draft: { ...state.draft, owner: ownerFields(owner) } };
+  const next = withOwner(state, ownerFields(owner));
   return ok(next, next.draft);
+}
+
+/**
+ * A pharmacy step that can be written: within the requested count and no later
+ * than the next unentered one, so entries never skip ahead and leave a sparse
+ * array sized by the count (R-012).
+ */
+export function isPharmacyStep(draft: RegistrationDraft, index: number): boolean {
+  return (
+    isValidStoreCount(draft.requestedStoreCount) &&
+    Number.isInteger(index) &&
+    index >= 0 &&
+    index < draft.requestedStoreCount &&
+    index <= draft.pharmacies.length
+  );
 }
 
 /** Back/navigation away on a pharmacy step: keep the entries (a real edit still invalidates the quote). */
 export function keepPharmacy(state: RegistrationState, index: number, pharmacy: Partial<PharmacyDraft>): Step<RegistrationDraft> {
-  if (!Number.isInteger(index) || index < 0 || index >= state.draft.requestedStoreCount)
-    return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
+  if (!isPharmacyStep(state.draft, index)) return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
   const before = state.draft.pharmacies[index] ?? {};
   const merged = { ...pharmacy, id: before.id ?? `demo_reg_ph_${index + 1}` };
   if (JSON.stringify(before) === JSON.stringify(merged)) return ok(state, state.draft);
@@ -289,7 +341,7 @@ export function saveOwner(state: RegistrationState, owner: Partial<OwnerDraft>):
   const picked = ownerFields(owner);
   const clean: Partial<OwnerDraft> = { ...picked, email: picked.email?.trim() };
   const errors = validateOwner(clean);
-  const kept = { ...state, draft: { ...state.draft, owner: clean } };
+  const kept = withOwner(state, clean);
   if (hasErrors(errors)) return fail(kept, 'validation', 'Some fields need attention.', errors);
   if (clean.email?.toLowerCase() === EMAIL_EXISTING_ACCOUNT)
     return fail(kept, 'conflict', 'This email may already have a Pharmacy Books account.');
@@ -301,8 +353,7 @@ export function savePharmacy(
   index: number,
   pharmacy: Partial<PharmacyDraft>,
 ): Step<RegistrationDraft> {
-  if (!Number.isInteger(index) || index < 0 || index >= state.draft.requestedStoreCount)
-    return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
+  if (!isPharmacyStep(state.draft, index)) return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
   const pharmacies = [...state.draft.pharmacies];
   pharmacies[index] = { ...pharmacy, id: pharmacies[index]?.id ?? `demo_reg_ph_${index + 1}` };
   const next = touch(state, { ...state.draft, pharmacies });
@@ -338,6 +389,24 @@ export function firstIncomplete(draft: RegistrationDraft): { step: RegistrationS
 export function isDraftComplete(draft: RegistrationDraft): boolean {
   return firstIncomplete(draft).step === 'review' && draft.pharmacies.length === draft.requestedStoreCount;
 }
+
+export type CheckoutHold = 'owner_declaration' | 'details_incomplete';
+
+/**
+ * R-012: what currently stops an unpaid checkout from moving toward payment
+ * (null = nothing). Checked on every such move — replay, outcome, unknown
+ * resolution, activation refresh — against the draft as it is NOW, so a
+ * stored or replayed checkout can't outlive its prerequisites.
+ */
+export function checkoutHold(draft: RegistrationDraft): CheckoutHold | null {
+  if (draft.owner?.ownerDeclarationAccepted !== true) return 'owner_declaration';
+  return isDraftComplete(draft) ? null : 'details_incomplete';
+}
+
+const HOLD_MESSAGE: Record<CheckoutHold, string> = {
+  owner_declaration: 'Confirm that you are the pharmacy owner before paying.',
+  details_incomplete: 'Some signup details are missing. Finish them before paying.',
+};
 
 // ---------------------------------------------------------------------------
 // Quotes, code, consent
@@ -444,8 +513,11 @@ export function startCheckout(
 ): Step<HandoffView> {
   if (!isOperationKey(input.operationKey)) return fail(state, 'validation', 'Missing operation key.');
   const existing = state.checkout;
-  if (existing && existing.operationKey === input.operationKey && existing.status === 'pending')
+  if (existing && existing.operationKey === input.operationKey && existing.status === 'pending') {
+    const hold = checkoutHold(state.draft);
+    if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
     return ok(state, checkoutHandoff(existing.operationKey)); // replay: same handoff, no second checkout
+  }
   if (existing && (existing.status === 'pending' || existing.status === 'unknown'))
     return fail(state, 'conflict', "A checkout is already in progress. Check its status instead of paying again.");
   if (existing?.status === 'paid') return fail(state, 'conflict', 'This signup is already paid.');
@@ -484,6 +556,8 @@ export function resolveCheckout(state: RegistrationState, outcome: unknown): Ste
   if (!(CHECKOUT_OUTCOMES as readonly unknown[]).includes(outcome)) return fail(state, 'validation', 'Unknown outcome.');
   if (checkout.status !== 'pending' && checkout.status !== 'declined')
     return fail(state, 'conflict', 'This checkout already has an outcome.');
+  const hold = outcome === 'paid' || outcome === 'processing' ? checkoutHold(state.draft) : null;
+  if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
   const email = state.draft.owner.email ?? '';
   let next: RegistrationState;
   switch (outcome as CheckoutOutcome) {
@@ -520,6 +594,8 @@ export function resolveUnknownPayment(state: RegistrationState, outcome: 'paid' 
   const checkout = state.checkout;
   if (checkout?.status !== 'unknown') return fail(state, 'conflict', 'Payment status is not pending.');
   if (outcome === 'paid') {
+    const hold = checkoutHold(state.draft);
+    if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
     const next: RegistrationState = {
       ...state,
       checkout: { ...checkout, status: 'paid' },
@@ -568,6 +644,8 @@ export function refreshActivation(state: RegistrationState): Step<ActivationView
   let next: ActivationView = a;
   let draftState = state.draft.state;
   if (a.paymentState === 'pending') {
+    const hold = state.activationPlan === 'payment_failed' ? null : checkoutHold(state.draft);
+    if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
     if (state.activationPlan === 'payment_failed') {
       next = { ...a, paymentState: 'failed', retryAvailable: true };
       draftState = 'abandoned';

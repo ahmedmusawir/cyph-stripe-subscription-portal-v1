@@ -95,6 +95,7 @@
 
 ### C05 Stripe boundary — `stripe-checkout-handoff.html`
 - **Ours:** `leaving` — spinner, "Opening Stripe's secure checkout…", what-happens-next list, manual continue/back links.
+- **R-012 states (ours, before the external frame):** `closed` — "This checkout was closed" (declaration withdrawn or details changed after checkout opened; nothing charged; link to review); `hold` — "Confirm the owner declaration before paying" / "Finish your signup details before paying" with no outcome buttons. C06 shows the matching hold alert with Refresh disabled while a waiting payment is held; C14 `payment_unknown` disables "Stripe confirms payment" while held, and `resumable` explains a closed checkout.
 - **External (labelled "Preview · external surface", dashed frame):** `preview` (Checkout stand-in: order we send, greyed non-editable Stripe form blocks, demo-outcome buttons → activation / review / checkout-incomplete / declined), `declined` (Stripe keeps the user; our next surface is C14), `portal_preview` (Customer Portal stand-in reached from "Manage billing"; return refreshes C12).
 - **Rule:** no editable card fields; access never granted from the browser return alone.
 

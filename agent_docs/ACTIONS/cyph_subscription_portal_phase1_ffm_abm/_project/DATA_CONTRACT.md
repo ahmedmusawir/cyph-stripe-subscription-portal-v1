@@ -1,6 +1,6 @@
 # DATA CONTRACT — Subscription Portal design and mock journeys
 
-> Version: 1.3 · Date: 29 October 2026 (Asia/Dhaka) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
+> Version: 1.4 · Date: 29 October 2026 (Asia/Dhaka) · v1.4 applies R-012 (REPAIR_002: pending checkout respects current prerequisites; bounded repeat-N work) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
 > Status: FFM contract under RULINGS R-001/R-005 · Owner: Architect
 > Purpose: screen fields, mock relationships, transitions and permissions. NOT production SQL or a migration contract.
 
@@ -80,6 +80,7 @@ Mock capability flags determine the visual fixtures. They are never proof of pro
 `editing → ready_for_checkout → checkout_pending → payment_confirmed → provisioning → access_email_ready`
 
 - Abandoned/back from Checkout: draft remains resumable, subscription inactive. The client return does not establish payment success.
+- (R-012) An open (unpaid, unsubmitted) checkout is closed — `abandoned` with a `closedReason`, nothing charged, details kept — when the owner declaration is withdrawn, a pre-R-011 draft is restored, or the draft changes materially. Moving any unpaid checkout toward payment (same-key replay, paid/processing outcome, unknown→paid, waiting→confirmed) re-checks the current draft: declaration exactly `true` and draft complete. A submitted or unknown payment is held, not closed, until that holds. Paid/confirmed history is never reversed by later edits.
 - Decline: display a Stripe-side failure reference and allow retry; no account activation.
 - Processing/delayed: payment confirmation and provisioning are distinct; a paid-but-delayed account must not invite the user to pay again.
 - Email-send failure: show resend/support without losing the confirmed payment state. The FFM simulates delivery and never sends mail.
@@ -154,6 +155,7 @@ Coach confirms subscription granularity and commercial policy. Architect/Enginee
 - Store addition uses a stable operation key for retries while pending/succeeded. A repeated request with the same key returns the same result; it never adds/charges twice. A definitive failed attempt can be retried deliberately with a new key. Unknown/pending is not failure and must not open a second payment attempt.
 - Paid/provisioning-attention adds one covered store in pending setup, keeps the financial change, holds invitation and prevents a duplicate addition. Paid amount, coverage and activation cannot contradict one another.
 - Ordinary route navigation retains the draft. FFM sessionStorage stores synthetic data only, versioned, in two per-tab namespaces: the anonymous public registration draft and the account mock state keyed to the signed-in admin. A public page never reads the account namespace. Reset clears its namespace; actual logout clears both; identity change clears the account namespace. Theme storage may remain. A hard reload in the same tab restores the demo. Browser-close retention and cross-tab synchronization are not promises.
+- (R-012) Pharmacy entries are materialized only as each step is filled in, in order; the requested count alone never allocates per-store state, and any step number up to the count is addressable.
 - All counter values >=1 are supported by a repeatable form/list, not a hardcoded second-store page. For an illustrative initial quote use 9900 + 4900 * (N - 1) cents; DEMO10 subtracts 1000 from due-now only. Each one-store add uses the fixed illustrative 2450-cent due-now fixture, never a production proration formula. Account counts and names drive downstream screens; the canonical two-store screenshot is one seed, not every account's state.
 - Status changes only through explicit mock service outcomes. URL `success=true`, closing an external preview or viewing a success route cannot grant authentication, confirm payment or activate a store. Deep-link missing context routes back to a safe starting step with an explanation.
 - Access-link and email demonstrations remain inert local previews. Recipients are synthetic. No token, payment SDK, API mutation, real email link or credential is generated.

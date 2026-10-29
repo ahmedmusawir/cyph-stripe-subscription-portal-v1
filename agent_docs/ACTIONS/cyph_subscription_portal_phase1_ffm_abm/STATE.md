@@ -50,3 +50,9 @@ Safe resume point: if E2 is approved, re-verify branch/HEAD/dirt against this fi
 - Self-checks: build 0 · tsc 0 · jest 156/156 · Playwright 131/131 · Gate M 220/0 · contrast 0 failures. Not QA certification.
 - Report `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` · ZIP `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip`. Owned server :3104 running.
 - Next: Tony commits → independent QA on the combined candidate (AC-06a + REPAIR_001 retest) → JARVIS.
+
+## REPAIR_002 — 29 Oct 2026 (RULINGS R-012; QA Lead dispatch after Gate Q FAIL on 24cf075)
+- Base `24cf075` (AMENDMENT_001 committed). CR-F01: an open checkout is closed when the declaration is withdrawn, a v1 draft is restored or the draft changes materially; replay/outcomes/unknown/activation re-check the current draft at the service; submitted payments held; paid history untouched. CR-F02: no count-sized allocation; steps fill in order. Self-found R2-N01 (count change left an open checkout payable) and R2-N02 (step 100+ route). Q2-O04 residual Actions divider. Uncommitted, pending Director commit.
+- Self-checks: build 0 · tsc 0 · jest 13 suites 180/180 · Playwright 148/148 (public 100, Gate M public 13, account 35) · Gate M 236/0 · contrast 0 failures. Not QA certification.
+- Report `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` · ZIP `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip`.
+- Next: JARVIS reviews → Tony commits → Cody retests → Tony walkthrough → JARVIS certification decision.

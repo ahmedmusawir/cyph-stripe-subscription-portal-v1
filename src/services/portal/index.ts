@@ -8,13 +8,15 @@ export { formatCents, initialRecurringCents, ADDITIONAL_STORE_CENTS, BASE_CENTS,
 export { formatDate, formatTime, maskEmail } from './format';
 export {
   accessEmailPreviews,
+  checkoutHold,
   estimateAvailable,
   firstIncomplete,
   isEmailVariant,
+  isPharmacyStep,
   isQuoteExpired,
   EMAIL_VARIANTS,
 } from './registration';
-export type { EmailVariant, CheckoutOutcome, RegistrationStep } from './registration';
+export type { EmailVariant, CheckoutHold, CheckoutOutcome, RegistrationStep } from './registration';
 export {
   addStoreAvailability,
   lastOperationPharmacy,

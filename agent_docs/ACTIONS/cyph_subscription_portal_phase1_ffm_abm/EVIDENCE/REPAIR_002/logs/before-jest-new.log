@@ -1,0 +1,1188 @@
+FAIL src/__tests__/portal-registration.test.ts
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › A: withdrawing the declaration on the owner step closes the open checkout; pay and replay are refused
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "closedReason": "owner_declaration",
+        "operationKey": "demo_key_000001",
+    -   "status": "abandoned",
+    +   "status": "pending",
+      }
+
+      444 |     const w = reg.saveOwner(pending, withdrawn);
+      445 |     expect(w.result).toMatchObject({ ok: false, code: 'validation', fieldErrors: { ownerDeclaration: expect.any(String) } });
+    > 446 |     expect(w.state.checkout).toMatchObject({ operationKey: KEY, status: 'abandoned', closedReason: 'owner_declaration' });
+          |                              ^
+      447 |     expect(w.state.quote).toBeNull();
+      448 |     expect(w.state.draft.consents).toMatchObject({ termsAccepted: false, recurringChargeAccepted: false });
+      449 |     expect(w.state.draft.owner.ownerDeclarationAccepted).toBe(false);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:446:30)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › A: Back with the box unticked (keepOwner) closes it the same way
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "closedReason": "owner_declaration",
+    -   "status": "abandoned",
+    +   "status": "pending",
+      }
+
+      456 |   it('A: Back with the box unticked (keepOwner) closes it the same way', () => {
+      457 |     const k = reg.keepOwner(open(), withdrawn).state;
+    > 458 |     expect(k.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+          |                        ^
+      459 |     refused(reg.resolveCheckout(k, 'paid'), k);
+      460 |   });
+      461 |
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:458:24)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › B: a legacy (storage v1) draft restored over a pending checkout cannot be paid
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "closedReason": "owner_declaration",
+    -   "status": "abandoned",
+    +   "status": "pending",
+      }
+
+      468 |     expect(m.draft.owner).not.toHaveProperty('businessRole');
+      469 |     expect(m.quote).toBeNull();
+    > 470 |     expect(m.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+          |                        ^
+      471 |     expect(m.draft.owner.firstName).toBe('Jordan');
+      472 |     refused(reg.resolveCheckout(m, 'paid'), m);
+      473 |     expect(reg.startCheckout(m, { quoteId: s.quote!.id, consents: consented, operationKey: 'qa_legacy_pending' }, deps).result.ok).toBe(false);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:470:24)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › B: a v1 draft never carries acceptance over, even if the field is present
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      477 |     const s = open();
+      478 |     const m = reg.migrateRegistration(JSON.parse(JSON.stringify(s)));
+    > 479 |     expect(m.draft.owner.ownerDeclarationAccepted).toBe(false);
+          |                                                    ^
+      480 |     expect(m.checkout?.status).toBe('abandoned');
+      481 |   });
+      482 |
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:479:52)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › a stored pending checkout with the declaration already false (no transition) is held at every step toward payment
+
+    TypeError: reg.checkoutHold is not a function
+
+      484 |     const pending = open();
+      485 |     const tampered: RegistrationState = { ...pending, draft: { ...pending.draft, owner: { ...pending.draft.owner, ownerDeclarationAccepted: false } } };
+    > 486 |     expect(reg.checkoutHold(tampered.draft)).toBe('owner_declaration');
+          |                ^
+      487 |     refused(reg.startCheckout(tampered, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps), tampered);
+      488 |     refused(reg.resolveCheckout(tampered, 'paid'), tampered);
+      489 |     refused(reg.resolveCheckout(tampered, 'processing'), tampered);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:486:16)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › a submitted payment (processing) is held, not closed, while the declaration is withdrawn
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      436 |   }
+      437 |   function refused(step: { state: RegistrationState; result: { ok: boolean } }, before: RegistrationState) {
+    > 438 |     expect(step.result).toMatchObject({ ok: false });
+          |                         ^
+      439 |     expect(step.state).toBe(before);
+      440 |   }
+      441 |
+
+      at refused (src/__tests__/portal-registration.test.ts:438:25)
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:503:5)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › an unknown payment is held while the declaration is withdrawn; "nothing charged" still resolves
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      436 |   }
+      437 |   function refused(step: { state: RegistrationState; result: { ok: boolean } }, before: RegistrationState) {
+    > 438 |     expect(step.result).toMatchObject({ ok: false });
+          |                         ^
+      439 |     expect(step.state).toBe(before);
+      440 |   }
+      441 |
+
+      at refused (src/__tests__/portal-registration.test.ts:438:25)
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:517:5)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › a declined checkout is closed on withdrawal, so "another card works" is refused
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "closedReason": "owner_declaration",
+    -   "status": "abandoned",
+    +   "status": "declined",
+      }
+
+      524 |     const declined = reg.resolveCheckout(open(), 'declined').state;
+      525 |     const w = reg.keepOwner(declined, withdrawn).state;
+    > 526 |     expect(w.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+          |                        ^
+      527 |     refused(reg.resolveCheckout(w, 'paid'), w);
+      528 |   });
+      529 |
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:526:24)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › valid recovery: explicit acceptance → fresh quote → fresh consent → new checkout → paid
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "abandoned"
+    Received: "pending"
+
+      533 |     expect(accepted.result.ok).toBe(true);
+      534 |     // Acceptance alone doesn't reopen the closed checkout or restore consent.
+    > 535 |     expect(accepted.state.checkout?.status).toBe('abandoned');
+          |                                             ^
+      536 |     expect(accepted.state.draft.consents.termsAccepted).toBe(false);
+      537 |     expect(reg.resolveCheckout(accepted.state, 'paid').result.ok).toBe(false);
+      538 |     let s = reg.resumeSignup(accepted.state).state;
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:535:45)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › R2-N01: changing the store count while a checkout is open closes it (the open checkout was priced for the old count)
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "closedReason": "details_changed",
+    -   "status": "abandoned",
+    +   "status": "pending",
+      }
+
+      565 |     const pending = open();
+      566 |     const changed = reg.setStoreCount(pending, 2).state;
+    > 567 |     expect(changed.checkout).toMatchObject({ status: 'abandoned', closedReason: 'details_changed' });
+          |                              ^
+      568 |     refused(reg.resolveCheckout(changed, 'paid'), changed);
+      569 |     // A pharmacy edit does the same.
+      570 |     const edited = reg.savePharmacy(pending, 0, pharmacy(1, { city: 'Shelbyville' })).state;
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:567:30)
+
+  ● pending checkout respects current prerequisites (R-012, CR-F01) › unchanged replay and payment for a valid draft still work
+
+    TypeError: reg.checkoutHold is not a function
+
+      574 |   it('unchanged replay and payment for a valid draft still work', () => {
+      575 |     const pending = open();
+    > 576 |     expect(reg.checkoutHold(pending.draft)).toBeNull();
+          |                ^
+      577 |     expect(reg.startCheckout(pending, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps).state).toBe(pending);
+      578 |     // Saving the same accepted owner again doesn't close anything.
+      579 |     expect(reg.saveOwner(pending, owner).state.checkout?.status).toBe('pending');
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:576:16)
+
+  ● count-driven work is bounded (R-012, CR-F02) › a billion-store count allocates no pharmacy entries and prices exactly
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "aborted": false,
+    -   "pushes": 0,
+    +   "aborted": true,
+    +   "pushes": 65,
+      }
+
+      624 |       s = reg.setStoreCount(s, BILLION).state;
+      625 |     });
+    > 626 |     expect(probe).toEqual({ pushes: 0, aborted: false });
+          |                   ^
+      627 |     return s;
+      628 |   }
+      629 |
+
+      at billion (src/__tests__/portal-registration.test.ts:626:19)
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:610:13)
+
+  ● count-driven work is bounded (R-012, CR-F02) › pharmacy steps fill in order: a far index is refused without growing the array
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "aborted": false,
+    -   "pushes": 0,
+    +   "aborted": true,
+    +   "pushes": 65,
+      }
+
+      624 |       s = reg.setStoreCount(s, BILLION).state;
+      625 |     });
+    > 626 |     expect(probe).toEqual({ pushes: 0, aborted: false });
+          |                   ^
+      627 |     return s;
+      628 |   }
+      629 |
+
+      at billion (src/__tests__/portal-registration.test.ts:626:19)
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:631:27)
+
+  ● count-driven work is bounded (R-012, CR-F02) › the largest representable count is accepted in constant work; one more is refused
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "aborted": false,
+    -   "pushes": 0,
+    +   "aborted": true,
+    +   "pushes": 65,
+      }
+
+      648 |       accepted = reg.setStoreCount(reg.createRegistration('fresh'), max).result.ok;
+      649 |     });
+    > 650 |     expect(probe).toEqual({ pushes: 0, aborted: false });
+          |                   ^
+      651 |     expect(accepted).toBe(true);
+      652 |     expect(reg.setStoreCount(reg.createRegistration('fresh'), max + 1).result).toMatchObject({ ok: false, code: 'validation' });
+      653 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:650:19)
+
+  ● count-driven work is bounded (R-012, CR-F02) › a restored draft with an extreme or malformed count is handled without count-sized work
+
+    TypeError: reg.isPharmacyStep is not a function
+
+      668 |       const d = { ...base.draft, requestedStoreCount: bad as unknown as number };
+      669 |       expect(reg.firstIncomplete(d)).toEqual({ step: 'plan' });
+    > 670 |       expect(reg.isPharmacyStep(d, 0)).toBe(false);
+          |                  ^
+      671 |       expect(reg.requestQuote({ ...base, draft: d }, deps).result).toMatchObject({ ok: false, code: 'missing_context' });
+      672 |     }
+      673 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:670:18)
+
+  ● count-driven work is bounded (R-012, CR-F02) › count reduction and restoration keep entered pharmacies coherent; 1/2/3 stores unchanged
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 3
+
+      678 |     expect(s.draft.pharmacies.map((p) => p.name)).toEqual(['Example Test Pharmacy 1']);
+      679 |     s = reg.setStoreCount(s, 3).state;
+    > 680 |     expect(s.draft.pharmacies.length).toBe(1);
+          |                                       ^
+      681 |     expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'pharmacy', index: 1 });
+      682 |     s = reg.savePharmacy(s, 1, pharmacy(2)).state;
+      683 |     s = reg.savePharmacy(s, 2, pharmacy(3)).state;
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:680:39)
+
+FAIL src/__tests__/portal-checkout-hold.test.tsx (5.832 s)
+  ● Stripe stand-in (C05) under R-012 › a stored open checkout whose declaration is not exactly true offers no payment outcome at all
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="checkout-hold"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33maria-live[39m=[32m"polite"[39m
+            [33mclass[39m=[32m"border border-border bg-card p-5"[39m
+            [33mdata-testid[39m=[32m"checkout-leaving"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-xl font-bold text-foreground"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-loader-circle h-5 w-5 animate-spin"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [0mOpening Stripe's secure checkout…[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-2 text-sm text-muted-foreground"[39m
+            [36m>[39m
+              [0mYou're leaving Pharmacy Books for a moment. Stripe handles the card details; we never see your card number. Standard plan · [0m
+              [0m1[0m
+              [0m [0m
+              [0mpharmacy[0m
+              [0m · [0m
+              [0m$99.00[0m
+              [0m due today (illustrative).[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-4 border-t border-border pt-4"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+              [36m>[39m
+                [0mWhat happens next[0m
+              [36m</p>[39m
+              [36m<ol[39m
+                [33mclass[39m=[32m"mt-2 list-inside list-decimal space-y-1 text-sm text-foreground"[39m
+              [36m>[39m
+                [36m<li>[39m
+                  [0mStripe's page opens in this tab.[0m
+                [36m</li>[39m
+                [36m<li>[39m
+                  [0mPay, or use Stripe's back link to return here with everything saved.[0m
+                [36m</li>[39m
+                [36m<li>[39m
+                  [0mAfter payment you come back to an activation page and we email your access link.[0m
+                [36m</li>[39m
+              [36m</ol>[39m
+            [36m</div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-4 text-xs text-muted-foreground"[39m
+            [36m>[39m
+              [0mNot redirected?[0m
+              [0m [0m
+              [36m<button[39m
+                [33mclass[39m=[32m"portal-link"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mContinue to Stripe[0m
+              [36m</button>[39m
+              [0m ·[0m
+              [0m [0m
+              [36m<a[39m
+                [33mclass[39m=[32m"portal-link"[39m
+                [33mhref[39m=[32m"/demo/register/review"[39m
+              [36m>[39m
+                [0mBack to review[0m
+              [36m</a>[39m
+            [36m</p>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      55 |       commit(withDeclaration(s(), bad));
+      56 |       const view = render(<CheckoutStandIn />);
+    > 57 |       expect(screen.getByTestId('checkout-hold').textContent).toMatch(/Confirm the owner declaration before paying/);
+         |                     ^
+      58 |       expect(screen.queryByTestId('outcome-paid')).toBeNull();
+      59 |       expect(screen.queryByText(/Payment processing/)).toBeNull();
+      60 |       view.unmount();
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:57:21)
+
+  ● Stripe stand-in (C05) under R-012 › after withdrawal on the owner step the checkout is closed and says so
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="checkout-closed"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33maria-live[39m=[32m"polite"[39m
+            [33mclass[39m=[32m"border border-border bg-card p-5"[39m
+            [33mdata-testid[39m=[32m"checkout-leaving"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-xl font-bold text-foreground"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-loader-circle h-5 w-5 animate-spin"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [0mOpening Stripe's secure checkout…[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-2 text-sm text-muted-foreground"[39m
+            [36m>[39m
+              [0mYou're leaving Pharmacy Books for a moment. Stripe handles the card details; we never see your card number. Standard plan · [0m
+              [0m1[0m
+              [0m [0m
+              [0mpharmacy[0m
+              [0m · [0m
+              [0m$99.00[0m
+              [0m due today (illustrative).[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-4 border-t border-border pt-4"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+              [36m>[39m
+                [0mWhat happens next[0m
+              [36m</p>[39m
+              [36m<ol[39m
+                [33mclass[39m=[32m"mt-2 list-inside list-decimal space-y-1 text-sm text-foreground"[39m
+              [36m>[39m
+                [36m<li>[39m
+                  [0mStripe's page opens in this tab.[0m
+                [36m</li>[39m
+                [36m<li>[39m
+                  [0mPay, or use Stripe's back link to return here with everything saved.[0m
+                [36m</li>[39m
+                [36m<li>[39m
+                  [0mAfter payment you come back to an activation page and we email your access link.[0m
+                [36m</li>[39m
+              [36m</ol>[39m
+            [36m</div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-4 text-xs text-muted-foreground"[39m
+            [36m>[39m
+              [0mNot redirected?[0m
+              [0m [0m
+              [36m<button[39m
+                [33mclass[39m=[32m"portal-link"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mContinue to Stripe[0m
+              [36m</button>[39m
+              [0m ·[0m
+              [0m [0m
+              [36m<a[39m
+                [33mclass[39m=[32m"portal-link"[39m
+                [33mhref[39m=[32m"/demo/register/review"[39m
+              [36m>[39m
+                [0mBack to review[0m
+              [36m</a>[39m
+            [36m</p>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      74 |     });
+      75 |     render(<CheckoutStandIn />);
+    > 76 |     expect(screen.getByTestId('checkout-closed').textContent).toMatch(/owner declaration was withdrawn after checkout opened.*Nothing was charged/);
+         |                   ^
+      77 |     expect(screen.queryByTestId('outcome-paid')).toBeNull();
+      78 |   });
+      79 | });
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:76:19)
+
+  ● activation and unknown payment holds › a processing payment with the declaration withdrawn cannot be refreshed to confirmed
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="activation-hold"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex min-w-0 flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"min-w-0"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[11px] font-bold uppercase tracking-widest text-muted-foreground"[39m
+              [36m>[39m
+                [0mActivation[0m
+              [36m</p>[39m
+              [36m<h1[39m
+                [33mclass[39m=[32m"mt-1 text-[26px] font-bold leading-tight text-foreground md:text-[32px]"[39m
+              [36m>[39m
+                [0mWaiting for payment confirmation[0m
+              [36m</h1>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<section[39m
+            [33maria-labelledby[39m=[32m"tr-h"[39m
+            [33maria-live[39m=[32m"polite"[39m
+            [33mclass[39m=[32m"mt-6 border border-border bg-card p-4 sm:p-5"[39m
+            [33mdata-testid[39m=[32m"activation-tracks"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-base font-semibold text-foreground"[39m
+              [33mid[39m=[32m"tr-h"[39m
+            [36m>[39m
+              [0mActivation progress[0m
+            [36m</h2>[39m
+            [36m<ol[39m
+              [33mclass[39m=[32m"mt-1 divide-y divide-border"[39m
+            [36m>[39m
+              [36m<li[39m
+                [33mclass[39m=[32m"flex min-w-0 items-start gap-3 py-3"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"grid h-9 w-9 shrink-0 place-items-center border text-foreground border-info bg-info/10"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-loader-circle h-4 w-4 animate-spin"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"min-w-0"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm font-semibold text-foreground"[39m
+                  [36m>[39m
+                    [0mPayment[0m
+                    [0m [0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"sr-only"[39m
+                    [36m>[39m
+                      [0m— [0m
+                      [0mIn progress[0m
+                    [36m</span>[39m
+                  [36m</p>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+                  [36m>[39m
+                    [0mWaiting for Stripe's confirmation.[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</li>[39m
+              [36m<li[39m
+                [33mclass[39m=[32m"flex min-w-0 items-start gap-3 py-3"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"grid h-9 w-9 shrink-0 place-items-center border text-foreground border-border bg-muted"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-circle h-4 w-4"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<circle[39m
+                      [33mcx[39m=[32m"12"[39m
+                      [33mcy[39m=[32m"12"[39m
+                      [33mr[39m=[32m"10"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"min-w-0"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm font-semibold text-foreground"[39m
+                  [36m>[39m
+                    [0mPharmacy setup[0m
+                    [0m [0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"sr-only"[39m
+                    [36m>[39m
+                      [0m— [0m
+                      [0mNot started[0m
+                    [36m</span>[39m
+                  [36m</p>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+                  [36m>[39m
+                    [0mStarts after payment is confirmed.[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</li>[39m
+              [36m<li[39m
+                [33mclass[39m=[32m"flex min-w-0 items-start gap-3 py-3"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"grid h-9 w-9 shrink-0 place-items-center border text-foreground border-border bg-muted"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-circle h-4 w-4"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<circle[39m
+                      [33mcx[39m=[32m"12"[39m
+                      [33mcy[39m=[32m"12"[39m
+                      [33mr[39m=[32m"10"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"min-w-0"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm font-semibold text-foreground"[39m
+                  [36m>[39m
+                    [0mAccess email[0m
+                    [0m [0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"sr-only"[39m
+                    [36m>[39m
+                      [0m— [0m
+                      [0mNot started[0m
+                    [36m</span>[39m
+                  [36m</p>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+                  [36m>[39m
+                    [0mSent once setup finishes.[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</li>[39m
+            [36m</ol>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-3 flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+              [36m>[39m
+                [0mIn the real app this page updates by itself. In this demo, refresh to play the next confirmation.[0m
+              [36m</p>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-4 py-2"[39m
+                [33mdata-testid[39m=[32m"activation-refresh"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mRefresh status[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mt-5 space-y-5"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border-info bg-info/10"[39m
+              [33mrole[39m=[32m"status"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex min-w-0 gap-3"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"min-w-0"[39m
+                  [36m>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"font-semibold text-foreground"[39m
+                    [36m>[39m
+                      [0mWaiting for Stripe to confirm your payment[0m
+                    [36m</p>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"mt-0.5 text-sm text-muted-foreground"[39m
+                    [36m>[39m
+                      [0mThis usually takes a moment. If you closed Stripe's page before finishing, nothing was charged and you can[0m
+                      [0m [0m
+                      [36m<a[39m
+                        [33mclass[39m=[32m"portal-link"[39m
+                        [33mhref[39m=[32m"/demo/stripe"[39m
+                      [36m>[39m
+                        [0mresume checkout[0m
+                      [36m</a>[39m
+                      [0m.[0m
+                    [36m</div>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      89 |     });
+      90 |     render(<ActivationView />);
+    > 91 |     expect(screen.getByTestId('activation-hold').textContent).toMatch(/Confirm the owner declaration to continue/);
+         |                   ^
+      92 |     const refresh = screen.getByTestId('activation-refresh') as HTMLButtonElement;
+      93 |     expect(refresh.disabled).toBe(true);
+      94 |     await act(async () => {
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:91:19)
+
+  ● activation and unknown payment holds › unknown payment: "Stripe confirms payment" is unavailable while held; "nothing charged" stays available
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="unknown-hold"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex min-w-0 flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"min-w-0"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[11px] font-bold uppercase tracking-widest text-muted-foreground"[39m
+              [36m>[39m
+                [0mSignup[0m
+              [36m</p>[39m
+              [36m<h1[39m
+                [33mclass[39m=[32m"mt-1 text-[26px] font-bold leading-tight text-foreground md:text-[32px]"[39m
+              [36m>[39m
+                [0mWelcome back. Let's finish your signup.[0m
+              [36m</h1>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"mt-1 text-sm text-muted-foreground"[39m
+              [36m>[39m
+                [0mYour details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.[0m
+              [36m</p>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mt-5"[39m
+            [33mdata-testid[39m=[32m"incomplete-unknown"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33maria-live[39m=[32m"polite"[39m
+              [33mclass[39m=[32m"min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border-warning bg-warning/10"[39m
+              [33mrole[39m=[32m"status"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex min-w-0 gap-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"mt-0.5 shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"lucide lucide-loader-circle h-4 w-4 animate-spin text-foreground"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"24"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"min-w-0"[39m
+                  [36m>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"font-semibold text-foreground"[39m
+                    [36m>[39m
+                      [0mWe're checking whether a payment went through[0m
+                    [36m</p>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"mt-0.5 text-sm text-muted-foreground"[39m
+                    [36m>[39m
+                      [0mYou returned from Stripe before we got a confirmation. Please don't pay again until this resolves — it usually takes a moment. If it stays here, contact [0m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"font-medium text-foreground"[39m
+                      [36m>[39m
+                        [0m[SUPPORT EMAIL][0m
+                      [36m</span>[39m
+                      [0m with reference [0m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"font-medium text-foreground"[39m
+                      [36m>[39m
+                        [0mdemo_ck_01[0m
+                      [36m</span>[39m
+                      [0m.[0m
+                    [36m</div>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<section[39m
+            [33maria-labelledby[39m=[32m"sv-h"[39m
+            [33mclass[39m=[32m"mt-5 border border-border bg-card p-4 sm:p-5"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+            [36m>[39m
+              [36m<h2[39m
+                [33mclass[39m=[32m"text-base font-semibold text-foreground"[39m
+                [33mid[39m=[32m"sv-h"[39m
+              [36m>[39m
+                [0mWhat we saved[0m
+              [36m</h2>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide border-border bg-muted text-foreground"[39m
+              [36m>[39m
+                [0mSaved until [HOLD PERIOD TBD][0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<dl[39m
+              [33mclass[39m=[32m"mt-3 grid gap-3 text-sm sm:grid-cols-3"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<dt[39m
+                  [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+                [36m>[39m
+                  [0mPlan[0m
+                [36m</dt>[39m
+                [36m<dd[39m
+                  [33mclass[39m=[32m"text-foreground"[39m
+                [36m>[39m
+                  [0mStandard · monthly[0m
+                [36m</dd>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0"[39m
+              [36m>[39m
+                [36m<dt[39m
+                  [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+                [36m>[39m
+                  [0mPharmacies[0m
+                [36m</dt>[39m
+                [36m<dd[39m
+                  [33mclass[39m=[32m"text-foreground"[39m
+                [36m>[39m
+                  [0mExample Main Street Pharmacy · Example Riverside Pharmacy[0m
+                [36m</dd>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<dt[39m
+                  [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+                [36m>[39m
+                  [0mDue today[0m
+                [36m</dt>[39m
+                [36m<dd[39m
+                  [33mclass[39m=[32m"tabular-nums text-foreground"[39m
+                [36m>[39m
+                  [0m$148.00[0m
+                  [0m · illustrative[0m
+                [36m</dd>[39m
+              [36m</div>[39m
+            [36m</dl>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-4 flex flex-col gap-2 sm:flex-row"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/25 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-4 py-2"[39m
+                [33mdata-testid[39m=[32m"incomplete-continue"[39m
+                [33mdisabled[39m=[32m""[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mContinue to payment[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-4 py-2"[39m
+                [33mdisabled[39m=[32m""[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mReview my details first[0m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-2 text-xs text-muted-foreground"[39m
+            [36m>[39m
+              [0mPayment is paused until we know whether the earlier attempt went through.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33maria-label[39m=[32m"Demo outcomes"[39m
+              [33mclass[39m=[32m"mt-4 border-t border-dashed border-border pt-4"[39m
+              [33mrole[39m=[32m"group"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+              [36m>[39m
+                [0mDemo outcome · review control[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"mt-2 flex flex-col gap-2 sm:flex-row sm:flex-wrap [&>a]:h-auto [&>a]:min-h-[44px] [&>a]:whitespace-normal [&>button]:h-auto [&>button]:min-h-[44px] [&>button]:whitespace-normal [&>button]:py-2 [&>button]:text-left"[39m
+              [36m>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-4 py-2"[39m
+                  [33mdata-testid[39m=[32m"unknown-paid"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [0mStripe confirms payment → activation[0m
+                [36m</button>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-4 py-2"[39m
+                  [33mdata-testid[39m=[32m"unknown-not-charged"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [0mStripe confirms nothing charged[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"mt-6 text-xs text-muted-foreground"[39m
+          [36m>[39m
+            [0mWe also email this link to the owner when a checkout is left unfinished ([0m
+            [36m<a[39m
+              [33mclass[39m=[32m"portal-link"[39m
+              [33mhref[39m=[32m"/demo/references/email?variant=checkout_unfinished"[39m
+            [36m>[39m
+              [0mpreview[0m
+            [36m</a>[39m
+            [0m). Already subscribed? [0m
+            [36m<a[39m
+              [33mclass[39m=[32m"portal-link"[39m
+              [33mhref[39m=[32m"/login"[39m
+            [36m>[39m
+              [0mSign in[0m
+            [36m</a>[39m
+            [0m.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      106 |     });
+      107 |     render(<CheckoutIncompleteView />);
+    > 108 |     expect(screen.getByTestId('unknown-hold')).toBeTruthy();
+          |                   ^
+      109 |     expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(true);
+      110 |     expect((screen.getByTestId('unknown-not-charged') as HTMLButtonElement).disabled).toBe(false);
+      111 |     fireEvent.click(screen.getByTestId('unknown-not-charged'));
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:108:19)
+
+  ● persisted storage and the whole-draft facade › a storage-v1 blob over a pending checkout rehydrates closed and unaccepted
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "closedReason": "owner_declaration",
+    -   "status": "abandoned",
+    +   "status": "pending",
+      }
+
+      126 |     });
+      127 |     expect(s().draft.owner.ownerDeclarationAccepted).toBe(false);
+    > 128 |     expect(s().checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+          |                          ^
+      129 |     expect(s().quote).toBeNull();
+      130 |     expect(JSON.parse(sessionStorage.getItem(PUBLIC_STORAGE_KEY)!).version).toBe(2);
+      131 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:128:26)
+
+  ● persisted storage and the whole-draft facade › saveRegistrationDraft with a billion-store count stops at the first missing pharmacy without count-sized work
+
+    push budget exceeded
+
+      142 |     Array.prototype.push = function (this: unknown[], ...items: unknown[]) {
+      143 |       pushes += items.length;
+    > 144 |       if (pushes > 10_000) throw new Error('push budget exceeded');
+          |                                  ^
+      145 |       return push.apply(this, items);
+      146 |     };
+      147 |     let r;
+
+      at Array.push (src/__tests__/portal-checkout-hold.test.tsx:144:34)
+      at Object.setStoreCount (src/services/portal/registration.ts:231:44)
+      at src/services/portal/registrationService.ts:80:64
+      at sync (src/services/portal/registrationService.ts:58:16)
+      at Object.saveRegistrationDraft (src/services/portal/registrationService.ts:80:45)
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:149:30)
+
+Test Suites: 2 failed, 2 total
+Tests:       22 failed, 47 passed, 69 total
+Snapshots:   0 total
+Time:        7.236 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts|src/__tests__/portal-checkout-hold.test.tsx.

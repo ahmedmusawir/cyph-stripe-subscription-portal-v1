@@ -368,7 +368,7 @@ export function DashboardView() {
       </div>
 
       <section aria-labelledby="plan-h" className="mt-5 border border-border bg-card p-4 sm:p-5" data-testid="plan-summary">
-        <div className="flex flex-col gap-5 lg:flex-row lg:justify-between">
+        <div className="flex flex-col gap-6 lg:flex-row lg:justify-between lg:gap-10">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Plan</p>
@@ -394,9 +394,10 @@ export function DashboardView() {
               </div>
             </dl>
           </div>
-          <div className="min-w-0 lg:w-72">
+          {/* Approved C10 actions column: divider above on mobile, beside on desktop (REPAIR_002 Q2-O04 residual). */}
+          <div className="flex min-w-0 flex-col gap-3 border-t border-border pt-5 lg:w-80 lg:shrink-0 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0" data-testid="plan-actions">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Actions</p>
-            <div className="mt-2 flex flex-col gap-2" aria-busy={refreshing || undefined}>
+            <div className="flex flex-col gap-3" aria-busy={refreshing || undefined}>
               {addStore}
               {sub.status === "canceled" ? (
                 <Button type="button" variant="outline" disabled={busy} onClick={() => openBilling("invoices")}>

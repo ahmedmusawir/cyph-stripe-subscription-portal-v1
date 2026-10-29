@@ -40,3 +40,9 @@ Engineer appends meaningful checkpoints: time, identity, work, command/result ev
 - Declaration enforced once, in `validateOwner`, so the owner step, deep links and `startCheckout` all inherit it; a quote still prices without it (pricing only).
 - The real risk was old drafts: persisted v1 drafts are migrated with the declaration explicitly false; an allow-list keeps `businessRole` (or any stray key) out of drafts.
 - One test expectation was wrong (expected `requestQuote` to fail); corrected to the mock submission (`startCheckout`). All browser runs passed first time, so 1 sign-in only.
+
+### 29 Oct 2026 — REPAIR_002 (Claudy)
+- Root cause CR-F01: the declaration was enforced only where a checkout is *created*; nothing re-checked it when an existing checkout was replayed, paid, resolved from unknown or confirmed on refresh, and owner edits never touched the checkout. Fix = close open checkouts on withdrawal/migration/material edit + a single `checkoutHold` gate on every move toward payment.
+- The review copy already promised "editing … closes the open checkout"; `touch` never did. That gap is R2-N01, found while reproducing.
+- Failed attempt: on the unrepaired baseline, billion-count test calls outside the push budget exhausted one Jest worker heap (4 GB) before I moved every extreme-count call inside the budget. Contained to that worker; recorded in the report.
+- R2-N02 found because the CR-F02 deep-link test failed: the route parsed `?store=` with `\d{1,2}`.

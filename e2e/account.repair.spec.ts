@@ -313,3 +313,33 @@ test("O04 evidence screenshots (real identity masked)", async ({ page }) => {
     });
   }
 });
+
+// ── REPAIR_002: Q2-O04 residual — plan Actions column (approved C10 treatment) ──
+test("O04 residual: Actions divider above on mobile, beside on desktop; approved spacing", async ({ page }) => {
+  const geometry = () =>
+    page.getByTestId("plan-actions").evaluate((el) => {
+      const cs = getComputedStyle(el);
+      const inner = getComputedStyle(el.children[1] as HTMLElement);
+      return { top: cs.borderTopWidth, left: cs.borderLeftWidth, pt: cs.paddingTop, pl: cs.paddingLeft, gap: cs.rowGap, innerGap: inner.rowGap, width: Math.round(el.getBoundingClientRect().width) };
+    });
+  await page.setViewportSize({ width: 375, height: 1000 });
+  await page.goto("/dashboard");
+  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
+  expect(await geometry()).toMatchObject({ top: "1px", left: "0px", pt: "20px", gap: "12px", innerGap: "12px" });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  expect(await geometry()).toMatchObject({ top: "0px", left: "1px", pt: "0px", pl: "32px", gap: "12px", innerGap: "12px", width: 320 });
+  for (const theme of THEMES) {
+    for (const [width, label] of [[375, "mobile"], [1440, "desktop"]] as const) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto("/dashboard");
+      await setTheme(page, theme);
+      await page.reload();
+      await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
+      await page.screenshot({
+        path: `test-results/shots/repair002-account-billing_active_${theme}_${label}.png`,
+        fullPage: true,
+        mask: [page.getByTestId("account-menu"), page.getByTestId("account-demo-strip").locator("summary > span").nth(1)],
+      });
+    }
+  }
+});

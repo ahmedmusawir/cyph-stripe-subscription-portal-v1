@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-10-29 07:30 UTC — [CC] Claude Code
+- **Updated:** `…/RULINGS.md` — R-012 REPAIR_002 (pending checkout respects current prerequisites; bounded repeat-N work).
+- **Updated:** `…/ACCEPTANCE_SPEC.md` v1.3 (AC-05, AC-06a extended), `…/_project/DATA_CONTRACT.md` v1.4, `…/_project/UI_SPEC.md` (C05/C06/C14 hold/closed states), `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9.
+- **Added:** `…/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md`, `…/EVIDENCE/REPAIR_002/` — repair evidence.
+- **Updated:** `…/STATE.md`, `…/JOURNAL.md`, `RECOVERY.md`, `agent_docs/SESSIONS/session_2026-10-29.md`.
+- **Reason:** QA Lead Gate Q FAIL on 24cf075 (CR-F01, CR-F02, Q2-O04 residual).
+
 ## 2026-10-29 04:26 UTC — [CC] Claude Code
 - **Updated:** `…/RULINGS.md` — R-011 owner-only registration / owner declaration (Coach decision, Director authorization).
 - **Updated:** `…/ACCEPTANCE_SPEC.md` v1.2 (AC-06, new AC-06a), `…/_project/DATA_CONTRACT.md` v1.3, `…/_project/UI_SPEC.md` (C02), `…/_project/portal-contract.ts` v1.2, `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9 — R-011 amendment.

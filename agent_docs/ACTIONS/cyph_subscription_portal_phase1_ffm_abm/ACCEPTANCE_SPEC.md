@@ -1,5 +1,5 @@
 # Acceptance specification — FFM-ABM-001-SUBSCRIPTION-PORTAL
-Version 1.2 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
+Version 1.3 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.3 adds R-012 (REPAIR_002) text to AC-05 and AC-06a; no criterion is removed or relaxed. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
 
 ## Basis and grading
 APP_BRIEF v1.1, DATA_CONTRACT v1.1, IMPLEMENTATION_CONTRACT v1.0, received UI_SPEC v1.0 with R-004. Each AC is required for the declared FFM scope. No arbitrary screen/test count replaces behavior. All mock checks run in a locally served app or isolated service tests; real access checks use only the authorized existing shared-dev auth target. Deployment/live billing/SSO are excluded.
@@ -37,7 +37,7 @@ Every evidence record includes input/precondition, expected result, actual resul
 **Evidence:** Inventory with each state, route, entry path and AC references.
 
 ## AC-05 — Plan/count and repeat-N
-**Requirement:** Count minimum 1; N pharmacy records required before payment. Decreasing count with entered records asks before discarding; cancel retains records. Exercise 1, 2 and 3 stores; no forced two-store limit.
+**Requirement:** Count minimum 1; N pharmacy records required before payment. Decreasing count with entered records asks before discarding; cancel retains records. Exercise 1, 2 and 3 stores; no forced two-store limit. (R-012) No business cap; the only upper bound is the documented technical safe-integer pricing bound. Work and memory scale with the pharmacies entered, never with the requested count: an extreme accepted count (e.g. 1,000,000,000), restored or malformed state, or a far step index causes no count-sized allocation; every step number up to N is reachable.
 
 **Verification:** Service/form/browser tests.
 
@@ -51,9 +51,9 @@ Every evidence record includes input/precondition, expected result, actual resul
 **Evidence:** Leading-zero, conditional-field and focus observations.
 
 ## AC-06a — Owner declaration (R-011)
-**Requirement:** Registration is owner-only. C02 shows a required, initially unchecked checkbox labelled exactly "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.", with an accessible label, an inline error and an error-summary link, separate from terms/payment consent. Missing it blocks owner progression, deep links past the owner step and the mock checkout submission (service boundary). An accepted declaration survives Back and reload; drafts saved before R-011 never acquire acceptance; seeded acceptance is a labelled synthetic fixture. Me / Someone else keeps account ownership and billing with the registering owner; Someone else never transfers ownership, billing or permission to buy more stores; one designated admin per store. UI and documents never claim that email or payment proves ownership or delegated authority.
+**Requirement:** Registration is owner-only. C02 shows a required, initially unchecked checkbox labelled exactly "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.", with an accessible label, an inline error and an error-summary link, separate from terms/payment consent. Missing it blocks owner progression, deep links past the owner step and the mock checkout submission (service boundary). An accepted declaration survives Back and reload; drafts saved before R-011 never acquire acceptance; seeded acceptance is a labelled synthetic fixture. Me / Someone else keeps account ownership and billing with the registering owner; Someone else never transfers ownership, billing or permission to buy more stores; one designated admin per store. UI and documents never claim that email or payment proves ownership or delegated authority. (R-012) A pending or replayed checkout never reaches paid/confirmed activation unless the declaration is exactly `true` **now**: withdrawing it or restoring a pre-R-011 draft closes an open checkout (nothing charged, details kept); a submitted/unknown payment is held until explicit re-acceptance; same-key replay, outcomes, unknown resolution and activation refresh re-check the current draft at the service boundary, not only in the UI. Re-acceptance never silently reopens a closed checkout or restores consent; completed payment history is never reversed by later edits.
 
-**Verification:** Service tests, component test, browser journeys (keyboard, 375/1440, light/dark), storage-migration check.
+**Verification:** Service tests, component test, browser journeys (keyboard, 375/1440, light/dark), storage-migration check; (R-012) withdrawal-after-checkout and legacy-over-pending reproductions with reload/direct navigation and replay.
 
 **Evidence:** Missing/accepted/migrated declaration observations and copy review.
 

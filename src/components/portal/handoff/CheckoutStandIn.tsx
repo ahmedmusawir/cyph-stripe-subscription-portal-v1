@@ -9,7 +9,7 @@ import { Alert, DemoNotice } from "../Alert";
 import { DemoOutcomes, ExternalHandoffPanel } from "../ExternalHandoffPanel";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { Pill } from "../Pill";
-import { formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
+import { checkoutHold, formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
 
 // C05 initial-checkout boundary (PUBLIC). Our "leaving" page, then a labelled
 // stand-in for Stripe Checkout with NO editable card fields. Only the explicit
@@ -39,6 +39,23 @@ export function CheckoutStandIn() {
       </PageContainer>
     );
   }
+  if (checkout.closedReason) {
+    // R-012: we closed this unpaid checkout because the details it was opened for changed.
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <div data-testid="checkout-closed">
+          <Alert tone="info" title="This checkout was closed">
+            {checkout.closedReason === "owner_declaration"
+              ? "The owner declaration was withdrawn after checkout opened, so we closed it. "
+              : "Your signup details changed after checkout opened, so we closed it. "}
+            Nothing was charged. Confirm your details, then get a fresh quote to pay.{" "}
+            <Link href="/demo/register/review" className="portal-link">Go to review</Link>
+          </Alert>
+        </div>
+      </PageContainer>
+    );
+  }
   if (checkout.status !== "pending" && checkout.status !== "declined") {
     const next = checkout.status === "paid" ? "/demo/activation" : "/demo/checkout-incomplete";
     return (
@@ -47,6 +64,22 @@ export function CheckoutStandIn() {
         <Alert tone="info" title="This checkout already has an outcome">
           <Link href={next} className="portal-link">{checkout.status === "paid" ? "See activation status" : "See checkout status"}</Link>
         </Alert>
+      </PageContainer>
+    );
+  }
+
+  const hold = checkoutHold(draft);
+  if (hold) {
+    // R-012: an open checkout can't be paid while its prerequisites are unmet.
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <div data-testid="checkout-hold">
+          <Alert tone="warning" title={hold === "owner_declaration" ? "Confirm the owner declaration before paying" : "Finish your signup details before paying"}>
+            Payment can&apos;t continue until {hold === "owner_declaration" ? "the pharmacy owner confirms the owner declaration" : "every signup step is complete"}. Nothing has been charged.{" "}
+            <Link href="/demo/register/review" className="portal-link">Go to my details</Link>
+          </Alert>
+        </div>
       </PageContainer>
     );
   }

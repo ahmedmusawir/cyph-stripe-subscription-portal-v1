@@ -423,3 +423,265 @@ describe('repeat-N pricing bound (REPAIR_001 Q2-G06)', () => {
     expect(() => pricing.initialRecurringCents(max + 1)).toThrow(RangeError);
   });
 });
+
+// REPAIR_002 (RULINGS R-012). CR-F01: an unpaid checkout never reaches payment
+// while the owner declaration is not exactly true. CR-F02: work and memory are
+// bounded by the pharmacies entered, never by the requested count.
+describe('pending checkout respects current prerequisites (R-012, CR-F01)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  const withdrawn = { ...owner, ownerDeclarationAccepted: false };
+  function open(n = 1, key = KEY) {
+    const s = reg.requestQuote(completeDraft(n), deps).state;
+    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: key }, deps).state;
+  }
+  function refused(step: { state: RegistrationState; result: { ok: boolean } }, before: RegistrationState) {
+    expect(step.result).toMatchObject({ ok: false });
+    expect(step.state).toBe(before);
+  }
+
+  it('A: withdrawing the declaration on the owner step closes the open checkout; pay and replay are refused', () => {
+    const pending = open();
+    const w = reg.saveOwner(pending, withdrawn);
+    expect(w.result).toMatchObject({ ok: false, code: 'validation', fieldErrors: { ownerDeclaration: expect.any(String) } });
+    expect(w.state.checkout).toMatchObject({ operationKey: KEY, status: 'abandoned', closedReason: 'owner_declaration' });
+    expect(w.state.quote).toBeNull();
+    expect(w.state.draft.consents).toMatchObject({ termsAccepted: false, recurringChargeAccepted: false });
+    expect(w.state.draft.owner.ownerDeclarationAccepted).toBe(false);
+    expect(w.state.draft.pharmacies[0].name).toBe('Example Test Pharmacy 1'); // details kept
+    for (const outcome of ['paid', 'processing'] as const) refused(reg.resolveCheckout(w.state, outcome), w.state);
+    expect(reg.startCheckout(w.state, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps).result.ok).toBe(false);
+    expect(w.state.activation).toBeNull();
+  });
+
+  it('A: Back with the box unticked (keepOwner) closes it the same way', () => {
+    const k = reg.keepOwner(open(), withdrawn).state;
+    expect(k.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+    refused(reg.resolveCheckout(k, 'paid'), k);
+  });
+
+  it('B: a legacy (storage v1) draft restored over a pending checkout cannot be paid', () => {
+    const s = open(1, 'qa_legacy_pending');
+    delete (s.draft.owner as Record<string, unknown>).ownerDeclarationAccepted;
+    (s.draft.owner as Record<string, unknown>).businessRole = 'owner';
+    const m = reg.migrateRegistration(JSON.parse(JSON.stringify(s)));
+    expect(m.draft.owner.ownerDeclarationAccepted).toBe(false);
+    expect(m.draft.owner).not.toHaveProperty('businessRole');
+    expect(m.quote).toBeNull();
+    expect(m.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+    expect(m.draft.owner.firstName).toBe('Jordan');
+    refused(reg.resolveCheckout(m, 'paid'), m);
+    expect(reg.startCheckout(m, { quoteId: s.quote!.id, consents: consented, operationKey: 'qa_legacy_pending' }, deps).result.ok).toBe(false);
+  });
+
+  it('B: a v1 draft never carries acceptance over, even if the field is present', () => {
+    const s = open();
+    const m = reg.migrateRegistration(JSON.parse(JSON.stringify(s)));
+    expect(m.draft.owner.ownerDeclarationAccepted).toBe(false);
+    expect(m.checkout?.status).toBe('abandoned');
+  });
+
+  it('a stored pending checkout with the declaration already false (no transition) is held at every step toward payment', () => {
+    const pending = open();
+    const tampered: RegistrationState = { ...pending, draft: { ...pending.draft, owner: { ...pending.draft.owner, ownerDeclarationAccepted: false } } };
+    expect(reg.checkoutHold(tampered.draft)).toBe('owner_declaration');
+    refused(reg.startCheckout(tampered, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps), tampered);
+    refused(reg.resolveCheckout(tampered, 'paid'), tampered);
+    refused(reg.resolveCheckout(tampered, 'processing'), tampered);
+    // Non-advancing outcomes stay available.
+    expect(reg.resolveCheckout(tampered, 'back').state.checkout?.status).toBe('abandoned');
+    for (const bad of [undefined, 'true', 1, null]) {
+      const forged = { ...tampered, draft: { ...tampered.draft, owner: { ...tampered.draft.owner, ownerDeclarationAccepted: bad as unknown as boolean } } };
+      refused(reg.resolveCheckout(forged, 'paid'), forged);
+    }
+  });
+
+  it('a submitted payment (processing) is held, not closed, while the declaration is withdrawn', () => {
+    const processing = reg.resolveCheckout(open(), 'processing').state;
+    const w = reg.keepOwner(processing, withdrawn).state;
+    expect(w.checkout?.status).toBe('pending');
+    expect(w.checkout?.closedReason).toBeUndefined();
+    refused(reg.refreshActivation(w), w);
+    // The failure path still plays; it doesn't advance toward payment.
+    const failPlan = reg.setActivationPlan(w, 'payment_failed').state;
+    expect(value<{ paymentState: string }>(reg.refreshActivation(failPlan)).paymentState).toBe('failed');
+    // Explicit acceptance lets the same payment confirm.
+    const back = reg.saveOwner(w, owner);
+    expect(back.result.ok).toBe(true);
+    expect(value<{ paymentState: string }>(reg.refreshActivation(back.state)).paymentState).toBe('confirmed');
+  });
+
+  it('an unknown payment is held while the declaration is withdrawn; "nothing charged" still resolves', () => {
+    const unknown = reg.resolveCheckout(open(), 'unknown').state;
+    const w = reg.keepOwner(unknown, withdrawn).state;
+    expect(w.checkout?.status).toBe('unknown');
+    refused(reg.resolveUnknownPayment(w, 'paid'), w);
+    expect(reg.resolveUnknownPayment(w, 'not_charged').state.checkout?.status).toBe('abandoned');
+    const accepted = reg.keepOwner(w, owner).state;
+    expect(reg.resolveUnknownPayment(accepted, 'paid').state.activation?.paymentState).toBe('confirmed');
+  });
+
+  it('a declined checkout is closed on withdrawal, so "another card works" is refused', () => {
+    const declined = reg.resolveCheckout(open(), 'declined').state;
+    const w = reg.keepOwner(declined, withdrawn).state;
+    expect(w.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
+    refused(reg.resolveCheckout(w, 'paid'), w);
+  });
+
+  it('valid recovery: explicit acceptance → fresh quote → fresh consent → new checkout → paid', () => {
+    const closed = reg.saveOwner(open(), withdrawn).state;
+    const accepted = reg.saveOwner(closed, owner);
+    expect(accepted.result.ok).toBe(true);
+    // Acceptance alone doesn't reopen the closed checkout or restore consent.
+    expect(accepted.state.checkout?.status).toBe('abandoned');
+    expect(accepted.state.draft.consents.termsAccepted).toBe(false);
+    expect(reg.resolveCheckout(accepted.state, 'paid').result.ok).toBe(false);
+    let s = reg.resumeSignup(accepted.state).state;
+    expect(s.checkout).toBeNull();
+    s = reg.requestQuote(s, deps).state;
+    // Consent is required again for the new quote.
+    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: { ...consented, termsAccepted: false }, operationKey: 'demo_key_000010' }, deps).result).toMatchObject({ ok: false, code: 'validation' });
+    const started = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: 'demo_key_000010' }, deps);
+    expect(started.result.ok).toBe(true);
+    // Same-operation replay of the NEW checkout is still idempotent.
+    const replay = reg.startCheckout(started.state, { quoteId: s.quote!.id, consents: consented, operationKey: 'demo_key_000010' }, deps);
+    expect(replay.result.ok).toBe(true);
+    expect(replay.state).toBe(started.state);
+    const paid = reg.resolveCheckout(started.state, 'paid').state;
+    expect(paid.checkout).toMatchObject({ operationKey: 'demo_key_000010', status: 'paid' });
+    expect(paid.activation?.paymentState).toBe('confirmed');
+    expect(paid.draft.owner.ownerDeclarationAccepted).toBe(true);
+  });
+
+  it('completed payment history is never closed or reversed by a later draft edit', () => {
+    const paid = reg.resolveCheckout(open(), 'paid').state;
+    const w = reg.keepOwner(paid, withdrawn).state;
+    expect(w.checkout).toEqual(paid.checkout);
+    expect(w.activation).toEqual(paid.activation);
+    const edited = reg.setStoreCount(paid, 2).state;
+    expect(edited.checkout).toEqual(paid.checkout);
+  });
+
+  it('R2-N01: changing the store count while a checkout is open closes it (the open checkout was priced for the old count)', () => {
+    const pending = open();
+    const changed = reg.setStoreCount(pending, 2).state;
+    expect(changed.checkout).toMatchObject({ status: 'abandoned', closedReason: 'details_changed' });
+    refused(reg.resolveCheckout(changed, 'paid'), changed);
+    // A pharmacy edit does the same.
+    const edited = reg.savePharmacy(pending, 0, pharmacy(1, { city: 'Shelbyville' })).state;
+    expect(edited.checkout).toMatchObject({ status: 'abandoned', closedReason: 'details_changed' });
+  });
+
+  it('unchanged replay and payment for a valid draft still work', () => {
+    const pending = open();
+    expect(reg.checkoutHold(pending.draft)).toBeNull();
+    expect(reg.startCheckout(pending, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps).state).toBe(pending);
+    // Saving the same accepted owner again doesn't close anything.
+    expect(reg.saveOwner(pending, owner).state.checkout?.status).toBe('pending');
+    expect(reg.resolveCheckout(pending, 'paid').state.checkout?.status).toBe('paid');
+  });
+});
+
+describe('count-driven work is bounded (R-012, CR-F02)', () => {
+  /** Counts Array.prototype.push calls inside fn and aborts past a small budget (no huge allocation is ever attempted). */
+  function countPushes(fn: () => void, budget = 64): { pushes: number; aborted: boolean } {
+    const push = Array.prototype.push;
+    const marker = new Error('push budget');
+    let pushes = 0;
+    let aborted = false;
+    try {
+      Array.prototype.push = function (this: unknown[], ...items: unknown[]) {
+        pushes += items.length;
+        if (pushes > budget) throw marker;
+        return push.apply(this, items);
+      };
+      fn();
+    } catch (e) {
+      if (e !== marker) throw e;
+      aborted = true;
+    } finally {
+      Array.prototype.push = push;
+    }
+    return { pushes, aborted };
+  }
+  const BILLION = 1_000_000_000;
+
+  it('a billion-store count allocates no pharmacy entries and prices exactly', () => {
+    const before = reg.createRegistration('fresh').draft.pharmacies.length;
+    let s = billion();
+    expect(s.draft.requestedStoreCount).toBe(BILLION);
+    expect(s.draft.pharmacies.length).toBe(before);
+    s = reg.saveOwner(s, owner).state;
+    expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'pharmacy', index: 0 });
+    expect(reg.isDraftComplete(s.draft)).toBe(false);
+    // 9900 + 4900 × 999,999,999 = 4,900,000,005,000 cents (literal).
+    expect(value<{ newRecurringCents: number }>(reg.requestQuote(s, deps)).newRecurringCents).toBe(4_900_000_005_000);
+  });
+
+  /** setStoreCount(BILLION) inside the budget: a count-sized loop aborts instead of exhausting memory. */
+  function billion(): RegistrationState {
+    let s = reg.createRegistration('fresh');
+    const probe = countPushes(() => {
+      s = reg.setStoreCount(s, BILLION).state;
+    });
+    expect(probe).toEqual({ pushes: 0, aborted: false });
+    return s;
+  }
+
+  it('pharmacy steps fill in order: a far index is refused without growing the array', () => {
+    let s = reg.saveOwner(billion(), owner).state;
+    s = reg.savePharmacy(s, 0, pharmacy(1)).state;
+    for (const index of [BILLION - 1, 5, 2]) {
+      expect(reg.isPharmacyStep(s.draft, index)).toBe(false);
+      const step = reg.savePharmacy(s, index, pharmacy(9));
+      expect(step.result).toMatchObject({ ok: false, code: 'missing_context' });
+      expect(step.state.draft.pharmacies.length).toBe(1);
+      expect(reg.keepPharmacy(s, index, pharmacy(9)).state.draft.pharmacies.length).toBe(1);
+    }
+    expect(reg.isPharmacyStep(s.draft, 1)).toBe(true);
+    expect(reg.savePharmacy(s, 1, pharmacy(2)).state.draft.pharmacies.length).toBe(2);
+  });
+
+  it('the largest representable count is accepted in constant work; one more is refused', () => {
+    const max = pricing.MAX_REPRESENTABLE_STORES;
+    let accepted = false;
+    const probe = countPushes(() => {
+      accepted = reg.setStoreCount(reg.createRegistration('fresh'), max).result.ok;
+    });
+    expect(probe).toEqual({ pushes: 0, aborted: false });
+    expect(accepted).toBe(true);
+    expect(reg.setStoreCount(reg.createRegistration('fresh'), max + 1).result).toMatchObject({ ok: false, code: 'validation' });
+  });
+
+  it('a restored draft with an extreme or malformed count is handled without count-sized work', () => {
+    const base = reg.createRegistration('prefilled_one_store');
+    const huge: RegistrationState = { ...base, draft: { ...base.draft, requestedStoreCount: BILLION } };
+    let gate: ReturnType<typeof reg.firstIncomplete> | null = null;
+    let discards: string[] | null = null;
+    const probe = countPushes(() => {
+      gate = reg.firstIncomplete(huge.draft);
+      discards = reg.storeCountDiscards(huge, 1);
+    });
+    expect(probe.aborted).toBe(false); // a handful of pushes for one entered pharmacy, not one per requested store
+    expect(gate).toEqual({ step: 'pharmacy', index: 1 });
+    expect(discards).toEqual([]);
+    for (const bad of [-5, 0, 1.5, 1e300, NaN, '3', null]) {
+      const d = { ...base.draft, requestedStoreCount: bad as unknown as number };
+      expect(reg.firstIncomplete(d)).toEqual({ step: 'plan' });
+      expect(reg.isPharmacyStep(d, 0)).toBe(false);
+      expect(reg.requestQuote({ ...base, draft: d }, deps).result).toMatchObject({ ok: false, code: 'missing_context' });
+    }
+  });
+
+  it('count reduction and restoration keep entered pharmacies coherent; 1/2/3 stores unchanged', () => {
+    let s = completeDraft(3);
+    s = reg.setStoreCount(s, 1).state;
+    expect(s.draft.pharmacies.map((p) => p.name)).toEqual(['Example Test Pharmacy 1']);
+    s = reg.setStoreCount(s, 3).state;
+    expect(s.draft.pharmacies.length).toBe(1);
+    expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'pharmacy', index: 1 });
+    s = reg.savePharmacy(s, 1, pharmacy(2)).state;
+    s = reg.savePharmacy(s, 2, pharmacy(3)).state;
+    expect(reg.isDraftComplete(s.draft)).toBe(true);
+    expect([1, 2, 3].map((n) => value<{ dueNowCents: number }>(reg.requestQuote(completeDraft(n), deps)).dueNowCents)).toEqual([9900, 14800, 19700]);
+  });
+});

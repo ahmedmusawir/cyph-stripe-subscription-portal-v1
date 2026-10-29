@@ -1,0 +1,15 @@
+{
+  "afterContinue": {
+    "accepted": false,
+    "quoteCleared": false,
+    "checkout": "pending",
+    "payment": null
+  },
+  "paidControlAvailable": true,
+  "final": {
+    "accepted": false,
+    "quoteCleared": false,
+    "checkout": "paid",
+    "payment": "confirmed"
+  }
+}

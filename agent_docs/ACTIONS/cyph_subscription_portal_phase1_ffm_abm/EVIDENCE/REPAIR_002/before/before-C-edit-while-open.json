@@ -1,0 +1,17 @@
+{
+  "afterEdit": {
+    "accepted": true,
+    "quoteCleared": true,
+    "checkout": "pending",
+    "payment": null
+  },
+  "paidControlAvailable": true,
+  "final": {
+    "accepted": true,
+    "quoteCleared": true,
+    "checkout": "paid",
+    "payment": "confirmed"
+  },
+  "requested": 2,
+  "entered": 1
+}

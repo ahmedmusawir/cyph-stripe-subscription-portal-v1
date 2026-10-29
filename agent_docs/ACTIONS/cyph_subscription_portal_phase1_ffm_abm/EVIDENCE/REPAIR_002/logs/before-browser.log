@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repro002.spec.ts:37:5 › A: current UI — uncheck declaration, revisit /demo/stripe (6.3s)
+  ✓  2 [public] › e2e/public.repro002.spec.ts:51:5 › B: legacy v1 draft restored over a pending checkout (5.5s)
+  ✓  3 [public] › e2e/public.repro002.spec.ts:65:5 › C: pharmacy edit while checkout open, then revisit /demo/stripe (5.3s)
+
+  3 passed (18.2s)

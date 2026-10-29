@@ -1,0 +1,174 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 9ebcb81..56722f4 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,5 +1,12 @@
+ # CHANGELOG
+ 
++## 2026-10-29 07:30 UTC — [CC] Claude Code
++- **Updated:** `…/RULINGS.md` — R-012 REPAIR_002 (pending checkout respects current prerequisites; bounded repeat-N work).
++- **Updated:** `…/ACCEPTANCE_SPEC.md` v1.3 (AC-05, AC-06a extended), `…/_project/DATA_CONTRACT.md` v1.4, `…/_project/UI_SPEC.md` (C05/C06/C14 hold/closed states), `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9.
++- **Added:** `…/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md`, `…/EVIDENCE/REPAIR_002/` — repair evidence.
++- **Updated:** `…/STATE.md`, `…/JOURNAL.md`, `RECOVERY.md`, `agent_docs/SESSIONS/session_2026-10-29.md`.
++- **Reason:** QA Lead Gate Q FAIL on 24cf075 (CR-F01, CR-F02, Q2-O04 residual).
++
+ ## 2026-10-29 04:26 UTC — [CC] Claude Code
+ - **Updated:** `…/RULINGS.md` — R-011 owner-only registration / owner declaration (Coach decision, Director authorization).
+ - **Updated:** `…/ACCEPTANCE_SPEC.md` v1.2 (AC-06, new AC-06a), `…/_project/DATA_CONTRACT.md` v1.3, `…/_project/UI_SPEC.md` (C02), `…/_project/portal-contract.ts` v1.2, `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9 — R-011 amendment.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
+index ca8e20e..6dc06f2 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
+@@ -1,5 +1,5 @@
+ # Engineering acceptance ledger
+-Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.2 (R-008/R-009/R-011). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
++Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.3 (R-008/R-009/R-011/R-012). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
+ 
+ | AC | Engineering claim | Evidence | Independent disposition |
+ |---|---|---|---|
+@@ -7,9 +7,9 @@ Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANC
+ | AC-02 | MET — real login/logout through existing routes; R-008 role rule only; logout clears both namespaces; mock flows never submit credentials. Note: inherited logout is GLOBAL scope | ER §3; `e2e/logout.final.spec.ts`; `portal-storage.test.ts` | See matrix |
+ | AC-03 | MET — real admin vs synthetic persona labelled in strip/menu; non-owner payload is `{kind:'denied', ownerContactLabel}` only; service denies add/billing | `portal-account.test.ts` (persona tests); account e2e personas | See matrix |
+ | AC-04 | MET — every C01–C17 + sign-in state reachable; missing context returns to a safe step with notice | ER §6; public/account e2e | See matrix |
+-| AC-05 | MET — count ≥1, N records required, reduce asks/keeps, 1/2/3 exercised | `portal-registration.test.ts`; e2e count reduction, 3-store journey | See matrix |
++| AC-05 | MET — count ≥1, N records required, reduce asks/keeps, 1/2/3 exercised. REPAIR_002 (R-012) self-check: no count-sized allocation (billion-count push probe 0), steps fill in order, step 100+ reachable (R2-N02), reduction/restoration, 21-store journey | `portal-registration.test.ts` incl. "count-driven work is bounded (R-012, CR-F02)"; `portal-checkout-hold.test.tsx`; `e2e/public.repair002.spec.ts`; `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` | CR-F02 pending independent retest |
+ | AC-06 | MET — required fields, NCPDP 7 / NPI 10 as strings, conditional fields, summary focus, no job-title field (R-011, AMENDMENT_001) | `portal-registration.test.ts` validation; e2e validation | See matrix |
+-| AC-06a | ENGINEERING SELF-CHECK (R-011, AMENDMENT_001) — required unchecked owner declaration with exact label; blocks owner step, deep links and mock checkout at the service; survives Back/reload; v1 drafts migrate unaccepted; Me / Someone else keeps billing with the owner; no ownership-proof claims | `portal-registration.test.ts` "owner declaration (R-011)"; `portal-owner.test.tsx`; `e2e/public.owner-declaration.spec.ts`; `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` | Pending independent QA |
++| AC-06a | ENGINEERING SELF-CHECK (R-011, AMENDMENT_001) — required unchecked owner declaration with exact label; blocks owner step, deep links and mock checkout at the service; survives Back/reload; v1 drafts migrate unaccepted; Me / Someone else keeps billing with the owner; no ownership-proof claims | `portal-registration.test.ts` "owner declaration (R-011)"; `portal-owner.test.tsx`; `e2e/public.owner-declaration.spec.ts`; `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`. REPAIR_002 (R-012) self-check: pending checkout closed on withdrawal/legacy restore; replay, outcomes, unknown and activation re-check the current declaration; submitted payments held; recovery only via explicit acceptance + fresh quote/consent | + `portal-registration.test.ts` "pending checkout respects current prerequisites (R-012, CR-F01)"; `portal-checkout-hold.test.tsx`; `e2e/public.repair002.spec.ts`; `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` | Gate Q FAILED on 24cf075 (CR-F01); pending independent retest |
+ | AC-07 | MET — back/edit/reload keep drafts; edits invalidate quote+consent; separate public/account namespaces; reset/logout/identity change clear; no secrets stored | e2e reload + storage check; `portal-storage.test.ts` | See matrix |
+ | AC-08 | MET — 9900/14800/19700; DEMO10 −1000 due-now only; unavailable ≠ 0; add 2450 | literal-expectation tests in `portal-registration.test.ts`, `portal-account.test.ts`; e2e $197.00/$187.00/$24.50 | See matrix |
+ | AC-09 | MET — two consents initial, one add; expired (injected clock)/stale revision rejected without mutation; refresh clears consent; busy disables; consent disabled until a current quote | engine tests; e2e consent error | See matrix |
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
+index 2bd5bf4..23299b1 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
+@@ -1,5 +1,5 @@
+ # Acceptance specification — FFM-ABM-001-SUBSCRIPTION-PORTAL
+-Version 1.2 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
++Version 1.3 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.3 adds R-012 (REPAIR_002) text to AC-05 and AC-06a; no criterion is removed or relaxed. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
+ 
+ ## Basis and grading
+ APP_BRIEF v1.1, DATA_CONTRACT v1.1, IMPLEMENTATION_CONTRACT v1.0, received UI_SPEC v1.0 with R-004. Each AC is required for the declared FFM scope. No arbitrary screen/test count replaces behavior. All mock checks run in a locally served app or isolated service tests; real access checks use only the authorized existing shared-dev auth target. Deployment/live billing/SSO are excluded.
+@@ -37,7 +37,7 @@ Every evidence record includes input/precondition, expected result, actual resul
+ **Evidence:** Inventory with each state, route, entry path and AC references.
+ 
+ ## AC-05 — Plan/count and repeat-N
+-**Requirement:** Count minimum 1; N pharmacy records required before payment. Decreasing count with entered records asks before discarding; cancel retains records. Exercise 1, 2 and 3 stores; no forced two-store limit.
++**Requirement:** Count minimum 1; N pharmacy records required before payment. Decreasing count with entered records asks before discarding; cancel retains records. Exercise 1, 2 and 3 stores; no forced two-store limit. (R-012) No business cap; the only upper bound is the documented technical safe-integer pricing bound. Work and memory scale with the pharmacies entered, never with the requested count: an extreme accepted count (e.g. 1,000,000,000), restored or malformed state, or a far step index causes no count-sized allocation; every step number up to N is reachable.
+ 
+ **Verification:** Service/form/browser tests.
+ 
+@@ -51,9 +51,9 @@ Every evidence record includes input/precondition, expected result, actual resul
+ **Evidence:** Leading-zero, conditional-field and focus observations.
+ 
+ ## AC-06a — Owner declaration (R-011)
+-**Requirement:** Registration is owner-only. C02 shows a required, initially unchecked checkbox labelled exactly "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.", with an accessible label, an inline error and an error-summary link, separate from terms/payment consent. Missing it blocks owner progression, deep links past the owner step and the mock checkout submission (service boundary). An accepted declaration survives Back and reload; drafts saved before R-011 never acquire acceptance; seeded acceptance is a labelled synthetic fixture. Me / Someone else keeps account ownership and billing with the registering owner; Someone else never transfers ownership, billing or permission to buy more stores; one designated admin per store. UI and documents never claim that email or payment proves ownership or delegated authority.
++**Requirement:** Registration is owner-only. C02 shows a required, initially unchecked checkbox labelled exactly "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.", with an accessible label, an inline error and an error-summary link, separate from terms/payment consent. Missing it blocks owner progression, deep links past the owner step and the mock checkout submission (service boundary). An accepted declaration survives Back and reload; drafts saved before R-011 never acquire acceptance; seeded acceptance is a labelled synthetic fixture. Me / Someone else keeps account ownership and billing with the registering owner; Someone else never transfers ownership, billing or permission to buy more stores; one designated admin per store. UI and documents never claim that email or payment proves ownership or delegated authority. (R-012) A pending or replayed checkout never reaches paid/confirmed activation unless the declaration is exactly `true` **now**: withdrawing it or restoring a pre-R-011 draft closes an open checkout (nothing charged, details kept); a submitted/unknown payment is held until explicit re-acceptance; same-key replay, outcomes, unknown resolution and activation refresh re-check the current draft at the service boundary, not only in the UI. Re-acceptance never silently reopens a closed checkout or restores consent; completed payment history is never reversed by later edits.
+ 
+-**Verification:** Service tests, component test, browser journeys (keyboard, 375/1440, light/dark), storage-migration check.
++**Verification:** Service tests, component test, browser journeys (keyboard, 375/1440, light/dark), storage-migration check; (R-012) withdrawal-after-checkout and legacy-over-pending reproductions with reload/direct navigation and replay.
+ 
+ **Evidence:** Missing/accepted/migrated declaration observations and copy review.
+ 
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
+index ac5f2c5..4b7fe1e 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
+@@ -40,3 +40,9 @@ Engineer appends meaningful checkpoints: time, identity, work, command/result ev
+ - Declaration enforced once, in `validateOwner`, so the owner step, deep links and `startCheckout` all inherit it; a quote still prices without it (pricing only).
+ - The real risk was old drafts: persisted v1 drafts are migrated with the declaration explicitly false; an allow-list keeps `businessRole` (or any stray key) out of drafts.
+ - One test expectation was wrong (expected `requestQuote` to fail); corrected to the mock submission (`startCheckout`). All browser runs passed first time, so 1 sign-in only.
++
++### 29 Oct 2026 — REPAIR_002 (Claudy)
++- Root cause CR-F01: the declaration was enforced only where a checkout is *created*; nothing re-checked it when an existing checkout was replayed, paid, resolved from unknown or confirmed on refresh, and owner edits never touched the checkout. Fix = close open checkouts on withdrawal/migration/material edit + a single `checkoutHold` gate on every move toward payment.
++- The review copy already promised "editing … closes the open checkout"; `touch` never did. That gap is R2-N01, found while reproducing.
++- Failed attempt: on the unrepaired baseline, billion-count test calls outside the push budget exhausted one Jest worker heap (4 GB) before I moved every extreme-count call inside the budget. Contained to that worker; recorded in the report.
++- R2-N02 found because the CR-F02 deep-link test failed: the route parsed `?store=` with `\d{1,2}`.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+index 7271853..368cba2 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+@@ -37,3 +37,4 @@ Owned: `next start -p 3001` from session scratchpad copy `run-r008/` (PID in `..
+ ## 9. Amendments after Q2 (appended; sections above are the E2 record)
+ - **REPAIR_001 (R-010)**, committed by the Director as `0d43a4c`: Q2-F01/F02/F03/O04/G06 + R1-N01. Report `../../EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md`.
+ - **AMENDMENT_001 (R-011, 29 Oct 2026)** — Coach-approved owner-only registration, Director-authorized before final certification. The C02 job-title select is removed; a required, initially unchecked owner declaration ("I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.") is enforced in the UI and in the mock service (owner step, deep links, checkout). v1 drafts migrate unaccepted. Me / Someone else copy clarifies that ownership, billing and permission to buy stores stay with the owner. Ownership-transfer copy is clarified with placeholders. ACCEPTANCE_SPEC v1.2 (AC-06 text, new AC-06a); DATA_CONTRACT v1.3; portal-contract v1.2. Report: `../../EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`. **Independent QA must cover AC-06a and re-run the REPAIR_001 retest on the combined candidate.**
++- **REPAIR_002 (R-012, 29 Oct 2026)** — QA Lead dispatch after Gate Q FAIL on `24cf075` (CR-F01 blocker, CR-F02 robustness, Q2-O04 residual). An open checkout is closed when the declaration is withdrawn, a v1 draft is restored or the draft changes materially; every move toward payment re-checks the current draft at the service; submitted/unknown payments are held until explicit re-acceptance; paid history untouched. Repeat-N entries materialize only as filled (no count-sized allocation); step 100+ route fixed (R2-N02, self-found); R2-N01 (count change kept a stale open checkout payable) self-found and fixed. Plan Actions column uses the approved divider/spacing. ACCEPTANCE_SPEC v1.3 (AC-05, AC-06a extended); DATA_CONTRACT v1.4. Report: `../../EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md`. **Independent retest required: CR-F01 A/B, CR-F02, the O04 residual and regression on the combined candidate. Cody's combined001 tests that expect the defect (e.g. the 64-push abort) will now observe the repaired behaviour.**
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+index 60f22f4..4c8fa81 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+@@ -88,3 +88,20 @@ Future amendment record: ID; date/seat; approving source; original observation;
+ - **Affected ACs/files:** AC-06 (validation) and a new AC-06a (owner declaration); DATA_CONTRACT v1.2→v1.3 (§4 OwnerDraft, §5 owner identity/admin assignment); `_project/portal-contract.ts` v1.1→v1.2; `_project/UI_SPEC.md` C02/C03 wording; ACCEPTANCE_SPEC v1.1→v1.2; ACCEPTANCE_LEDGER; QAM engineering handoff. Received design bytes (`_design/`, `_extraction/`) are preserved as history.
+ - **Required regression:** missing declaration blocks owner progression and the mock checkout; accepted declaration survives Back and reload; pre-R-011 drafts do not acquire acceptance; the job title no longer exists or affects registration; Me / Someone else keeps billing ownership; keyboard, mobile and both themes usable; REPAIR_001 regressions still pass.
+ - **Production note:** the eventual production ownership model (verification, delegated authority, transfer) is separate backend work and is not decided here.
++
++## R-012 — REPAIR_002: pending checkout must respect current prerequisites; count-driven work bounded (QA Lead dispatch, R-010 route)
++- **ID / date / seat:** R-012 · 29 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Repair authorized by JARVIS (QA Lead) under the existing R-010 repair route; no business decision is made here.
++- **Approving source:** QA Lead dispatch, 29 Oct 2026: "Gate Q FAIL for this candidate. CR-F01 blocks acceptance. CR-F02 requires a bounded robustness repair." … "A pending registration must not advance to paid/confirmed activation when the required owner declaration is no longer explicitly true. Enforce this in the mock service and UI. Hiding a button alone does not satisfy the repair." … "Do not reintroduce the unapproved 20-store business cap or silently substitute another arbitrary purchasing limit."
++- **Base:** `qa/ffm-abm-001-subscription-portal` @ `24cf075dc3c6252bc22712b067cbf9a8680f24fa` (Director commit of AMENDMENT_001).
++- **Repair semantics (frontend / mock service only):**
++  1. *Open checkout* = an unpaid checkout nobody has submitted payment on: status `pending` with no activation waiting, or `declined` (Stripe kept the visitor). *Submitted* = `pending` with activation `paymentState: pending` ("processing") or `unknown`. *Completed history* = `paid` / payment `confirmed`.
++  2. **Pending invalidation.** Withdrawing the owner declaration (owner step Continue or Back), restoring a storage-v1 draft, or any material draft change (store count, pharmacy details, code — the existing `touch`) **closes** an open checkout: status `abandoned`, new internal field `CheckoutRecord.closedReason` (`owner_declaration` | `details_changed`), quote dropped, consents cleared, draft details kept. Nothing is charged; the record is kept, not erased.
++  3. **Current-prerequisite gate.** Every move of an unpaid checkout toward payment re-checks the draft as it is now (`checkoutHold`: declaration exactly `true`, then `isDraftComplete`): same-key `startCheckout` replay, `resolveCheckout('paid' | 'processing')`, `resolveUnknownPayment('paid')`, and `refreshActivation` pending→confirmed. A failure returns `missing_context` and leaves state unchanged. Non-advancing outcomes (back, decline, unknown, nothing-charged, the payment-failed plan) stay available. A submitted payment is **held, not closed**: it can confirm once the owner explicitly accepts again.
++  4. **No silent restoration.** Re-accepting does not reopen a closed checkout or restore consent. The path is owner declaration → review ("Get a fresh quote") → fresh consent → a new checkout. Acceptance is never inferred from payment, email, store-admin nomination or an old checkout; storage-v1 drafts never carry acceptance over (forced `false`).
++  5. **Completed history is untouched:** a later draft edit never closes, reverses or rewrites a `paid` checkout or confirmed activation.
++  6. **CR-F02 — bounded work.** `setStoreCount` no longer creates one placeholder per requested store; pharmacy entries are created only as each step is filled in. Steps fill in order (`isPharmacyStep`: valid count, index < count, index ≤ entries), so a far index can't create a count-sized sparse array. Work and storage scale with entered pharmacies, never the requested count. No business cap is added; the only bound remains the technical safe-integer pricing bound (`MAX_REPRESENTABLE_STORES`, R-010/REPAIR_001).
++  7. **R2-N02 (self-found).** The pharmacy route accepted at most a two-digit `?store=`, so step 100+ silently rendered step 1, a hidden 99-store limit. It now accepts any safe integer; the view validates it against the draft.
++  8. **Q2-O04 residual.** The account plan Actions column uses the approved C10 treatment: divider above on mobile (`border-t pt-5`), beside on desktop (`lg:border-l lg:pl-8`, 20 rem), 12 px gaps.
++- **Unchanged:** database, RLS/RBAC, stored roles, live auth, Stripe, email, provisioning, vendors, dependencies; the real admin/superadmin gate (R-008/R-009); exact R-011 declaration, unchecked default, strict boolean validation, review summary, Me / Someone else; quote/consent rules; REPAIR_001 behaviour.
++- **Affected ACs/files:** AC-05 and AC-06a wording extended (ACCEPTANCE_SPEC v1.2→v1.3; nothing removed); DATA_CONTRACT v1.3→v1.4 (§6 initial purchase, §10 binding); UI_SPEC C05/C06/C14 hold/closed states; internal `src/types/portal/state.ts` (`closedReason`; not the frozen view contract, so `portal-contract.ts` is unchanged); ACCEPTANCE_LEDGER; QAM engineering handoff §9.
++- **Required regression:** both CR-F01 reproductions (current UI; legacy draft) refused at service and UI, with valid recovery after explicit acceptance; reload/direct navigation; same-key replay; processing/unknown holds; completed history preserved; bounded CR-F02 instrumentation; 1/2/3/21 stores; count reduction/restoration; invalid counts; REPAIR_001 and AMENDMENT_001 regressions.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
+index 057d480..e97af46 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
+@@ -50,3 +50,9 @@ Safe resume point: if E2 is approved, re-verify branch/HEAD/dirt against this fi
+ - Self-checks: build 0 · tsc 0 · jest 156/156 · Playwright 131/131 · Gate M 220/0 · contrast 0 failures. Not QA certification.
+ - Report `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` · ZIP `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip`. Owned server :3104 running.
+ - Next: Tony commits → independent QA on the combined candidate (AC-06a + REPAIR_001 retest) → JARVIS.
++
++## REPAIR_002 — 29 Oct 2026 (RULINGS R-012; QA Lead dispatch after Gate Q FAIL on 24cf075)
++- Base `24cf075` (AMENDMENT_001 committed). CR-F01: an open checkout is closed when the declaration is withdrawn, a v1 draft is restored or the draft changes materially; replay/outcomes/unknown/activation re-check the current draft at the service; submitted payments held; paid history untouched. CR-F02: no count-sized allocation; steps fill in order. Self-found R2-N01 (count change left an open checkout payable) and R2-N02 (step 100+ route). Q2-O04 residual Actions divider. Uncommitted, pending Director commit.
++- Self-checks: build 0 · tsc 0 · jest 13 suites 180/180 · Playwright 148/148 (public 100, Gate M public 13, account 35) · Gate M 236/0 · contrast 0 failures. Not QA certification.
++- Report `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` · ZIP `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip`.
++- Next: JARVIS reviews → Tony commits → Cody retests → Tony walkthrough → JARVIS certification decision.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
+index 1e36a3e..10637bd 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
+@@ -1,6 +1,6 @@
+ # DATA CONTRACT — Subscription Portal design and mock journeys
+ 
+-> Version: 1.3 · Date: 29 October 2026 (Asia/Dhaka) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
++> Version: 1.4 · Date: 29 October 2026 (Asia/Dhaka) · v1.4 applies R-012 (REPAIR_002: pending checkout respects current prerequisites; bounded repeat-N work) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
+ > Status: FFM contract under RULINGS R-001/R-005 · Owner: Architect
+ > Purpose: screen fields, mock relationships, transitions and permissions. NOT production SQL or a migration contract.
+ 
+@@ -80,6 +80,7 @@ Mock capability flags determine the visual fixtures. They are never proof of pro
+ `editing → ready_for_checkout → checkout_pending → payment_confirmed → provisioning → access_email_ready`
+ 
+ - Abandoned/back from Checkout: draft remains resumable, subscription inactive. The client return does not establish payment success.
++- (R-012) An open (unpaid, unsubmitted) checkout is closed — `abandoned` with a `closedReason`, nothing charged, details kept — when the owner declaration is withdrawn, a pre-R-011 draft is restored, or the draft changes materially. Moving any unpaid checkout toward payment (same-key replay, paid/processing outcome, unknown→paid, waiting→confirmed) re-checks the current draft: declaration exactly `true` and draft complete. A submitted or unknown payment is held, not closed, until that holds. Paid/confirmed history is never reversed by later edits.
+ - Decline: display a Stripe-side failure reference and allow retry; no account activation.
+ - Processing/delayed: payment confirmation and provisioning are distinct; a paid-but-delayed account must not invite the user to pay again.
+ - Email-send failure: show resend/support without losing the confirmed payment state. The FFM simulates delivery and never sends mail.
+@@ -154,6 +155,7 @@ Coach confirms subscription granularity and commercial policy. Architect/Enginee
+ - Store addition uses a stable operation key for retries while pending/succeeded. A repeated request with the same key returns the same result; it never adds/charges twice. A definitive failed attempt can be retried deliberately with a new key. Unknown/pending is not failure and must not open a second payment attempt.
+ - Paid/provisioning-attention adds one covered store in pending setup, keeps the financial change, holds invitation and prevents a duplicate addition. Paid amount, coverage and activation cannot contradict one another.
+ - Ordinary route navigation retains the draft. FFM sessionStorage stores synthetic data only, versioned, in two per-tab namespaces: the anonymous public registration draft and the account mock state keyed to the signed-in admin. A public page never reads the account namespace. Reset clears its namespace; actual logout clears both; identity change clears the account namespace. Theme storage may remain. A hard reload in the same tab restores the demo. Browser-close retention and cross-tab synchronization are not promises.
++- (R-012) Pharmacy entries are materialized only as each step is filled in, in order; the requested count alone never allocates per-store state, and any step number up to the count is addressable.
+ - All counter values >=1 are supported by a repeatable form/list, not a hardcoded second-store page. For an illustrative initial quote use 9900 + 4900 * (N - 1) cents; DEMO10 subtracts 1000 from due-now only. Each one-store add uses the fixed illustrative 2450-cent due-now fixture, never a production proration formula. Account counts and names drive downstream screens; the canonical two-store screenshot is one seed, not every account's state.
+ - Status changes only through explicit mock service outcomes. URL `success=true`, closing an external preview or viewing a success route cannot grant authentication, confirm payment or activate a store. Deep-link missing context routes back to a safe starting step with an explanation.
+ - Access-link and email demonstrations remain inert local previews. Recipients are synthetic. No token, payment SDK, API mutation, real email link or credential is generated.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+index 4c5b625..03dac55 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+@@ -95,6 +95,7 @@
+ 
+ ### C05 Stripe boundary — `stripe-checkout-handoff.html`
+ - **Ours:** `leaving` — spinner, "Opening Stripe's secure checkout…", what-happens-next list, manual continue/back links.
++- **R-012 states (ours, before the external frame):** `closed` — "This checkout was closed" (declaration withdrawn or details changed after checkout opened; nothing charged; link to review); `hold` — "Confirm the owner declaration before paying" / "Finish your signup details before paying" with no outcome buttons. C06 shows the matching hold alert with Refresh disabled while a waiting payment is held; C14 `payment_unknown` disables "Stripe confirms payment" while held, and `resumable` explains a closed checkout.
+ - **External (labelled "Preview · external surface", dashed frame):** `preview` (Checkout stand-in: order we send, greyed non-editable Stripe form blocks, demo-outcome buttons → activation / review / checkout-incomplete / declined), `declined` (Stripe keeps the user; our next surface is C14), `portal_preview` (Customer Portal stand-in reached from "Manage billing"; return refreshes C12).
+ - **Rule:** no editable card fields; access never granted from the browser return alone.
+ 

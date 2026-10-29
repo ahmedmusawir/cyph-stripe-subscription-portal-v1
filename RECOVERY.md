@@ -1,11 +1,19 @@
 # Recovery State — cyph-stripe-subscription-portal-v1
 
-Last action (2026-10-29 10:26): **AMENDMENT_001 COMPLETE (engineering), RULINGS R-011** — owner-only registration: job-title
+Last action (2026-10-29 13:35): **REPAIR_002 COMPLETE (engineering), RULINGS R-012**. This follows the QA Lead's Gate Q FAIL on 24cf075:
+  CR-F01 (owner declaration bypassed through a retained or replayed pending checkout), CR-F02 (count-driven allocation), Q2-O04 residual, and self-found
+  R2-N01/R2-N02. Uncommitted on `qa/ffm-abm-001-subscription-portal` @ 24cf075. build 0 · tsc 0 · jest 180/180 · Playwright
+  148/148 · Gate M 236/0. Report: module `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` · ZIP:
+  `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip` (+ `~/Downloads/`) · Session: `session_2026-10-29.md`.
+Pending: JARVIS review → Tony commits. No owned servers running; r003 scratch folder fully deleted (29 Oct). :3000 (PID 916513) and :3457 not owned.
+Next step: Cody independently retests → Tony walkthrough → JARVIS certification decision.
+
+Previous (2026-10-29 10:26): **AMENDMENT_001 COMPLETE (engineering), RULINGS R-011** — owner-only registration: job-title
   select removed, required owner declaration (UI + mock service), v1 drafts migrate unaccepted, admin/ownership copy clarified.
   Uncommitted on `qa/ffm-abm-001-subscription-portal` @ 0d43a4c (REPAIR_001 committed). build 0 · tsc 0 · jest 156/156 ·
   Playwright 131/131 · Gate M 220/0. Report: module `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` · ZIP:
   `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip` (+ `~/Downloads/`) · Session: `session_2026-10-29.md`.
-Pending: Tony commits. Owned server :3104 stopped (no owned servers running); scratch copy r002 retained until asked. REPAIR_001 scratch deleted.
+Pending: Tony commits. Owned server :3104 stopped (no owned servers running); all scratch app copies deleted (r002 on 29 Oct).
 Next step: independent QA on the combined candidate (AC-06a + REPAIR_001 retest) → JARVIS adjudicates.
 
 Previous (2026-10-28 16:24): **REPAIR_001 COMPLETE (engineering) for FFM-ABM-001-SUBSCRIPTION-PORTAL** under RULINGS R-010
