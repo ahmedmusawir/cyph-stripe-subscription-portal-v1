@@ -1,0 +1,50 @@
+[
+  {
+    surface: 'processing',
+    theme: 'light',
+    actualZoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'unknown',
+    theme: 'light',
+    actualZoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'unmatched',
+    theme: 'light',
+    actualZoom: true,
+    shortfalls: 0,
+    keyboard: false,
+    error: undefined
+  },
+  {
+    surface: 'processing',
+    theme: 'dark',
+    actualZoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'unknown',
+    theme: 'dark',
+    actualZoom: true,
+    shortfalls: 2,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'unmatched',
+    theme: 'dark',
+    actualZoom: true,
+    shortfalls: 0,
+    keyboard: false,
+    error: undefined
+  }
+]

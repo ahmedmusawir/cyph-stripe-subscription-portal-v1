@@ -1,0 +1,369 @@
+{
+  "config": {
+    "configFile": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers.config.ts",
+    "rootDir": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-readers-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-readers.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "phase-display.spec.ts",
+      "file": "phase-display.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "paid checkout remains visibly paid with activation flag none",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1277,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"There's no payment to track yet\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mThere's no payment to track yet\u001b[27m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActivation starts after checkout. Go to review\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"There's no payment to track yet\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mThere's no payment to track yet\u001b[27m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActivation starts after checkout. Go to review\"\u001b[39m\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:3:1610",
+                    "location": {
+                      "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                      "column": 1610,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n> 3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^\n  4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n  5 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                        "column": 1610,
+                        "line": 3
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"There's no payment to track yet\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mThere's no payment to track yet\u001b[27m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActivation starts after checkout. Go to review\"\u001b[39m\n\n  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n> 3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^\n  4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n  5 |\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:3:1610"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T02:53:50.269Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-readers-output/phase-display-paid-checkou-780e6-d-with-activation-flag-none/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                    "column": 1610,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bd2c53dfc7c36154cac4-a6db75e5f424ee3f23a8",
+          "file": "phase-display.spec.ts",
+          "line": 3,
+          "column": 63
+        },
+        {
+          "title": "paid checkout remains visibly paid with activation flag pending",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1137,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Waiting for payment confirmation\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mACTIVATION\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mWaiting for payment confirmation\u001b[27m\u001b[39m\n\u001b[31mActivation progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPayment\u001b[39m\n\u001b[31m— In progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWaiting for Stripe's confirmation.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPharmacy setup\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStarts after payment is confirmed.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mAccess email\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mSent once setup finishes.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mIn the real app this page updates by itself. In this demo, refresh to play the next confirmation.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mREFRESH STATUS\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWaiting for Stripe to confirm your payment\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mThis usually takes a moment. Your payment has been submitted, so please don't pay again.\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Waiting for payment confirmation\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mACTIVATION\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mWaiting for payment confirmation\u001b[27m\u001b[39m\n\u001b[31mActivation progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPayment\u001b[39m\n\u001b[31m— In progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWaiting for Stripe's confirmation.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPharmacy setup\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStarts after payment is confirmed.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mAccess email\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mSent once setup finishes.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mIn the real app this page updates by itself. In this demo, refresh to play the next confirmation.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mREFRESH STATUS\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWaiting for Stripe to confirm your payment\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mThis usually takes a moment. Your payment has been submitted, so please don't pay again.\"\u001b[39m\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:3:1547",
+                    "location": {
+                      "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                      "column": 1547,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n> 3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n  5 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                        "column": 1547,
+                        "line": 3
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Waiting for payment confirmation\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mACTIVATION\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mWaiting for payment confirmation\u001b[27m\u001b[39m\n\u001b[31mActivation progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPayment\u001b[39m\n\u001b[31m— In progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWaiting for Stripe's confirmation.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPharmacy setup\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStarts after payment is confirmed.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mAccess email\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mSent once setup finishes.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mIn the real app this page updates by itself. In this demo, refresh to play the next confirmation.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mREFRESH STATUS\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWaiting for Stripe to confirm your payment\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mThis usually takes a moment. Your payment has been submitted, so please don't pay again.\"\u001b[39m\n\n  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n> 3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^\n  4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n  5 |\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:3:1547"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T02:53:52.583Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-readers-output/phase-display-paid-checkou-39e85-ith-activation-flag-pending/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                    "column": 1547,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bd2c53dfc7c36154cac4-929403d9db269de45bdd",
+          "file": "phase-display.spec.ts",
+          "line": 3,
+          "column": 63
+        },
+        {
+          "title": "paid checkout remains visibly paid with activation flag failed",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1264,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Payment didn't go through\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mACTIVATION\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mPayment didn't go through\u001b[27m\u001b[39m\n\u001b[31mActivation progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPayment\u001b[39m\n\u001b[31m— Failed\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStripe reported the payment didn't complete.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPharmacy setup\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStarts after payment is confirmed.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mAccess email\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mSent once setup finishes.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWe haven't received a payment confirmation\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStripe reported the payment didn't complete (reference demo_decline_01). Nothing is set up yet and your details are saved.\u001b[39m\n\u001b[31mTRY PAYMENT AGAIN\u001b[39m\n\u001b[31mREVIEW MY DETAILS\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Payment didn't go through\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mACTIVATION\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mPayment didn't go through\u001b[27m\u001b[39m\n\u001b[31mActivation progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPayment\u001b[39m\n\u001b[31m— Failed\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStripe reported the payment didn't complete.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPharmacy setup\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStarts after payment is confirmed.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mAccess email\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mSent once setup finishes.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWe haven't received a payment confirmation\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStripe reported the payment didn't complete (reference demo_decline_01). Nothing is set up yet and your details are saved.\u001b[39m\n\u001b[31mTRY PAYMENT AGAIN\u001b[39m\n\u001b[31mREVIEW MY DETAILS\"\u001b[39m\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:3:1491",
+                    "location": {
+                      "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                      "column": 1491,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n> 3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^\n  4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n  5 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                        "column": 1491,
+                        "line": 3
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Payment didn't go through\"\u001b[39m\nReceived string:        \u001b[31m\"DEMO\u001b[39m\n\u001b[31mIllustrative pricing.\u001b[39m\n\u001b[31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mACTIVATION\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[7mPayment didn't go through\u001b[27m\u001b[39m\n\u001b[31mActivation progress\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPayment\u001b[39m\n\u001b[31m— Failed\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStripe reported the payment didn't complete.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mPharmacy setup\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStarts after payment is confirmed.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mAccess email\u001b[39m\n\u001b[31m— Not started\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mSent once setup finishes.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mWe haven't received a payment confirmation\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mStripe reported the payment didn't complete (reference demo_decline_01). Nothing is set up yet and your details are saved.\u001b[39m\n\u001b[31mTRY PAYMENT AGAIN\u001b[39m\n\u001b[31mREVIEW MY DETAILS\"\u001b[39m\n\n  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n> 3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^\n  4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n  5 |\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:3:1491"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T02:53:54.679Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-readers-output/phase-display-paid-checkou-7c009-with-activation-flag-failed/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                    "column": 1491,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bd2c53dfc7c36154cac4-6c283dad185ac8227080",
+          "file": "phase-display.spec.ts",
+          "line": 3,
+          "column": 63
+        },
+        {
+          "title": "paid checkout remains visibly paid with activation flag confirmed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1441,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T02:53:56.946Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bd2c53dfc7c36154cac4-674339a99932c72da268",
+          "file": "phase-display.spec.ts",
+          "line": 3,
+          "column": 63
+        },
+        {
+          "title": "resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6141,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('activation-not-charged')\nExpected substring: \u001b[32m\"Nothing was charged\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('activation-not-charged')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('activation-not-charged')\nExpected substring: \u001b[32m\"Nothing was charged\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('activation-not-charged')\u001b[22m\n\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:4:1023",
+                    "location": {
+                      "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                      "column": 1023,
+                      "line": 4
+                    },
+                    "snippet": "  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n  3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n> 4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^\n  5 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                        "column": 1023,
+                        "line": 4
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('activation-not-charged')\nExpected substring: \u001b[32m\"Nothing was charged\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('activation-not-charged')\u001b[22m\n\n\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n  3 | for(const flag of ['none','pending','failed','confirmed'])test(`paid checkout remains visibly paid with activation flag ${flag}`,async({page})=>{await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-${flag}-fixture.json`);for(let i=0;i<2;i++){const text=await page.locator('main').innerText();const snapshot=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout.status,payment:s.activation?.paymentState??null}},key);fs.appendFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-reader-observations.jsonl',JSON.stringify({flag,iteration:i,...snapshot,claimsFailed:text.includes(\"Payment didn't go through\"),claimsPending:text.includes('Waiting for payment confirmation'),claimsMissing:text.includes(\"There's no payment to track yet\"),retry:await page.getByRole('button',{name:'Try payment again',exact:true}).count(),refresh:await page.getByTestId('activation-refresh').count()})+'\\n');if(i===0&&flag==='failed')await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-paid-failed-display.png',fullPage:true});expect(snapshot.checkout).toBe('paid');expect(text).not.toContain(\"Payment didn't go through\");expect(text).not.toContain('Waiting for payment confirmation');expect(text).not.toContain(\"There's no payment to track yet\");await expect(page.getByRole('button',{name:'Try payment again',exact:true})).toHaveCount(0);if(flag!=='confirmed')await expect(page.getByTestId('activation-refresh')).toHaveCount(0);await page.reload()}});\n> 4 | test('resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-fixture.json');const text=await page.locator('main').innerText();fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-reader.json',JSON.stringify({hasNothingChargedNotice:text.includes('Nothing was charged for this payment'),hasMissingNotice:text.includes(\"There's no payment to track yet\")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-terminal-display.png',fullPage:true});await expect(page.getByTestId('activation-not-charged')).toContainText('Nothing was charged');await expect(page.getByRole('link',{name:'Continue my signup'})).toBeVisible();await expect(page.getByTestId('activation-refresh')).toHaveCount(0)});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^\n  5 |\n    at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts:4:1023"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T02:53:58.618Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/out/before/cody-r5-readers-output/phase-display-resolved-not-ac901-fter-activation-was-cleared/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/qa-readers/phase-display.spec.ts",
+                    "column": 1023,
+                    "line": 4
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bd2c53dfc7c36154cac4-38697dc25fc129ba30fe",
+          "file": "phase-display.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T02:53:49.539Z",
+    "duration": 15332.778,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

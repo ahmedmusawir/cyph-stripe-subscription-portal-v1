@@ -1,0 +1,6 @@
+Test Suites: 1 passed, 1 total
+Tests:       8 passed, 8 total
+Snapshots:   0 total
+Time:        0.728 s
+Ran all test suites within paths "qa-transition/predecessor-controls.test.ts".
+Test results written to: ../cody-r4-predecessor-controls.json

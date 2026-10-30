@@ -1,0 +1,171 @@
+
+Running 7 tests using 1 worker
+
+  ✘  1 [public] › e2e/public.repair004.spec.ts:73:5 › R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads (8.8s)
+  ✓  2 [public] › e2e/public.repair004.spec.ts:92:5 › R3-F01 known scope: an unedited legacy open checkout binds the quote it opened with and can be paid (5.5s)
+  ✓  3 [public] › e2e/public.repair004.spec.ts:101:5 › R3-F01 recovery: an edited legacy unknown payment stays unmatched; nothing charged → fresh quote → new key (6.9s)
+  ✘  4 [public] › e2e/public.repair004.spec.ts:159:5 › R3-F02: completed activation and its previews name no admin nominated after payment (3.6s)
+  ✘  5 [public] › e2e/public.repair004.spec.ts:174:5 › R3-F02 control: an admin the payment covered is still the one named and previewed (3.6s)
+  ✘  6 [public] › e2e/public.repair004.spec.ts:208:5 › R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores (10.7s)
+  ✘  7 [public] › e2e/public.repair004.spec.ts:240:5 › REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (9.0s)
+
+
+  1) [public] › e2e/public.repair004.spec.ts:73:5 › R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('checkout-hold')
+    Expected substring: [32m"We can't match this payment to your current details"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('checkout-hold')[22m
+
+
+      77 |   for (let i = 0; i < 2; i++) {
+      78 |     const hold = page.getByTestId("checkout-hold");
+    > 79 |     await expect(hold).toContainText("We can't match this payment to your current details");
+         |                        ^
+      80 |     await expect(hold).toContainText("Please don't pay again");
+      81 |     await expect(hold).not.toContainText("after you paid");
+      82 |     await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/e2e/public.repair004.spec.ts:79:24
+
+    Error Context: test-results/public.repair004-R3-F01-an-a59ca-d-no-payment-across-reloads-public/error-context.md
+
+  2) [public] › e2e/public.repair004.spec.ts:159:5 › R3-F02: completed activation and its previews name no admin nominated after payment 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+    Expected substring: [32m"sent to j•••@demo-pharmacy.example."[39m
+    Received string:    [31m"demo[39m
+    [31millustrative pricing.[39m
+    [31mamounts are engineering fixtures; final prices are pending coach/frank. nothing here charges a card, sends email or creates an account.·[39m
+    [31mactivation·[39m
+    [31myou're in. check your email.·[39m
+    [31mpayment is confirmed and your pharmacies are set up. we sent your access link to j•••@demo-pharmacy.example.·[39m
+    [31mactivation progress·[39m
+    [31mpayment[39m
+    [31m— done·[39m
+    [31mconfirmed by stripe · $99.00 (illustrative)·[39m
+    [31mpharmacy setup[39m
+    [31m— done·[39m
+    [31mexample main street pharmacy is set up in owedbook.·[39m
+    [31maccess email[39m
+    [31m— done·[39m
+    [31msent to j•••@demo-pharmacy.example · a separate store invitation went to replacement admin.·[39m
+    [31mopen the email “set up your pharmacy books account”·[39m
+    [31mthe link hands you to account setup. it works once and for a limited time [link lifetime tbd]. we don't sign you in from this page, and this demo never creates an account.·[39m
+    [31mpreview the access email[39m
+    [31mpreview replacement admin's invitation[39m
+    [31mdidn't get it?·[39m
+    [31mgive it a few minutes and check your spam folder. still nothing? send it again.·[39m
+    [31mresend access email·[39m
+    [31mwrong email address? contact [support email]. for your security we don't change it from this page."[39m
+
+      160 |   await completeThenNominate(page);
+      161 |   const main = await text(page);
+    > 162 |   expect(main).toContain("sent to j•••@demo-pharmacy.example.");
+          |                ^
+      163 |   expect(main).not.toContain("replacement admin");
+      164 |   expect(main).not.toContain("invitation");
+      165 |   for (const variant of ["owner", "store_admin"]) {
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/e2e/public.repair004.spec.ts:162:16
+
+    Error Context: test-results/public.repair004-R3-F02-co-530c5-min-nominated-after-payment-public/error-context.md
+
+  3) [public] › e2e/public.repair004.spec.ts:174:5 › R3-F02 control: an admin the payment covered is still the one named and previewed 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+    Expected substring: [32m"a separate store invitation went to sam ortiz"[39m
+    Received string:    [31m"demo[39m
+    [31millustrative pricing.[39m
+    [31mamounts are engineering fixtures; final prices are pending coach/frank. nothing here charges a card, sends email or creates an account.·[39m
+    [31mactivation·[39m
+    [31myou're in. check your email.·[39m
+    [31mpayment is confirmed and your pharmacies are set up. we sent your access link to j•••@demo-pharmacy.example.·[39m
+    [31mactivation progress·[39m
+    [31mpayment[39m
+    [31m— done·[39m
+    [31mconfirmed by stripe · $99.00 (illustrative)·[39m
+    [31mpharmacy setup[39m
+    [31m— done·[39m
+    [31mexample main street pharmacy is set up in owedbook.·[39m
+    [31maccess email[39m
+    [31m— done·[39m
+    [31msent to j•••@demo-pharmacy.example · a separate store invitation went to replacement admin.·[39m
+    [31mopen the email “set up your pharmacy books account”·[39m
+    [31mthe link hands you to account setup. it works once and for a limited time [link lifetime tbd]. we don't sign you in from this page, and this demo never creates an account.·[39m
+    [31mpreview the access email[39m
+    [31mpreview replacement admin's invitation[39m
+    [31mdidn't get it?·[39m
+    [31mgive it a few minutes and check your spam folder. still nothing? send it again.·[39m
+    [31mresend access email·[39m
+    [31mwrong email address? contact [support email]. for your security we don't change it from this page."[39m
+
+      175 |   await completeThenNominate(page, SAM);
+      176 |   const main = await text(page);
+    > 177 |   expect(main).toContain("a separate store invitation went to sam ortiz");
+          |                ^
+      178 |   expect(main).not.toContain("replacement admin");
+      179 |   await page.getByRole("link", { name: "Preview Sam Ortiz's invitation" }).click();
+      180 |   await page.waitForURL("**/demo/references/email?variant=store_admin");
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/e2e/public.repair004.spec.ts:177:16
+
+    Error Context: test-results/public.repair004-R3-F02-co-188a9-the-one-named-and-previewed-public/error-context.md
+
+  4) [public] › e2e/public.repair004.spec.ts:208:5 › R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores 
+
+    Error: dark outer
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m3[39m
+    Received:    [31m2.9941945342929457[39m
+
+      229 |     const r = await ringRatios(page);
+      230 |     recordContrast("focus-repair004.jsonl", { screen: "/demo/checkout-incomplete [restore-scope]", theme, ...r });
+    > 231 |     expect(r.outer, `${theme} outer`).toBeGreaterThanOrEqual(3);
+          |                                       ^
+      232 |     expect(r.inner, `${theme} inner`).toBeGreaterThanOrEqual(3);
+      233 |     await page.screenshot({ path: `test-results/repair004-focus-restore_${theme}.png` });
+      234 |     await page.keyboard.press("Enter");
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/e2e/public.repair004.spec.ts:231:39
+
+    Error Context: test-results/public.repair004-R3-O03-th-f0449-themes-Enter-still-restores-public/error-context.md
+
+  5) [public] › e2e/public.repair004.spec.ts:240:5 › REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('checkout-hold')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('checkout-hold')[22m
+
+
+      253 |         await setTheme(page, theme);
+      254 |         await page.reload();
+    > 255 |         await expect(page.getByTestId(sc.ready)).toBeVisible({ timeout: 5000 });
+          |                                                  ^
+      256 |         const g = await measure(page, `${sc.url} [REPAIR_004 ${sc.name}]`, width, theme);
+      257 |         record("gate-m-repair004.jsonl", g);
+      258 |         assertGate(g);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/e2e/public.repair004.spec.ts:255:50
+
+    Error Context: test-results/public.repair004-REPAIR-00-6ad66-Gate-M-contrast-screenshots-public/error-context.md
+
+  5 failed
+    [public] › e2e/public.repair004.spec.ts:73:5 › R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads 
+    [public] › e2e/public.repair004.spec.ts:159:5 › R3-F02: completed activation and its previews name no admin nominated after payment 
+    [public] › e2e/public.repair004.spec.ts:174:5 › R3-F02 control: an admin the payment covered is still the one named and previewed 
+    [public] › e2e/public.repair004.spec.ts:208:5 › R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores 
+    [public] › e2e/public.repair004.spec.ts:240:5 › REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+  2 passed (53.5s)

@@ -1,0 +1,140 @@
+
+Running 7 tests using 1 worker
+
+  ✘  1 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (3.5s)
+  ✘  2 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (4.0s)
+  ✘  3 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (4.0s)
+  ✘  4 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (4.1s)
+  ✘  5 [public] › e2e/public.repair003.spec.ts:114:5 › R2-F01 valid recovery for the edited details: unknown → nothing charged → fresh quote for 2 → new checkout with a new key (3.5s)
+  ✓  6 [public] › e2e/public.repair003.spec.ts:137:5 › R2-F02: closing a checkout from the review page and paying again on the same page uses a new key (6.1s)
+  ✘  7 [public] › e2e/public.repair003.spec.ts:155:5 › R-013 holds at 375 and 1440, light and dark: Gate M, contrast, screenshots (3.9s)
+
+
+  1) [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [1mMatcher error[22m: [31mreceived[39m value must be a non-null object
+
+    Received has value: [31mnull[39m
+
+      49 |   await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
+      50 |   const s = await snap(page);
+    > 51 |   expect(s.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+         |                   ^
+      52 |   return s.key!;
+      53 | }
+      54 |
+        at submit (/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:51:19)
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:83:19
+
+    Error Context: test-results/public.repair003-R2-F01-pr-6ce68-d-for-confirms-the-original-public/error-context.md
+
+  2) [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [1mMatcher error[22m: [31mreceived[39m value must be a non-null object
+
+    Received has value: [31mnull[39m
+
+      49 |   await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
+      50 |   const s = await snap(page);
+    > 51 |   expect(s.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+         |                   ^
+      52 |   return s.key!;
+      53 | }
+      54 |
+        at submit (/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:51:19)
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:83:19
+
+    Error Context: test-results/public.repair003-R2-F01-pr-89b97-d-for-confirms-the-original-public/error-context.md
+
+  3) [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [1mMatcher error[22m: [31mreceived[39m value must be a non-null object
+
+    Received has value: [31mnull[39m
+
+      49 |   await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
+      50 |   const s = await snap(page);
+    > 51 |   expect(s.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+         |                   ^
+      52 |   return s.key!;
+      53 | }
+      54 |
+        at submit (/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:51:19)
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:83:19
+
+    Error Context: test-results/public.repair003-R2-F01-un-4f8bc-d-for-confirms-the-original-public/error-context.md
+
+  4) [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [1mMatcher error[22m: [31mreceived[39m value must be a non-null object
+
+    Received has value: [31mnull[39m
+
+      49 |   await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
+      50 |   const s = await snap(page);
+    > 51 |   expect(s.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+         |                   ^
+      52 |   return s.key!;
+      53 | }
+      54 |
+        at submit (/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:51:19)
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:83:19
+
+    Error Context: test-results/public.repair003-R2-F01-un-82376-d-for-confirms-the-original-public/error-context.md
+
+  5) [public] › e2e/public.repair003.spec.ts:114:5 › R2-F01 valid recovery for the edited details: unknown → nothing charged → fresh quote for 2 → new checkout with a new key 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [1mMatcher error[22m: [31mreceived[39m value must be a non-null object
+
+    Received has value: [31mnull[39m
+
+      49 |   await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
+      50 |   const s = await snap(page);
+    > 51 |   expect(s.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+         |                   ^
+      52 |   return s.key!;
+      53 | }
+      54 |
+        at submit (/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:51:19)
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:115:15
+
+    Error Context: test-results/public.repair003-R2-F01-va-9589f-new-checkout-with-a-new-key-public/error-context.md
+
+  6) [public] › e2e/public.repair003.spec.ts:155:5 › R-013 holds at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [1mMatcher error[22m: [31mreceived[39m value must be a non-null object
+
+    Received has value: [31mnull[39m
+
+      49 |   await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
+      50 |   const s = await snap(page);
+    > 51 |   expect(s.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+         |                   ^
+      52 |   return s.key!;
+      53 | }
+      54 |
+        at submit (/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:51:19)
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r006/app/e2e/public.repair003.spec.ts:159:5
+
+    Error Context: test-results/public.repair003-R-013-hol-47666-Gate-M-contrast-screenshots-public/error-context.md
+
+  6 failed
+    [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+    [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+    [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+    [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original 
+    [public] › e2e/public.repair003.spec.ts:114:5 › R2-F01 valid recovery for the edited details: unknown → nothing charged → fresh quote for 2 → new checkout with a new key 
+    [public] › e2e/public.repair003.spec.ts:155:5 › R-013 holds at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+  1 passed (35.1s)

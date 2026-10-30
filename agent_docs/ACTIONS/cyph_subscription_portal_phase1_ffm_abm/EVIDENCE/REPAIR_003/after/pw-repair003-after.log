@@ -1,0 +1,12 @@
+
+Running 7 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (8.5s)
+  ✓  2 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 processing: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (8.6s)
+  ✓  3 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a pharmacy name edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (6.9s)
+  ✓  4 [public] › e2e/public.repair003.spec.ts:82:9 › R2-F01 unknown: after a count 1 → 2 with a second pharmacy edit the payment can't confirm the edit; "Use the details I paid for" confirms the original (7.2s)
+  ✓  5 [public] › e2e/public.repair003.spec.ts:114:5 › R2-F01 valid recovery for the edited details: unknown → nothing charged → fresh quote for 2 → new checkout with a new key (8.1s)
+  ✓  6 [public] › e2e/public.repair003.spec.ts:137:5 › R2-F02: closing a checkout from the review page and paying again on the same page uses a new key (6.4s)
+  ✓  7 [public] › e2e/public.repair003.spec.ts:155:5 › R-013 holds at 375 and 1440, light and dark: Gate M, contrast, screenshots (13.4s)
+
+  7 passed (1.0m)

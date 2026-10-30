@@ -1,0 +1,12 @@
+
+Running 7 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 processing: Review, reload, direct navigation and Back never close the submitted payment or open another (7.2s)
+  ✓  2 [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 unknown: Review, reload, direct navigation and Back never close the submitted payment or open another (7.5s)
+  ✓  3 [public] › e2e/public.repair004-addendum.spec.ts:85:5 › R4-N01 preserved: an unsubmitted open checkout can still be closed from Review and paid with a new key (6.4s)
+  ✓  4 [public] › e2e/public.repair004-addendum.spec.ts:100:5 › R4-N01 preserved: a genuine payment failure recovers through a fresh quote and a new checkout (3.2s)
+  ✓  5 [public] › e2e/public.repair004-addendum.spec.ts:117:5 › R4-N01 preserved: unknown → nothing charged recovers through a fresh quote and a new checkout (6.7s)
+  ✓  6 [public] › e2e/public.repair004-addendum.spec.ts:147:5 › completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt (4.5s)
+  ✓  7 [public] › e2e/public.repair004-addendum.spec.ts:166:5 › REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (16.8s)
+
+  7 passed (53.5s)

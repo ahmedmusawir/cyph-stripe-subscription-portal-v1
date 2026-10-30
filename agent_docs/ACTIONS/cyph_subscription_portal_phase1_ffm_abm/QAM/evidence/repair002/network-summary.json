@@ -1,0 +1,26 @@
+[
+  {
+    "method": "POST",
+    "category": "supabase",
+    "path": "/auth/v1/verify",
+    "count": 3
+  },
+  {
+    "method": "POST",
+    "category": "supabase",
+    "path": "/auth/v1/token",
+    "count": 2
+  },
+  {
+    "method": "GET",
+    "category": "supabase",
+    "path": "/rest/v1/user_roles",
+    "count": 59
+  },
+  {
+    "method": "GET",
+    "category": "supabase",
+    "path": "/auth/v1/user",
+    "count": 229
+  }
+]

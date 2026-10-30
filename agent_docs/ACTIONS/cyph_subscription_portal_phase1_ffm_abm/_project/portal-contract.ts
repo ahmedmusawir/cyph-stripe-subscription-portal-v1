@@ -1,4 +1,4 @@
-/** FFM contract v1.1. Pure types; no SDK/runtime implementation. */
+/** FFM contract v1.2 (R-011: owner declaration replaces businessRole). Pure types; no SDK/runtime implementation. */
 export type Cents = number; // Integer, >=0; validate at mock-service boundary.
 export type ISODate = string;
 export type Persona = 'prospective_owner' | 'billing_owner' | 'store_admin' | 'member';
@@ -17,7 +17,8 @@ export interface PlanView {
 }
 export interface OwnerDraft {
  firstName: string; lastName: string; email: string; mobile: string;
- businessRole: 'owner' | 'pharmacist_in_charge' | 'manager' | 'other'; legalBusinessName?: string;
+ /** R-011: explicit owner self-declaration (initially false; must be exactly true). Not proof of ownership. */
+ ownerDeclarationAccepted: boolean; legalBusinessName?: string;
 }
 export type AdminAssignment = {kind:'owner'} | {kind:'other'; fullName:string; email:string};
 export interface PharmacyDraft {

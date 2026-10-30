@@ -1,0 +1,3051 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-r2-snapshot/qa.config.ts",
+    "rootDir": "/tmp/cody-r2-snapshot/qa-e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-r2-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "public",
+        "name": "public",
+        "testDir": "/tmp/cody-r2-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.(journeys|owner-declaration|boundaries|repair002)\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/tmp/cody-r2-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "routes",
+        "name": "routes",
+        "testDir": "/tmp/cody-r2-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.repair\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/tmp/cody-r2-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "account",
+        "name": "account",
+        "testDir": "/tmp/cody-r2-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/account\\.repair\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-r2-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "public.boundaries.spec.ts",
+      "file": "public.boundaries.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "anonymous /dashboard → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 264,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.084Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-12ac4010c196d4c1e907",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stores/add → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.380Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-05e95c983b509df0798c",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stores/confirm → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 85,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.502Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-4d9cc7d967a93c7a7dac",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stores/result → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 67,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.604Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-8fc8ae884bd27df1f506",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/references/owedbook → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 51,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.686Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-f6362673ca775ad0874b",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stripe?mode=portal → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 47,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.744Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-213b03ff5690898de753",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stripe?mode=portal&purpose=cancel → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 55,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.796Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-63d1fd68c8893588b7ea",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "anonymous /demo/stripe?mode=card → /login with no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 41,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.858Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-9f1e71bb4df84c5062b3",
+          "file": "public.boundaries.spec.ts",
+          "line": 20,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/plan → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 66,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.909Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-93ce4414a87600849f46",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/owner → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:45.986Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-b80f5e1f35376f7f2195",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/pharmacies → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 28,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.023Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-311da3ba91834e794acf",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/register/review → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.062Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-ed007df2625b5e010ec8",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/stripe → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.081Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-962622c21e3aa939ce58",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/activation → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.098Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-2850c6960c69c09dc66e",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/checkout-incomplete → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 25,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.119Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-9612e27c944f715f9897",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/access-link → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.151Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-30f410b7fcfe5ab59580",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /demo/references/email → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.170Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-f6be768f34977f9c3342",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "public /login → 200 without login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.184Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-2a0bc63baaf85719fddc",
+          "file": "public.boundaries.spec.ts",
+          "line": 52,
+          "column": 7
+        },
+        {
+          "title": "forged role values in query, cookies and storage grant nothing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1059,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:46.208Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-2a1a5426491689c2ac06",
+          "file": "public.boundaries.spec.ts",
+          "line": 58,
+          "column": 5
+        },
+        {
+          "title": "foundation regressions: GET login 405, removed routes 404, /demo/sign-in → /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 89,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:47.458Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-ce9c451c5a2cc4d5e7ff",
+          "file": "public.boundaries.spec.ts",
+          "line": 78,
+          "column": 5
+        },
+        {
+          "title": "session expired banner via enum only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 469,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:47.559Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "baeabe33f17e0886b1a6-3107ea7634b6cc735a23",
+          "file": "public.boundaries.spec.ts",
+          "line": 86,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.journeys.spec.ts",
+      "file": "public.journeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "/ opens the public plan screen with a sign-in path to the real /login",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 699,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:48.056Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-2ca1912c526d0150173e",
+          "file": "public.journeys.spec.ts",
+          "line": 52,
+          "column": 5
+        },
+        {
+          "title": "anonymous 1-store registration end to end, never asked to log in, no external hosts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6698,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:48.773Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-5364c44e2293104373b5",
+          "file": "public.journeys.spec.ts",
+          "line": 65,
+          "column": 5
+        },
+        {
+          "title": "3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4974,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:53:55.489Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-94ff66cb8553547e7bc9",
+          "file": "public.journeys.spec.ts",
+          "line": 104,
+          "column": 5
+        },
+        {
+          "title": "count reduction asks before discarding entered pharmacies",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3640,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:00.480Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-744ad23b01c200f045ca",
+          "file": "public.journeys.spec.ts",
+          "line": 123,
+          "column": 5
+        },
+        {
+          "title": "validation keeps input, focuses the summary, flags duplicates without naming the owner",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2774,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:04.136Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-2844dd0526c71620e700",
+          "file": "public.journeys.spec.ts",
+          "line": 136,
+          "column": 5
+        },
+        {
+          "title": "abandoned checkout resumes with values; unknown payment pauses payment",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8224,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:06.929Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-1111c2d0bddef3ac5cd6",
+          "file": "public.journeys.spec.ts",
+          "line": 156,
+          "column": 5
+        },
+        {
+          "title": "forged success URL or direct visits change nothing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 646,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:15.168Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-a78c8315ba5570b83b01",
+          "file": "public.journeys.spec.ts",
+          "line": 178,
+          "column": 5
+        },
+        {
+          "title": "hostile text renders as text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2515,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:15.830Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4869ae07d4339621b0a-cd6b47250309a6b82025",
+          "file": "public.journeys.spec.ts",
+          "line": 188,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.owner-declaration.spec.ts",
+      "file": "public.owner-declaration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "no job-title dropdown; declaration is unchecked and required; missing it blocks progression",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:18.363Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "10eba91d5169e8bb1751-361b2321e10dda1f3287",
+          "file": "public.owner-declaration.spec.ts",
+          "line": 22,
+          "column": 5
+        },
+        {
+          "title": "accepted declaration survives Back and reload; separate from terms/payment consent",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1630,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:19.711Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "10eba91d5169e8bb1751-19418bc38e774e4a3a93",
+          "file": "public.owner-declaration.spec.ts",
+          "line": 41,
+          "column": 5
+        },
+        {
+          "title": "a pre-amendment (v1) draft does not acquire acceptance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1288,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:21.350Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "10eba91d5169e8bb1751-a5d615b325422ae54f25",
+          "file": "public.owner-declaration.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "Me / Someone else copy keeps ownership and billing with the registering owner",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1723,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:22.655Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "10eba91d5169e8bb1751-a519f657c1c337c8cecd",
+          "file": "public.owner-declaration.spec.ts",
+          "line": 85,
+          "column": 5
+        },
+        {
+          "title": "keyboard + mobile + both themes: declaration usable at 375 and 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2789,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:24.397Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "10eba91d5169e8bb1751-65d0962a9450de0affe6",
+          "file": "public.owner-declaration.spec.ts",
+          "line": 98,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.repair002.spec.ts",
+      "file": "public.repair002.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12242,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:27.223Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-91534cf17962ac963bd8",
+          "file": "public.repair002.spec.ts",
+          "line": 79,
+          "column": 5
+        },
+        {
+          "title": "CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5421,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:39.479Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-315f25105822aaf6df1e",
+          "file": "public.repair002.spec.ts",
+          "line": 106,
+          "column": 5
+        },
+        {
+          "title": "CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:44.919Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-df0538c5fc8896423c88",
+          "file": "public.repair002.spec.ts",
+          "line": 118,
+          "column": 5
+        },
+        {
+          "title": "a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5291,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:54.064Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-84e2123980a277ee1da8",
+          "file": "public.repair002.spec.ts",
+          "line": 139,
+          "column": 5
+        },
+        {
+          "title": "processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5911,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:54:59.369Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-2c2fc3d6259282e800e3",
+          "file": "public.repair002.spec.ts",
+          "line": 158,
+          "column": 5
+        },
+        {
+          "title": "unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1398,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:05.289Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-25e221c3fc33792698f4",
+          "file": "public.repair002.spec.ts",
+          "line": 178,
+          "column": 5
+        },
+        {
+          "title": "R2-N01: changing the store count while checkout is open closes it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5305,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:06.704Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-606fa5cddbd82a8c5d3c",
+          "file": "public.repair002.spec.ts",
+          "line": 192,
+          "column": 5
+        },
+        {
+          "title": "valid open checkout: review ↔ stand-in round trips and reloads replay one checkout, then pay once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6305,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:12.022Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-ddb579800d3b79b7f4e7",
+          "file": "public.repair002.spec.ts",
+          "line": 203,
+          "column": 5
+        },
+        {
+          "title": "R2-N02: pharmacy step 100 of 100 is reachable (no hidden two-digit step limit)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1980,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:18.340Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-907cc8103b4904a22e5f",
+          "file": "public.repair002.spec.ts",
+          "line": 221,
+          "column": 5
+        },
+        {
+          "title": "CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1860,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:20.340Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-b78d85300bf2f3f21659",
+          "file": "public.repair002.spec.ts",
+          "line": 239,
+          "column": 5
+        },
+        {
+          "title": "CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2172,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:22.210Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-64cfaa6fc531d9fc34b3",
+          "file": "public.repair002.spec.ts",
+          "line": 264,
+          "column": 5
+        },
+        {
+          "title": "21 pharmacies: full journey through review, checkout and activation at $1,079.00",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19039,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:24.401Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-909b8de24105c6193120",
+          "file": "public.repair002.spec.ts",
+          "line": 287,
+          "column": 5
+        },
+        {
+          "title": "R-012 surface: stand-in closed — Gate M 375/1440 and contrast, light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12504,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:43.456Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-cb1a51a484b37965ad92",
+          "file": "public.repair002.spec.ts",
+          "line": 369,
+          "column": 7
+        },
+        {
+          "title": "R-012 surface: stand-in hold — Gate M 375/1440 and contrast, light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12593,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:55:55.981Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-6faf88a00900d49318f7",
+          "file": "public.repair002.spec.ts",
+          "line": 369,
+          "column": 7
+        },
+        {
+          "title": "R-012 surface: activation hold — Gate M 375/1440 and contrast, light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10172,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:08.588Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-3319be1b37aeb99003c2",
+          "file": "public.repair002.spec.ts",
+          "line": 369,
+          "column": 7
+        },
+        {
+          "title": "R-012 surface: unknown hold — Gate M 375/1440 and contrast, light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10135,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:18.774Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-1d0bb257cd930144a778",
+          "file": "public.repair002.spec.ts",
+          "line": 369,
+          "column": 7
+        },
+        {
+          "title": "C14 intro [checkout_unknown]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2653,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:28.923Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-c2097ad25cfd0faf14b4",
+          "file": "public.repair002.spec.ts",
+          "line": 404,
+          "column": 7
+        },
+        {
+          "title": "C14 intro [checkout_abandoned]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2110,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:31.596Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-bea088c7e0c73f251ee1",
+          "file": "public.repair002.spec.ts",
+          "line": 404,
+          "column": 7
+        },
+        {
+          "title": "C14 intro [checkout_declined]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "public",
+              "projectName": "public",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2288,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:33.725Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-b7c839e440dd50fd3d02",
+          "file": "public.repair002.spec.ts",
+          "line": 404,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "public.repair.spec.ts",
+      "file": "public.repair.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "F03 anonymous /demo/stripe?mode=checkout&mode=portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 111,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:36.801Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-b88ce0893f9516068466",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=portal&mode=checkout → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 82,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:36.936Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-69e9d9d4dd8da71f958b",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=card&mode=card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 55,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.042Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-5b075f865474819420c2",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=checkout&mode=card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 41,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.117Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-0133189e82c2bc4e117d",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=card&mode=portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 37,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.180Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-f7ad4e74b8862496028a",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 45,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.228Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-076ff03b7a576bf2236f",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 41,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.283Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-93fc0b5135e454e4d61f",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=Portal → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.335Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-43d10ea86db9d1a64b93",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=%20portal%20 → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.386Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-8ede2c822c1920a34c4f",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=CARD&purpose=change_card → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 41,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.424Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-139633efa60eacd7dbfd",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=portal&purpose=cancel&purpose=manage → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 34,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.471Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-bdd8f662a0013c09a5ac",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode=unknown → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 44,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.514Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-eecab03dbe4f78b77e17",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 anonymous /demo/stripe?mode= → /login, no account payload (HTML and RSC)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.567Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-18b2c50c45bf459ba213",
+          "file": "public.repair.spec.ts",
+          "line": 25,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.613Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-70446d2159ce6d1953fc",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe?mode=checkout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 28,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.630Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-df53f5d6c93bebfe48b7",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe?mode=checkout&mode=checkout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.672Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-ee36cb9ff161f37e33fc",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "F03 public initial checkout stays public: /demo/stripe?mode=CHECKOUT",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.703Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-f442127a5beb8afbb548",
+          "file": "public.repair.spec.ts",
+          "line": 43,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm? → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 29,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.730Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-9e07384e15fc77d50dfa",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?type=email → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 20,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.767Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-3050d0ea9bdd844335cd",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash= → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.796Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-c03d244a17d0fa22ea03",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=bogus → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1367,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:37.830Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-a8b356bb603d63f57e1e",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 381,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:39.207Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-69691fa2884ab93c2153",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email&next=https://evil.example/ → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 372,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:39.598Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-a5b7a8b6f02ca679809d",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        },
+        {
+          "title": "AC-26 /api/auth/confirm?type=recovery&next=//evil.example → same-origin /login, no session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "routes",
+              "projectName": "routes",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:39.977Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "529177e78cf4b25b77ce-2806ea9b4394f55b032f",
+          "file": "public.repair.spec.ts",
+          "line": 63,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "account.repair.spec.ts",
+      "file": "account.repair.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "F02: load error stays until Retry, survives navigation and reload, Retry recovers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "load-retry-seen-at-least-once",
+                  "description": "true"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11782,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:40.698Z",
+                  "annotations": [
+                    {
+                      "type": "load-retry-seen-at-least-once",
+                      "description": "true"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-183cbe369b2b001a3e0a",
+          "file": "account.repair.spec.ts",
+          "line": 30,
+          "column": 5
+        },
+        {
+          "title": "F02: Retry shows a busy state, then a coherent account (both themes)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8384,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:57.126Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-89ecc243e0d7843e2533",
+          "file": "account.repair.spec.ts",
+          "line": 57,
+          "column": 5
+        },
+        {
+          "title": "O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3648,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:57:05.527Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-af010ff638be2764f6a1",
+          "file": "account.repair.spec.ts",
+          "line": 70,
+          "column": 5
+        },
+        {
+          "title": "O04: returned-from-Stripe and refreshing variants of the refresh line",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5634,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:57:09.198Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-d8ffedec09e3949fca9e",
+          "file": "account.repair.spec.ts",
+          "line": 115,
+          "column": 5
+        },
+        {
+          "title": "transient states are observable: loading, launching, saving, quote loading, confirming",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12678,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:57:14.859Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-902837f7abbef7e39223",
+          "file": "account.repair.spec.ts",
+          "line": 125,
+          "column": 5
+        },
+        {
+          "title": "keyboard only: add store → confirm → result with no pointer input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7501,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:57:27.549Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-3d92948aa554fc18a75a",
+          "file": "account.repair.spec.ts",
+          "line": 186,
+          "column": 5
+        },
+        {
+          "title": "O04 evidence screenshots (real identity masked)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7591,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:57:35.074Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-f6e0ced8d585787419da",
+          "file": "account.repair.spec.ts",
+          "line": 302,
+          "column": 5
+        },
+        {
+          "title": "O04 residual: Actions divider above on mobile, beside on desktop; approved spacing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "account",
+              "projectName": "account",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18001,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:57:42.688Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cb8fe59ffdb280e1208c-0de5784380a3bab4113d",
+          "file": "account.repair.spec.ts",
+          "line": 318,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-29T09:53:43.979Z",
+    "duration": 256845.242,
+    "expected": 85,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

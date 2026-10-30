@@ -2,47 +2,78 @@
   "module": "FFM-ABM-001-SUBSCRIPTION-PORTAL",
   "manifest": "installed-file hash manifest (separate from FILE_INDEX.json, which describes delivered bytes)",
   "install_root": "agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm",
-  "generated": "2026-10-27 Asia/Dhaka, E1",
+  "generated": "2026-10-27 Asia/Dhaka, regenerated at E2 return (R-009)",
   "excludes_self": true,
   "source_archive": {
     "path": "/home/moose/Downloads/FFM-ABM-001-SUBSCRIPTION-PORTAL_v1_0.zip",
     "sha256": "5c0ad43a4682d85b7b357cad50d3299df9b6c33d30f94d81e62cde35be97372e"
   },
   "counts": {
-    "files": 394,
-    "original_unchanged": 383,
-    "modified_after_install": 8,
-    "added_after_install": 2,
+    "files": 409,
+    "original_unchanged": 367,
+    "modified_after_install": 24,
+    "added_after_install": 17,
     "missing_from_index": 0
   },
   "modified_after_install": [
+    "ACCEPTANCE_LEDGER.md",
+    "ACCEPTANCE_SPEC.md",
     "AGENTS.md",
     "CLAUDE.md",
     "EXECUTION_PLAN.md",
     "GEMINI.md",
     "JOURNAL.md",
+    "QAM/HANDOFFS/ENGINEERING_HANDOFF.md",
+    "QAM/QAM_MANIFEST.md",
+    "QAM/QAM_PREFLIGHT.md",
+    "QAM/QAM_RISK_REQUIREMENTS.md",
+    "QAM/QAM_STATE.md",
     "README.md",
+    "RETROSPECTIVE.md",
     "RULINGS.md",
-    "STATE.md"
+    "SKILLS_MANIFEST.md",
+    "STATE.md",
+    "_project/APP_BRIEF.md",
+    "_project/DATA_CONTRACT.md",
+    "_project/IMPLEMENTATION_CONTRACT.md",
+    "_project/UI_SPEC.md",
+    "playbook/04-MOCKS.md",
+    "playbook/05-COMPONENTS.md",
+    "verification/BUILD_CHECKLIST.md"
   ],
   "added_after_install": [
     "EVIDENCE/E1_RECON.md",
+    "EVIDENCE/E2/01_build.log",
+    "EVIDENCE/E2/02_typecheck.log",
+    "EVIDENCE/E2/03_jest.log",
+    "EVIDENCE/E2/04_playwright.log",
+    "EVIDENCE/E2/05_rebuild_after_pill_fix.log",
+    "EVIDENCE/E2/gate-m-account.jsonl",
+    "EVIDENCE/E2/gate-m-public.jsonl",
+    "EVIDENCE/E2/screenshots/account-billing_active_dark_desktop.png",
+    "EVIDENCE/E2/screenshots/account-billing_active_light_mobile.png",
+    "EVIDENCE/E2/screenshots/account-billing_past-due_dark_desktop.png",
+    "EVIDENCE/E2/screenshots/owedbook_owner_light_desktop.png",
+    "EVIDENCE/E2/signin-count.txt",
+    "EVIDENCE/E2_ENGINEERING_REPORT.md",
+    "EVIDENCE/E2_STALE_INSTRUCTION_CHECK.md",
+    "EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E1_REVIEW_001.zip",
     "EVIDENCE/INSTALL_RECORD.md"
   ],
   "missing_from_index": [],
   "files": [
     {
       "path": "ACCEPTANCE_LEDGER.md",
-      "status": "original_unchanged",
-      "size_bytes": 2216,
-      "sha256": "94caaab62e4f781bccf16ec66e0ac1124386931d987471c2d4c476b26a00545a",
+      "status": "modified_after_install",
+      "size_bytes": 6235,
+      "sha256": "b474b335db6667f5333fb9c6e45332cfa59b1ce9323d9ef4ab814e8489eb7f64",
       "original_sha256": "94caaab62e4f781bccf16ec66e0ac1124386931d987471c2d4c476b26a00545a"
     },
     {
       "path": "ACCEPTANCE_SPEC.md",
-      "status": "original_unchanged",
-      "size_bytes": 14264,
-      "sha256": "2a69b461a5f6f698a657ed3d1b35fa54150acce1bfd1669195cddb8066446035",
+      "status": "modified_after_install",
+      "size_bytes": 15419,
+      "sha256": "127a0a865bfedd3208dce98c65fe34bd04aeedb9ad498ff932f6918270d78dc5",
       "original_sha256": "2a69b461a5f6f698a657ed3d1b35fa54150acce1bfd1669195cddb8066446035"
     },
     {
@@ -67,10 +98,115 @@
       "original_sha256": null
     },
     {
+      "path": "EVIDENCE/E2/01_build.log",
+      "status": "added_after_install",
+      "size_bytes": 1339,
+      "sha256": "50d4215f4c5f3292e735cbb264fc2a4b9926b2bb7c8cf55833c5216ccc2bdaef",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/02_typecheck.log",
+      "status": "added_after_install",
+      "size_bytes": 65,
+      "sha256": "170475ed7752de626c7b52b99ef7e49fc9c249b37496909f29b0d1d6f443c1d8",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/03_jest.log",
+      "status": "added_after_install",
+      "size_bytes": 137,
+      "sha256": "afba278dcf50c224c1c89974e5b93b5ff60e949509dabeffb992b98cf25ccaff",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/04_playwright.log",
+      "status": "added_after_install",
+      "size_bytes": 7865,
+      "sha256": "28479d65968f00773d371271081de83f5668155e6e3836fc5d50873a6115a2b6",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/05_rebuild_after_pill_fix.log",
+      "status": "added_after_install",
+      "size_bytes": 6982,
+      "sha256": "bce77c0196cb10e26e8b9c32cf946e9f007575712bcd8060f4cab0cbc2888dd6",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/gate-m-account.jsonl",
+      "status": "added_after_install",
+      "size_bytes": 9624,
+      "sha256": "93f1125a06b111b093a76e118ff03a79248ce0633aabc82a258c96d9b683c6fd",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/gate-m-public.jsonl",
+      "status": "added_after_install",
+      "size_bytes": 16024,
+      "sha256": "e1119d5d05ce3f21fe21960549e6592e89ae51f6c3393b8d23dfd69180b60f0b",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/screenshots/account-billing_active_dark_desktop.png",
+      "status": "added_after_install",
+      "size_bytes": 144874,
+      "sha256": "0e0f31b7c303e968f1b5b60d042b2089c557707a128f8f5818a33ffabbbc5573",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/screenshots/account-billing_active_light_mobile.png",
+      "status": "added_after_install",
+      "size_bytes": 140232,
+      "sha256": "48d5d832389a517a6c3cb0e50e501dd2d288b708fdc6602332bdbc1a11189507",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/screenshots/account-billing_past-due_dark_desktop.png",
+      "status": "added_after_install",
+      "size_bytes": 162450,
+      "sha256": "3b7df62f2ea415fae60a053a51a87852d68b156d283becebf4eb6f723b3e5c46",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/screenshots/owedbook_owner_light_desktop.png",
+      "status": "added_after_install",
+      "size_bytes": 94067,
+      "sha256": "6e48d0e87310abc087377f0a1d52322d65bc6ce0346df5702622b421b1cce43d",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2/signin-count.txt",
+      "status": "added_after_install",
+      "size_bytes": 42,
+      "sha256": "a29aa965c1c0524d2b03def1774042e9e58127d7abb04490d5d8518d40800814",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2_ENGINEERING_REPORT.md",
+      "status": "added_after_install",
+      "size_bytes": 10168,
+      "sha256": "5caf8d414aa323067d6c511c8c0db0b9218f4fd983e402b74d2d50b00a192681",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/E2_STALE_INSTRUCTION_CHECK.md",
+      "status": "added_after_install",
+      "size_bytes": 2227,
+      "sha256": "4c9aa0cb12983a9447e6266f8a7efc2b7359df796d7252078e56554c104cf161",
+      "original_sha256": null
+    },
+    {
+      "path": "EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E1_REVIEW_001.zip",
+      "status": "added_after_install",
+      "size_bytes": 96438,
+      "sha256": "b22a061394b990f99517811f17aa7583627fb674f42288b4b61cf2f623c600d1",
+      "original_sha256": null
+    },
+    {
       "path": "EVIDENCE/INSTALL_RECORD.md",
       "status": "added_after_install",
-      "size_bytes": 2689,
-      "sha256": "89494cd2dde8bef540d7e7a8c5233a1b338613eab760b339014478bd690aebe0",
+      "size_bytes": 4884,
+      "sha256": "2ee9bd199bef1b99af12d00d6545449457aee7bbcbc6c2ef2c35dd804d5f48e6",
       "original_sha256": null
     },
     {
@@ -83,8 +219,8 @@
     {
       "path": "EXECUTION_PLAN.md",
       "status": "modified_after_install",
-      "size_bytes": 18978,
-      "sha256": "5fcff8fb7dec1a83c3338cdfa73e9ada5353592dc2f158acd825b955528b9661",
+      "size_bytes": 19032,
+      "sha256": "a3d089282308b5c4986e0ccf9adff6220d7a5cab86138bf18f4586365131bf08",
       "original_sha256": "9575f9e66b2ffb08062496768b295c58cfb2f4c6afbfa666f29f4ff5eee0eb30"
     },
     {
@@ -111,8 +247,8 @@
     {
       "path": "JOURNAL.md",
       "status": "modified_after_install",
-      "size_bytes": 1760,
-      "sha256": "871e101de9af86e54b328e06651980b8be4fd0e815b417a3cba2550881a86eed",
+      "size_bytes": 4592,
+      "sha256": "927acd31549b1ba2961ec4880e91b2080173dca09a09617904f9d6b1c9ce368c",
       "original_sha256": "a20ed4e68a5ecac14a22f63a3fa0c449a65ccbcfd9de249eb87223b2a332f071"
     },
     {
@@ -243,9 +379,9 @@
     },
     {
       "path": "QAM/HANDOFFS/ENGINEERING_HANDOFF.md",
-      "status": "original_unchanged",
-      "size_bytes": 1087,
-      "sha256": "3fabf55983a4780565d5573d3d1b111379f6f81cda2099d8717acba97553af7e",
+      "status": "modified_after_install",
+      "size_bytes": 5220,
+      "sha256": "383a3f81b5535591e9ec98406d9fa493fb48996400c7a16cd817653fbf2bce44",
       "original_sha256": "3fabf55983a4780565d5573d3d1b111379f6f81cda2099d8717acba97553af7e"
     },
     {
@@ -285,16 +421,16 @@
     },
     {
       "path": "QAM/QAM_MANIFEST.md",
-      "status": "original_unchanged",
-      "size_bytes": 1374,
-      "sha256": "4c39b99a87b97aafc404401cb6718f18ecd49fed22436617f048614af10a6d1b",
+      "status": "modified_after_install",
+      "size_bytes": 3557,
+      "sha256": "4c03b30de1d0453b6b59a1f09bc2b2d0dc0b91020337bb64f26dab229dde60b7",
       "original_sha256": "4c39b99a87b97aafc404401cb6718f18ecd49fed22436617f048614af10a6d1b"
     },
     {
       "path": "QAM/QAM_PREFLIGHT.md",
-      "status": "original_unchanged",
-      "size_bytes": 3342,
-      "sha256": "3952b65bab6bc68d51dfb4c7e578304f6e5391959d03118e1fd99f065654d3fd",
+      "status": "modified_after_install",
+      "size_bytes": 3418,
+      "sha256": "5a5522ef7bc3fd41e172de70b80941f2423ab759ef4500329c1657e44e199be6",
       "original_sha256": "3952b65bab6bc68d51dfb4c7e578304f6e5391959d03118e1fd99f065654d3fd"
     },
     {
@@ -306,16 +442,16 @@
     },
     {
       "path": "QAM/QAM_RISK_REQUIREMENTS.md",
-      "status": "original_unchanged",
-      "size_bytes": 2744,
-      "sha256": "b577a439ae8295b94700f420aaafb223645e04e4bd01df57347a5868d8417aa3",
+      "status": "modified_after_install",
+      "size_bytes": 3118,
+      "sha256": "3a3d654517be5b0f785d8369fb001e57c517446ad5109671e98d392745d1802e",
       "original_sha256": "b577a439ae8295b94700f420aaafb223645e04e4bd01df57347a5868d8417aa3"
     },
     {
       "path": "QAM/QAM_STATE.md",
-      "status": "original_unchanged",
-      "size_bytes": 792,
-      "sha256": "ae399bf3fb09f34005455a9c348e471156da607a0bec7d1f145fe61dfe7064dd",
+      "status": "modified_after_install",
+      "size_bytes": 1014,
+      "sha256": "6bb0b62de0d8cd74ed984eb5a4a47b61b0014ae13267a63ff72c450e5d38a3ff",
       "original_sha256": "ae399bf3fb09f34005455a9c348e471156da607a0bec7d1f145fe61dfe7064dd"
     },
     {
@@ -335,36 +471,36 @@
     {
       "path": "README.md",
       "status": "modified_after_install",
-      "size_bytes": 3821,
-      "sha256": "ea0058a98862cd71f4b65a5cf9246914f48c9d0dbb523e259f55b80834f15e0b",
+      "size_bytes": 4016,
+      "sha256": "eca0966a91ce973f85e28e3e875f287bac3b5eb7ec08ffa09818162e4699171b",
       "original_sha256": "7b5198f655568ce1b8a3d07c13f6611737d654cd89b93babc9554df694154462"
     },
     {
       "path": "RETROSPECTIVE.md",
-      "status": "original_unchanged",
-      "size_bytes": 411,
-      "sha256": "9e7b2b304b0a7cde48f34f74b128413511cfd1a8805eb86aafb4c02cff52a06e",
+      "status": "modified_after_install",
+      "size_bytes": 1494,
+      "sha256": "f51714c9d45b892720c5097848631847f1b690e9e9384e22769afd3152c20e5e",
       "original_sha256": "9e7b2b304b0a7cde48f34f74b128413511cfd1a8805eb86aafb4c02cff52a06e"
     },
     {
       "path": "RULINGS.md",
       "status": "modified_after_install",
-      "size_bytes": 6530,
-      "sha256": "cc1e83ede5d3f9352915a9680b90b1bade08a17ac5b5c3a73a556b75f5617718",
+      "size_bytes": 15356,
+      "sha256": "aefd6c70257d851e6e89102fc55028b56561250e8d7e69ee3d3a774cde9125bd",
       "original_sha256": "00de2adcfbd7a710dc3d8b022dd7e32280c5539ddb87f509c5995ab68459c0b6"
     },
     {
       "path": "SKILLS_MANIFEST.md",
-      "status": "original_unchanged",
-      "size_bytes": 2949,
-      "sha256": "6e4816214afcee7a2812ddd11360dbfaec97c3e3b2403e8885587ffb1b54c0c1",
+      "status": "modified_after_install",
+      "size_bytes": 3031,
+      "sha256": "9994a23ea93b22c768830eb49987ffc133dc8168aab058f4bbde895fecd83f9f",
       "original_sha256": "6e4816214afcee7a2812ddd11360dbfaec97c3e3b2403e8885587ffb1b54c0c1"
     },
     {
       "path": "STATE.md",
       "status": "modified_after_install",
-      "size_bytes": 1876,
-      "sha256": "1d1b853247398961ecf1b998d6157144748fc44469de6eafa118aa706a2033c0",
+      "size_bytes": 4259,
+      "sha256": "6711bf8980e540a8e1febf6ef15af16b24c6a9e44bbb9a450bfd35d6bb365b90",
       "original_sha256": "aa9fa705c14d643507c38eddcbb6108eb5c761822740dcb277f3637790f9d9ab"
     },
     {
@@ -2560,9 +2696,9 @@
     },
     {
       "path": "_project/APP_BRIEF.md",
-      "status": "original_unchanged",
-      "size_bytes": 13097,
-      "sha256": "52f475ee85537d9a8ff1d9ee5e3bc29a033732c1b461576b153f56fff0845f7c",
+      "status": "modified_after_install",
+      "size_bytes": 14016,
+      "sha256": "86857529eabbb7be26a2b49984dce9197b0d1a35a0e526491aa3072fc47c5253",
       "original_sha256": "52f475ee85537d9a8ff1d9ee5e3bc29a033732c1b461576b153f56fff0845f7c"
     },
     {
@@ -2574,23 +2710,23 @@
     },
     {
       "path": "_project/DATA_CONTRACT.md",
-      "status": "original_unchanged",
-      "size_bytes": 16647,
-      "sha256": "33a740320b0655c76020dd5275c8dd76aad5d6ce72fd6ca1b995492ad5f7c6f9",
+      "status": "modified_after_install",
+      "size_bytes": 17021,
+      "sha256": "f93474babf406cbb23ee8f0d447b783397c49a9012a9e01504a4fc5ff1541e77",
       "original_sha256": "33a740320b0655c76020dd5275c8dd76aad5d6ce72fd6ca1b995492ad5f7c6f9"
     },
     {
       "path": "_project/IMPLEMENTATION_CONTRACT.md",
-      "status": "original_unchanged",
-      "size_bytes": 11393,
-      "sha256": "216c7f1b2ff33fab7577db945d8dccb1833706ee7905cf913dbc6e5433e9b554",
+      "status": "modified_after_install",
+      "size_bytes": 13008,
+      "sha256": "54bf46c41e12f7e98297f3f2893e84ce651fc9e93704d834386447f7057995e1",
       "original_sha256": "216c7f1b2ff33fab7577db945d8dccb1833706ee7905cf913dbc6e5433e9b554"
     },
     {
       "path": "_project/UI_SPEC.md",
-      "status": "original_unchanged",
-      "size_bytes": 21592,
-      "sha256": "9c7164edeb2d6d37c5de2db8263b1f363c43c7471857ebe8e3f85ee773e3e904",
+      "status": "modified_after_install",
+      "size_bytes": 21742,
+      "sha256": "59bdee400be0ca2d38ae5b482c7a0d83ba0b88d7203b1ec2acc6f0b0a0bafd25",
       "original_sha256": "9c7164edeb2d6d37c5de2db8263b1f363c43c7471857ebe8e3f85ee773e3e904"
     },
     {
@@ -2630,16 +2766,16 @@
     },
     {
       "path": "playbook/04-MOCKS.md",
-      "status": "original_unchanged",
-      "size_bytes": 796,
-      "sha256": "292d11df022ddbb89cfcfa0fbdc3372bbd6a2620199dd40a4e1462ab28832881",
+      "status": "modified_after_install",
+      "size_bytes": 831,
+      "sha256": "4115bb382f4e15b73cdaa20a25cb2e981ccfd8818e68556b47a0d11534f580a0",
       "original_sha256": "292d11df022ddbb89cfcfa0fbdc3372bbd6a2620199dd40a4e1462ab28832881"
     },
     {
       "path": "playbook/05-COMPONENTS.md",
-      "status": "original_unchanged",
-      "size_bytes": 972,
-      "sha256": "aea5d7dd44a03a9d36486f90d30443ffeeec4f2173b86aa56d73215c2142ff7c",
+      "status": "modified_after_install",
+      "size_bytes": 1068,
+      "sha256": "9b1cd7c77c44d23b7b4f7fe96c52b7725ab89a29222ef800cb9841a895b70cfe",
       "original_sha256": "aea5d7dd44a03a9d36486f90d30443ffeeec4f2173b86aa56d73215c2142ff7c"
     },
     {
@@ -2770,9 +2906,9 @@
     },
     {
       "path": "verification/BUILD_CHECKLIST.md",
-      "status": "original_unchanged",
-      "size_bytes": 1609,
-      "sha256": "0c5c08d2768b1847bac1e68e86eb01cdcc9346a224875c53689cdc11a550bad9",
+      "status": "modified_after_install",
+      "size_bytes": 1696,
+      "sha256": "5f7edc69d5e1af067424829edbc854a5bbd5ba3cec0dab792dc4a46f257eaf1a",
       "original_sha256": "0c5c08d2768b1847bac1e68e86eb01cdcc9346a224875c53689cdc11a550bad9"
     },
     {

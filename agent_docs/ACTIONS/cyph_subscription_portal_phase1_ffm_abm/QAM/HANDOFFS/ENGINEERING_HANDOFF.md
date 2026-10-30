@@ -1,14 +1,70 @@
 # Engineering handoff to independent QA
-Owner: Claudy · Status: NOT EXECUTED
+Owner: Claudy · Status: **COMPLETE (E2), pending Director candidate commit** · 27 Oct 2026 · Contract ACCEPTANCE_SPEC v1.1 + RULINGS R-001…R-009
+Engineering self-checks below are **not** independent QA. Never copy passwords, token values, `.env` contents, browser storage or raw authenticated traces.
 
-Required sections to complete in E2:
-1. What was implemented; exact candidate identity or “pending Director commit”, baseline and changed paths.
-2. Runnable setup and walkthrough from actual repo CWD, with reset/scenario commands and local URLs.
-3. Real staff login boundary versus synthetic personas; authorized credentials referenced by safe location only.
-4. Per-AC engineering evidence, failed attempts/fixes and unverified claims. Link parent ledger.
-5. Build/typecheck/test results, meaningful negatives, protected-file and network checks.
-6. Actual screenshots and routes compared to design; accessibility/viewport/theme gaps.
-7. Known limitations (commercial placeholders, live billing/email/SSO/deploy excluded), inherited issues and risk owners.
-8. Process/temp-path ownership, export membership/privacy checks, next action for Tony then Cody.
+## 1. What was implemented
+Public registration journey (C01–C07, C14, C17) with no login; account management (C08–C13, C15) behind the real admin/superadmin login; real `/login` with the designed sign-in presentation; mock services with quotes, consent, idempotent operations and enumerated scenarios. Baseline `b1fbdda` (branch `ffm-abm-001-subscription-portal`, descendant of foundation `1d15918`). **Candidate: uncommitted working tree — pending Director commit**; Q1 must bind the SHA Tony creates. Changed/added paths: see `QAM/QAM_MANIFEST.md` §Paths.
 
-Never copy passwords, token values, .env contents, browser storage or raw authenticated traces. Do not label Engineering self-checks independent QA.
+## 2. Setup and walkthrough (repo root)
+1. `npm ci` (existing lock) → `npm run build` → `npx next start -p 3001` (or any free port; set `PORTAL_BASE_URL`).
+2. Open `http://localhost:3001/` → plan screen. Register 1–N pharmacies → review → "Continue to secure payment" → stand-in outcome buttons → activation → "Refresh status" → email preview → access link.
+3. "Already subscribed? Sign in" → real `/login` with an authorized admin/superadmin → `/dashboard` (synthetic two-store account).
+4. Demo controls: public strip (registration scenarios, activation outcome, clock +31 min, reset); account strip (scenario, synthetic persona, next add outcome, resolve last addition, clock, reset). Typing hints: code `DEMO10`, NCPDP `0000099` (registered elsewhere), email `existing.owner@demo-pharmacy.example`.
+5. Tests: `npx jest`; `npx playwright test` (projects `public`, `gate-m-public` need no credentials; `admin-setup` → `account` → `logout` need the admin pair).
+
+## 3. Access boundary (R-008/R-009)
+- **Public, no login:** `/`, `/demo/register/*`, `/demo/stripe` (checkout mode), `/demo/activation`, `/demo/checkout-incomplete`, `/demo/access-link`, `/demo/references/email`, `/login`. `/demo/sign-in` → `/login`.
+- **Admin or superadmin (`user_roles`), server-checked in layout AND page:** `/dashboard`, `/demo/stores/{add,confirm,result}`, `/demo/references/owedbook`, `/demo/stripe?mode=portal|card`. Member / role-less / anonymous → `/login`; the redirect body (HTML and RSC) carries no account content.
+- Synthetic personas (billing owner / store admin / member) live only inside account management and drive the mock service, never the real session or roles.
+- Credentials: exactly one pair, `QA_PORTAL_ADMIN_EMAIL` / `QA_PORTAL_ADMIN_PASSWORD` in ignored, untracked `.env.qa.local` (Director-supplied). Missing pair ⇒ live checks BLOCKED, never PASS. No second real account; member denial is mocked-role evidence.
+- **Warning:** the inherited `/api/auth/logout` calls Supabase `signOut()` with default **global** scope, so a logout ends every session of that account (including Tony's browser). Plan logout checks accordingly.
+
+## 4. Per-AC engineering evidence
+`../../ACCEPTANCE_LEDGER.md` (claims + paths) and `../../EVIDENCE/E2_ENGINEERING_REPORT.md` (commands, boundaries, Gate M, route/state inventory, gaps). Failed attempts and fixes: report §5 and `../../JOURNAL.md`.
+
+## 5. Build/test results and negatives
+Build 0 · tsc 0 (scratch copy; in-repo tsc trips on a stale `.next` owned by unowned PID 40320) · jest 106/106 · Playwright 59/59 · lint NOT CONFIGURED. Negatives: stale/expired quote, missing consent, same-key replay, unknown blocks retry, non-owner payload, forged query/cookie/storage roles, forged success URL, hostile text, anonymous account routes (HTML + RSC). Protected-path diff vs `1d15918` empty. Browser hosts only localhost. Real sign-ins by Engineering: 3; real (global) logouts: 2.
+
+## 6. Screens vs design
+Masked screenshots in `../../EVIDENCE/E2/screenshots/` (real identity masked). Public screens compared by Engineer against `_design/approved_v1_0/renders/` (plan, review, pharmacy, activation, mobile plan) — close match; differences: demo strip under the top bar (R-009 demo controls), longer demo-notice copy, "Already subscribed? Sign in" wording. Gaps: no AT walk, no real-device Safari, contrast not re-measured per state; account Gate M predates a one-class pill alignment fix.
+
+## 7. Limits and risks
+Mock business mode only; commercial/policy placeholders intentional; no Stripe/email/SSO/DB/deploy. Inherited: lint not configured, npm audit advisories (zod high, postcss-selector-parser moderate), global-scope logout, credential rotation of the historical exposed credential (Director). Brand text configurable in `src/components/portal/brand.ts`.
+
+## 8. Processes, export, next action
+Owned: `next start -p 3001` from session scratchpad copy `run-r008/` (PID in `../../STATE.md`). Not owned, untouched: PID 40320 (:3457). `.auth/` deleted. Export: `../../EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E2_REVIEW_001.zip` (+ `~/Downloads/` copy), indexed and privacy-scanned. **Next: Tony reviews and commits the candidate, creates `qa/ffm-abm-001-subscription-portal`; then Cody starts Q1 at `QAM/QAM_ENTRY.md`.**
+
+## 9. Amendments after Q2 (appended; sections above are the E2 record)
+- **REPAIR_001 (R-010)**, committed by the Director as `0d43a4c`: Q2-F01/F02/F03/O04/G06 + R1-N01. Report `../../EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md`.
+- **AMENDMENT_001 (R-011, 29 Oct 2026)** — Coach-approved owner-only registration, Director-authorized before final certification. The C02 job-title select is removed; a required, initially unchecked owner declaration ("I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.") is enforced in the UI and in the mock service (owner step, deep links, checkout). v1 drafts migrate unaccepted. Me / Someone else copy clarifies that ownership, billing and permission to buy stores stay with the owner. Ownership-transfer copy is clarified with placeholders. ACCEPTANCE_SPEC v1.2 (AC-06 text, new AC-06a); DATA_CONTRACT v1.3; portal-contract v1.2. Report: `../../EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`. **Independent QA must cover AC-06a and re-run the REPAIR_001 retest on the combined candidate.**
+- **REPAIR_002 (R-012, 29 Oct 2026)** — QA Lead dispatch after Gate Q FAIL on `24cf075` (CR-F01 blocker, CR-F02 robustness, Q2-O04 residual). An open checkout is closed when the declaration is withdrawn, a v1 draft is restored or the draft changes materially; every move toward payment re-checks the current draft at the service; submitted/unknown payments are held until explicit re-acceptance; paid history untouched. Repeat-N entries materialize only as filled (no count-sized allocation); step 100+ route fixed (R2-N02, self-found); R2-N01 (count change kept a stale open checkout payable) self-found and fixed. Plan Actions column uses the approved divider/spacing. ACCEPTANCE_SPEC v1.3 (AC-05, AC-06a extended); DATA_CONTRACT v1.4. Report: `../../EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md`. **Independent retest required: CR-F01 A/B, CR-F02, the O04 residual and regression on the combined candidate. Cody's combined001 tests that expect the defect (e.g. the 64-push abort) will now observe the repaired behaviour.**
+- **REPAIR_002 addendum 1 (R-012, 29 Oct 2026)** — manual-review copy fix on C14 `payment_unknown` only (intro no longer says "Payment wasn't completed"). Lock/recovery unchanged. Focused rendered check per the QA Lead (unknown, abandoned, declined; 375/1440, light/dark). Base `d6fe678`; record: `../../EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` §10.
+- **REPAIR_002 addendum 2 (R-012, 29 Oct 2026)**: "Next activation check" was removed from the public demo bar. This is a demo-usability finding; no engine failure was reproduced. Registration scenario → Load is the single selector for the six named activation states. Each one loads as named, stays put, and progresses through its customer action. Focused checks: 9 new browser tests, 35 affected existing ones, and 1 component test. Base `d6fe678` + ADDENDUM_001. Record: `../../EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` §11; table: `../../EVIDENCE/REPAIR_002/addendum_002/SCENARIO_RESULTS.md`. **QA:** include the scenario/progression check in the pending addendum verification. Tests that selected `#demo-activation-plan` would now find nothing; none exist in `e2e/`.
+- **REPAIR_003 (R-013, 29 Oct 2026)** — JARVIS dispatch after Cody's REPAIR_002 RETEST_001 (R2-F01, R2-F02). Each checkout records the scope it was quoted for (count, pharmacies, code, due-now). A processing/unknown payment can confirm only while the draft matches it (`checkoutHold` → `scope_changed`, enforced at the service). Recovery is "Use the details I paid for" (restore, then it confirms the original scope) or, for unknown, "nothing charged", then a fresh quote and a new key; nothing is charged again. Closed or replaced checkout keys are spent and refused by `startCheckout`; valid open-checkout replay is unchanged; the review page renews its key once no checkout is open. Public storage v2→v3 (legacy unscoped checkouts are bound only if provably unedited). ACCEPTANCE_SPEC v1.4 (AC-10, AC-13 extended); DATA_CONTRACT v1.5. Base `d6fe678` + addenda 1/2 (uncommitted, preserved). Report: `../../EVIDENCE/REPAIR_003_ENGINEERING_REPORT.md`. **Independent retest required: R2-F01 (processing/unknown × pharmacy/count edits), R2-F02, and regression. Cody's `repair-boundaries.test.ts` and `submitted-corrected.spec.ts` now pass unchanged (except their output paths) on the repaired code; tests that assert a stored public `version: 2` will now see 3.**
+- **REPAIR_004 (R-013 addendum 1, 29 Oct 2026)** — JARVIS dispatch after Cody's REPAIR_003 RETEST_001 (R3-F01, R3-F02, R3-O03).
+  - **R3-F01:** a stored v2 checkout binds a scope only from retained evidence: the quote it opened with, for the same draft revision and count, or an unchanged demo seed. An open checkout alone no longer counts. Unproven records stay held, show "We can't match this payment… don't pay again", get no restore and never confirm. The v1 migration binds before it drops the quote.
+  - **R3-F02:** `coveredDetails(state)` feeds the activation admin-invitation claim and preview button, and the C07 previews. An admin nominated after payment is never named.
+  - **R3-O03:** dark-only `--ring` 12 93% 68% on Alert, giving ≥3:1 against tint and offset.
+  - Records: ACCEPTANCE_SPEC v1.5; DATA_CONTRACT v1.6. Base: `d6fe678` + addenda 1/2 + REPAIR_003 (all uncommitted, preserved). Report: `../../EVIDENCE/REPAIR_004_ENGINEERING_REPORT.md`.
+  - **Independent retest required:** R3-F01, R3-F02, R3-O03 and the regression. Cody's `migration-recovery.test.ts`, `original-boundaries.test.ts`, `qa-extra/*.spec.ts` and `cody-r3-focus.cjs` pass on the repaired code, changed only in output paths, the scratch `node_modules` require path and the port.
+  - **Self-found, not repaired, for JARVIS: R4-N01.** While a payment is processing, Review's "Edit my details instead" closes it (`resolveCheckout('back')` is accepted for any pending checkout), and a second checkout can follow.
+- **Documentation closeout (30 Oct 2026)** — after JARVIS's Gate Q PASS for the frozen snapshot (`CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md`, installed unchanged). Records reconciled; no product change. Commit binding BOUND to `f27261734fd0a3ac96253aa6c55e3b9e911125a8` on 30 Oct 2026 (`COMMIT_BINDING_RECEIPT_001.md`). Report and Director commit instructions: `../../EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md`. Engineering "independent retest required" lines below are superseded by the decision.
+- **REPAIR_006 (R-014 addendum 1, 30 Oct 2026)** — JARVIS dispatch after Cody's REPAIR_005 RETEST_001 (R5-F01, R5-F02; R5-O03 recorded).
+  - `consistentActivation(state)`: the activation is presented and acted on only where it agrees with the phase. C06 evaluates the phase first; paid with missing/conflicting activation → "Payment confirmed" + "We can't show setup or access-email status here", no Refresh/retry/resend. The actual nothing-charged path shows the terminal notice.
+  - `resendAccessEmail` requires paid + agreeing activation + setup ready; everything else is `conflict`, state unchanged. `readActivation` follows the same rule.
+  - R5-O03 not repaired (Lead: nonblocking idempotent no-op); Cody's identity assertion still fails and is reported.
+  - Cody's oracle 230/1 (the 1 is R5-O03; before 226/5) and readers 5/5 (before 1/4) on the repaired code. Inspected paths: `EVIDENCE/REPAIR_006/INSPECTED_PATHS.md`.
+  - Report: `../../EVIDENCE/REPAIR_006_ENGINEERING_REPORT.md`. **Independent retest required: R5-F01, R5-F02, and regression.**
+- **REPAIR_005 (R-014, 30 Oct 2026)** — JARVIS dispatch after Cody's REPAIR_004 RETEST_001 (R4-F01, R4-F02).
+  - One engine read `paymentPhase(state)`: the checkout record governs; the activation flag counts only where it agrees (paid > unknown > processing/open > failed > not charged).
+  - `refreshActivation` advances only processing, or paid + confirmed still setting up; `resumeSignup` needs an abandoned/declined checkout (the "activation failed" clause is gone); nothing-charged clears the activation. Refusals are `conflict`, state unchanged. No storage bump; old flags stay as history.
+  - C06 renders from the phase: unknown → C14 notice, no retry/refresh; not charged → "Nothing was charged… Continue my signup", no refresh.
+  - Bounded matrix: 8 checkout records × 4 activation flags × 7 actions = 224 cells, every refusal leaving state untouched (`EVIDENCE/REPAIR_005/TRANSITION_MATRIX.md`).
+  - Cody's probes pass on the repaired code (service 46/46; both R4 browser cases in both spec files). His `notcharged-stale` fixture now stores `activation: null`, because the current nothing-charged resolution clears it.
+  - Report: `../../EVIDENCE/REPAIR_005_ENGINEERING_REPORT.md`. **Independent retest required: R4-F01, R4-F02, the matrix, reload/direct navigation, valid recovery, and regression.**
+- **REPAIR_004 ADDENDUM_001 (R-013 addendum 2, 29 Oct 2026)** — JARVIS dispatch to close R4-N01.
+  - A submitted payment (processing/unknown) refuses every `resolveCheckout` outcome, `startCheckout` (including replay) and `restartSignup` at the service, with state unchanged. `resumeSignup` already refused.
+  - Review shows "You've already submitted a payment" with no "Edit my details instead" and Continue disabled. The stand-in shows no outcomes. C06 waiting no longer offers "resume checkout" (a deviation from the approved render). C14 links a processing payment to activation.
+  - A completed record with no provable scope keeps its status and shows unavailable history: no edited names or amount, no payment action.
+  - Preserved: genuine failure recovery, nothing-charged recovery, open-checkout close/re-quote, R-013 binding, restore and spent keys.
+  - Report: `../../EVIDENCE/REPAIR_004_ADDENDUM_001_ENGINEERING_REPORT.md`. **Independent retest required: R4-N01 (service, Review, stand-in, reload, back), unavailable history, and regression.**

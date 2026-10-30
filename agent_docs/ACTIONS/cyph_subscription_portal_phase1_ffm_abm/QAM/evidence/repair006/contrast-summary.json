@@ -1,0 +1,12 @@
+{
+  "surfaces": 8,
+  "raw": 204,
+  "applicable": 187,
+  "shortfalls": [],
+  "minimumByKind": {
+    "boundary": 3.0541647933718106,
+    "text": 4.952011546592508,
+    "focus": 3.066806316813648
+  },
+  "exclusions": "BODY tab-wrap, disabled/faded; raw retained"
+}

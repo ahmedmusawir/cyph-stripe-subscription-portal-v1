@@ -1,0 +1,13 @@
+--- /tmp/cody-r5-snapshot/e2e/public.repair002.spec.ts	2026-10-30 07:50:53.752341218 +0600
++++ /tmp/cody-r6-snapshot/e2e/public.repair002.spec.ts	2026-10-30 09:35:28.118229730 +0600
+@@ -93,7 +93,9 @@
+   }
+   // Activation and the incomplete page don't offer a back door either.
+   await page.goto("/demo/activation");
+-  await expect(page.getByText("There's no payment to track yet")).toBeVisible();
++  // REPAIR_006: the closed checkout's phase is read first, so Activation shows its terminal no-charge notice.
++  await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged");
++  await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
+   await page.goto("/demo/checkout-incomplete");
+   await expect(page.getByTestId("incomplete-abandoned")).toContainText("The owner declaration was withdrawn");
+   await page.getByTestId("incomplete-continue").click();

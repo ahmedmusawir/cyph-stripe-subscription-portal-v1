@@ -1,0 +1,5 @@
+{"case":"resend","checkout":"none","phase":"none","beforeEmail":"failed","ok":false,"afterEmail":"failed","checkoutAfter":null}
+{"case":"resend","checkout":"unknown","phase":"unknown","beforeEmail":"failed","ok":false,"afterEmail":"failed","checkoutAfter":"unknown"}
+{"case":"resend","checkout":"abandoned","phase":"not_charged","beforeEmail":"failed","ok":false,"afterEmail":"failed","checkoutAfter":"abandoned"}
+{"case":"resend","checkout":"expired","phase":"not_charged","beforeEmail":"failed","ok":false,"afterEmail":"failed","checkoutAfter":"expired"}
+{"case":"ready-repeat-refresh","ok":true,"checkout":"paid","deepUnchanged":true,"stateIdentity":false}

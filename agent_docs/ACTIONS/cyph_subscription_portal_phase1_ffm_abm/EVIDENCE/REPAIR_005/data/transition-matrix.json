@@ -1,0 +1,2030 @@
+{
+ "states": 32,
+ "actions": [
+  "refresh",
+  "resume",
+  "restart",
+  "outcome paid",
+  "unknown → paid",
+  "unknown → nothing charged",
+  "new checkout (fresh quote, new key)"
+ ],
+ "rows": [
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "refresh",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "resume",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "none",
+   "phase": "none",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "refresh",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "resume",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "pending",
+   "phase": "none",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "refresh",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "resume",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "failed",
+   "phase": "none",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "refresh",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "resume",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "none",
+   "unchanged": true
+  },
+  {
+   "checkout": "none",
+   "activation": "confirmed",
+   "phase": "none",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "resume",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "none",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "refresh",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "resume",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "restart",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "resume",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "failed",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "resume",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "open",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "none",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "pending",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "refresh",
+   "ok": false,
+   "after": "failed",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "failed",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "failed",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "failed",
+   "phase": "failed",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "declined",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "resume",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "none",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "refresh",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "resume",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "restart",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "pending",
+   "phase": "processing",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "processing",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "resume",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "failed",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "refresh",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "resume",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "outcome paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "processing",
+   "activation": "confirmed",
+   "phase": "open",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "open",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "refresh",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "resume",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "restart",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "unknown → paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "unknown → nothing charged",
+   "ok": true,
+   "after": "not_charged",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "none",
+   "phase": "unknown",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "refresh",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "resume",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "restart",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "unknown → paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "unknown → nothing charged",
+   "ok": true,
+   "after": "not_charged",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "pending",
+   "phase": "unknown",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "refresh",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "resume",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "restart",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "unknown → paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "unknown → nothing charged",
+   "ok": true,
+   "after": "not_charged",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "failed",
+   "phase": "unknown",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "refresh",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "resume",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "restart",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "unknown → paid",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "unknown → nothing charged",
+   "ok": true,
+   "after": "not_charged",
+   "unchanged": false
+  },
+  {
+   "checkout": "unknown",
+   "activation": "confirmed",
+   "phase": "unknown",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "unknown",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "refresh",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "resume",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "restart",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "none",
+   "phase": "paid",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "refresh",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "resume",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "restart",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "pending",
+   "phase": "paid",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "refresh",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "resume",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "restart",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "failed",
+   "phase": "paid",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "refresh",
+   "ok": true,
+   "after": "paid",
+   "unchanged": false
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "resume",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "restart",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "paid",
+   "activation": "confirmed",
+   "phase": "paid",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": false,
+   "after": "paid",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "abandoned",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "none",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "pending",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "failed",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "refresh",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "resume",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "restart",
+   "ok": true,
+   "after": "none",
+   "unchanged": false
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "outcome paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "unknown → paid",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "unknown → nothing charged",
+   "ok": false,
+   "after": "not_charged",
+   "unchanged": true
+  },
+  {
+   "checkout": "expired",
+   "activation": "confirmed",
+   "phase": "not_charged",
+   "action": "new checkout (fresh quote, new key)",
+   "ok": true,
+   "after": "open",
+   "unchanged": false
+  }
+ ]
+}

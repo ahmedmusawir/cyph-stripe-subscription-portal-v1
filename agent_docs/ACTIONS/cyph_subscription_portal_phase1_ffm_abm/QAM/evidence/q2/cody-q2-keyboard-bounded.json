@@ -1,0 +1,10 @@
+[
+  {
+    "target": "Continue",
+    "tabs": 9
+  },
+  {
+    "result": "FAIL",
+    "error": "locator.waitFor: Timeout 5000ms exceeded."
+  }
+]

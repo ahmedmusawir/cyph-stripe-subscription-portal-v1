@@ -1,0 +1,1360 @@
+diff --git a/e2e/account.repair.spec.ts b/e2e/account.repair.spec.ts
+index 7cf320c..e4f1823 100644
+--- a/e2e/account.repair.spec.ts
++++ b/e2e/account.repair.spec.ts
+@@ -313,3 +313,33 @@ test("O04 evidence screenshots (real identity masked)", async ({ page }) => {
+     });
+   }
+ });
++
++// ── REPAIR_002: Q2-O04 residual — plan Actions column (approved C10 treatment) ──
++test("O04 residual: Actions divider above on mobile, beside on desktop; approved spacing", async ({ page }) => {
++  const geometry = () =>
++    page.getByTestId("plan-actions").evaluate((el) => {
++      const cs = getComputedStyle(el);
++      const inner = getComputedStyle(el.children[1] as HTMLElement);
++      return { top: cs.borderTopWidth, left: cs.borderLeftWidth, pt: cs.paddingTop, pl: cs.paddingLeft, gap: cs.rowGap, innerGap: inner.rowGap, width: Math.round(el.getBoundingClientRect().width) };
++    });
++  await page.setViewportSize({ width: 375, height: 1000 });
++  await page.goto("/dashboard");
++  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++  expect(await geometry()).toMatchObject({ top: "1px", left: "0px", pt: "20px", gap: "12px", innerGap: "12px" });
++  await page.setViewportSize({ width: 1440, height: 1000 });
++  expect(await geometry()).toMatchObject({ top: "0px", left: "1px", pt: "0px", pl: "32px", gap: "12px", innerGap: "12px", width: 320 });
++  for (const theme of THEMES) {
++    for (const [width, label] of [[375, "mobile"], [1440, "desktop"]] as const) {
++      await page.setViewportSize({ width, height: 1000 });
++      await page.goto("/dashboard");
++      await setTheme(page, theme);
++      await page.reload();
++      await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++      await page.screenshot({
++        path: `test-results/shots/repair002-account-billing_active_${theme}_${label}.png`,
++        fullPage: true,
++        mask: [page.getByTestId("account-menu"), page.getByTestId("account-demo-strip").locator("summary > span").nth(1)],
++      });
++    }
++  }
++});
+diff --git a/src/__tests__/portal-registration.test.ts b/src/__tests__/portal-registration.test.ts
+index 8d7d88e..fbfe072 100644
+--- a/src/__tests__/portal-registration.test.ts
++++ b/src/__tests__/portal-registration.test.ts
+@@ -423,3 +423,265 @@ describe('repeat-N pricing bound (REPAIR_001 Q2-G06)', () => {
+     expect(() => pricing.initialRecurringCents(max + 1)).toThrow(RangeError);
+   });
+ });
++
++// REPAIR_002 (RULINGS R-012). CR-F01: an unpaid checkout never reaches payment
++// while the owner declaration is not exactly true. CR-F02: work and memory are
++// bounded by the pharmacies entered, never by the requested count.
++describe('pending checkout respects current prerequisites (R-012, CR-F01)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  const withdrawn = { ...owner, ownerDeclarationAccepted: false };
++  function open(n = 1, key = KEY) {
++    const s = reg.requestQuote(completeDraft(n), deps).state;
++    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: key }, deps).state;
++  }
++  function refused(step: { state: RegistrationState; result: { ok: boolean } }, before: RegistrationState) {
++    expect(step.result).toMatchObject({ ok: false });
++    expect(step.state).toBe(before);
++  }
++
++  it('A: withdrawing the declaration on the owner step closes the open checkout; pay and replay are refused', () => {
++    const pending = open();
++    const w = reg.saveOwner(pending, withdrawn);
++    expect(w.result).toMatchObject({ ok: false, code: 'validation', fieldErrors: { ownerDeclaration: expect.any(String) } });
++    expect(w.state.checkout).toMatchObject({ operationKey: KEY, status: 'abandoned', closedReason: 'owner_declaration' });
++    expect(w.state.quote).toBeNull();
++    expect(w.state.draft.consents).toMatchObject({ termsAccepted: false, recurringChargeAccepted: false });
++    expect(w.state.draft.owner.ownerDeclarationAccepted).toBe(false);
++    expect(w.state.draft.pharmacies[0].name).toBe('Example Test Pharmacy 1'); // details kept
++    for (const outcome of ['paid', 'processing'] as const) refused(reg.resolveCheckout(w.state, outcome), w.state);
++    expect(reg.startCheckout(w.state, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps).result.ok).toBe(false);
++    expect(w.state.activation).toBeNull();
++  });
++
++  it('A: Back with the box unticked (keepOwner) closes it the same way', () => {
++    const k = reg.keepOwner(open(), withdrawn).state;
++    expect(k.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
++    refused(reg.resolveCheckout(k, 'paid'), k);
++  });
++
++  it('B: a legacy (storage v1) draft restored over a pending checkout cannot be paid', () => {
++    const s = open(1, 'qa_legacy_pending');
++    delete (s.draft.owner as Record<string, unknown>).ownerDeclarationAccepted;
++    (s.draft.owner as Record<string, unknown>).businessRole = 'owner';
++    const m = reg.migrateRegistration(JSON.parse(JSON.stringify(s)));
++    expect(m.draft.owner.ownerDeclarationAccepted).toBe(false);
++    expect(m.draft.owner).not.toHaveProperty('businessRole');
++    expect(m.quote).toBeNull();
++    expect(m.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
++    expect(m.draft.owner.firstName).toBe('Jordan');
++    refused(reg.resolveCheckout(m, 'paid'), m);
++    expect(reg.startCheckout(m, { quoteId: s.quote!.id, consents: consented, operationKey: 'qa_legacy_pending' }, deps).result.ok).toBe(false);
++  });
++
++  it('B: a v1 draft never carries acceptance over, even if the field is present', () => {
++    const s = open();
++    const m = reg.migrateRegistration(JSON.parse(JSON.stringify(s)));
++    expect(m.draft.owner.ownerDeclarationAccepted).toBe(false);
++    expect(m.checkout?.status).toBe('abandoned');
++  });
++
++  it('a stored pending checkout with the declaration already false (no transition) is held at every step toward payment', () => {
++    const pending = open();
++    const tampered: RegistrationState = { ...pending, draft: { ...pending.draft, owner: { ...pending.draft.owner, ownerDeclarationAccepted: false } } };
++    expect(reg.checkoutHold(tampered.draft)).toBe('owner_declaration');
++    refused(reg.startCheckout(tampered, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps), tampered);
++    refused(reg.resolveCheckout(tampered, 'paid'), tampered);
++    refused(reg.resolveCheckout(tampered, 'processing'), tampered);
++    // Non-advancing outcomes stay available.
++    expect(reg.resolveCheckout(tampered, 'back').state.checkout?.status).toBe('abandoned');
++    for (const bad of [undefined, 'true', 1, null]) {
++      const forged = { ...tampered, draft: { ...tampered.draft, owner: { ...tampered.draft.owner, ownerDeclarationAccepted: bad as unknown as boolean } } };
++      refused(reg.resolveCheckout(forged, 'paid'), forged);
++    }
++  });
++
++  it('a submitted payment (processing) is held, not closed, while the declaration is withdrawn', () => {
++    const processing = reg.resolveCheckout(open(), 'processing').state;
++    const w = reg.keepOwner(processing, withdrawn).state;
++    expect(w.checkout?.status).toBe('pending');
++    expect(w.checkout?.closedReason).toBeUndefined();
++    refused(reg.refreshActivation(w), w);
++    // The failure path still plays; it doesn't advance toward payment.
++    const failPlan = reg.setActivationPlan(w, 'payment_failed').state;
++    expect(value<{ paymentState: string }>(reg.refreshActivation(failPlan)).paymentState).toBe('failed');
++    // Explicit acceptance lets the same payment confirm.
++    const back = reg.saveOwner(w, owner);
++    expect(back.result.ok).toBe(true);
++    expect(value<{ paymentState: string }>(reg.refreshActivation(back.state)).paymentState).toBe('confirmed');
++  });
++
++  it('an unknown payment is held while the declaration is withdrawn; "nothing charged" still resolves', () => {
++    const unknown = reg.resolveCheckout(open(), 'unknown').state;
++    const w = reg.keepOwner(unknown, withdrawn).state;
++    expect(w.checkout?.status).toBe('unknown');
++    refused(reg.resolveUnknownPayment(w, 'paid'), w);
++    expect(reg.resolveUnknownPayment(w, 'not_charged').state.checkout?.status).toBe('abandoned');
++    const accepted = reg.keepOwner(w, owner).state;
++    expect(reg.resolveUnknownPayment(accepted, 'paid').state.activation?.paymentState).toBe('confirmed');
++  });
++
++  it('a declined checkout is closed on withdrawal, so "another card works" is refused', () => {
++    const declined = reg.resolveCheckout(open(), 'declined').state;
++    const w = reg.keepOwner(declined, withdrawn).state;
++    expect(w.checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
++    refused(reg.resolveCheckout(w, 'paid'), w);
++  });
++
++  it('valid recovery: explicit acceptance → fresh quote → fresh consent → new checkout → paid', () => {
++    const closed = reg.saveOwner(open(), withdrawn).state;
++    const accepted = reg.saveOwner(closed, owner);
++    expect(accepted.result.ok).toBe(true);
++    // Acceptance alone doesn't reopen the closed checkout or restore consent.
++    expect(accepted.state.checkout?.status).toBe('abandoned');
++    expect(accepted.state.draft.consents.termsAccepted).toBe(false);
++    expect(reg.resolveCheckout(accepted.state, 'paid').result.ok).toBe(false);
++    let s = reg.resumeSignup(accepted.state).state;
++    expect(s.checkout).toBeNull();
++    s = reg.requestQuote(s, deps).state;
++    // Consent is required again for the new quote.
++    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: { ...consented, termsAccepted: false }, operationKey: 'demo_key_000010' }, deps).result).toMatchObject({ ok: false, code: 'validation' });
++    const started = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: 'demo_key_000010' }, deps);
++    expect(started.result.ok).toBe(true);
++    // Same-operation replay of the NEW checkout is still idempotent.
++    const replay = reg.startCheckout(started.state, { quoteId: s.quote!.id, consents: consented, operationKey: 'demo_key_000010' }, deps);
++    expect(replay.result.ok).toBe(true);
++    expect(replay.state).toBe(started.state);
++    const paid = reg.resolveCheckout(started.state, 'paid').state;
++    expect(paid.checkout).toMatchObject({ operationKey: 'demo_key_000010', status: 'paid' });
++    expect(paid.activation?.paymentState).toBe('confirmed');
++    expect(paid.draft.owner.ownerDeclarationAccepted).toBe(true);
++  });
++
++  it('completed payment history is never closed or reversed by a later draft edit', () => {
++    const paid = reg.resolveCheckout(open(), 'paid').state;
++    const w = reg.keepOwner(paid, withdrawn).state;
++    expect(w.checkout).toEqual(paid.checkout);
++    expect(w.activation).toEqual(paid.activation);
++    const edited = reg.setStoreCount(paid, 2).state;
++    expect(edited.checkout).toEqual(paid.checkout);
++  });
++
++  it('R2-N01: changing the store count while a checkout is open closes it (the open checkout was priced for the old count)', () => {
++    const pending = open();
++    const changed = reg.setStoreCount(pending, 2).state;
++    expect(changed.checkout).toMatchObject({ status: 'abandoned', closedReason: 'details_changed' });
++    refused(reg.resolveCheckout(changed, 'paid'), changed);
++    // A pharmacy edit does the same.
++    const edited = reg.savePharmacy(pending, 0, pharmacy(1, { city: 'Shelbyville' })).state;
++    expect(edited.checkout).toMatchObject({ status: 'abandoned', closedReason: 'details_changed' });
++  });
++
++  it('unchanged replay and payment for a valid draft still work', () => {
++    const pending = open();
++    expect(reg.checkoutHold(pending.draft)).toBeNull();
++    expect(reg.startCheckout(pending, { quoteId: pending.quote!.id, consents: consented, operationKey: KEY }, deps).state).toBe(pending);
++    // Saving the same accepted owner again doesn't close anything.
++    expect(reg.saveOwner(pending, owner).state.checkout?.status).toBe('pending');
++    expect(reg.resolveCheckout(pending, 'paid').state.checkout?.status).toBe('paid');
++  });
++});
++
++describe('count-driven work is bounded (R-012, CR-F02)', () => {
++  /** Counts Array.prototype.push calls inside fn and aborts past a small budget (no huge allocation is ever attempted). */
++  function countPushes(fn: () => void, budget = 64): { pushes: number; aborted: boolean } {
++    const push = Array.prototype.push;
++    const marker = new Error('push budget');
++    let pushes = 0;
++    let aborted = false;
++    try {
++      Array.prototype.push = function (this: unknown[], ...items: unknown[]) {
++        pushes += items.length;
++        if (pushes > budget) throw marker;
++        return push.apply(this, items);
++      };
++      fn();
++    } catch (e) {
++      if (e !== marker) throw e;
++      aborted = true;
++    } finally {
++      Array.prototype.push = push;
++    }
++    return { pushes, aborted };
++  }
++  const BILLION = 1_000_000_000;
++
++  it('a billion-store count allocates no pharmacy entries and prices exactly', () => {
++    const before = reg.createRegistration('fresh').draft.pharmacies.length;
++    let s = billion();
++    expect(s.draft.requestedStoreCount).toBe(BILLION);
++    expect(s.draft.pharmacies.length).toBe(before);
++    s = reg.saveOwner(s, owner).state;
++    expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'pharmacy', index: 0 });
++    expect(reg.isDraftComplete(s.draft)).toBe(false);
++    // 9900 + 4900 × 999,999,999 = 4,900,000,005,000 cents (literal).
++    expect(value<{ newRecurringCents: number }>(reg.requestQuote(s, deps)).newRecurringCents).toBe(4_900_000_005_000);
++  });
++
++  /** setStoreCount(BILLION) inside the budget: a count-sized loop aborts instead of exhausting memory. */
++  function billion(): RegistrationState {
++    let s = reg.createRegistration('fresh');
++    const probe = countPushes(() => {
++      s = reg.setStoreCount(s, BILLION).state;
++    });
++    expect(probe).toEqual({ pushes: 0, aborted: false });
++    return s;
++  }
++
++  it('pharmacy steps fill in order: a far index is refused without growing the array', () => {
++    let s = reg.saveOwner(billion(), owner).state;
++    s = reg.savePharmacy(s, 0, pharmacy(1)).state;
++    for (const index of [BILLION - 1, 5, 2]) {
++      expect(reg.isPharmacyStep(s.draft, index)).toBe(false);
++      const step = reg.savePharmacy(s, index, pharmacy(9));
++      expect(step.result).toMatchObject({ ok: false, code: 'missing_context' });
++      expect(step.state.draft.pharmacies.length).toBe(1);
++      expect(reg.keepPharmacy(s, index, pharmacy(9)).state.draft.pharmacies.length).toBe(1);
++    }
++    expect(reg.isPharmacyStep(s.draft, 1)).toBe(true);
++    expect(reg.savePharmacy(s, 1, pharmacy(2)).state.draft.pharmacies.length).toBe(2);
++  });
++
++  it('the largest representable count is accepted in constant work; one more is refused', () => {
++    const max = pricing.MAX_REPRESENTABLE_STORES;
++    let accepted = false;
++    const probe = countPushes(() => {
++      accepted = reg.setStoreCount(reg.createRegistration('fresh'), max).result.ok;
++    });
++    expect(probe).toEqual({ pushes: 0, aborted: false });
++    expect(accepted).toBe(true);
++    expect(reg.setStoreCount(reg.createRegistration('fresh'), max + 1).result).toMatchObject({ ok: false, code: 'validation' });
++  });
++
++  it('a restored draft with an extreme or malformed count is handled without count-sized work', () => {
++    const base = reg.createRegistration('prefilled_one_store');
++    const huge: RegistrationState = { ...base, draft: { ...base.draft, requestedStoreCount: BILLION } };
++    let gate: ReturnType<typeof reg.firstIncomplete> | null = null;
++    let discards: string[] | null = null;
++    const probe = countPushes(() => {
++      gate = reg.firstIncomplete(huge.draft);
++      discards = reg.storeCountDiscards(huge, 1);
++    });
++    expect(probe.aborted).toBe(false); // a handful of pushes for one entered pharmacy, not one per requested store
++    expect(gate).toEqual({ step: 'pharmacy', index: 1 });
++    expect(discards).toEqual([]);
++    for (const bad of [-5, 0, 1.5, 1e300, NaN, '3', null]) {
++      const d = { ...base.draft, requestedStoreCount: bad as unknown as number };
++      expect(reg.firstIncomplete(d)).toEqual({ step: 'plan' });
++      expect(reg.isPharmacyStep(d, 0)).toBe(false);
++      expect(reg.requestQuote({ ...base, draft: d }, deps).result).toMatchObject({ ok: false, code: 'missing_context' });
++    }
++  });
++
++  it('count reduction and restoration keep entered pharmacies coherent; 1/2/3 stores unchanged', () => {
++    let s = completeDraft(3);
++    s = reg.setStoreCount(s, 1).state;
++    expect(s.draft.pharmacies.map((p) => p.name)).toEqual(['Example Test Pharmacy 1']);
++    s = reg.setStoreCount(s, 3).state;
++    expect(s.draft.pharmacies.length).toBe(1);
++    expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'pharmacy', index: 1 });
++    s = reg.savePharmacy(s, 1, pharmacy(2)).state;
++    s = reg.savePharmacy(s, 2, pharmacy(3)).state;
++    expect(reg.isDraftComplete(s.draft)).toBe(true);
++    expect([1, 2, 3].map((n) => value<{ dueNowCents: number }>(reg.requestQuote(completeDraft(n), deps)).dueNowCents)).toEqual([9900, 14800, 19700]);
++  });
++});
+diff --git a/src/app/(public)/demo/register/pharmacies/page.tsx b/src/app/(public)/demo/register/pharmacies/page.tsx
+index 594feb9..be1f85f 100644
+--- a/src/app/(public)/demo/register/pharmacies/page.tsx
++++ b/src/app/(public)/demo/register/pharmacies/page.tsx
+@@ -3,8 +3,11 @@ import { PharmacyStepView } from "@/components/portal/register/PharmacyStepView"
+ export const metadata = { title: "Pharmacy details — Pharmacy Books" };
+ 
+ // `store` is a 1-based step index; the view validates it against the draft.
++// Any safe integer is accepted here: a two-digit limit silently sent step 100+
++// back to step 1 (REPAIR_002 R2-N02; repeat-N has no business cap).
+ export default async function Page({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+   const { store, notice } = await searchParams;
+-  const n = typeof store === "string" && /^\d{1,2}$/.test(store) ? Number(store) : 1;
++  const parsed = typeof store === "string" && /^[1-9]\d{0,15}$/.test(store) ? Number(store) : 1;
++  const n = Number.isSafeInteger(parsed) ? parsed : 1;
+   return <PharmacyStepView key={n} storeParam={n} notice={notice === "missing_context"} />;
+ }
+diff --git a/src/components/portal/account/DashboardView.tsx b/src/components/portal/account/DashboardView.tsx
+index 45a312a..b9eb7c4 100644
+--- a/src/components/portal/account/DashboardView.tsx
++++ b/src/components/portal/account/DashboardView.tsx
+@@ -368,7 +368,7 @@ export function DashboardView() {
+       </div>
+ 
+       <section aria-labelledby="plan-h" className="mt-5 border border-border bg-card p-4 sm:p-5" data-testid="plan-summary">
+-        <div className="flex flex-col gap-5 lg:flex-row lg:justify-between">
++        <div className="flex flex-col gap-6 lg:flex-row lg:justify-between lg:gap-10">
+           <div className="min-w-0 flex-1">
+             <div className="flex flex-wrap items-center gap-2">
+               <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Plan</p>
+@@ -394,9 +394,10 @@ export function DashboardView() {
+               </div>
+             </dl>
+           </div>
+-          <div className="min-w-0 lg:w-72">
++          {/* Approved C10 actions column: divider above on mobile, beside on desktop (REPAIR_002 Q2-O04 residual). */}
++          <div className="flex min-w-0 flex-col gap-3 border-t border-border pt-5 lg:w-80 lg:shrink-0 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0" data-testid="plan-actions">
+             <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Actions</p>
+-            <div className="mt-2 flex flex-col gap-2" aria-busy={refreshing || undefined}>
++            <div className="flex flex-col gap-3" aria-busy={refreshing || undefined}>
+               {addStore}
+               {sub.status === "canceled" ? (
+                 <Button type="button" variant="outline" disabled={busy} onClick={() => openBilling("invoices")}>
+diff --git a/src/components/portal/activation/ActivationView.tsx b/src/components/portal/activation/ActivationView.tsx
+index c7436b3..46afc01 100644
+--- a/src/components/portal/activation/ActivationView.tsx
++++ b/src/components/portal/activation/ActivationView.tsx
+@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
+ import { Alert, DemoNotice, Placeholder } from "../Alert";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+-import { formatCents, formatTime, initialRecurringCents, registration, useRegistration } from "@/services/portal";
++import { checkoutHold, formatCents, formatTime, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+ 
+ type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
+ 
+@@ -83,6 +83,8 @@ export function ActivationView() {
+               : "You're in. Check your email.";
+ 
+   const canRefresh = a.paymentState === "pending" || (a.paymentState === "confirmed" && a.provisioningState !== "ready");
++  // R-012: a payment still waiting for confirmation doesn't advance while prerequisites are unmet.
++  const hold = a.paymentState === "pending" ? checkoutHold(draft) : null;
+ 
+   async function refresh() {
+     setBusy("refresh");
+@@ -141,7 +143,7 @@ export function ActivationView() {
+         {canRefresh ? (
+           <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
+             <p className="text-xs text-muted-foreground">In the real app this page updates by itself. In this demo, refresh to play the next confirmation.</p>
+-            <Button type="button" variant="outline" onClick={refresh} disabled={busy !== null} aria-busy={busy === "refresh" || undefined} data-testid="activation-refresh">
++            <Button type="button" variant="outline" onClick={refresh} disabled={busy !== null || Boolean(hold)} aria-busy={busy === "refresh" || undefined} data-testid="activation-refresh">
+               {busy === "refresh" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+               Refresh status
+             </Button>
+@@ -150,6 +152,14 @@ export function ActivationView() {
+       </section>
+ 
+       <div className="mt-5 space-y-5">
++        {hold ? (
++          <div data-testid="activation-hold">
++            <Alert tone="warning" title={hold === "owner_declaration" ? "Confirm the owner declaration to continue" : "Finish your signup details to continue"}>
++              Activation can&apos;t continue until {hold === "owner_declaration" ? "the pharmacy owner confirms the owner declaration" : "every signup step is complete"}.{" "}
++              <Link href="/demo/register/review" className="portal-link">Go to my details</Link>
++            </Alert>
++          </div>
++        ) : null}
+         {a.paymentState === "pending" ? (
+           <Alert tone="info" title="Waiting for Stripe to confirm your payment">
+             This usually takes a moment. If you closed Stripe&apos;s page before finishing, nothing was charged and you can{" "}
+diff --git a/src/components/portal/activation/CheckoutIncompleteView.tsx b/src/components/portal/activation/CheckoutIncompleteView.tsx
+index 467d31f..653ef84 100644
+--- a/src/components/portal/activation/CheckoutIncompleteView.tsx
++++ b/src/components/portal/activation/CheckoutIncompleteView.tsx
+@@ -10,7 +10,7 @@ import { DemoOutcomes } from "../ExternalHandoffPanel";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+ import { Pill } from "../Pill";
+-import { formatCents, initialRecurringCents, registration, useRegistration } from "@/services/portal";
++import { checkoutHold, formatCents, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+ 
+ // C14 Checkout not completed: resumable · payment_unknown · declined · expired.
+ // Unknown pauses payment ("don't pay again") without declaring no charge.
+@@ -41,6 +41,7 @@ export function CheckoutIncompleteView() {
+   }
+ 
+   const n = draft.requestedStoreCount;
++  const hold = checkoutHold(draft);
+   const names = draft.pharmacies.slice(0, n).map((p) => p.name).filter(Boolean).join(" · ");
+   const due = quote?.dueNowCents ?? initialRecurringCents(n);
+ 
+@@ -50,9 +51,9 @@ export function CheckoutIncompleteView() {
+   }
+   async function resolveUnknown(outcome: "paid" | "not_charged") {
+     setBusy(true);
+-    await registration.resolveUnknownPayment(outcome);
++    const r = await registration.resolveUnknownPayment(outcome);
+     setBusy(false);
+-    if (outcome === "paid") router.push("/demo/activation");
++    if (r.ok && outcome === "paid") router.push("/demo/activation");
+   }
+ 
+   return (
+@@ -64,7 +65,11 @@ export function CheckoutIncompleteView() {
+         lead={status === "expired" ? undefined : `Your details for ${n} ${n === 1 ? "pharmacy are" : "pharmacies are"} saved. Payment wasn't completed, so your account isn't active yet.`}
+       />
+       <div className="mt-5" data-testid={`incomplete-${status}`}>
+-        {status === "abandoned" ? (
++        {status === "abandoned" && state.checkout?.closedReason ? (
++          <Alert tone="info" title="Nothing has been charged">
++            {state.checkout.closedReason === "owner_declaration" ? "The owner declaration was withdrawn" : "Your signup details changed"} after checkout opened, so we closed that checkout. Confirm your details and get a fresh quote whenever you&apos;re ready.
++          </Alert>
++        ) : status === "abandoned" ? (
+           <Alert tone="info" title="Nothing has been charged">Stripe confirmed no payment was taken for this signup. Pick up where you left off whenever you&apos;re ready.</Alert>
+         ) : status === "unknown" ? (
+           <Alert tone="warning" live title="We're checking whether a payment went through" icon={<Loader2 className="h-4 w-4 animate-spin text-foreground" aria-hidden="true" />}>
+@@ -97,8 +102,14 @@ export function CheckoutIncompleteView() {
+           {status === "unknown" ? (
+             <>
+               <p className="mt-2 text-xs text-muted-foreground">Payment is paused until we know whether the earlier attempt went through.</p>
++              {hold ? (
++                <p className="mt-2 text-xs text-muted-foreground" data-testid="unknown-hold">
++                  Activation also waits for {hold === "owner_declaration" ? "the owner declaration" : "your remaining signup details"}.{" "}
++                  <Link href="/demo/register/review" className="portal-link">Go to my details</Link>
++                </p>
++              ) : null}
+               <DemoOutcomes>
+-                <Button type="button" variant="outline" disabled={busy} onClick={() => resolveUnknown("paid")} data-testid="unknown-paid">Stripe confirms payment → activation</Button>
++                <Button type="button" variant="outline" disabled={busy || Boolean(hold)} onClick={() => resolveUnknown("paid")} data-testid="unknown-paid">Stripe confirms payment → activation</Button>
+                 <Button type="button" variant="outline" disabled={busy} onClick={() => resolveUnknown("not_charged")} data-testid="unknown-not-charged">Stripe confirms nothing charged</Button>
+               </DemoOutcomes>
+             </>
+diff --git a/src/components/portal/handoff/CheckoutStandIn.tsx b/src/components/portal/handoff/CheckoutStandIn.tsx
+index 85be80a..5ebf654 100644
+--- a/src/components/portal/handoff/CheckoutStandIn.tsx
++++ b/src/components/portal/handoff/CheckoutStandIn.tsx
+@@ -9,7 +9,7 @@ import { Alert, DemoNotice } from "../Alert";
+ import { DemoOutcomes, ExternalHandoffPanel } from "../ExternalHandoffPanel";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { Pill } from "../Pill";
+-import { formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
++import { checkoutHold, formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
+ 
+ // C05 initial-checkout boundary (PUBLIC). Our "leaving" page, then a labelled
+ // stand-in for Stripe Checkout with NO editable card fields. Only the explicit
+@@ -39,6 +39,23 @@ export function CheckoutStandIn() {
+       </PageContainer>
+     );
+   }
++  if (checkout.closedReason) {
++    // R-012: we closed this unpaid checkout because the details it was opened for changed.
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <div data-testid="checkout-closed">
++          <Alert tone="info" title="This checkout was closed">
++            {checkout.closedReason === "owner_declaration"
++              ? "The owner declaration was withdrawn after checkout opened, so we closed it. "
++              : "Your signup details changed after checkout opened, so we closed it. "}
++            Nothing was charged. Confirm your details, then get a fresh quote to pay.{" "}
++            <Link href="/demo/register/review" className="portal-link">Go to review</Link>
++          </Alert>
++        </div>
++      </PageContainer>
++    );
++  }
+   if (checkout.status !== "pending" && checkout.status !== "declined") {
+     const next = checkout.status === "paid" ? "/demo/activation" : "/demo/checkout-incomplete";
+     return (
+@@ -51,6 +68,22 @@ export function CheckoutStandIn() {
+     );
+   }
+ 
++  const hold = checkoutHold(draft);
++  if (hold) {
++    // R-012: an open checkout can't be paid while its prerequisites are unmet.
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <div data-testid="checkout-hold">
++          <Alert tone="warning" title={hold === "owner_declaration" ? "Confirm the owner declaration before paying" : "Finish your signup details before paying"}>
++            Payment can&apos;t continue until {hold === "owner_declaration" ? "the pharmacy owner confirms the owner declaration" : "every signup step is complete"}. Nothing has been charged.{" "}
++            <Link href="/demo/register/review" className="portal-link">Go to my details</Link>
++          </Alert>
++        </div>
++      </PageContainer>
++    );
++  }
++
+   const n = draft.requestedStoreCount;
+   const due = quote?.dueNowCents !== undefined ? formatCents(quote.dueNowCents) : "[amount pending]";
+   const recurring = quote ? formatCents(quote.newRecurringCents) : "[amount pending]";
+diff --git a/src/components/portal/register/PharmacyStepView.tsx b/src/components/portal/register/PharmacyStepView.tsx
+index 40ce344..d8642e8 100644
+--- a/src/components/portal/register/PharmacyStepView.tsx
++++ b/src/components/portal/register/PharmacyStepView.tsx
+@@ -13,7 +13,7 @@ import { Pill } from "../Pill";
+ import { PHARMACY_SUMMARY_FIELDS, PharmacyFields, toDraft, toForm, type PharmacyForm } from "../PharmacyFields";
+ import { Stepper } from "../Stepper";
+ import { MISSING, MissingContextNotice } from "./MissingContext";
+-import { firstIncomplete, registration, useRegistration } from "@/services/portal";
++import { firstIncomplete, isPharmacyStep, registration, useRegistration } from "@/services/portal";
+ 
+ // C03 Pharmacy n of N (repeat for every requested store) + C16 duplicate.
+ export function PharmacyStepView({ storeParam, notice }: { storeParam: number; notice: boolean }) {
+@@ -21,7 +21,8 @@ export function PharmacyStepView({ storeParam, notice }: { storeParam: number; n
+   const { state, hydrated } = useRegistration();
+   const count = state.draft.requestedStoreCount;
+   const index = storeParam - 1;
+-  const valid = Number.isInteger(index) && index >= 0 && index < count;
++  // Steps fill in order; a link past the next unentered pharmacy goes back to it (R-012).
++  const valid = isPharmacyStep(state.draft, index);
+   const [form, setForm] = useState<PharmacyForm | null>(null);
+   const [errors, setErrors] = useState<Record<string, string>>({});
+   const [duplicate, setDuplicate] = useState<string | null>(null);
+diff --git a/src/components/portal/register/ReviewView.tsx b/src/components/portal/register/ReviewView.tsx
+index 730e639..bbcb8e8 100644
+--- a/src/components/portal/register/ReviewView.tsx
++++ b/src/components/portal/register/ReviewView.tsx
+@@ -177,7 +177,9 @@ export function ReviewView() {
+       ) : null}
+       {checkout?.status === "abandoned" || checkout?.status === "declined" ? (
+         <Alert tone="info" className="mt-5" title="Welcome back — your details are saved" action={<Button type="button" variant="outline" onClick={() => registration.resumeSignup()}>Get a fresh quote</Button>}>
+-          Payment wasn&apos;t completed. Get a current quote and confirm again to continue.
++          {checkout.closedReason
++            ? "Your details changed after checkout opened, so we closed that checkout. Nothing was charged. Get a current quote and confirm again to continue."
++            : "Payment wasn't completed. Get a current quote and confirm again to continue."}
+         </Alert>
+       ) : null}
+       {consentErr ? (
+diff --git a/src/services/portal/index.ts b/src/services/portal/index.ts
+index 85b979b..885b1b3 100644
+--- a/src/services/portal/index.ts
++++ b/src/services/portal/index.ts
+@@ -8,13 +8,15 @@ export { formatCents, initialRecurringCents, ADDITIONAL_STORE_CENTS, BASE_CENTS,
+ export { formatDate, formatTime, maskEmail } from './format';
+ export {
+   accessEmailPreviews,
++  checkoutHold,
+   estimateAvailable,
+   firstIncomplete,
+   isEmailVariant,
++  isPharmacyStep,
+   isQuoteExpired,
+   EMAIL_VARIANTS,
+ } from './registration';
+-export type { EmailVariant, CheckoutOutcome, RegistrationStep } from './registration';
++export type { EmailVariant, CheckoutHold, CheckoutOutcome, RegistrationStep } from './registration';
+ export {
+   addStoreAvailability,
+   lastOperationPharmacy,
+diff --git a/src/services/portal/registration.ts b/src/services/portal/registration.ts
+index 2afa147..47af08f 100644
+--- a/src/services/portal/registration.ts
++++ b/src/services/portal/registration.ts
+@@ -16,6 +16,7 @@ import type {
+   Result,
+ } from '@/types/portal/contract';
+ import type {
++  CheckoutClosedReason,
+   CheckoutRecord,
+   RegistrationScenarioId,
+   RegistrationState,
+@@ -198,10 +199,31 @@ export function selectScenario(state: RegistrationState, id: unknown): Step<Regi
+ // Draft
+ // ---------------------------------------------------------------------------
+ 
+-/** Material change: new revision, quote dropped, consents cleared. */
+-function touch(state: RegistrationState, draft: RegistrationDraft): RegistrationState {
++/**
++ * R-012: a checkout Stripe has not charged and nobody has submitted payment on —
++ * still on the stand-in, or kept there after a decline.
++ */
++function isOpenCheckout(state: RegistrationState): boolean {
++  const status = state.checkout?.status;
++  return (status === 'pending' || status === 'declined') && state.activation?.paymentState !== 'pending';
++}
++
++/**
++ * Material change: new revision, quote dropped, consents cleared. An open
++ * checkout was priced and agreed for the old details, so it is closed
++ * (status 'abandoned', nothing charged, record kept). A submitted or paid
++ * checkout is never closed or reversed here.
++ */
++function touch(
++  state: RegistrationState,
++  draft: RegistrationDraft,
++  reason: CheckoutClosedReason = 'details_changed',
++): RegistrationState {
++  const checkout =
++    state.checkout && isOpenCheckout(state) ? { ...state.checkout, status: 'abandoned' as const, closedReason: reason } : state.checkout;
+   return {
+     ...state,
++    checkout,
+     draft: { ...draft, revision: draft.revision + 1, consents: { ...EMPTY_CONSENTS }, state: 'editing' },
+     quote: null,
+   };
+@@ -227,8 +249,9 @@ export function setStoreCount(state: RegistrationState, n: unknown): Step<Regist
+       'validation',
+       typeof n === 'number' && Number.isInteger(n) && n > 1 ? "That many pharmacies can't be priced exactly." : 'Choose at least 1 pharmacy.',
+     );
++  // Entries are created only as each pharmacy step is filled in (R-012), so the
++  // work here is bounded by what was entered, never by the requested count.
+   const pharmacies = state.draft.pharmacies.slice(0, n);
+-  while (pharmacies.length < n) pharmacies.push({});
+   if (n === state.draft.requestedStoreCount) return ok(state, state.draft);
+   const next = touch(state, { ...state.draft, requestedStoreCount: n, pharmacies });
+   return ok(next, next.draft);
+@@ -263,19 +286,48 @@ function ownerFields(owner: Partial<OwnerDraft> | undefined): Partial<OwnerDraft
+ export function migrateRegistration(persisted: unknown): RegistrationState {
+   const old = persisted as Partial<RegistrationState> | null;
+   if (!old || typeof old !== 'object' || !old.draft || typeof old.draft !== 'object') return createRegistration('fresh');
+-  return { ...old, draft: { ...old.draft, owner: ownerFields(old.draft.owner) }, quote: null } as RegistrationState;
++  const migrated = { ...old, quote: null } as RegistrationState;
++  // Storage v1 never recorded the declaration, so none is carried over, and an
++  // open checkout from then was never covered by one (R-012).
++  return withOwner(migrated, { ...ownerFields(old.draft.owner), ownerDeclarationAccepted: false });
++}
++
++/**
++ * Store owner fields. Withdrawing the declaration while a checkout is open
++ * closes that checkout (R-012): it can't be paid until the owner confirms
++ * again and gets a fresh quote.
++ */
++function withOwner(state: RegistrationState, owner: Partial<OwnerDraft>): RegistrationState {
++  const draft = { ...state.draft, owner };
++  return owner.ownerDeclarationAccepted !== true && isOpenCheckout(state)
++    ? touch(state, draft, 'owner_declaration')
++    : { ...state, draft };
+ }
+ 
+ /** Back/navigation away: keep what was typed without validating. */
+ export function keepOwner(state: RegistrationState, owner: Partial<OwnerDraft>): Step<RegistrationDraft> {
+-  const next = { ...state, draft: { ...state.draft, owner: ownerFields(owner) } };
++  const next = withOwner(state, ownerFields(owner));
+   return ok(next, next.draft);
+ }
+ 
++/**
++ * A pharmacy step that can be written: within the requested count and no later
++ * than the next unentered one, so entries never skip ahead and leave a sparse
++ * array sized by the count (R-012).
++ */
++export function isPharmacyStep(draft: RegistrationDraft, index: number): boolean {
++  return (
++    isValidStoreCount(draft.requestedStoreCount) &&
++    Number.isInteger(index) &&
++    index >= 0 &&
++    index < draft.requestedStoreCount &&
++    index <= draft.pharmacies.length
++  );
++}
++
+ /** Back/navigation away on a pharmacy step: keep the entries (a real edit still invalidates the quote). */
+ export function keepPharmacy(state: RegistrationState, index: number, pharmacy: Partial<PharmacyDraft>): Step<RegistrationDraft> {
+-  if (!Number.isInteger(index) || index < 0 || index >= state.draft.requestedStoreCount)
+-    return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
++  if (!isPharmacyStep(state.draft, index)) return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
+   const before = state.draft.pharmacies[index] ?? {};
+   const merged = { ...pharmacy, id: before.id ?? `demo_reg_ph_${index + 1}` };
+   if (JSON.stringify(before) === JSON.stringify(merged)) return ok(state, state.draft);
+@@ -289,7 +341,7 @@ export function saveOwner(state: RegistrationState, owner: Partial<OwnerDraft>):
+   const picked = ownerFields(owner);
+   const clean: Partial<OwnerDraft> = { ...picked, email: picked.email?.trim() };
+   const errors = validateOwner(clean);
+-  const kept = { ...state, draft: { ...state.draft, owner: clean } };
++  const kept = withOwner(state, clean);
+   if (hasErrors(errors)) return fail(kept, 'validation', 'Some fields need attention.', errors);
+   if (clean.email?.toLowerCase() === EMAIL_EXISTING_ACCOUNT)
+     return fail(kept, 'conflict', 'This email may already have a Pharmacy Books account.');
+@@ -301,8 +353,7 @@ export function savePharmacy(
+   index: number,
+   pharmacy: Partial<PharmacyDraft>,
+ ): Step<RegistrationDraft> {
+-  if (!Number.isInteger(index) || index < 0 || index >= state.draft.requestedStoreCount)
+-    return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
++  if (!isPharmacyStep(state.draft, index)) return fail(state, 'missing_context', 'That pharmacy step is not part of this signup.');
+   const pharmacies = [...state.draft.pharmacies];
+   pharmacies[index] = { ...pharmacy, id: pharmacies[index]?.id ?? `demo_reg_ph_${index + 1}` };
+   const next = touch(state, { ...state.draft, pharmacies });
+@@ -339,6 +390,24 @@ export function isDraftComplete(draft: RegistrationDraft): boolean {
+   return firstIncomplete(draft).step === 'review' && draft.pharmacies.length === draft.requestedStoreCount;
+ }
+ 
++export type CheckoutHold = 'owner_declaration' | 'details_incomplete';
++
++/**
++ * R-012: what currently stops an unpaid checkout from moving toward payment
++ * (null = nothing). Checked on every such move — replay, outcome, unknown
++ * resolution, activation refresh — against the draft as it is NOW, so a
++ * stored or replayed checkout can't outlive its prerequisites.
++ */
++export function checkoutHold(draft: RegistrationDraft): CheckoutHold | null {
++  if (draft.owner?.ownerDeclarationAccepted !== true) return 'owner_declaration';
++  return isDraftComplete(draft) ? null : 'details_incomplete';
++}
++
++const HOLD_MESSAGE: Record<CheckoutHold, string> = {
++  owner_declaration: 'Confirm that you are the pharmacy owner before paying.',
++  details_incomplete: 'Some signup details are missing. Finish them before paying.',
++};
++
+ // ---------------------------------------------------------------------------
+ // Quotes, code, consent
+ // ---------------------------------------------------------------------------
+@@ -444,8 +513,11 @@ export function startCheckout(
+ ): Step<HandoffView> {
+   if (!isOperationKey(input.operationKey)) return fail(state, 'validation', 'Missing operation key.');
+   const existing = state.checkout;
+-  if (existing && existing.operationKey === input.operationKey && existing.status === 'pending')
++  if (existing && existing.operationKey === input.operationKey && existing.status === 'pending') {
++    const hold = checkoutHold(state.draft);
++    if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+     return ok(state, checkoutHandoff(existing.operationKey)); // replay: same handoff, no second checkout
++  }
+   if (existing && (existing.status === 'pending' || existing.status === 'unknown'))
+     return fail(state, 'conflict', "A checkout is already in progress. Check its status instead of paying again.");
+   if (existing?.status === 'paid') return fail(state, 'conflict', 'This signup is already paid.');
+@@ -484,6 +556,8 @@ export function resolveCheckout(state: RegistrationState, outcome: unknown): Ste
+   if (!(CHECKOUT_OUTCOMES as readonly unknown[]).includes(outcome)) return fail(state, 'validation', 'Unknown outcome.');
+   if (checkout.status !== 'pending' && checkout.status !== 'declined')
+     return fail(state, 'conflict', 'This checkout already has an outcome.');
++  const hold = outcome === 'paid' || outcome === 'processing' ? checkoutHold(state.draft) : null;
++  if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+   const email = state.draft.owner.email ?? '';
+   let next: RegistrationState;
+   switch (outcome as CheckoutOutcome) {
+@@ -520,6 +594,8 @@ export function resolveUnknownPayment(state: RegistrationState, outcome: 'paid'
+   const checkout = state.checkout;
+   if (checkout?.status !== 'unknown') return fail(state, 'conflict', 'Payment status is not pending.');
+   if (outcome === 'paid') {
++    const hold = checkoutHold(state.draft);
++    if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+     const next: RegistrationState = {
+       ...state,
+       checkout: { ...checkout, status: 'paid' },
+@@ -568,6 +644,8 @@ export function refreshActivation(state: RegistrationState): Step<ActivationView
+   let next: ActivationView = a;
+   let draftState = state.draft.state;
+   if (a.paymentState === 'pending') {
++    const hold = state.activationPlan === 'payment_failed' ? null : checkoutHold(state.draft);
++    if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+     if (state.activationPlan === 'payment_failed') {
+       next = { ...a, paymentState: 'failed', retryAvailable: true };
+       draftState = 'abandoned';
+diff --git a/src/types/portal/state.ts b/src/types/portal/state.ts
+index db3bfc2..83c0c81 100644
+--- a/src/types/portal/state.ts
++++ b/src/types/portal/state.ts
+@@ -57,10 +57,17 @@ export type CheckoutStatus =
+   | 'expired' // hold period over; start again
+   | 'paid';
+ 
++/**
++ * Why Pharmacy Books closed an unpaid checkout itself (R-012). The record keeps
++ * status 'abandoned' (nothing charged); this says what invalidated it.
++ */
++export type CheckoutClosedReason = 'details_changed' | 'owner_declaration';
++
+ export interface CheckoutRecord {
+   operationKey: string;
+   quoteId: string;
+   status: CheckoutStatus;
++  closedReason?: CheckoutClosedReason;
+ }
+ 
+ /** What the next activation status check resolves to (demo outcome). */
+diff --git a/e2e/public.repair002.spec.ts b/e2e/public.repair002.spec.ts
+new file mode 100644
+index 0000000..c72be52
+--- /dev/null
++++ b/e2e/public.repair002.spec.ts
+@@ -0,0 +1,395 @@
++import { expect, test, type Page } from "@playwright/test";
++import { focusRings, recordContrast, textContrast, textFailures } from "./contrast";
++import { assertGate, measure, record, setTheme, THEMES } from "./gate-m";
++
++// REPAIR_002 anonymous regressions (RULINGS R-012). No credentials are used here.
++const KEY = "cyph-portal-demo:v1:public";
++type Snap = { accepted: unknown; quoteCleared: boolean; checkout: string | null; closedReason: string | null; key: string | null; payment: string | null; version: number };
++
++const snap = (page: Page): Promise<Snap> =>
++  page.evaluate((k) => {
++    const v = JSON.parse(sessionStorage.getItem(k)!);
++    const s = v.state.s;
++    return {
++      accepted: s.draft.owner.ownerDeclarationAccepted,
++      quoteCleared: s.quote === null,
++      checkout: s.checkout?.status ?? null,
++      closedReason: s.checkout?.closedReason ?? null,
++      key: s.checkout?.operationKey ?? null,
++      payment: s.activation?.paymentState ?? null,
++      version: v.version,
++    };
++  }, KEY);
++
++async function load(page: Page, scenario: string) {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption(scenario);
++  await page.getByRole("button", { name: "Load", exact: true }).click();
++}
++
++async function openCheckout(page: Page) {
++  await load(page, "prefilled_one_store");
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++}
++
++/** Revisit the stand-in directly and wait past its 900 ms "leaving" phase. */
++async function revisitStripe(page: Page) {
++  await page.goto("/demo/stripe");
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++  await page.waitForTimeout(1500);
++}
++
++/** Owner re-accepts → review → fresh quote → fresh consent → new checkout → paid. */
++async function recoverAndPay(page: Page, oldKey: string | null, closedBanner = true) {
++  await page.goto("/demo/register/owner");
++  const box = page.locator("#owner-declaration");
++  await expect(box).not.toBeChecked();
++  await expect(page.getByLabel("First name")).toHaveValue("Jordan");
++  await box.check();
++  await page.getByRole("button", { name: "Continue", exact: true }).click();
++  await expect(page).toHaveURL(/pharmacies\?store=1/);
++  await page.goto("/demo/register/review");
++  if (closedBanner) {
++    await expect(page.getByText("Welcome back — your details are saved")).toBeVisible();
++    await page.getByRole("button", { name: "Get a fresh quote" }).click();
++  }
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await expect(page.locator("#c1")).not.toBeChecked();
++  await expect(page.locator("#c2")).not.toBeChecked();
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const reopened = await snap(page);
++  expect(reopened).toMatchObject({ accepted: true, checkout: "pending", closedReason: null });
++  expect(reopened.key).not.toBe(oldKey);
++  await page.getByTestId("outcome-paid").click();
++  await page.waitForURL("**/demo/activation");
++  expect(await snap(page)).toMatchObject({ accepted: true, checkout: "paid", payment: "confirmed" });
++}
++
++// ── CR-F01 A: current UI ─────────────────────────────────────────────────────
++test("CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works", async ({ page }) => {
++  await openCheckout(page);
++  const opened = await snap(page);
++  await page.goto("/demo/register/owner");
++  await page.locator("#owner-declaration").uncheck();
++  await page.getByRole("button", { name: "Continue", exact: true }).click();
++  await expect(page.locator("#owner-declaration-err")).toHaveText("Confirm that you are the pharmacy owner to continue.");
++  expect(await snap(page)).toMatchObject({ accepted: false, checkout: "abandoned", closedReason: "owner_declaration", quoteCleared: true, payment: null });
++
++  for (let i = 0; i < 2; i++) {
++    await revisitStripe(page);
++    await expect(page.getByTestId("checkout-closed")).toContainText("The owner declaration was withdrawn after checkout opened");
++    await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
++    await page.reload();
++  }
++  // Activation and the incomplete page don't offer a back door either.
++  await page.goto("/demo/activation");
++  await expect(page.getByText("There's no payment to track yet")).toBeVisible();
++  await page.goto("/demo/checkout-incomplete");
++  await expect(page.getByTestId("incomplete-abandoned")).toContainText("The owner declaration was withdrawn");
++  await page.getByTestId("incomplete-continue").click();
++  await expect(page).toHaveURL(/\/demo\/register\/owner/); // review guard → owner step
++  expect(await snap(page)).toMatchObject({ checkout: null, payment: null }); // resumed: closed record cleared, fresh quote next
++
++  await recoverAndPay(page, opened.key, false);
++});
++
++test("CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout", async ({ page }) => {
++  await openCheckout(page);
++  await page.goto("/demo/register/owner");
++  await page.locator("#owner-declaration").uncheck();
++  await page.getByRole("button", { name: "Back" }).click();
++  await expect(page).toHaveURL(/\/demo\/register\/plan/);
++  expect(await snap(page)).toMatchObject({ accepted: false, checkout: "abandoned", closedReason: "owner_declaration" });
++  await revisitStripe(page);
++  await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
++});
++
++// ── CR-F01 B: legacy draft restored over a pending checkout ──────────────────
++test("CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works", async ({ page }) => {
++  await openCheckout(page);
++  const opened = await snap(page);
++  await page.evaluate((k) => {
++    const v = JSON.parse(sessionStorage.getItem(k)!);
++    delete v.state.s.draft.owner.ownerDeclarationAccepted;
++    v.state.s.draft.owner.businessRole = "owner";
++    v.version = 1;
++    sessionStorage.setItem(k, JSON.stringify(v));
++  }, KEY);
++  await page.reload();
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++  await page.waitForTimeout(1500);
++  await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
++  await expect(page.getByTestId("checkout-closed")).toBeVisible();
++  const migrated = await snap(page);
++  expect(migrated).toMatchObject({ version: 2, accepted: false, quoteCleared: true, checkout: "abandoned", closedReason: "owner_declaration", payment: null });
++  await recoverAndPay(page, opened.key);
++});
++
++// ── Stored state already unaccepted (no transition): held, not payable ───────
++test("a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details", async ({ page }) => {
++  await openCheckout(page);
++  await page.evaluate((k) => {
++    const v = JSON.parse(sessionStorage.getItem(k)!);
++    v.state.s.draft.owner.ownerDeclarationAccepted = false;
++    sessionStorage.setItem(k, JSON.stringify(v));
++  }, KEY);
++  await revisitStripe(page);
++  await expect(page.getByTestId("checkout-hold")).toContainText("Confirm the owner declaration before paying");
++  await expect(page.getByRole("button", { name: /Payment succeeds|Payment processing/ })).toHaveCount(0);
++  // Keyboard-only: Tab to the details link and follow it.
++  const link = page.getByRole("link", { name: "Go to my details" });
++  for (let i = 0; i < 40 && !(await link.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
++  await expect(link).toBeFocused();
++  await page.keyboard.press("Enter");
++  await expect(page).toHaveURL(/\/demo\/register\/owner/);
++  expect(await snap(page)).toMatchObject({ checkout: "pending", payment: null });
++});
++
++test("processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again", async ({ page }) => {
++  await openCheckout(page);
++  await page.getByRole("button", { name: /Payment processing/ }).click();
++  await page.waitForURL("**/demo/activation");
++  await page.goto("/demo/register/owner");
++  await page.locator("#owner-declaration").uncheck();
++  await page.getByRole("button", { name: "Back" }).click();
++  await page.goto("/demo/activation");
++  await expect(page.getByTestId("activation-hold")).toContainText("Confirm the owner declaration to continue");
++  await expect(page.getByTestId("activation-refresh")).toBeDisabled();
++  expect(await snap(page)).toMatchObject({ checkout: "pending", payment: "pending", closedReason: null });
++  await page.goto("/demo/register/owner");
++  await page.locator("#owner-declaration").check();
++  await page.getByRole("button", { name: "Continue", exact: true }).click();
++  await expect(page).toHaveURL(/pharmacies\?store=1/);
++  await page.goto("/demo/activation");
++  await page.getByTestId("activation-refresh").click();
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Payment confirmed. Setting up your pharmacies…");
++});
++
++test("unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available", async ({ page }) => {
++  await load(page, "checkout_unknown");
++  await page.goto("/demo/register/owner");
++  await page.locator("#owner-declaration").uncheck();
++  await page.getByRole("button", { name: "Back" }).click();
++  await page.goto("/demo/checkout-incomplete");
++  await expect(page.getByTestId("unknown-hold")).toBeVisible();
++  await expect(page.getByTestId("unknown-paid")).toBeDisabled();
++  await page.getByTestId("unknown-not-charged").click();
++  await expect.poll(async () => (await snap(page)).checkout).toBe("abandoned");
++  expect((await snap(page)).payment).toBeNull();
++});
++
++// ── R2-N01: a material edit closes the open checkout ─────────────────────────
++test("R2-N01: changing the store count while checkout is open closes it", async ({ page }) => {
++  await openCheckout(page);
++  await page.goto("/demo/register/plan");
++  await page.getByRole("button", { name: "More pharmacies" }).click();
++  expect(await snap(page)).toMatchObject({ checkout: "abandoned", closedReason: "details_changed", quoteCleared: true });
++  await revisitStripe(page);
++  await expect(page.getByTestId("checkout-closed")).toContainText("Your signup details changed after checkout opened");
++  await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
++});
++
++// ── Valid replay / repeated operation still work ─────────────────────────────
++test("valid open checkout: review ↔ stand-in round trips and reloads replay one checkout, then pay once", async ({ page }) => {
++  await openCheckout(page);
++  const first = await snap(page);
++  await page.goto("/demo/register/review");
++  await expect(page.getByText("Your checkout on Stripe is still open")).toBeVisible();
++  await page.getByRole("link", { name: "Back to checkout" }).click();
++  await page.waitForURL("**/demo/stripe");
++  await page.reload();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible({ timeout: 5000 });
++  expect((await snap(page)).key).toBe(first.key);
++  await page.getByTestId("outcome-paid").click();
++  await page.waitForURL("**/demo/activation");
++  await page.goto("/demo/stripe");
++  await expect(page.getByText("This checkout already has an outcome")).toBeVisible();
++  expect(await snap(page)).toMatchObject({ key: first.key, checkout: "paid", payment: "confirmed" });
++});
++
++// ── CR-F02: bounded count-driven work ────────────────────────────────────────
++test("R2-N02: pharmacy step 100 of 100 is reachable (no hidden two-digit step limit)", async ({ page }) => {
++  await load(page, "prefilled_one_store");
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.evaluate((k) => {
++    const v = JSON.parse(sessionStorage.getItem(k)!);
++    const d = v.state.s.draft;
++    d.requestedStoreCount = 100;
++    d.pharmacies = Array.from({ length: 99 }, (_, i) => ({ ...d.pharmacies[0], id: `demo_reg_ph_${i + 1}`, name: `Example Pharmacy ${i + 1}` }));
++    v.state.s.quote = null;
++    sessionStorage.setItem(k, JSON.stringify(v));
++  }, KEY);
++  await page.goto("/demo/register/pharmacies?store=100");
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pharmacy 100 of 100");
++  await expect(page).toHaveURL(/store=100/);
++  await page.goto("/demo/register/review");
++  await expect(page).toHaveURL(/pharmacies\?store=100/);
++});
++
++test("CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order", async ({ page }) => {
++  await load(page, "prefilled_one_store");
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.evaluate((k) => {
++    const v = JSON.parse(sessionStorage.getItem(k)!);
++    v.state.s.draft.requestedStoreCount = 1_000_000_000;
++    v.state.s.quote = null;
++    sessionStorage.setItem(k, JSON.stringify(v));
++  }, KEY);
++  const started = Date.now();
++  await page.goto("/demo/register/plan");
++  await expect(page.locator("output#stores")).toHaveText("1000000000");
++  await expect(page.locator("main")).toContainText("$49,000,000,050.00");
++  await page.goto("/demo/register/pharmacies?store=999999999");
++  await expect(page).toHaveURL(/pharmacies\?store=2/);
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pharmacy 2 of 1000000000");
++  expect(Date.now() - started).toBeLessThan(15_000);
++  const sizes = await page.evaluate((k) => {
++    const raw = sessionStorage.getItem(k)!;
++    return { bytes: raw.length, entries: JSON.parse(raw).state.s.draft.pharmacies.length };
++  }, KEY);
++  expect(sizes.entries).toBeLessThanOrEqual(2);
++  expect(sizes.bytes).toBeLessThan(20_000);
++});
++
++test("CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order", async ({ page }) => {
++  await load(page, "prefilled_three_store");
++  await page.goto("/demo/register/plan");
++  await page.getByRole("button", { name: "Fewer pharmacies" }).click();
++  await expect(page.getByTestId("reduce-confirm")).toContainText("Hillside"); // names the pharmacy it would discard
++  await page.getByRole("button", { name: "Remove and continue with 2" }).click();
++  await expect(page.locator("output#stores")).toHaveText("2");
++  await page.getByRole("button", { name: "More pharmacies" }).click();
++  await expect(page.locator("output#stores")).toHaveText("3");
++  const entries = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!).state.s.draft.pharmacies.length, KEY);
++  expect(entries).toBe(2); // the restored third store is not pre-allocated
++  await page.goto("/demo/register/review");
++  await expect(page).toHaveURL(/pharmacies\?store=3/);
++  await expect(page.getByLabel("Pharmacy name")).toHaveValue("");
++  for (const [label, v] of [["Pharmacy name", "Example Restored Pharmacy"], ["Street address", "3 Test Road"], ["City", "Springfield"], ["ZIP", "00000"], ["NCPDP number", "0000399"], ["NPI", "0000000399"], ["Store phone", "(555) 010-0101"]])
++    await page.getByLabel(label).fill(v);
++  await page.getByLabel("State").selectOption("Alabama");
++  await page.getByLabel("Pharmacy software").selectOption("Liberty");
++  await page.getByRole("button", { name: "Continue to review", exact: true }).click();
++  await expect(page.getByTestId("review-pharmacy")).toHaveCount(3);
++  await expect(page.getByTestId("due-today")).toHaveText("$197.00");
++});
++
++test("21 pharmacies: full journey through review, checkout and activation at $1,079.00", async ({ page }) => {
++  test.setTimeout(240_000);
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  for (let i = 1; i < 21; i++) await page.getByRole("button", { name: "More pharmacies" }).click();
++  await page.getByRole("button", { name: "Continue", exact: true }).click();
++  for (const [label, v] of [["First name", "Jordan"], ["Last name", "Ellis"], ["Work email", "jordan@demo-pharmacy.example"], ["Mobile phone", "(555) 010-0101"]]) await page.getByLabel(label).fill(v);
++  await page.locator("#owner-declaration").check();
++  await page.getByRole("button", { name: "Continue", exact: true }).click();
++  for (let n = 1; n <= 21; n++) {
++    await expect(page.getByRole("heading", { level: 1 })).toHaveText(`Pharmacy ${n} of 21`);
++    const pad = String(n).padStart(2, "0");
++    for (const [label, v] of [["Pharmacy name", `Example Large Journey ${n}`], ["Street address", `${n} Test Road`], ["City", "Springfield"], ["ZIP", "00000"], ["NCPDP number", `00001${pad}`], ["NPI", `00000001${pad}`], ["Store phone", "(555) 010-0101"]])
++      await page.getByLabel(label).fill(v);
++    await page.getByLabel("State").selectOption("Alabama");
++    await page.getByLabel("Pharmacy software").selectOption("Liberty");
++    await page.getByRole("button", { name: n === 21 ? "Continue to review" : `Continue to pharmacy ${n + 1} of 21`, exact: true }).click();
++  }
++  await expect(page.getByTestId("review-pharmacy")).toHaveCount(21);
++  await expect(page.getByTestId("due-today")).toHaveText("$1,079.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("stripe-due")).toContainText("$1,079.00");
++  await page.getByTestId("outcome-paid").click();
++  await page.getByTestId("activation-refresh").click();
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("You're in. Check your email.");
++  const x = await page.evaluate((k) => {
++    const s = JSON.parse(sessionStorage.getItem(k)!).state.s;
++    return { count: s.draft.pharmacies.length, names: new Set(s.draft.pharmacies.map((p: { name: string }) => p.name)).size, due: s.quote.dueNowCents, payment: s.activation.paymentState };
++  }, KEY);
++  expect(x).toEqual({ count: 21, names: 21, due: 107900, payment: "confirmed" });
++});
++
++// ── New R-012 surfaces: Gate M (375/1440) and contrast, both themes ─────────
++const HOLD_SURFACES: { name: string; route: string; prepare: (p: Page) => Promise<void> }[] = [
++  {
++    name: "stand-in closed",
++    route: "/demo/stripe",
++    prepare: async (p) => {
++      await openCheckout(p);
++      await p.goto("/demo/register/owner");
++      await p.locator("#owner-declaration").uncheck();
++      await p.getByRole("button", { name: "Back" }).click();
++    },
++  },
++  {
++    name: "stand-in hold",
++    route: "/demo/stripe",
++    prepare: async (p) => {
++      await openCheckout(p);
++      await p.evaluate((k) => {
++        const v = JSON.parse(sessionStorage.getItem(k)!);
++        v.state.s.draft.owner.ownerDeclarationAccepted = false;
++        sessionStorage.setItem(k, JSON.stringify(v));
++      }, KEY);
++    },
++  },
++  {
++    name: "activation hold",
++    route: "/demo/activation",
++    prepare: async (p) => {
++      await load(p, "activation_waiting");
++      await p.goto("/demo/register/owner");
++      await p.locator("#owner-declaration").uncheck();
++      await p.getByRole("button", { name: "Back" }).click();
++    },
++  },
++  {
++    name: "unknown hold",
++    route: "/demo/checkout-incomplete",
++    prepare: async (p) => {
++      await load(p, "checkout_unknown");
++      await p.goto("/demo/register/owner");
++      await p.locator("#owner-declaration").uncheck();
++      await p.getByRole("button", { name: "Back" }).click();
++    },
++  },
++];
++
++for (const s of HOLD_SURFACES) {
++  test(`R-012 surface: ${s.name} — Gate M 375/1440 and contrast, light/dark`, async ({ page }) => {
++    test.setTimeout(120_000);
++    await s.prepare(page);
++    for (const theme of THEMES) {
++      for (const width of [375, 1440]) {
++        await page.setViewportSize({ width, height: 900 });
++        await page.goto(s.route);
++        await setTheme(page, theme);
++        await page.reload();
++        await page.waitForLoadState("networkidle");
++        await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++        await page.waitForTimeout(1200);
++        const r = await measure(page, `${s.route} [${s.name}]`, width, theme);
++        record("gate-m-repair002.jsonl", r);
++        assertGate(r);
++        const rows = await textContrast(page);
++        const fails = textFailures(rows);
++        const rings = await focusRings(page, 20);
++        recordContrast("contrast-repair002.jsonl", { screen: `${s.route} [${s.name}]`, width, theme, rows: rows.length, fails, rings });
++        expect.soft(fails, `${s.name} ${theme} ${width}: text below threshold`).toEqual([]);
++        expect.soft(rings.filter((x) => x.ratio < x.required), `${s.name} ${theme} ${width}: focus ring`).toEqual([]);
++        await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur()); // focus probe leaves focus on the skip link
++        await page.screenshot({ path: `test-results/repair002-${s.name.replace(/\s+/g, "-")}_${theme}_${width}.png`, fullPage: true });
++      }
++    }
++  });
++}
+diff --git a/src/__tests__/portal-checkout-hold.test.tsx b/src/__tests__/portal-checkout-hold.test.tsx
+new file mode 100644
+index 0000000..b8a8f60
+--- /dev/null
++++ b/src/__tests__/portal-checkout-hold.test.tsx
+@@ -0,0 +1,159 @@
++/**
++ * @jest-environment jsdom
++ */
++// REPAIR_002 (R-012) component + facade layer: the real stand-in, activation
++// and checkout-not-completed views on the real public registration store.
++import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
++import { CheckoutStandIn } from '@/components/portal/handoff/CheckoutStandIn';
++import { ActivationView } from '@/components/portal/activation/ActivationView';
++import { CheckoutIncompleteView } from '@/components/portal/activation/CheckoutIncompleteView';
++import { registration, registrationHarness, PUBLIC_STORAGE_KEY } from '@/services/portal';
++import { registrationStore } from '@/services/portal/registrationService';
++import type { RegistrationState } from '@/types/portal/state';
++
++const push = jest.fn();
++jest.mock('next/navigation', () => ({ useRouter: () => ({ push, replace: jest.fn(), refresh: jest.fn() }) }));
++
++const consents = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++const s = () => registrationStore.getState().s;
++const commit = (next: RegistrationState) => act(() => registrationStore.getState().commit(next));
++const withDeclaration = (state: RegistrationState, accepted: unknown): RegistrationState => ({
++  ...state,
++  draft: { ...state.draft, owner: { ...state.draft.owner, ownerDeclarationAccepted: accepted as boolean } },
++});
++
++async function openCheckout(key = 'demo_hold_key_01') {
++  act(() => {
++    registrationHarness.selectScenario('prefilled_one_store');
++  });
++  await act(async () => {
++    await registration.requestQuote();
++  });
++  await act(async () => {
++    const r = await registration.startCheckout({ draftId: s().draft.id, quoteId: s().quote!.id, consents, operationKey: key });
++    expect(r.ok).toBe(true);
++  });
++}
++
++beforeEach(() => {
++  sessionStorage.clear();
++  push.mockClear();
++  registrationStore.setState({ hydrated: true });
++});
++
++describe('Stripe stand-in (C05) under R-012', () => {
++  it('shows payment outcomes for a valid open checkout', async () => {
++    await openCheckout();
++    render(<CheckoutStandIn />);
++    expect(await screen.findByTestId('outcome-paid', {}, { timeout: 3000 })).toBeTruthy();
++    expect(screen.queryByTestId('checkout-hold')).toBeNull();
++  });
++
++  it('a stored open checkout whose declaration is not exactly true offers no payment outcome at all', async () => {
++    await openCheckout();
++    for (const bad of [false, undefined, 'true', 1]) {
++      commit(withDeclaration(s(), bad));
++      const view = render(<CheckoutStandIn />);
++      expect(screen.getByTestId('checkout-hold').textContent).toMatch(/Confirm the owner declaration before paying/);
++      expect(screen.queryByTestId('outcome-paid')).toBeNull();
++      expect(screen.queryByText(/Payment processing/)).toBeNull();
++      view.unmount();
++    }
++    // The service refuses too (hiding the button is not the repair).
++    const before = s();
++    await act(async () => {
++      expect((await registration.resolveCheckout('paid')).ok).toBe(false);
++    });
++    expect(s()).toBe(before);
++  });
++
++  it('after withdrawal on the owner step the checkout is closed and says so', async () => {
++    await openCheckout();
++    await act(async () => {
++      await registration.saveOwner({ ...s().draft.owner, ownerDeclarationAccepted: false });
++    });
++    render(<CheckoutStandIn />);
++    expect(screen.getByTestId('checkout-closed').textContent).toMatch(/owner declaration was withdrawn after checkout opened.*Nothing was charged/);
++    expect(screen.queryByTestId('outcome-paid')).toBeNull();
++  });
++});
++
++describe('activation and unknown payment holds', () => {
++  it('a processing payment with the declaration withdrawn cannot be refreshed to confirmed', async () => {
++    await openCheckout();
++    await act(async () => {
++      await registration.resolveCheckout('processing');
++    });
++    act(() => {
++      registration.keepOwner({ ...s().draft.owner, ownerDeclarationAccepted: false });
++    });
++    render(<ActivationView />);
++    expect(screen.getByTestId('activation-hold').textContent).toMatch(/Confirm the owner declaration to continue/);
++    const refresh = screen.getByTestId('activation-refresh') as HTMLButtonElement;
++    expect(refresh.disabled).toBe(true);
++    await act(async () => {
++      expect((await registration.refreshActivation()).ok).toBe(false);
++    });
++    expect(s().activation?.paymentState).toBe('pending');
++  });
++
++  it('unknown payment: "Stripe confirms payment" is unavailable while held; "nothing charged" stays available', async () => {
++    act(() => {
++      registrationHarness.selectScenario('checkout_unknown');
++    });
++    act(() => {
++      registration.keepOwner({ ...s().draft.owner, ownerDeclarationAccepted: false });
++    });
++    render(<CheckoutIncompleteView />);
++    expect(screen.getByTestId('unknown-hold')).toBeTruthy();
++    expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(true);
++    expect((screen.getByTestId('unknown-not-charged') as HTMLButtonElement).disabled).toBe(false);
++    fireEvent.click(screen.getByTestId('unknown-not-charged'));
++    await waitFor(() => expect(s().checkout?.status).toBe('abandoned'), { timeout: 3000 });
++    expect(push).not.toHaveBeenCalledWith('/demo/activation');
++  });
++});
++
++describe('persisted storage and the whole-draft facade', () => {
++  it('a storage-v1 blob over a pending checkout rehydrates closed and unaccepted', async () => {
++    await openCheckout('qa_legacy_pending');
++    const legacy = JSON.parse(JSON.stringify(s()));
++    delete legacy.draft.owner.ownerDeclarationAccepted;
++    legacy.draft.owner.businessRole = 'owner';
++    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 1 }));
++    await act(async () => {
++      await registrationStore.persist.rehydrate();
++    });
++    expect(s().draft.owner.ownerDeclarationAccepted).toBe(false);
++    expect(s().checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
++    expect(s().quote).toBeNull();
++    expect(JSON.parse(sessionStorage.getItem(PUBLIC_STORAGE_KEY)!).version).toBe(2);
++  });
++
++  it('saveRegistrationDraft with a billion-store count stops at the first missing pharmacy without count-sized work', async () => {
++    act(() => {
++      registrationHarness.selectScenario('prefilled_one_store');
++    });
++    const draft = { ...s().draft, requestedStoreCount: 1_000_000_000 };
++    const started = Date.now();
++    // Push budget: a count-sized loop aborts here instead of exhausting memory.
++    const push = Array.prototype.push;
++    let pushes = 0;
++    Array.prototype.push = function (this: unknown[], ...items: unknown[]) {
++      pushes += items.length;
++      if (pushes > 10_000) throw new Error('push budget exceeded');
++      return push.apply(this, items);
++    };
++    let r;
++    try {
++      r = await registration.saveRegistrationDraft(draft);
++    } finally {
++      Array.prototype.push = push;
++    }
++    expect(pushes).toBeLessThan(10_000);
++    expect(r).toMatchObject({ ok: false, code: 'validation' });
++    expect(s().draft.requestedStoreCount).toBe(1_000_000_000);
++    expect(s().draft.pharmacies.length).toBe(2); // the one entered + the failed attempt at step 2
++    expect(Date.now() - started).toBeLessThan(2000);
++  });
++});

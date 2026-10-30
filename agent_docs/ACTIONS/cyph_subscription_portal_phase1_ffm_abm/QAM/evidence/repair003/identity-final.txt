@@ -1,0 +1,72 @@
+HEAD d6fe67839961fcbbf801b0bb04d3a2522e7b1f36
+Plan SHA256 4432895ed0dfc8dcf2b90a9e43b0d1b5de2245d87035b27f83a8586488279597
+ M CHANGELOG.md
+ M RECOVERY.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/IMPLEMENTATION_CONTRACT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+ M agent_docs/SESSIONS/session_2026-10-29.md
+ M e2e/public.owner-declaration.spec.ts
+ M e2e/public.repair002.spec.ts
+ M src/__tests__/portal-checkout-hold.test.tsx
+ M src/__tests__/portal-registration.test.ts
+ M src/components/portal/PublicDemoControls.tsx
+ M src/components/portal/activation/ActivationView.tsx
+ M src/components/portal/activation/CheckoutIncompleteView.tsx
+ M src/components/portal/handoff/CheckoutStandIn.tsx
+ M src/components/portal/register/ReviewView.tsx
+ M src/services/portal/index.ts
+ M src/services/portal/registration.ts
+ M src/services/portal/registrationService.ts
+ M src/types/portal/state.ts
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_REVIEW.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FINAL_CANDIDATE_PREPARATION_001.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FINAL_CANDIDATE_PREPARATION_001.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002/addendum_001/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002/addendum_002/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003_ENGINEERING_REPORT.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/combined001/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/q2/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair002/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair003/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/COMBINED_RETEST_001_IDENTITY_STOP.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/COMBINED_RETEST_001_RECEIPT.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/CYPH_Q1_LEAD_DECISION_001_2026-10-28_SUPERSEDED.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_COMBINED_RETEST_001_REVIEW.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_001.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_002.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q2_REVIEW_001.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_RETEST_001_REVIEW.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/Q1_RECEIPT.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/Q2_RECEIPT.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_002_RETEST_001_IDENTITY_STOP.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_002_RETEST_001_RECEIPT.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/REVIEW_START_HERE.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/combined001/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/q1/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/q2/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair002/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair003/
+?? agent_docs/RESPONSES/response_2026-10-29_135500_repair-002-addendum-001.md
+?? agent_docs/RESPONSES/response_2026-10-29_144500_repair-002-addendum-002.md
+?? agent_docs/RESPONSES/response_2026-10-29_164500_repair-003-ffm-abm-001.md
+?? e2e/public.activation-scenarios.spec.ts
+?? e2e/public.repair003.spec.ts

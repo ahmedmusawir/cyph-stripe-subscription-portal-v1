@@ -1,0 +1,21 @@
+{
+  time: '2026-10-29T06:04:08.002Z',
+  logoutRequests: 1,
+  signInAttempts: 1,
+  loginHTTP: 200,
+  login: true,
+  refresh: {
+    staleExpiryInjected: true,
+    tokenRequests: 2,
+    protectedPageVisible: true
+  },
+  publicClock: { delta: 1860000, expiry: true, consentsCleared: true },
+  twoTabIsolation: true,
+  accountClock: { expiry: true, consentCleared: true },
+  lightHandoffError: true,
+  demoNamespacesBefore: 2,
+  logoutHTTP: 200,
+  demoNamespacesAfter: 0,
+  protectedDeniedAfterLogout: true,
+  logoutPassed: true
+}

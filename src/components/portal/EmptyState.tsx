@@ -35,7 +35,7 @@ export function EmptyState({
         ) : null}
       </div>
       {action ? (
-        <Button variant="outline" size="sm" onClick={action.onClick}>
+        <Button variant="outline" onClick={action.onClick}>
           {action.label}
         </Button>
       ) : null}

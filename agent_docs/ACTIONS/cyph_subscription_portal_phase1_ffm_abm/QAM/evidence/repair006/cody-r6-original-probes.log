@@ -1,0 +1,22 @@
+FAIL qa-oracle/precedence.test.ts
+  ● completed ready payment rejects stale refresh after setup already finished
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      25 | test('paid and terminal reader fixtures retain records for browser assessment',()=>{for(const flag of flags){const s=make('paid',flag);fs.writeFileSync(`/tmp/cody-r6-paid-${flag}-fixture.json`,JSON.stringify({state:{s},version:3}))}const terminal=r.resolveUnknownPayment(r.resolveCheckout(open(),'unknown').state,'not_charged').state;fs.writeFileSync('/tmp/cody-r6-terminal-fixture.json',JSON.stringify({state:{s:terminal},version:3}))});
+      26 | for(const label of ['none','unknown','abandoned','expired'])test(`resend cannot claim delivery from stale confirmed flag when checkout ${label}`,()=>{const s=make(label,'confirmed');s.activation.provisioningState='ready';s.activation.emailState='failed';const out=r.resendAccessEmail(s,d);fs.appendFileSync('/tmp/cody-r6-reader-writer-observations.jsonl',JSON.stringify({case:'resend',checkout:label,phase:r.paymentPhase(s),beforeEmail:s.activation.emailState,ok:out.result.ok,afterEmail:out.state.activation?.emailState,checkoutAfter:out.state.checkout?.status??null})+'\n');expect(out.result.ok).toBe(false);expect(out.state).toBe(s)});
+    > 27 | test('completed ready payment rejects stale refresh after setup already finished',()=>{let s=r.resolveCheckout(open(),'paid').state;s=r.refreshActivation(s).state;expect(s.activation?.provisioningState).toBe('ready');const out=r.refreshActivation(s);fs.appendFileSync('/tmp/cody-r6-reader-writer-observations.jsonl',JSON.stringify({case:'ready-repeat-refresh',ok:out.result.ok,checkout:out.state.checkout?.status,deepUnchanged:JSON.stringify(s)===JSON.stringify(out.state),stateIdentity:out.state===s})+'\n');expect(out.result.ok).toBe(false);expect(out.state).toBe(s)});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^
+      28 |
+
+      at Object.<anonymous> (qa-oracle/precedence.test.ts:27:532)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 225 skipped, 5 passed, 231 total
+Snapshots:   0 total
+Time:        0.873 s
+Ran all test suites with tests matching "resend cannot|paid and terminal reader fixtures|completed ready payment rejects".
+Test results written to: ../cody-r6-original-probes.json

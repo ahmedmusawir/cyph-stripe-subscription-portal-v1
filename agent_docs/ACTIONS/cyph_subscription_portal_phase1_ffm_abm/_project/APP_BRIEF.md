@@ -1,6 +1,6 @@
 # APP BRIEF — Cyber Pharma Subscription Portal
 
-> Version: 1.1 · Date: 27 October 2026 (Asia/Dhaka)
+> Version: 1.2 · Date: 27 October 2026 (Asia/Dhaka) · v1.2 applies Director rulings R-008/R-009 (entry and access model)
 > Status: APPROVED FFM scope/design under RULINGS R-001; engineering plan approval remains E1.
 > Author: JARVIS, Architect · Director: Tony · Designer: Fable
 > Repository: `cyph-stripe-subscription-portal-v1`
@@ -10,7 +10,7 @@
 
 Give pharmacy account owners a simple place to register their pharmacies, review subscription costs, add stores and reach Stripe's hosted billing tools. The first deliverable is an FFM: a convincing, clickable demonstration with mock business data, ready for Coach's review before real billing and provisioning are built.
 
-OwedBook remains the product where pharmacy teams work. Mission Control remains an internal operations app. This portal owns the subscriber-facing registration and billing journeys. Marketing lives outside this module.
+OwedBook remains the product where pharmacy teams work. Mission Control remains an internal operations app. This portal owns the subscriber-facing registration and billing journeys. Marketing lives outside this module and sends prospective subscribers here: `/` opens the public plan-selection screen (`/demo/register/plan`); no separate home or marketing page is built.
 
 ## 2. Hero action
 
@@ -21,11 +21,11 @@ An existing owner can understand their plan and store count, then choose **Add a
 - Audience: pharmacy owners and the store administrators they nominate; ordinary team members only need a clear route back to OwedBook or to their owner.
 - Technical level: business users; simple labels, explicit prices and clear next steps.
 - Devices: desktop and mobile; 375px is the minimum design review width.
-- Existing implementation: real Supabase password-login plumbing and server-side role lookup. The cleaned repo temporarily admits only `superadmin`. It has no customer account authorization or working cross-app SSO.
+- Existing implementation: real Supabase password-login plumbing and server-side role lookup. Account management admits existing `admin` or `superadmin` accounts (R-008 shared rule; superadmin retained provisionally); `member` is denied. There is no customer account authorization or working cross-app SSO.
 - Product intent: the owner controls billing for their account. A nominated store administrator manages that store in OwedBook; designation does not transfer ownership or grant billing permission. An owner may also be a store administrator.
 - First-time entry: payment confirmation leads to an access email. A Stripe return alone never creates an authenticated customer session. Existing authenticated users should eventually move between OwedBook and this portal without another login.
 - FFM boundary: registration, access-email sending, invitations, billing, entitlement changes and external-app transitions are simulated. The Designer represents these journeys; the FFM must label demonstrations honestly. Live SSO proof and production authorization are separate integration work and must not be certified from a mock transition.
-- FFM access harness: retain the existing staff-only protection while designing customer personas with fixtures. The protected reviewer harness is specified in `IMPLEMENTATION_CONTRACT.md`. Do not convert global `admin/member` roles into account ownership.
+- FFM access model (R-009): registration, plan selection, owner/pharmacy forms, review, mock checkout and its completion/recovery screens are public and need no login; public navigation offers "Already subscribed? Sign in" to the real `/login`. `/dashboard` and add-store/account management require a real admin or superadmin session. Inside account management, synthetic owner/store-admin/member personas are selected with fixtures. Mock payment never creates a user, grants a role or signs anyone in. Eventual production journey: payment → account setup → admin access to OwedBook and subscription management; real provisioning, Stripe and SSO come later. Do not convert global `admin/member` roles into account ownership. Details in `IMPLEMENTATION_CONTRACT.md`.
 
 ## 4. Complexity class
 
@@ -107,7 +107,7 @@ Acceptance outcomes for the later FFM contract:
 | Proration, cancellation, refunds, retention, grace periods | Open commercial decision | Show neutral pending-policy text or clearly labeled demo values; never invent promises. |
 | Support/legal/sender addresses and link lifetime | Open content decision | Use visible placeholders; no production delivery promises. |
 | Live SSO / production domains | Open integration decision | Design the boundary now; later verify both apps and trusted domains. |
-| FFM persona access harness | Architect implementation decision | Retain real staff gate; synthetic personas behind it. See IMPLEMENTATION_CONTRACT.md. |
+| Entry and access model | Director ruling R-009 (with R-008) | Public registration from marketing; real admin/superadmin login for account management; members denied; synthetic personas inside account management. See IMPLEMENTATION_CONTRACT.md. |
 | Password and two-step setup after first email | Open cross-app scope | Show downstream setup handoff; do not promise unimplemented MFA or design it into this portal by accident. |
 | APA/code eligibility | Open business rule | Mock applied/rejected states only; a Stripe promotion does not establish APA membership. |
 

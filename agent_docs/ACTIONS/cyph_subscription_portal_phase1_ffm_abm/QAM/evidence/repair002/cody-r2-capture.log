@@ -1,0 +1,30 @@
+[
+  {
+    surface: 'closed',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'activation-hold',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'closed',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'activation-hold',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  }
+]

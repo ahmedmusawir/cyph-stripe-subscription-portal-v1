@@ -1,0 +1,14 @@
+# Packaging hygiene (FFM-ABM-001 E2): keep docs, credentials, browser state and
+# local build/test output out of any image build context.
+agent_docs/
+_SKILLS/
+.env*
+!.env.example
+.auth/
+test-results/
+playwright-report/
+blob-report/
+e2e/
+node_modules
+.next
+.git

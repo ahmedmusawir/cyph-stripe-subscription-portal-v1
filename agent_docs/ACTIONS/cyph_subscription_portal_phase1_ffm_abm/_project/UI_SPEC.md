@@ -1,6 +1,6 @@
 # UI_SPEC — Cyber Pharma Subscription Portal
 
-> **Version:** 1.0 · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** DRAFT for Architect review — approval requires an attributable Director decision on this revision
+> **Version:** 1.0 + R-009 wording + R-011 owner declaration · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** approved design (RULINGS R-001/R-004); this active copy applies R-009 sign-in wording. The received design copy under `_design/approved_v1_0/` is preserved unchanged.
 > **Design mode:** Demo (functional clarity; token discipline mandatory) · **Designer:** Fable · **Architect:** JARVIS · **Director:** Tony
 > **Repository baseline:** `cyph-stripe-subscription-portal-v1` foundation commit `1d15918` · **Module:** FFM-ABM-001-SUBSCRIPTION-PORTAL
 > **Inputs:** `APP_BRIEF.md` v1.0, `DATA_CONTRACT.md` v1.0, `DESIGNER_HANDOFF.md` v1.0, Coach's 17-board HTML, Architect feedback 27 Oct (v0.2 corrections, all applied)
@@ -70,13 +70,13 @@
 
 ### C01 Choose plan — `signup-plan.html`
 - **Purpose:** pick the (single, provisional) plan and the number of pharmacies; see an estimate; sign-in path.
-- **Elements:** radio-card plan selector (one real plan + a dashed "[Second plan TBD]" slot, not selectable); store-count control (− / count / +); estimate panel ("Estimate · not a charge"); Continue; "Already a member? Sign in" line; "not charged until the final step" note.
+- **Elements:** radio-card plan selector (one real plan + a dashed "[Second plan TBD]" slot, not selectable); store-count control (− / count / +); estimate panel ("Estimate · not a charge"); Continue; "Already subscribed? Sign in" line → real `/login` (R-009); "not charged until the final step" note.
 - **Gating:** Continue enabled whenever a plan is selected (always). Count ≥ 1; − disabled at 1.
 - **States:** `two` recomputes the estimate (1 included + 1 additional). `reduce_confirm` appears when lowering the count would discard an entered pharmacy: inline `alertdialog` with "Remove and continue with 1" (destructive-outline) / "Keep 2". `price_unavailable` replaces the estimate with a retry alert; Continue stays enabled because the full price is shown again before payment.
 - **Human checkpoint:** the reduce confirmation.
 
 ### C02 Owner details — `signup-owner.html`
-- **Fields:** first name*, last name*, work email* (help: access link goes here), mobile*, role* (Owner / Pharmacist in charge / Manager / Other — self-description, explicitly "doesn't change what you can do"), legal business name (optional, for invoices).
+- **Fields:** first name*, last name*, work email* (help: access link goes here), mobile*, legal business name (optional, for invoices), owner declaration* — required checkbox, initially unchecked: "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies." Help text: owner-only registration; a self-declaration; email and payment don't prove ownership. Separate from terms/payment consent. *(R-011, 29 Oct 2026: replaces the retired role select Owner / Pharmacist in charge / Manager / Other; the received design copy under `_design/` is preserved as history.)*
 - **Gating:** Continue always clickable; submit validates → `errors` state (summary + per-field) and focus moves to the summary.
 - **States:** `filled` = returning via Back with retained values. `existing_email` = info alert with "Sign in instead" (primary) / "Use a different email"; copy says "may already have an account" (anti-enumeration is implementation work). `saving` = busy CTA.
 
@@ -95,6 +95,13 @@
 
 ### C05 Stripe boundary — `stripe-checkout-handoff.html`
 - **Ours:** `leaving` — spinner, "Opening Stripe's secure checkout…", what-happens-next list, manual continue/back links.
+- **R-012 states (ours, before the external frame):** `closed` — "This checkout was closed" (declaration withdrawn or details changed after checkout opened; nothing charged; link to review); `hold` — "Confirm the owner declaration before paying" / "Finish your signup details before paying" with no outcome buttons. C06 shows the matching hold alert with Refresh disabled while a waiting payment is held; C14 `payment_unknown` disables "Stripe confirms payment" while held, and `resumable` explains a closed checkout.
+- **R-013 scope hold (ours; no approved render):** when a submitted payment's details changed afterwards, C06 (Refresh disabled) and C14 `payment_unknown` ("Stripe confirms payment" disabled; "nothing charged" enabled) show a warning "Your details changed after you paid" naming the paid scope ("This payment is for N pharmacies (names), $X…") with the primary action **Use the details I paid for**. Without a recorded scope (storage v2, edited) the warning reads "We can't match this payment to your current details", with "don't pay again" and support, and offers no restore. C05 shows "Your details changed after you paid" with no outcome buttons and a link to activation. C06 amounts and setup names come from the payment's recorded scope. **R-013 addendum 1:** an unscoped open checkout on C05 shows the same "We can't match this payment…" warning (no outcome buttons, no "after you paid"). After payment, C06 names a nominated admin ("a separate store invitation went to …" and "Preview …'s invitation") only if that admin is in the paid scope, and C07 previews use the covered details. Alerts use a dark-only lighter focus ring (`--ring` 12 93% 68%) so that a focused control inside a tinted alert clears 3:1 against the tint (R3-O03). **R-013 addendum 2 (R4-N01):**
+  - C04 shows "You've already submitted a payment" (**See payment status**; no "Edit my details instead"; Continue disabled) for a submitted payment.
+  - C05 shows "You've already submitted this payment" with no outcome buttons.
+  - C06 waiting copy is "This usually takes a moment. Your payment has been submitted, so please don't pay again." This deviates from the approved render, which offered "resume checkout".
+  - C14 links a processing payment to activation.
+  - A completed record with no provable scope shows "Confirmed by Stripe." and "Your pharmacies are set up…" without names or amount, plus the notice "We can't show what this payment covered" (support, `demo_act_01`). C07 previews name no pharmacies for it. **R-014 (REPAIR_005):** C06 renders from the payment phase. Unknown (any flag): "We're still checking whether a payment went through" → C14, no Refresh or retry. Not charged (abandoned/expired, any flag): "Nothing was charged for this payment" → C14 "Continue my signup", no Refresh. "Try payment again" only for a recorded failure on a declined checkout. **R-014 addendum 1 (REPAIR_006):** C06 reads the phase before the activation record. Paid with a missing or conflicting activation: H1 "Payment confirmed" and the notice "We can't show setup or access-email status here" (amount when recorded, support, `demo_act_01`), with no tracks, Refresh, retry or resend. A checkout closed without a charge (including before payment) shows the not-charged notice.
 - **External (labelled "Preview · external surface", dashed frame):** `preview` (Checkout stand-in: order we send, greyed non-editable Stripe form blocks, demo-outcome buttons → activation / review / checkout-incomplete / declined), `declined` (Stripe keeps the user; our next surface is C14), `portal_preview` (Customer Portal stand-in reached from "Manage billing"; return refreshes C12).
 - **Rule:** no editable card fields; access never granted from the browser return alone.
 
@@ -102,6 +109,7 @@
 - **Structure:** three independent tracks (Payment · Pharmacy setup · Access email), each with its own icon state; contextual panel; resend section.
 - **States:** `waiting_payment` (nothing set up), `provisioning` (paid, setting up), `ready` (open-email panel + resend), `delayed` (paid, setup late — "don't pay again"), `email_failed` (paid + set up; resend is the primary fix), `resent` (success line with time), `payment_failed` (retry on Stripe / review details; nothing set up).
 - **Rules:** no automatic login; link lifetime placeholder; wrong email → support, not an unauthenticated change control.
+- **Demo selection (R-012 addendum 2):** each named state (waiting_payment, provisioning, delayed, email_failed, payment_failed, ready) is loaded from the public Demo controls (Registration scenario → Load) and shown as named until the reviewer uses a customer action (Refresh status, Resend access email, Try payment again). There is no "next activation check" demo control.
 
 ### C07 Email previews — `references/email-access.html`
 - Envelope (From `[SENDING ADDRESS TBD]`, masked To, Subject) + 600px body. Variants: owner access ("Set up my account"), store-admin invitation ("Accept invitation"; billing stays with the owner), checkout-unfinished reminder, new link after expiry. Footer placeholders. Labelled reference; no sending.
@@ -130,12 +138,12 @@
 - Before leaving: cancel panel copy (account-wide effect; timing, charges, refunds, retention → `[POLICY TBD]`). After return: `cancel_scheduled` (Scheduled; Resume in Stripe), `canceled` (Start a new subscription; Past invoices in Stripe), `unchanged`, `refreshing`. No custom cancellation wizard.
 
 ### C14 Checkout not completed — `checkout-incomplete.html`
-- `resumable` (Stripe confirmed nothing charged → info), `payment_unknown` (warning + spinner; CTA paused; "don't pay again"), `declined` (destructive; CTA enabled), `expired` (`[HOLD PERIOD TBD]`; start a new signup). Saved-details panel with "Saved until" chip; "Review my details first".
+- `resumable` (Stripe confirmed nothing charged → info), `payment_unknown` (warning + spinner; CTA paused; "don't pay again"; introduction "Your details are saved. We're checking your payment status. Please don't pay again yet." — R-012 addendum 1; the other states keep "Payment wasn't completed, so your account isn't active yet."), `declined` (destructive; CTA enabled), `expired` (`[HOLD PERIOD TBD]`; start a new signup). Saved-details panel with "Saved until" chip; "Review my details first".
 
 ### C17 Access link — `access-link.html`
 - `valid` (spinner → downstream account setup, explicitly not designed here), `expired` / `used` (request a new link; no email shown or editable), `sending`, `request_sent` (neutral "if an account matches"), `error`.
 
-### Sign-in — `sign-in.html`
+### Sign-in — `sign-in.html` (realised on the real `/login`, R-009)
 - Kit login adapted: email + password, Sign in; `session_expired` info banner; `error` alert + `aria-invalid`; `busy`. Password reset and MFA shown as out-of-scope placeholders, not links.
 
 ## 6. Loading, empty and error states (summary)

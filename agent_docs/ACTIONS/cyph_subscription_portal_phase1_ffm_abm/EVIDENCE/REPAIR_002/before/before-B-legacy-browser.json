@@ -1,0 +1,9 @@
+{
+  "paidControlAvailable": true,
+  "final": {
+    "accepted": false,
+    "quoteCleared": true,
+    "checkout": "paid",
+    "payment": "confirmed"
+  }
+}

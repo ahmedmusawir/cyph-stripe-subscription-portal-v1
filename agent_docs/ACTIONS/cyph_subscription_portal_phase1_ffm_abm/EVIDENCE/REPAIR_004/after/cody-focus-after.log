@@ -1,0 +1,10 @@
+[
+  {
+    surface: 'unknown',
+    theme: 'dark',
+    actualZoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  }
+]

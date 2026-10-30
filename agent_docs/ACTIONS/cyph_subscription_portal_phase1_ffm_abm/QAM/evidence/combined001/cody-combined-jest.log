@@ -1,0 +1,7 @@
+
+Test Suites: 12 passed, 12 total
+Tests:       156 passed, 156 total
+Snapshots:   0 total
+Time:        6.567 s
+Ran all test suites.
+Test results written to: ../cody-combined-jest.json

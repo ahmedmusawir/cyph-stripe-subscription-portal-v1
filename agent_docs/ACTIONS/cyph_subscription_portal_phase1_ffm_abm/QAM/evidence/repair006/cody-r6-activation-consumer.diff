@@ -1,0 +1,80 @@
+--- /tmp/cody-r5-snapshot/src/components/portal/activation/ActivationView.tsx	2026-10-30 07:50:53.971173326 +0600
++++ /tmp/cody-r6-snapshot/src/components/portal/activation/ActivationView.tsx	2026-10-30 09:35:28.312120612 +0600
+@@ -9,7 +9,7 @@
+ import { Alert, DemoNotice, Placeholder } from "../Alert";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+-import { checkoutHold, formatCents, formatTime, paymentPhase, registration, useRegistration, type CheckoutScope } from "@/services/portal";
++import { checkoutHold, consistentActivation, formatCents, formatTime, paymentPhase, registration, useRegistration, type CheckoutScope } from "@/services/portal";
+ 
+ type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
+ 
+@@ -77,21 +77,11 @@
+ 
+   if (!hydrated) return <PageContainer><ViewSkeleton /></PageContainer>;
+ 
+-  const a = state.activation;
+-  if (!a) {
+-    return (
+-      <PageContainer>
+-        <DemoNotice />
+-        <Alert tone="info" title="There's no payment to track yet">
+-          Activation starts after checkout. <Link href="/demo/register/review" className="portal-link">Go to review</Link>
+-        </Alert>
+-      </PageContainer>
+-    );
+-  }
+-
+-  // REPAIR_005: the checkout record governs what this page may offer. A stale activation
+-  // flag never shows Refresh or "Try payment again" for a payment that is unknown or closed.
++  // REPAIR_005/006: the checkout record governs what this page may offer, before the
++  // activation record is read at all. A stale or missing activation flag never shows
++  // Refresh, "Try payment again" or "no payment" for a payment that is paid, unknown or closed.
+   const phase = paymentPhase(state);
++  const a = consistentActivation(state);
+   if (phase === "unknown") {
+     return (
+       <PageContainer>
+@@ -105,7 +95,7 @@
+       </PageContainer>
+     );
+   }
+-  if (phase !== "processing" && phase !== "paid" && phase !== "failed") {
++  if (phase === "not_charged") {
+     return (
+       <PageContainer>
+         <DemoNotice />
+@@ -118,6 +108,33 @@
+       </PageContainer>
+     );
+   }
++  if (phase === "paid" && !a) {
++    // R5-F01: paid, but the activation record is missing or disagrees. Setup and email
++    // outcomes aren't known, so none is claimed and nothing can be retried or refreshed.
++    const scope = state.checkout?.scope;
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <PageHeader eyebrow="Activation" title="Payment confirmed" />
++        <div className="mt-5" data-testid="activation-paid-status-unavailable">
++          <Alert tone="info" title="We can't show setup or access-email status here">
++            Stripe confirmed your payment{scope ? ` of ${formatCents(scope.dueNowCents)} (illustrative)` : ""}, so you don&apos;t need to pay again. Setup and access-email status aren&apos;t available on this page right now. If your access email hasn&apos;t arrived, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
++          </Alert>
++        </div>
++      </PageContainer>
++    );
++  }
++  if (!a) {
++    // No checkout, or one still open on the stand-in: no payment has been submitted.
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <Alert tone="info" title="There's no payment to track yet">
++          Activation starts after checkout. <Link href="/demo/register/review" className="portal-link">Go to review</Link>
++        </Alert>
++      </PageContainer>
++    );
++  }
+ 
+   const { draft } = state;
+   // R-013: the payment covers what its checkout was quoted for, not later edits.

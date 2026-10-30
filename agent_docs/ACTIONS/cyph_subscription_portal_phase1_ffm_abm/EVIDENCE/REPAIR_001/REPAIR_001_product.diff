@@ -1,0 +1,1758 @@
+diff --git a/e2e/account.journeys.spec.ts b/e2e/account.journeys.spec.ts
+index 21c0e2f..2ab0f03 100644
+--- a/e2e/account.journeys.spec.ts
++++ b/e2e/account.journeys.spec.ts
+@@ -1,9 +1,10 @@
+ import { mkdirSync, writeFileSync } from "node:fs";
+-import { expect, test, type Page } from "@playwright/test";
++import type { Page } from "@playwright/test";
++import { expect, test } from "./auth";
+ import { assertGate, checkSheet, measure, record, setTheme, THEMES, WIDTHS, type GateResult } from "./gate-m";
+ import { trackHosts } from "./helpers";
+ 
+-// REAL admin session (storage state from admin.setup). The account shown is
++// REAL admin session (in-memory fixture, e2e/auth.ts). The account shown is
+ // SYNTHETIC. Never screenshot or log the real identity.
+ const gate: GateResult[] = [];
+ 
+@@ -65,7 +66,7 @@ test("real admin reaches account management; synthetic account is labelled", asy
+   // /login skips straight in for an admin session.
+   await page.goto("/login");
+   await expect(page).toHaveURL(/\/dashboard$/);
+-  expect([...hosts].filter((h) => h !== "localhost:3001")).toEqual([]);
++  expect([...hosts].filter((h) => h !== new URL(test.info().project.use.baseURL!).host)).toEqual([]);
+ });
+ 
+ test("add store 2 → 3: $197.00, three distinct stores, invitation pending", async ({ page }) => {
+diff --git a/e2e/admin.setup.ts b/e2e/admin.setup.ts
+deleted file mode 100644
+index 6e31955..0000000
+--- a/e2e/admin.setup.ts
++++ /dev/null
+@@ -1,21 +0,0 @@
+-import { mkdirSync, writeFileSync } from "node:fs";
+-import { expect, test as setup } from "@playwright/test";
+-import { adminCredentials } from "./helpers";
+-
+-// One REAL sign-in through the real /login UI with the single authorized admin
+-// pair from ignored `.env.qa.local` (R-009). Values are never logged; the saved
+-// browser state goes to ignored `.auth/` and is deleted after the run.
+-setup("real admin login", async ({ page }) => {
+-  const creds = adminCredentials();
+-  setup.skip(!creds, "BLOCKED: .env.qa.local admin credentials absent");
+-  await page.goto("/login");
+-  await page.getByLabel("Work email").fill(creds!.email);
+-  await page.getByLabel("Password").fill(creds!.password);
+-  await page.getByRole("button", { name: "Sign in" }).click();
+-  await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15000 });
+-  await expect(page.getByRole("heading", { name: "Your subscription" })).toBeVisible();
+-  mkdirSync(".auth", { recursive: true });
+-  await page.context().storageState({ path: ".auth/admin.json" });
+-  mkdirSync("test-results", { recursive: true });
+-  writeFileSync("test-results/signin-count.txt", "real sign-ins performed by admin.setup: 1\n", { flag: "a" });
+-});
+diff --git a/e2e/logout.final.spec.ts b/e2e/logout.final.spec.ts
+index b50c07e..ccf0c05 100644
+--- a/e2e/logout.final.spec.ts
++++ b/e2e/logout.final.spec.ts
+@@ -1,4 +1,6 @@
+-import { expect, test } from "@playwright/test";
++import { expect, test } from "./auth";
++
++test.use({ allowLogout: true });
+ 
+ // LAST: the inherited logout route calls Supabase signOut() with its default
+ // GLOBAL scope, which ends every session of this account. Run once, at the end.
+diff --git a/e2e/public.journeys.spec.ts b/e2e/public.journeys.spec.ts
+index 387d022..0b74195 100644
+--- a/e2e/public.journeys.spec.ts
++++ b/e2e/public.journeys.spec.ts
+@@ -98,7 +98,7 @@ test("anonymous 1-store registration end to end, never asked to log in, no exter
+   // Mock payment never signs anyone in: account management is still gated.
+   await page.goto("/dashboard");
+   await expect(page).toHaveURL(/\/login$/);
+-  expect([...hosts].filter((h) => h !== "localhost:3001")).toEqual([]);
++  expect([...hosts].filter((h) => h !== new URL(test.info().project.use.baseURL!).host)).toEqual([]);
+ });
+ 
+ test("3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through", async ({ page }) => {
+diff --git a/playwright.config.ts b/playwright.config.ts
+index 3a95276..add78b3 100644
+--- a/playwright.config.ts
++++ b/playwright.config.ts
+@@ -23,19 +23,12 @@ export default defineConfig({
+   projects: [
+     { name: "public", testMatch: /public\..*\.spec\.ts/, use: { ...devices["Desktop Chrome"], channel: "chrome" } },
+     { name: "gate-m-public", testMatch: /gate-m\.public\.spec\.ts/, use: { channel: "chrome" } },
+-    { name: "admin-setup", testMatch: /admin\.setup\.ts/, use: { channel: "chrome" } },
+-    {
+-      name: "account",
+-      testMatch: /account\..*\.spec\.ts/,
+-      dependencies: ["admin-setup"],
+-      use: { ...devices["Desktop Chrome"], channel: "chrome", storageState: ".auth/admin.json" },
+-    },
+-    {
+-      // Runs after everything else: the inherited logout ends every session of the account.
+-      name: "logout",
+-      testMatch: /logout\.final\.spec\.ts/,
+-      dependencies: ["account"],
+-      use: { channel: "chrome", storageState: ".auth/admin.json" },
+-    },
++    // Account specs sign in through e2e/auth.ts (real admin, in memory; logout aborted).
++    { name: "account", testMatch: /account\..*\.spec\.ts/, use: { ...devices["Desktop Chrome"], channel: "chrome" } },
++    // Opt-in only (PORTAL_ALLOW_LOGOUT=1): the inherited logout is a GLOBAL
++    // sign-out that ends every session of the account, including the Director's.
++    ...(process.env.PORTAL_ALLOW_LOGOUT === "1"
++      ? [{ name: "logout", testMatch: /logout\.final\.spec\.ts/, use: { channel: "chrome" as const } }]
++      : []),
+   ],
+ });
+diff --git a/src/__tests__/portal-account.test.ts b/src/__tests__/portal-account.test.ts
+index fc53e86..ddaf202 100644
+--- a/src/__tests__/portal-account.test.ts
++++ b/src/__tests__/portal-account.test.ts
+@@ -210,10 +210,25 @@ describe('hosted billing return', () => {
+     expect(acct.openBillingPreview(first.state, 'manage').result.ok).toBe(true);
+   });
+ 
+-  it('load error then retry succeeds', () => {
+-    const s = acct.createAccount('load_error');
+-    const first = acct.loadAccount(s);
+-    expect(first.result.ok).toBe(false);
+-    expect(acct.loadAccount(first.state).result).toMatchObject({ ok: true, value: { kind: 'account' } });
++  it('load error persists across repeated loads until the explicit retry (REPAIR_001 Q2-F02)', () => {
++    let s = acct.createAccount('load_error');
++    // Remounts, navigation and reloads all call loadAccount: none may consume the error.
++    for (let i = 0; i < 3; i++) {
++      const read = acct.loadAccount(s);
++      expect(read.result.ok).toBe(false);
++      s = read.state;
++    }
++    expect(s.loadFailuresRemaining).toBe(1);
++    const retried = acct.retryLoadAccount(s);
++    expect(retried.result).toMatchObject({ ok: true, value: { kind: 'account' } });
++    expect(retried.state.loadFailuresRemaining).toBe(0);
++    // Coherent afterwards: the baseline two-store account, and later loads keep succeeding.
++    const after = acct.loadAccount(retried.state);
++    expect(after.result).toMatchObject({ ok: true, value: { kind: 'account', account: { subscription: { coveredStoreCount: 2, monthlyAmountCents: 14800 } } } });
++  });
++
++  it('retry on a healthy account is a plain load', () => {
++    const s = acct.createAccount('two_store_active');
++    expect(acct.retryLoadAccount(s).result).toMatchObject({ ok: true, value: { kind: 'account' } });
+   });
+ });
+diff --git a/src/__tests__/portal-registration.test.ts b/src/__tests__/portal-registration.test.ts
+index 8daf67e..2b5ce61 100644
+--- a/src/__tests__/portal-registration.test.ts
++++ b/src/__tests__/portal-registration.test.ts
+@@ -1,6 +1,7 @@
+ // Public registration engine (R-009 surface). Expected cents are hard-coded
+ // literals (DATA_CONTRACT §8), never computed with the code under test.
+ import * as reg from '@/services/portal/registration';
++import * as pricing from '@/services/portal/pricing';
+ import type { RegistrationState } from '@/types/portal/state';
+ import { REGISTRATION_SCENARIOS } from '@/types/portal/state';
+ import type { PharmacyDraft } from '@/types/portal/contract';
+@@ -99,6 +100,29 @@ describe('store count and repeat-N', () => {
+     expect(reg.setStoreCount(s, 1.5).result.ok).toBe(false);
+   });
+ 
++  // REPAIR_001 Q2-G06: repeat-N has no business cap; only unrepresentable counts are rejected.
++  it('accepts counts above 20 and prices them by repeat-N (literal cents)', () => {
++    let s = reg.createRegistration('fresh');
++    s = reg.setStoreCount(s, 21).state;
++    s = reg.saveOwner(s, owner).state;
++    for (let i = 0; i < 21; i++) {
++      const step = reg.savePharmacy(s, i, pharmacy(i + 1, { ncpdp: String(1000000 + i), npi: String(1000000000 + i) }));
++      expect(step.result.ok).toBe(true);
++      s = step.state;
++    }
++    expect(s.draft.requestedStoreCount).toBe(21);
++    expect(value<{ newRecurringCents: number; dueNowCents: number; proposedStoreCount: number }>(reg.requestQuote(s, deps))).toMatchObject({ newRecurringCents: 107900, dueNowCents: 107900, proposedStoreCount: 21 });
++    expect(reg.setStoreCount(reg.createRegistration('fresh'), 25).result.ok).toBe(true);
++  });
++
++  it('rejects unsafe or non-numeric counts explicitly', () => {
++    const s = reg.createRegistration('fresh');
++    for (const bad of [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 2, Infinity, NaN, -1, '3', null]) {
++      expect(reg.setStoreCount(s, bad).result).toMatchObject({ ok: false });
++    }
++    expect(reg.setStoreCount(s, Number.MAX_SAFE_INTEGER).result).toMatchObject({ ok: false, code: 'validation', message: "That many pharmacies can't be priced exactly." });
++  });
++
+   it('reports which entered pharmacies a reduction would discard', () => {
+     const s = completeDraft(3);
+     expect(reg.storeCountDiscards(s, 1)).toEqual(['Example Test Pharmacy 2', 'Example Test Pharmacy 3']);
+@@ -319,3 +343,16 @@ describe('scenarios', () => {
+     }
+   });
+ });
++
++describe('repeat-N pricing bound (REPAIR_001 Q2-G06)', () => {
++  it('prices 1/2/3/21/1000 stores by 9900 + 4900·(N−1) (literal cents)', () => {
++    expect([1, 2, 3, 21, 1000].map(pricing.initialRecurringCents)).toEqual([9900, 14800, 19700, 107900, 4905000]);
++  });
++  it('the only upper bound keeps the total an exact safe integer', () => {
++    const max = pricing.MAX_REPRESENTABLE_STORES;
++    expect(max).toBeGreaterThan(1_000_000_000);
++    expect(Number.isSafeInteger(pricing.initialRecurringCents(max))).toBe(true);
++    expect(pricing.isValidStoreCount(max + 1)).toBe(false);
++    expect(() => pricing.initialRecurringCents(max + 1)).toThrow(RangeError);
++  });
++});
+diff --git a/src/app/(handoff)/demo/stripe/page.tsx b/src/app/(handoff)/demo/stripe/page.tsx
+index e8482c6..ed57d12 100644
+--- a/src/app/(handoff)/demo/stripe/page.tsx
++++ b/src/app/(handoff)/demo/stripe/page.tsx
+@@ -1,5 +1,5 @@
+ import { accountKeyFor, requireAccountUser } from "@/services/auth/session";
+-import { AccountDemoProvider, BILLING_PURPOSES, type BillingPurpose } from "@/services/portal";
++import { AccountDemoProvider, classifyStripeStandIn } from "@/services/portal";
+ import { CheckoutStandIn } from "@/components/portal/handoff/CheckoutStandIn";
+ import { PortalStandIn } from "@/components/portal/handoff/PortalStandIn";
+ 
+@@ -7,22 +7,21 @@ export const metadata = { title: "Stripe (stand-in) — Pharmacy Books" };
+ export const dynamic = "force-dynamic";
+ 
+ // Shared stand-in route (RULINGS R-009):
+-//   mode=checkout (default)  → PUBLIC initial-checkout stand-in (registration draft only)
+-//   mode=portal | mode=card  → ACCOUNT management: real admin/superadmin required
+-//                              BEFORE anything renders or the account store mounts.
+-// Query values only select a mode; they can add the login requirement, never remove it.
++//   mode absent / checkout  → PUBLIC initial-checkout stand-in (registration draft only)
++//   mode=portal | mode=card → ACCOUNT management: real admin/superadmin required
++//                             BEFORE anything renders or the account store mounts.
++// Query values only select a mode; they can add the login requirement, never
++// remove it. Repeated, re-ordered, mixed-case or unknown `mode` values are
++// classified in classifyStripeStandIn and fail closed (REPAIR_001 Q2-F03).
+ export default async function Page({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+-  const params = await searchParams;
+-  const mode = params.mode === "portal" || params.mode === "card" ? params.mode : "checkout";
+-  if (mode === "checkout") return <CheckoutStandIn />;
++  const route = classifyStripeStandIn(await searchParams);
++  if (route.access === "public") return <CheckoutStandIn />;
+ 
+   const user = await requireAccountUser();
+-  const purpose: BillingPurpose = (BILLING_PURPOSES as readonly string[]).includes(String(params.purpose))
+-    ? (params.purpose as BillingPurpose)
+-    : "manage";
++  if (route.mode === "checkout") return <CheckoutStandIn />;
+   return (
+     <AccountDemoProvider accountKey={accountKeyFor(user.id)}>
+-      <PortalStandIn mode={mode} purpose={purpose} />
++      <PortalStandIn mode={route.mode} purpose={route.purpose} />
+     </AccountDemoProvider>
+   );
+ }
+diff --git a/src/app/globals.scss b/src/app/globals.scss
+index 6550ca9..81e7fef 100644
+--- a/src/app/globals.scss
++++ b/src/app/globals.scss
+@@ -12,7 +12,13 @@
+    each marked "portal:" with the inherited value. Reason: measured WCAG AA on
+    the rendered screens (see DECISIONS_AND_DELTAS.md §5). Hue/saturation kept;
+    only lightness moved, except primary-foreground (white → dark ink on coral).
+-   No fleet-wide rollout is implied; OwedBook / Mission Control keep theirs. */
++   No fleet-wide rollout is implied; OwedBook / Mission Control keep theirs.
++
++   REPAIR_001 (2026-10-28, Q2-F01) — six more values, marked "portal R1:".
++   Rendered light-theme small text measured 3.95–4.44:1; text-entry boundaries
++   and the keyboard focus ring were below 3:1. Hue kept; lightness only. Coral
++   (--primary) is unchanged as the brand fill; only the light focus RING uses a
++   deeper coral. Decorative --border is deliberately left as approved. */
+ @layer base {
+   :root {
+     --background: 217 16% 90%;
+@@ -26,13 +32,13 @@
+     --secondary: 216 16% 88%;
+     --secondary-foreground: 220 24% 22%;
+     --muted: 216 16% 93%;
+-    --muted-foreground: 220 10% 42%;
++    --muted-foreground: 220 10% 36%;    /* portal R1: was 220 10% 42% — 4.44 on page, 3.95 on tinted notices; now ≥4.8 */
+     --accent: 216 16% 90%;
+     --accent-foreground: 220 24% 22%;
+     --border: 216 15% 80%;
+-    --input: 216 15% 80%;
+-    --ring: 12 93% 64%;
+-    --destructive: 2 67% 51%;
++    --input: 216 15% 50%;               /* portal R1: was 216 15% 80% — field boundary 1.4–1.65:1; now ≥3.3 (--border unchanged) */
++    --ring: 12 80% 44%;                 /* portal R1: was 12 93% 64% (= primary) — focus ring 2.4–2.8:1; now ≥3.8 */
++    --destructive: 2 67% 40%;           /* portal R1: was 2 67% 51% — 3.78 on page, 3.3 on its tint; now ≥4.7 */
+     --destructive-foreground: 0 0% 100%;
+     --success: 131 54% 34%;             /* portal: was 131 54% 40% — small text on card 4.6:1 */
+     --success-foreground: 0 0% 100%;
+@@ -55,11 +61,11 @@
+     --secondary: 220 13% 31%;
+     --secondary-foreground: 218 22% 92%;
+     --muted: 220 13% 31%;
+-    --muted-foreground: 218 14% 70%;
++    --muted-foreground: 218 14% 76%;    /* portal R1: was 218 14% 70% — 3.96 on muted (demo strip); now 4.7 */
+     --accent: 220 13% 33%;
+     --accent-foreground: 218 22% 92%;
+     --border: 220 12% 38%;
+-    --input: 220 12% 38%;
++    --input: 220 12% 62%;               /* portal R1: was 220 12% 38% — field boundary 1.3–1.5:1; now ≥3.0 (--border unchanged) */
+     --ring: 12 93% 64%;
+     --destructive: 351 95% 77%;         /* portal: was 351 95% 71% — small text on card 4.6:1 */
+     --destructive-foreground: 220 24% 12%;
+@@ -92,6 +98,19 @@ body {
+   input[type="radio"] {
+     accent-color: hsl(var(--primary));
+   }
++
++  /* REPAIR_001 (Q2-F01): one token-driven keyboard focus indicator for
++     anything without its own ring utility (skip link, plain links, native
++     checkboxes). Utilities such as focus-visible:outline-none + ring-ring win
++     because they sit in a later layer. Radios are excluded: their RadioCard /
++     plan-card label carries the focus-within ring. */
++  :focus-visible {
++    outline: 2px solid hsl(var(--ring));
++    outline-offset: 2px;
++  }
++  input[type="radio"]:focus-visible {
++    outline: none;
++  }
+ }
+ 
+ @layer components {
+diff --git a/src/components/portal/AccountStrip.tsx b/src/components/portal/AccountStrip.tsx
+index 661ad8d..e16dfca 100644
+--- a/src/components/portal/AccountStrip.tsx
++++ b/src/components/portal/AccountStrip.tsx
+@@ -58,7 +58,7 @@ export function AccountStrip({ realName, roleLabel }: { realName: string; roleLa
+             <div className="space-y-1.5">
+               <label htmlFor="demo-acct-scenario" className="font-medium text-foreground">Account scenario</label>
+               <div className="flex gap-2">
+-                <select id="demo-acct-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground">
++                <select id="demo-acct-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                   <option value="">Choose…</option>
+                   {ACCOUNT_SCENARIOS.map((id) => (
+                     <option key={id} value={id}>{SCENARIO_LABEL[id]}</option>
+@@ -83,7 +83,7 @@ export function AccountStrip({ realName, roleLabel }: { realName: string; roleLa
+                 id="demo-persona"
+                 value={state.persona}
+                 onChange={(e) => account.harness.selectPersona(e.target.value)}
+-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground"
++                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+               >
+                 {ACCOUNT_PERSONAS.map((p) => (
+                   <option key={p} value={p}>{PERSONA_PROFILE[p].label} — {PERSONA_PROFILE[p].name}</option>
+@@ -96,7 +96,7 @@ export function AccountStrip({ realName, roleLabel }: { realName: string; roleLa
+                 id="demo-next-add"
+                 value={state.nextAddOutcome}
+                 onChange={(e) => account.harness.setNextAddOutcome(e.target.value)}
+-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground"
++                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+               >
+                 {ADD_OUTCOMES.map((o) => (
+                   <option key={o} value={o}>{OUTCOME_LABEL[o]}</option>
+diff --git a/src/components/portal/DataTable.tsx b/src/components/portal/DataTable.tsx
+index c595156..7c9f79e 100644
+--- a/src/components/portal/DataTable.tsx
++++ b/src/components/portal/DataTable.tsx
+@@ -31,6 +31,12 @@ export interface DataTableProps<T> {
+   onRowClick?: (row: T) => void;
+   empty?: React.ReactNode;
+   className?: string;
++  /** Classes for the ≥ md table wrapper (e.g. the bordered card around it). */
++  tableClassName?: string;
++  /** Screen-specific < md card body; replaces the generic stacked rows. */
++  renderMobileCard?: (row: T) => React.ReactNode;
++  /** Accessible name for the < md list. */
++  mobileLabel?: string;
+ }
+ 
+ const alignClass = (align?: "left" | "right" | "center") =>
+@@ -43,6 +49,9 @@ export function DataTable<T>({
+   onRowClick,
+   empty,
+   className,
++  tableClassName,
++  renderMobileCard,
++  mobileLabel,
+ }: DataTableProps<T>) {
+   if (rows.length === 0 && empty) return <>{empty}</>;
+ 
+@@ -52,7 +61,7 @@ export function DataTable<T>({
+   return (
+     <div className={className}>
+       {/* Desktop / tablet ≥ md */}
+-      <div className="hidden md:block">
++      <div className={cn("hidden md:block", tableClassName)}>
+         <Table>
+           <TableHeader className="sticky top-0 bg-card">
+             <TableRow>
+@@ -85,7 +94,7 @@ export function DataTable<T>({
+       </div>
+ 
+       {/* Mobile < md — stacked blocks; header hidden, primary cell first */}
+-      <ul className="flex flex-col gap-3 md:hidden">
++      <ul className="flex flex-col gap-3 md:hidden" aria-label={mobileLabel}>
+         {rows.map((row) => (
+           <li
+             key={getRowKey(row)}
+@@ -95,17 +104,23 @@ export function DataTable<T>({
+               onRowClick && "cursor-pointer",
+             )}
+           >
+-            <div className="mb-2 text-sm font-semibold text-foreground">{primary.cell(row)}</div>
+-            <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm tabular-nums">
+-              {rest.map((c) => (
+-                <React.Fragment key={c.key}>
+-                  <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
+-                    {c.header}
+-                  </dt>
+-                  <dd className="text-right text-foreground">{c.cell(row)}</dd>
+-                </React.Fragment>
+-              ))}
+-            </dl>
++            {renderMobileCard ? (
++              renderMobileCard(row)
++            ) : (
++              <>
++                <div className="mb-2 text-sm font-semibold text-foreground">{primary.cell(row)}</div>
++                <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm tabular-nums">
++                  {rest.map((c) => (
++                    <React.Fragment key={c.key}>
++                      <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
++                        {c.header}
++                      </dt>
++                      <dd className="text-right text-foreground">{c.cell(row)}</dd>
++                    </React.Fragment>
++                  ))}
++                </dl>
++              </>
++            )}
+           </li>
+         ))}
+       </ul>
+diff --git a/src/components/portal/PublicDemoControls.tsx b/src/components/portal/PublicDemoControls.tsx
+index 292e59a..5b61a7b 100644
+--- a/src/components/portal/PublicDemoControls.tsx
++++ b/src/components/portal/PublicDemoControls.tsx
+@@ -76,7 +76,7 @@ export function PublicDemoControls() {
+             <div className="space-y-1.5">
+               <label htmlFor="demo-reg-scenario" className="font-medium text-foreground">Registration scenario</label>
+               <div className="flex gap-2">
+-                <select id="demo-reg-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground">
++                <select id="demo-reg-scenario" value={scenario} onChange={(e) => setScenario(e.target.value)} className="h-11 min-w-0 flex-1 border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                   <option value="">Choose…</option>
+                   {REGISTRATION_SCENARIOS.map((id) => (
+                     <option key={id} value={id}>{LABEL[id]}</option>
+@@ -91,7 +91,7 @@ export function PublicDemoControls() {
+                 id="demo-activation-plan"
+                 value={hydrated ? state.activationPlan : "ready"}
+                 onChange={(e) => registrationHarness.setActivationPlan(e.target.value as (typeof ACTIVATION_PLANS)[number])}
+-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground"
++                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+               >
+                 {ACTIVATION_PLANS.map((p) => (
+                   <option key={p} value={p}>{p.replace("_", " ")}</option>
+diff --git a/src/components/portal/account/DashboardView.tsx b/src/components/portal/account/DashboardView.tsx
+index d3ebd15..7b5336e 100644
+--- a/src/components/portal/account/DashboardView.tsx
++++ b/src/components/portal/account/DashboardView.tsx
+@@ -39,6 +39,9 @@ export function DashboardView() {
+   const [handoffError, setHandoffError] = useState<BillingPurpose | null>(null);
+   const [launching, setLaunching] = useState<BillingPurpose | null>(null);
+   const [retrying, setRetrying] = useState(false);
++  const [reloading, setReloading] = useState(false);
++  const [loadedAt, setLoadedAt] = useState<number | null>(null);
++  const [now, setNow] = useState(() => Date.now());
+   const seq = useRef(0);
+ 
+   const refreshing = state.returnStatus === "refreshing";
+@@ -47,18 +50,45 @@ export function DashboardView() {
+   useEffect(() => {
+     if (!hydrated) return;
+     const mine = ++seq.current;
++    // Returning from Stripe: show the last-known summary under the "refreshing"
++    // banner (approved C13 state) instead of a blank skeleton. REPAIR_001 R1-N01.
++    if (refreshing) {
++      const last = account.peekAccount();
++      if (last.ok) setView(last.value);
++    }
+     const run = refreshing ? account.refreshAfterHandoff("account_billing") : account.loadAccount();
+     void run.then((r) => {
+       if (mine !== seq.current) return;
+       setView(r.ok ? r.value : { kind: "error" });
++      if (r.ok) setLoadedAt(Date.now());
+     });
+   }, [hydrated, state.account, state.persona, state.scenario, refreshing, account]);
+ 
++  // "Last refreshed just now" ages honestly (approved refresh line, Q2-O04).
++  useEffect(() => {
++    const id = window.setInterval(() => setNow(Date.now()), 30_000);
++    return () => window.clearInterval(id);
++  }, []);
++
++  async function reloadSummary() {
++    setReloading(true);
++    const mine = ++seq.current;
++    const r = await account.loadAccount();
++    setReloading(false);
++    if (mine !== seq.current) return;
++    setView(r.ok ? r.value : { kind: "error" });
++    if (r.ok) {
++      setLoadedAt(Date.now());
++      setNow(Date.now());
++    }
++  }
++
+   async function retryLoad() {
+     setRetrying(true);
+-    const r = await account.loadAccount();
++    const r = await account.retryLoadAccount();
+     setRetrying(false);
+     setView(r.ok ? r.value : { kind: "error" });
++    if (r.ok) setLoadedAt(Date.now());
+   }
+ 
+   async function openBilling(purpose: BillingPurpose) {
+@@ -147,6 +177,25 @@ export function DashboardView() {
+   const all = covered === 1 ? "your pharmacy" : covered === 2 ? "both pharmacies" : `all ${covered} pharmacies`;
+   const busy = refreshing || launching !== null;
+ 
++  const monthly = (p: PharmacyListItem) =>
++    p.isIncluded ? "Included" : p.monthlyAmountCents !== undefined ? formatCents(p.monthlyAmountCents) : "—";
++  const sentOn = formatDate("2026-10-26").replace(/ \d{4}$/, "");
++  const action = (p: PharmacyListItem) =>
++    p.invitationStatus === "pending" ? (
++      <button
++        type="button"
++        className="portal-link inline-flex min-h-[44px] items-center text-sm"
++        disabled={busy}
++        onClick={() => toast({ title: "Invitation resent", description: `Simulated — nothing was sent to ${p.adminName}.` })}
++      >
++        Resend invitation<span className="sr-only"> to {p.adminName}</span>
++      </button>
++    ) : (
++      <Link href="/demo/references/owedbook" className="portal-link inline-flex min-h-[44px] items-center text-sm">
++        Open in OwedBook<span className="sr-only"> — {p.name}</span>
++      </Link>
++    );
++
+   const columns = [
+     {
+       key: "name",
+@@ -168,7 +217,7 @@ export function DashboardView() {
+         </span>
+       ),
+     },
+-    { key: "monthly", header: "Monthly", cell: (p: PharmacyListItem) => <span className="tabular-nums">{p.isIncluded ? "Included" : p.monthlyAmountCents !== undefined ? formatCents(p.monthlyAmountCents) : "—"}</span> },
++    { key: "monthly", header: "Monthly", cell: (p: PharmacyListItem) => <span className="tabular-nums">{monthly(p)}</span> },
+     { key: "act", header: "Activation", cell: (p: PharmacyListItem) => <StatusPill map={STORE_PILL} value={p.activationStatus} checking={refreshing} /> },
+     {
+       key: "inv",
+@@ -177,32 +226,64 @@ export function DashboardView() {
+         <div>
+           <StatusPill map={INVITATION_PILL} value={p.invitationStatus} checking={refreshing} />
+           {p.invitationStatus === "pending" && p.invitationEmailMasked ? (
+-            <p className="mt-1 break-all text-xs text-muted-foreground">Sent {formatDate("2026-10-26").replace(/ \d{4}$/, "")} · {p.invitationEmailMasked}</p>
++            <p className="mt-1 break-all text-xs text-muted-foreground">Sent {sentOn} · {p.invitationEmailMasked}</p>
+           ) : null}
+         </div>
+       ),
+     },
+-    {
+-      key: "action",
+-      header: "Actions",
+-      cell: (p: PharmacyListItem) =>
+-        p.invitationStatus === "pending" ? (
+-          <button
+-            type="button"
+-            className="portal-link inline-flex min-h-[44px] items-center text-sm"
+-            disabled={busy}
+-            onClick={() => toast({ title: "Invitation resent", description: `Simulated — nothing was sent to ${p.adminName}.` })}
+-          >
+-            Resend invitation<span className="sr-only"> to {p.adminName}</span>
+-          </button>
+-        ) : (
+-          <Link href="/demo/references/owedbook" className="portal-link inline-flex min-h-[44px] items-center text-sm">
+-            Open in OwedBook<span className="sr-only"> — {p.name}</span>
+-          </Link>
+-        ),
+-    },
++    { key: "action", header: "Actions", cell: action },
+   ];
+ 
++  // < md card, as approved (account-billing mobile): activation pill in the
++  // title row; Store admin | Monthly; Invitation | action.
++  const card = (p: PharmacyListItem) => (
++    <div className="min-w-0" data-testid="pharmacy-card">
++      <div className="flex items-start justify-between gap-2">
++        <div className="min-w-0">
++          <p className="font-semibold text-foreground">{p.name}</p>
++          <p className="text-xs tabular-nums text-muted-foreground">{p.ncpdpDisplay}</p>
++        </div>
++        <span className="shrink-0" data-testid="card-activation">
++          <StatusPill map={STORE_PILL} value={p.activationStatus} checking={refreshing} />
++        </span>
++      </div>
++      <dl className="mt-3 grid min-w-0 grid-cols-2 gap-3 text-sm">
++        <div className="min-w-0">
++          <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">Store admin</dt>
++          <dd className="text-foreground">
++            {p.adminName} <RoleLabel>{p.ownerIsAdmin ? "Owner" : "Store admin"}</RoleLabel>
++          </dd>
++        </div>
++        <div className="min-w-0">
++          <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">Monthly</dt>
++          <dd className="tabular-nums text-foreground">{monthly(p)}</dd>
++        </div>
++        <div className="min-w-0">
++          <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">Invitation</dt>
++          <dd>
++            <StatusPill map={INVITATION_PILL} value={p.invitationStatus} checking={refreshing} />
++            {p.invitationStatus === "pending" ? <p className="mt-0.5 text-[11px] text-muted-foreground">Sent {sentOn}</p> : null}
++          </dd>
++        </div>
++        <div className="self-end text-right">{action(p)}</div>
++      </dl>
++    </div>
++  );
++
++  const refreshLine = refreshing ? (
++    <span>Refreshing…</span>
++  ) : (
++    <>
++      {state.returnStatus !== "none" && state.refreshedAt
++        ? `Refreshed ${formatTime(state.refreshedAt)} after returning from Stripe`
++        : `Last refreshed ${loadedAt === null || now - loadedAt < 60_000 ? "just now" : `at ${formatTime(new Date(loadedAt).toISOString())}`}`}
++      {" · "}
++      <button type="button" className="portal-link inline-flex min-h-[44px] items-center" onClick={reloadSummary} disabled={busy || reloading} aria-busy={reloading || undefined}>
++        Refresh
++      </button>
++    </>
++  );
++
+   const addStore =
+     availability === "allowed" ? (
+       <Button asChild={!busy} disabled={busy} className="w-full sm:w-auto" data-testid="add-store">
+@@ -223,7 +304,7 @@ export function DashboardView() {
+             Billing owner <span className="font-medium text-foreground">{a.ownerName}</span> · <span className="break-all">{a.ownerEmail}</span>
+           </>
+         }
+-        meta={state.refreshedAt ? <>Last refreshed {formatTime(state.refreshedAt)}</> : null}
++        meta={<p className="sm:text-right" data-testid="refresh-line" aria-live="polite">{refreshLine}</p>}
+       />
+ 
+       <div className="mt-5 space-y-3" data-testid="dashboard-banners">
+@@ -346,20 +427,23 @@ export function DashboardView() {
+         </div>
+       </section>
+ 
+-      <section aria-labelledby="ph-h" className="mt-5 border border-border bg-card p-4 sm:p-5">
+-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
++      <section aria-labelledby="ph-h" className="mt-8" data-testid="pharmacies-section">
++        <div className="mb-3 flex items-end justify-between gap-3">
+           <div className="min-w-0">
+-            <h2 id="ph-h" className="text-base font-semibold text-foreground">Pharmacies on this plan</h2>
+-            <p className="text-xs text-muted-foreground">Each pharmacy has one store admin. Store admins who are not the billing owner cannot manage billing. An owner can also be a store admin.</p>
++            <h2 id="ph-h" className="text-xl font-bold text-foreground">Pharmacies on this plan</h2>
++            <p className="text-sm text-muted-foreground">Each pharmacy has one store admin. Store admins who are not the billing owner cannot manage billing. An owner can also be a store admin.</p>
+           </div>
+-          <Pill tone="muted" className="self-start">
++          <span className="shrink-0 text-sm tabular-nums text-muted-foreground" data-testid="pharmacy-count">
+             {a.pharmacies.length} of {covered}
+-          </Pill>
++          </span>
+         </div>
+         <DataTable
+           columns={columns}
+           rows={a.pharmacies}
+           getRowKey={(p) => p.id}
++          tableClassName="border border-border bg-card"
++          renderMobileCard={card}
++          mobileLabel="Pharmacies covered by this subscription"
+           empty={
+             <EmptyState
+               icon={Home}
+@@ -371,7 +455,7 @@ export function DashboardView() {
+         />
+       </section>
+ 
+-      <div className="mt-5 grid gap-5 lg:grid-cols-2">
++      <div className="mt-8 grid gap-5 lg:grid-cols-2">
+         <section aria-labelledby="own-h" className="border border-border bg-card p-4 sm:p-5">
+           <h2 id="own-h" className="text-base font-semibold text-foreground">Billing owner</h2>
+           <div className="mt-3 flex items-center gap-3">
+diff --git a/src/components/portal/register/PlanView.tsx b/src/components/portal/register/PlanView.tsx
+index 041a426..bcde4e7 100644
+--- a/src/components/portal/register/PlanView.tsx
++++ b/src/components/portal/register/PlanView.tsx
+@@ -17,7 +17,6 @@ import {
+   estimateAvailable,
+   formatCents,
+   initialRecurringCents,
+-  MAX_STORES,
+   PLAN_VIEW,
+   registration,
+   useRegistration,
+@@ -110,7 +109,7 @@ export function PlanView({ notice }: { notice: boolean }) {
+                 Each additional store is {formatCents(ADDITIONAL_STORE_CENTS)} / month (illustrative). Start with one if you&apos;re unsure — you can add stores any time. You&apos;ll enter details for each pharmacy before payment.
+               </p>
+             </div>
+-            <Counter id="stores" value={confirm ? count : count} max={MAX_STORES} onChange={change} labelledBy="stores-label" />
++            <Counter id="stores" value={confirm ? count : count} onChange={change} labelledBy="stores-label" />
+           </div>
+           {confirm ? (
+             <div className="mt-4 border-l-[3px] border-warning bg-warning/10 p-3 text-sm" role="alertdialog" aria-labelledby="rc-h" aria-describedby="rc-d" data-testid="reduce-confirm">
+diff --git a/src/services/portal/account.ts b/src/services/portal/account.ts
+index 169bece..888b3fe 100644
+--- a/src/services/portal/account.ts
++++ b/src/services/portal/account.ts
+@@ -209,13 +209,23 @@ function denied(): AccountRead {
+ 
+ export type AccountReadModel = { kind: 'account'; account: AccountViewModel } | Extract<AccountRead, { kind: 'denied' }>;
+ 
++/**
++ * A pending load error is NOT consumed by reading: every load (remount, route
++ * change, reload, a second effect) keeps failing until the user's explicit
++ * "Try again" (`retryLoadAccount`). REPAIR_001 Q2-F02 — a one-shot failure was
++ * silently used up by whichever load ran first.
++ */
+ export function loadAccount(state: AccountState): Step<AccountReadModel> {
+-  if (state.loadFailuresRemaining > 0)
+-    return fail({ ...state, loadFailuresRemaining: state.loadFailuresRemaining - 1 }, 'conflict', "We couldn't load your account.");
++  if (state.loadFailuresRemaining > 0) return fail(state, 'conflict', "We couldn't load your account.");
+   if (!capabilitiesFor(state.persona).canViewBilling) return ok(state, denied() as AccountReadModel);
+   return ok(state, { kind: 'account', account: toView(state) });
+ }
+ 
++/** The error view's "Try again": one retry clears one simulated failure, then loads. */
++export function retryLoadAccount(state: AccountState): Step<AccountReadModel> {
++  return loadAccount({ ...state, loadFailuresRemaining: Math.max(0, state.loadFailuresRemaining - 1) });
++}
++
+ export type AddStoreAvailability = 'allowed' | 'paused_past_due' | 'paused_cancel_scheduled' | 'unavailable_canceled';
+ 
+ export function addStoreAvailability(state: AccountState): AddStoreAvailability {
+diff --git a/src/services/portal/accountService.tsx b/src/services/portal/accountService.tsx
+index c32b176..c1bd7fc 100644
+--- a/src/services/portal/accountService.tsx
++++ b/src/services/portal/accountService.tsx
+@@ -84,6 +84,9 @@ export function createAccountFacade(store: StoreApi<AccountStore>) {
+   return {
+     ...services,
+     loadAccount: () => later((s) => engine.loadAccount(s)),
++    retryLoadAccount: () => later((s) => engine.retryLoadAccount(s)),
++    /** Last-known summary, read synchronously (no latency, no state change). */
++    peekAccount: () => engine.loadAccount(store.getState().s).result,
+     refreshAfterHandoff: (context: ReturnContext) => later((s, d) => engine.refreshAfterHandoff(s, context, d)),
+     savePharmacy: (pharmacy: Partial<PharmacyDraft>) => later((s) => engine.saveAddStoreDraft(s, pharmacy)),
+     keepDraft: (pharmacy: Partial<PharmacyDraft>) => sync((s) => engine.keepAddStoreDraft(s, pharmacy)),
+diff --git a/src/services/portal/index.ts b/src/services/portal/index.ts
+index 39d73b6..f9b0bc5 100644
+--- a/src/services/portal/index.ts
++++ b/src/services/portal/index.ts
+@@ -4,7 +4,7 @@ export { registration, registrationHarness, useRegistration } from './registrati
+ export { AccountDemoProvider, useAccount } from './accountService';
+ export type { AccountFacade } from './accountService';
+ export { clearDemoStorage, PUBLIC_STORAGE_KEY } from './storage';
+-export { formatCents, initialRecurringCents, ADDITIONAL_STORE_CENTS, BASE_CENTS, DEMO_CODE, QUOTE_TTL_MS, MAX_STORES } from './pricing';
++export { formatCents, initialRecurringCents, ADDITIONAL_STORE_CENTS, BASE_CENTS, DEMO_CODE, QUOTE_TTL_MS } from './pricing';
+ export { formatDate, formatTime, maskEmail } from './format';
+ export {
+   accessEmailPreviews,
+@@ -24,6 +24,7 @@ export {
+ } from './account';
+ export type { AccountReadModel, AccountViewModel, PharmacyListItem, BillingPurpose, AddStoreAvailability } from './account';
+ export { PLAN_VIEW, US_STATE_NAMES, DEMO_HINTS } from './catalog';
++export { classifyStripeStandIn } from './stripeRoute';
+ export {
+   REGISTRATION_SCENARIOS,
+   ACCOUNT_SCENARIOS,
+diff --git a/src/services/portal/pricing.ts b/src/services/portal/pricing.ts
+index a3cf268..16eb911 100644
+--- a/src/services/portal/pricing.ts
++++ b/src/services/portal/pricing.ts
+@@ -8,10 +8,16 @@ export const ADD_STORE_DUE_NOW_CENTS: Cents = 2450;
+ export const DEMO_CODE = 'DEMO10';
+ export const DEMO_CODE_DISCOUNT_CENTS: Cents = 1000;
+ export const QUOTE_TTL_MS = 30 * 60 * 1000;
+-export const MAX_STORES = 20;
++
++/**
++ * Repeat-N has NO business cap (REPAIR_001 Q2-G06 removed an unapproved 20).
++ * The only upper bound is technical: the recurring total in integer cents must
++ * stay an exactly representable safe integer.
++ */
++export const MAX_REPRESENTABLE_STORES = Math.floor((Number.MAX_SAFE_INTEGER - BASE_CENTS) / ADDITIONAL_STORE_CENTS) + 1;
+ 
+ export function isValidStoreCount(n: unknown): n is number {
+-  return typeof n === 'number' && Number.isInteger(n) && n >= 1 && n <= MAX_STORES;
++  return typeof n === 'number' && Number.isSafeInteger(n) && n >= 1 && n <= MAX_REPRESENTABLE_STORES;
+ }
+ 
+ /** 9900 + 4900 · (N − 1) */
+diff --git a/src/services/portal/registration.ts b/src/services/portal/registration.ts
+index c61f0be..4a292bd 100644
+--- a/src/services/portal/registration.ts
++++ b/src/services/portal/registration.ts
+@@ -221,7 +221,12 @@ export function storeCountDiscards(state: RegistrationState, n: number): string[
+ }
+ 
+ export function setStoreCount(state: RegistrationState, n: unknown): Step<RegistrationDraft> {
+-  if (!isValidStoreCount(n)) return fail(state, 'validation', 'Choose at least 1 pharmacy.');
++  if (!isValidStoreCount(n))
++    return fail(
++      state,
++      'validation',
++      typeof n === 'number' && Number.isInteger(n) && n > 1 ? "That many pharmacies can't be priced exactly." : 'Choose at least 1 pharmacy.',
++    );
+   const pharmacies = state.draft.pharmacies.slice(0, n);
+   while (pharmacies.length < n) pharmacies.push({});
+   if (n === state.draft.requestedStoreCount) return ok(state, state.draft);
+--- /dev/null
++++ b/e2e/account.repair.spec.ts
+@@ -0,0 +1,315 @@
++import type { Page } from "@playwright/test";
++import { expect, test } from "./auth";
++import { focusRings, inputBoundaries, recordContrast, textContrast, textFailures } from "./contrast";
++import { setTheme, THEMES } from "./gate-m";
++
++// REPAIR_001 regressions on the REAL admin session (in memory; logout aborted).
++// The account shown is SYNTHETIC. Never screenshot or log the real identity.
++
++async function controls(page: Page) {
++  const summary = page.locator("summary", { hasText: "Demo controls" });
++  if ((await summary.count()) && !(await page.locator("details[open]").count())) await summary.click();
++}
++async function scenario(page: Page, id: string) {
++  await page.goto("/dashboard");
++  await controls(page);
++  await page.locator("#demo-acct-scenario").selectOption(id);
++  await page.getByRole("button", { name: "Load" }).click();
++  await page.waitForLoadState("networkidle");
++}
++
++test.beforeEach(async ({ page }) => {
++  await page.goto("/dashboard");
++  await expect(page).toHaveURL(/\/dashboard$/);
++  await controls(page);
++  await page.getByRole("button", { name: "Reset account demo" }).click();
++  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++});
++
++// ── Q2-F02 ──────────────────────────────────────────────────────────────────
++test("F02: load error stays until Retry, survives navigation and reload, Retry recovers", async ({ page }) => {
++  await page.goto("/dashboard");
++  await controls(page);
++  await page.locator("#demo-acct-scenario").selectOption("load_error");
++  // Diagnostic: did the error view appear at all, even briefly?
++  const seen = page.getByTestId("load-retry").waitFor({ timeout: 5000 }).then(() => true, () => false);
++  await page.getByRole("button", { name: "Load" }).click();
++  test.info().annotations.push({ type: "load-retry-seen-at-least-once", description: String(await seen) });
++  await expect(page.getByTestId("load-retry")).toBeVisible();
++  await page.waitForTimeout(1200); // past any second load the navigation could trigger
++  await expect(page.getByTestId("load-retry")).toBeVisible();
++  await expect(page.getByTestId("monthly-total")).toHaveCount(0);
++
++  await page.reload();
++  await expect(page.getByTestId("load-retry")).toBeVisible();
++  await page.goto("/demo/references/owedbook");
++  await page.goto("/dashboard");
++  await expect(page.getByTestId("load-retry")).toBeVisible();
++
++  await page.getByTestId("load-retry").click();
++  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++  await expect(page.getByTestId("store-count")).toHaveText("2");
++  await page.reload();
++  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++  await expect(page.getByTestId("load-retry")).toHaveCount(0);
++});
++
++test("F02: Retry shows a busy state, then a coherent account (both themes)", async ({ page }) => {
++  for (const theme of THEMES) {
++    await scenario(page, "load_error");
++    await setTheme(page, theme);
++    const retry = page.getByTestId("load-retry");
++    await expect(retry).toBeVisible();
++    await retry.click();
++    await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++    await expect(page.getByTestId("plan-summary")).toContainText("Active");
++  }
++});
++
++// ── Q2-O04 ──────────────────────────────────────────────────────────────────
++test("O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)", async ({ page }) => {
++  await page.setViewportSize({ width: 375, height: 900 });
++  await page.goto("/dashboard");
++  const section = page.getByTestId("pharmacies-section");
++  await expect(section).toBeVisible();
++  // No enclosing panel around the section (approved: heading on the page surface).
++  expect(await section.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe("0px");
++  // Plain count, right of the description (not a bordered pill).
++  const count = page.getByTestId("pharmacy-count");
++  await expect(count).toHaveText("2 of 2");
++  expect(await count.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe("0px");
++  const cBox = (await count.boundingBox())!;
++  const hBox = (await page.getByRole("heading", { name: "Pharmacies on this plan" }).boundingBox())!;
++  expect(cBox.x).toBeGreaterThan(hBox.x + 150);
++  // Cards: activation pill in the title row; two-column Store admin | Monthly; Invitation | action.
++  const cards = page.getByTestId("pharmacy-card");
++  await expect(cards).toHaveCount(2);
++  const first = cards.nth(0);
++  const name = (await first.getByText("Example Main Street Pharmacy", { exact: true }).boundingBox())!;
++  const pill = (await first.getByTestId("card-activation").boundingBox())!;
++  expect(Math.abs(pill.y - name.y)).toBeLessThan(12);
++  expect(pill.x).toBeGreaterThan(name.x + 100);
++  const admin = (await first.getByText("Store admin", { exact: true }).boundingBox())!;
++  const monthly = (await first.getByText("Monthly", { exact: true }).boundingBox())!;
++  expect(Math.abs(admin.y - monthly.y)).toBeLessThan(2);
++  expect(monthly.x).toBeGreaterThan(admin.x + 100);
++  const inv = (await first.getByText("Invitation", { exact: true }).boundingBox())!;
++  const act = (await first.getByRole("link", { name: /Open in OwedBook/ }).boundingBox())!;
++  expect(act.x).toBeGreaterThan(inv.x + 100);
++  await expect(cards.nth(1)).toContainText("Sent 26 Oct");
++  // Refresh line visible on the initial view; Refresh re-reads the summary.
++  const line = page.getByTestId("refresh-line");
++  await expect(line).toContainText("Last refreshed just now");
++  await page.getByRole("button", { name: "Refresh" }).click();
++  await expect(line).toContainText("Last refreshed");
++  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++
++  // Desktop: the table is the bordered card; same section/count treatment.
++  await page.setViewportSize({ width: 1440, height: 900 });
++  await expect(page.locator("table")).toBeVisible();
++  await expect(page.getByTestId("pharmacy-card").first()).toBeHidden();
++  // table → overflow wrapper → bordered card wrapper (approved desktop table card)
++  expect(await page.locator("[data-testid=pharmacies-section] table").evaluate((el) => getComputedStyle(el.parentElement!.parentElement!).borderTopWidth)).toBe("1px");
++});
++
++test("O04: returned-from-Stripe and refreshing variants of the refresh line", async ({ page }) => {
++  await page.getByTestId("manage-billing").click();
++  await expect(page).toHaveURL(/mode=portal&purpose=manage/);
++  await page.getByTestId("portal-no-change").click();
++  await expect(page).toHaveURL(/\/dashboard$/);
++  await expect(page.getByTestId("refresh-line")).toContainText(/Refreshing…|after returning from Stripe/);
++  await expect(page.getByTestId("refresh-line")).toContainText("after returning from Stripe");
++});
++
++// ── Mapped transient states (AC-04 evidence gap) ────────────────────────────
++test("transient states are observable: loading, launching, saving, quote loading, confirming", async ({ page }) => {
++  await page.goto("/dashboard");
++  await expect(page.getByTestId("dashboard-loading")).toBeVisible();
++  await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++
++  const manage = page.getByTestId("manage-billing");
++  await manage.click();
++  await expect(manage).toHaveAttribute("aria-busy", "true");
++  await expect(page).toHaveURL(/mode=portal/);
++  // The refreshing banner lives ~350ms: record it with a MutationObserver
++  // installed before the click (client navigation keeps the document).
++  await page.evaluate(() => {
++    const w = window as unknown as { __refreshingSeen?: boolean };
++    w.__refreshingSeen = false;
++    new MutationObserver(() => {
++      if (document.body.innerText.includes("Welcome back from Stripe — refreshing your summary")) w.__refreshingSeen = true;
++    }).observe(document.body, { subtree: true, childList: true, characterData: true });
++  });
++  await page.getByTestId("portal-no-change").click();
++  await expect(page.getByText("Nothing changed on this account")).toBeVisible();
++  expect(await page.evaluate(() => (window as unknown as { __refreshingSeen?: boolean }).__refreshingSeen)).toBe(true);
++  await expect(page.getByText("Nothing changed on this account")).toBeVisible();
++
++  await page.goto("/demo/stores/add");
++  await page.getByLabel("Pharmacy name").fill("Example Busy Pharmacy");
++  await page.getByLabel("Street address").fill("3 Test Road");
++  await page.getByLabel("City").fill("Springfield");
++  await page.getByLabel("State").selectOption("Alabama");
++  await page.getByLabel("ZIP").fill("00000");
++  await page.getByLabel("NCPDP number").fill("0000031");
++  await page.getByLabel("NPI").fill("0000000031");
++  await page.getByLabel("Store phone").fill("(555) 010-0188");
++  await page.getByLabel("Pharmacy software").selectOption("Pioneer");
++  await page.getByRole("radio", { name: /^Me/ }).check();
++  const review = page.getByTestId("review-price");
++  await review.click();
++  await expect(review).toHaveAttribute("aria-busy", "true");
++  await expect(page).toHaveURL(/\/demo\/stores\/confirm/);
++  await expect(page.getByTestId("add-quote")).toContainText(/Getting|Loading|price/i);
++  await expect(page.getByTestId("charged-today")).toHaveText("$24.50");
++  await page.locator("#pc").check();
++  const confirm = page.getByTestId("confirm-add");
++  await confirm.click();
++  await expect(confirm).toHaveAttribute("aria-busy", "true");
++  await expect(page).toHaveURL(/\/demo\/stores\/result$/);
++});
++
++// ── AC-23 evidence gap: account form completed by keyboard only ─────────────
++type Focused = { id: string; type: string; testid: string };
++async function tabTo(page: Page, match: (at: Focused) => boolean, max = 80) {
++  for (let i = 0; i < max; i++) {
++    await page.keyboard.press("Tab");
++    const at = await page.evaluate(() => {
++      const el = document.activeElement as HTMLInputElement | null;
++      return { id: el?.id ?? "", type: el?.type ?? "", testid: el?.getAttribute("data-testid") ?? "" };
++    });
++    if (match(at)) return at;
++  }
++  throw new Error("focus target not reached by Tab");
++}
++
++test("keyboard only: add store → confirm → result with no pointer input", async ({ page }) => {
++  await page.goto("/demo/stores/add");
++  await expect(page.getByLabel("Pharmacy name")).toBeVisible();
++  const text: [string, string][] = [
++    ["ph-name", "Example Keyboard Pharmacy"],
++    ["ph-street", "4 Key Street"],
++    ["ph-city", "Springfield"],
++  ];
++  for (const [id, value] of text) {
++    await tabTo(page, (a) => a.id === id);
++    await page.keyboard.type(value);
++  }
++  await tabTo(page, (a) => a.id === "ph-state");
++  await page.keyboard.type("Alabama"); // native select typeahead, no pointer
++  for (const [id, value] of [["ph-zip", "00000"], ["ph-ncpdp", "0000041"], ["ph-npi", "0000000041"], ["ph-phone", "(555) 010-0141"]]) {
++    await tabTo(page, (a) => a.id === id);
++    await page.keyboard.type(value);
++  }
++  await tabTo(page, (a) => a.id === "ph-software");
++  await page.keyboard.type("Pioneer");
++  // Store admin radio group: Tab lands on the group, arrow keys move, Space selects "Me".
++  await tabTo(page, (a) => a.type === "radio");
++  const me = page.getByRole("radio", { name: /^Me/ });
++  for (let i = 0; i < 3 && !(await me.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("ArrowUp");
++  await page.keyboard.press("Space");
++  await expect(me).toBeChecked();
++  await tabTo(page, (a) => a.testid === "review-price");
++  await page.keyboard.press("Enter");
++  await expect(page).toHaveURL(/\/demo\/stores\/confirm/);
++  await expect(page.getByTestId("charged-today")).toHaveText("$24.50");
++  await tabTo(page, (a) => a.id === "pc");
++  await page.keyboard.press("Space");
++  await expect(page.locator("#pc")).toBeChecked();
++  await tabTo(page, (a) => a.testid === "confirm-add");
++  await page.keyboard.press("Enter");
++  await expect(page).toHaveURL(/\/demo\/stores\/result$/);
++  await expect(page.getByTestId("result-added")).toContainText("Example Keyboard Pharmacy");
++});
++
++// ── Q2-F01: rendered contrast on account surfaces, both themes ──────────────
++const SCREENS: { name: string; scenario: string; route: string; act?: (p: Page) => Promise<void> }[] = [
++  { name: "dashboard active", scenario: "two_store_active", route: "/dashboard" },
++  { name: "dashboard past due", scenario: "past_due", route: "/dashboard" },
++  { name: "dashboard cancel scheduled", scenario: "cancel_scheduled", route: "/dashboard" },
++  { name: "dashboard canceled", scenario: "canceled", route: "/dashboard" },
++  { name: "dashboard no pharmacies", scenario: "no_pharmacies", route: "/dashboard" },
++  { name: "dashboard load error", scenario: "load_error", route: "/dashboard" },
++  {
++    name: "dashboard handoff error",
++    scenario: "handoff_error",
++    route: "/dashboard",
++    act: async (p) => {
++      await p.getByTestId("manage-billing").click();
++      await expect(p.getByTestId("handoff-retry")).toBeVisible();
++    },
++  },
++  { name: "add store draft restored", scenario: "add_draft_restored", route: "/demo/stores/add" },
++  {
++    name: "add store errors",
++    scenario: "two_store_active",
++    route: "/demo/stores/add",
++    act: async (p) => {
++      await p.getByTestId("review-price").click();
++      await expect(p.getByRole("alert").first()).toBeVisible();
++    },
++  },
++  { name: "owedbook", scenario: "two_store_active", route: "/demo/references/owedbook" },
++  { name: "portal stand-in", scenario: "two_store_active", route: "/demo/stripe?mode=portal&purpose=manage" },
++];
++
++for (const s of SCREENS) {
++  test(`F01 contrast: ${s.name}`, async ({ page }) => {
++    test.setTimeout(90_000);
++    for (const theme of THEMES) {
++      await scenario(page, s.scenario);
++      await page.setViewportSize({ width: 1024, height: 900 });
++      await page.goto(s.route);
++      await setTheme(page, theme);
++      await page.reload(); // theme applied at load: no colour transition in flight
++      await page.waitForLoadState("networkidle");
++      if (s.act) await s.act(page);
++      await controls(page); // include the demo strip's controls in the scan
++      const rows = await textContrast(page);
++      const fails = textFailures(rows);
++      const boundaries = await inputBoundaries(page);
++      const rings = await focusRings(page, 30);
++      recordContrast("repair-contrast-account.jsonl", { screen: s.name, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
++      expect.soft(fails, `${s.name} ${theme}: text below threshold`).toEqual([]);
++      expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.name} ${theme}: input boundary`).toEqual([]);
++      expect.soft(rings.filter((r) => r.ratio < r.required), `${s.name} ${theme}: focus ring`).toEqual([]);
++    }
++  });
++}
++
++// ── 200% zoom emulation (720 CSS px, DPR 2 ≙ 1440 window at 200%) ────────────
++test.describe("200% zoom emulation", () => {
++  test.use({ viewport: { width: 720, height: 450 }, deviceScaleFactor: 2 });
++  test("dashboard cards and add-store confirm reflow without overflow; actions reachable", async ({ page }) => {
++    for (const theme of THEMES) {
++      await page.goto("/dashboard");
++      await setTheme(page, theme);
++      await page.reload();
++      await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++      const g = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, dpr: window.devicePixelRatio }));
++      expect(g).toMatchObject({ dpr: 2 });
++      expect(g.sw).toBeLessThanOrEqual(g.cw);
++      await expect(page.getByTestId("pharmacy-card")).toHaveCount(2);
++      for (const id of ["add-store", "manage-billing", "cancel-in-stripe"]) {
++        await page.getByTestId(id).scrollIntoViewIfNeeded();
++        await expect(page.getByTestId(id)).toBeInViewport();
++      }
++    }
++  });
++});
++
++// ── O04 evidence: masked mobile screenshots for comparison with the approved render ──
++test("O04 evidence screenshots (real identity masked)", async ({ page }) => {
++  for (const theme of THEMES) {
++    await page.setViewportSize({ width: 375, height: 1000 });
++    await page.goto("/dashboard");
++    await setTheme(page, theme);
++    await page.reload();
++    await expect(page.getByTestId("monthly-total")).toHaveText("$148.00");
++    await page.screenshot({
++      path: `test-results/shots/repair-account-billing_active_${theme}_mobile.png`,
++      fullPage: true,
++      mask: [page.getByTestId("account-menu"), page.getByTestId("account-demo-strip").locator("summary > span").nth(1)],
++    });
++  }
++});
+--- /dev/null
++++ b/e2e/auth.ts
+@@ -0,0 +1,45 @@
++import { appendFileSync, mkdirSync } from "node:fs";
++import { test as base, expect, type BrowserContext } from "@playwright/test";
++import { adminCredentials } from "./helpers";
++
++// REAL admin session kept IN MEMORY only (REPAIR_001): one sign-in per worker
++// through the real /login UI with the single authorized pair from ignored
++// `.env.qa.local`. No storage-state file is written. The inherited logout is a
++// GLOBAL sign-out, so every account context aborts /api/auth/logout unless a
++// test opts in with `allowLogout` (only logout.final does).
++type StorageState = Awaited<ReturnType<BrowserContext["storageState"]>>;
++
++export const test = base.extend<{ allowLogout: boolean }, { adminState: StorageState }>({
++  allowLogout: [false, { option: true }],
++  adminState: [
++    async ({ browser }, use, workerInfo) => {
++      const creds = adminCredentials();
++      if (!creds) throw new Error("BLOCKED: .env.qa.local admin credentials absent");
++      const baseURL = workerInfo.project.use.baseURL;
++      const ctx = await browser.newContext({ baseURL });
++      await ctx.route("**/api/auth/logout", (r) => r.abort());
++      const page = await ctx.newPage();
++      await page.goto("/login");
++      await page.getByLabel("Work email").fill(creds!.email);
++      await page.getByLabel("Password").fill(creds!.password);
++      await page.getByRole("button", { name: "Sign in", exact: true }).click();
++      await expect(page).toHaveURL(/\/dashboard$/, { timeout: 20000 });
++      await expect(page.getByRole("heading", { name: "Your subscription" })).toBeVisible({ timeout: 20000 });
++      mkdirSync("test-results", { recursive: true });
++      appendFileSync("test-results/signin-count.txt", "real sign-in (in-memory fixture)\n");
++      const state = await ctx.storageState();
++      await ctx.close();
++      await use(state);
++    },
++    { scope: "worker" },
++  ],
++  storageState: async ({ adminState }, use) => {
++    await use(adminState);
++  },
++  context: async ({ context, allowLogout }, use) => {
++    if (!allowLogout) await context.route("**/api/auth/logout", (r) => r.abort());
++    await use(context);
++  },
++});
++
++export { expect };
+--- /dev/null
++++ b/e2e/contrast.ts
+@@ -0,0 +1,183 @@
++import { appendFileSync, mkdirSync } from "node:fs";
++import type { Page } from "@playwright/test";
++
++// REPAIR_001 (Q2-F01) rendered-contrast probe. Same compositing method as the
++// QA scan: walk every ancestor, alpha-blend background colours onto white,
++// blend the text colour onto that, WCAG 2.x ratio. Normal text needs 4.5:1,
++// large text (≥24px, or ≥18.66px bold) 3:1. Disabled controls are recorded but
++// exempt (WCAG 1.4.3 "inactive components"). Elements under an ancestor with
++// opacity < 1 are flagged so they are never silently counted as passing.
++export interface TextRow {
++  tag: string;
++  text: string;
++  cls: string;
++  ratio: number;
++  required: number;
++  disabled: boolean;
++  faded: boolean;
++  font: string;
++}
++export interface BoundaryRow {
++  kind: "input-boundary" | "focus-ring";
++  tag: string;
++  label: string;
++  ratio: number;
++  required: number;
++}
++
++export async function textContrast(page: Page): Promise<TextRow[]> {
++  return page.evaluate(() => {
++    const rgb = (s: string) => {
++      const a = s.match(/[\d.]+/g)?.map(Number) || [0, 0, 0];
++      return [a[0], a[1], a[2], a.length > 3 ? a[3] : 1];
++    };
++    const blend = (f: number[], b: number[]) => [0, 1, 2].map((i) => f[i] * f[3] + b[i] * (1 - f[3]));
++    const lum = (a: number[]) =>
++      a
++        .map((v) => {
++          v /= 255;
++          return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
++        })
++        .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
++    const rows: TextRow[] = [];
++    for (const el of Array.from(document.querySelectorAll<HTMLElement>("body *"))) {
++      if (["SCRIPT", "STYLE", "OPTION", "svg", "path"].includes(el.tagName)) continue;
++      const own = Array.from(el.childNodes).some((n) => n.nodeType === 3 && n.textContent?.trim());
++      if (!own) continue;
++      const box = el.getBoundingClientRect();
++      if (!box.width || !box.height) continue;
++      const st = getComputedStyle(el);
++      if (st.visibility === "hidden" || el.closest("[aria-hidden=true],.sr-only")) continue;
++      const chain: HTMLElement[] = [];
++      for (let a: HTMLElement | null = el; a; a = a.parentElement) chain.unshift(a);
++      let bg = [255, 255, 255];
++      let faded = false;
++      for (const a of chain) {
++        const cs = getComputedStyle(a);
++        bg = blend(rgb(cs.backgroundColor), bg);
++        if (parseFloat(cs.opacity) < 1) faded = true;
++      }
++      const fg = blend(rgb(st.color), bg);
++      const ratio = (Math.max(lum(fg), lum(bg)) + 0.05) / (Math.min(lum(fg), lum(bg)) + 0.05);
++      const size = parseFloat(st.fontSize);
++      const large = size >= 24 || (size >= 18.66 && parseInt(st.fontWeight) >= 700);
++      const masked = !!el.closest("[data-testid=account-menu],[data-testid=account-demo-strip] summary");
++      rows.push({
++        tag: el.tagName,
++        text: masked ? "[real identity masked]" : (el.textContent || "").trim().slice(0, 40),
++        cls: String(el.className).slice(0, 90),
++        ratio: Math.round(ratio * 100) / 100,
++        required: large ? 3 : 4.5,
++        disabled: !!el.closest(":disabled,[aria-disabled=true]"),
++        faded,
++        font: st.fontSize,
++      });
++    }
++    return rows;
++  });
++}
++
++/** Text-entry boundaries (input/select/textarea) against the surface they sit on: 3:1 (WCAG 1.4.11). */
++export async function inputBoundaries(page: Page): Promise<BoundaryRow[]> {
++  return page.evaluate(() => {
++    const rgb = (s: string) => {
++      const a = s.match(/[\d.]+/g)?.map(Number) || [0, 0, 0];
++      return [a[0], a[1], a[2], a.length > 3 ? a[3] : 1];
++    };
++    const blend = (f: number[], b: number[]) => [0, 1, 2].map((i) => f[i] * f[3] + b[i] * (1 - f[3]));
++    const lum = (a: number[]) =>
++      a
++        .map((v) => {
++          v /= 255;
++          return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
++        })
++        .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
++    const surface = (el: HTMLElement | null) => {
++      const chain: HTMLElement[] = [];
++      for (let a = el; a; a = a.parentElement) chain.unshift(a);
++      let bg = [255, 255, 255];
++      for (const a of chain) bg = blend(rgb(getComputedStyle(a).backgroundColor), bg);
++      return bg;
++    };
++    const rows: BoundaryRow[] = [];
++    const sel = "input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea";
++    for (const el of Array.from(document.querySelectorAll<HTMLElement>(sel))) {
++      const r = el.getBoundingClientRect();
++      if (!r.width || !r.height || el.closest(":disabled")) continue;
++      const outer = surface(el.parentElement);
++      const border = blend(rgb(getComputedStyle(el).borderTopColor), outer);
++      const ratio = (Math.max(lum(border), lum(outer)) + 0.05) / (Math.min(lum(border), lum(outer)) + 0.05);
++      rows.push({
++        kind: "input-boundary",
++        tag: el.tagName,
++        label: el.id || el.getAttribute("name") || "",
++        ratio: Math.round(ratio * 100) / 100,
++        required: 3,
++      });
++    }
++    return rows;
++  });
++}
++
++/**
++ * Keyboard focus ring: Tab through the first `steps` stops; for each focused
++ * element read the ring colour (box-shadow/outline) and compare it with the
++ * surface around the control (3:1, WCAG 1.4.11 state indicator).
++ */
++export async function focusRings(page: Page, steps = 8): Promise<BoundaryRow[]> {
++  const rows: BoundaryRow[] = [];
++  await page.locator("body").click({ position: { x: 1, y: 1 } });
++  for (let i = 0; i < steps; i++) {
++    await page.keyboard.press("Tab");
++    const row = await page.evaluate(() => {
++      const el = document.activeElement as HTMLElement | null;
++      if (!el || el === document.body) return null;
++      const rgb = (s: string) => {
++        const a = s.match(/[\d.]+/g)?.map(Number) || [0, 0, 0];
++        return [a[0], a[1], a[2], a.length > 3 ? a[3] : 1];
++      };
++      const blend = (f: number[], b: number[]) => [0, 1, 2].map((k) => f[k] * f[3] + b[k] * (1 - f[3]));
++      const lum = (a: number[]) =>
++        a
++          .map((v) => {
++            v /= 255;
++            return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
++          })
++          .reduce((s, v, k) => s + v * [0.2126, 0.7152, 0.0722][k], 0);
++      // A radio's indicator is its card label's focus-within ring.
++      const src = el instanceof HTMLInputElement && el.type === "radio" ? (el.closest("label") as HTMLElement) ?? el : el;
++      const chain: HTMLElement[] = [];
++      for (let a = src.parentElement; a; a = a.parentElement) chain.unshift(a);
++      let outer = [255, 255, 255];
++      for (const a of chain) outer = blend(rgb(getComputedStyle(a).backgroundColor), outer);
++      const st = getComputedStyle(src);
++      // Tailwind ring = last non-transparent colour in the box-shadow list.
++      const shadows = (st.boxShadow.match(/rgba?\([^)]*\)/g) || []).map(rgb).filter((c) => c[3] > 0);
++      const ringColor = shadows.length ? shadows[shadows.length - 1] : st.outlineStyle !== "none" ? rgb(st.outlineColor) : null;
++      const label = el.closest("[data-testid=account-menu],[data-testid=account-demo-strip] summary")
++        ? "[real identity region]"
++        : (el.getAttribute("aria-label") || el.textContent || "").trim().slice(0, 40);
++      if (!ringColor) return { kind: "focus-ring" as const, tag: el.tagName, label, ratio: 0, required: 3 };
++      const ring = blend(ringColor, outer);
++      const ratio = (Math.max(lum(ring), lum(outer)) + 0.05) / (Math.min(lum(ring), lum(outer)) + 0.05);
++      return {
++        kind: "focus-ring" as const,
++        tag: el.tagName,
++        label,
++        ratio: Math.round(ratio * 100) / 100,
++        required: 3,
++      };
++    });
++    if (row) rows.push(row);
++  }
++  return rows;
++}
++
++export function textFailures(rows: TextRow[]) {
++  return rows.filter((r) => !r.disabled && r.ratio < r.required);
++}
++
++export function recordContrast(file: string, entry: unknown) {
++  mkdirSync("test-results", { recursive: true });
++  appendFileSync(`test-results/${file}`, JSON.stringify(entry) + "\n");
++}
+--- /dev/null
++++ b/e2e/public.repair.spec.ts
+@@ -0,0 +1,156 @@
++import { expect, test, type Page } from "@playwright/test";
++import { focusRings, inputBoundaries, recordContrast, textContrast, textFailures } from "./contrast";
++import { setTheme, THEMES } from "./gate-m";
++
++// REPAIR_001 anonymous regressions. No credentials are used here.
++
++// ── Q2-F03: repeated / re-ordered / mixed-case account modes never downgrade ──
++const ACCOUNT_MARKERS = ["Your subscription", "Pharmacies on this plan", "Customer Portal", "Billing owner", "Jordan Ellis", "$148.00", "Demo controls"];
++const ACCOUNT_QUERIES = [
++  "mode=checkout&mode=portal",
++  "mode=portal&mode=checkout",
++  "mode=card&mode=card",
++  "mode=checkout&mode=card",
++  "mode=card&mode=portal",
++  "mode=portal",
++  "mode=card",
++  "mode=Portal",
++  "mode=%20portal%20",
++  "mode=CARD&purpose=change_card",
++  "mode=portal&purpose=cancel&purpose=manage",
++  "mode=unknown",
++  "mode=",
++];
++for (const q of ACCOUNT_QUERIES) {
++  test(`F03 anonymous /demo/stripe?${q} → /login, no account payload (HTML and RSC)`, async ({ request }) => {
++    const route = `/demo/stripe?${q}`;
++    const html = await request.get(route, { maxRedirects: 0 });
++    expect(html.status()).toBe(307);
++    expect(html.headers()["location"]).toMatch(/\/login$/);
++    const htmlBody = await html.text();
++    for (const m of ACCOUNT_MARKERS) expect(htmlBody).not.toContain(m);
++
++    const hop = await request.get(route, { maxRedirects: 0, headers: { RSC: "1" } });
++    const rscUrl = hop.status() === 307 ? hop.headers()["location"] : route;
++    const rsc = await request.get(rscUrl, { maxRedirects: 0, headers: { RSC: "1" } });
++    const rscBody = await rsc.text();
++    expect(rscBody).toContain("NEXT_REDIRECT;replace;/login;307");
++    for (const m of ACCOUNT_MARKERS) expect(rscBody).not.toContain(m);
++  });
++}
++
++for (const q of ["", "mode=checkout", "mode=checkout&mode=checkout", "mode=CHECKOUT"]) {
++  test(`F03 public initial checkout stays public: /demo/stripe${q ? "?" + q : ""}`, async ({ request }) => {
++    const res = await request.get(`/demo/stripe${q ? "?" + q : ""}`, { maxRedirects: 0 });
++    expect(res.status()).toBe(200);
++    const body = await res.text();
++    for (const m of ACCOUNT_MARKERS) expect(body).not.toContain(m);
++  });
++}
++
++// ── AC-26 evidence gap: malformed auth-confirm links fail safe ──────────────
++// Cases without token_hash never reach the auth provider; the two with a
++// syntactically fake hash make one rejected verification call each.
++for (const q of [
++  "",
++  "type=email",
++  "token_hash=",
++  "token_hash=not-a-real-hash&type=bogus",
++  "token_hash=not-a-real-hash&type=email",
++  "token_hash=not-a-real-hash&type=email&next=https://evil.example/",
++  "type=recovery&next=//evil.example",
++]) {
++  test(`AC-26 /api/auth/confirm?${q} → same-origin /login, no session`, async ({ request, baseURL }) => {
++    const res = await request.get(`/api/auth/confirm?${q}`, { maxRedirects: 0 });
++    expect(res.status()).toBe(307);
++    const loc = new URL(res.headers()["location"], baseURL);
++    expect(loc.origin).toBe(new URL(baseURL!).origin);
++    expect(loc.pathname).toBe("/login");
++    expect(res.headers()["set-cookie"] ?? "").not.toMatch(/sb-[^=]*-auth-token=[^;]+/);
++    // Following it lands on the sign-in form, never on account management.
++    const followed = await request.get(loc.pathname + loc.search);
++    expect(followed.status()).toBe(200);
++    expect(await followed.text()).not.toContain("Your subscription");
++  });
++}
++
++// ── Q2-G06: no 20-store cap ─────────────────────────────────────────────────
++test("G06: plan counter passes 20; 21 stores price by repeat-N", async ({ page }) => {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  const more = page.getByRole("button", { name: "More pharmacies" });
++  for (let i = 1; i < 21; i++) await more.click();
++  await expect(page.locator("output#stores")).toHaveText("21");
++  await expect(more).toBeEnabled();
++  await expect(page.locator("main")).toContainText("$1,079.00");
++  await more.click();
++  await expect(page.locator("output#stores")).toHaveText("22");
++  await expect(page.locator("main")).toContainText("$1,128.00");
++});
++
++// ── Q2-F01: rendered contrast on public surfaces, both themes ───────────────
++async function seed(page: Page, scenario: string) {
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption(scenario);
++  await page.getByRole("button", { name: "Load" }).click();
++  await page.waitForLoadState("networkidle");
++}
++const SCREENS: { scenario: string; route: string; act?: (p: Page) => Promise<void> }[] = [
++  { scenario: "fresh", route: "/demo/register/plan" },
++  { scenario: "quote_unavailable", route: "/demo/register/plan" },
++  { scenario: "prefilled_two_store", route: "/demo/register/owner" },
++  {
++    scenario: "fresh",
++    route: "/demo/register/owner",
++    act: async (p) => {
++      await p.getByRole("button", { name: "Continue" }).click();
++      await expect(p.getByRole("alert").first()).toBeVisible();
++    },
++  },
++  { scenario: "prefilled_two_store", route: "/demo/register/pharmacies?store=2" },
++  { scenario: "prefilled_three_store", route: "/demo/register/review" },
++  { scenario: "prefilled_one_store", route: "/demo/stripe" },
++  { scenario: "checkout_abandoned", route: "/demo/checkout-incomplete" },
++  { scenario: "checkout_declined", route: "/demo/checkout-incomplete" },
++  { scenario: "checkout_unknown", route: "/demo/checkout-incomplete" },
++  { scenario: "checkout_expired", route: "/demo/checkout-incomplete" },
++  { scenario: "activation_waiting", route: "/demo/activation" },
++  { scenario: "activation_delayed", route: "/demo/activation" },
++  { scenario: "activation_email_failed", route: "/demo/activation" },
++  { scenario: "activation_payment_failed", route: "/demo/activation" },
++  { scenario: "activation_ready", route: "/demo/activation" },
++  { scenario: "link_expired", route: "/demo/access-link" },
++  { scenario: "link_used", route: "/demo/access-link" },
++  { scenario: "link_request_error", route: "/demo/access-link" },
++  { scenario: "prefilled_two_store", route: "/demo/references/email?variant=owner" },
++  { scenario: "fresh", route: "/login" },
++  { scenario: "fresh", route: "/login?reason=session_expired" },
++];
++
++for (const s of SCREENS) {
++  test(`F01 contrast: ${s.route} [${s.scenario}]`, async ({ page }) => {
++    test.setTimeout(90_000);
++    for (const theme of THEMES) {
++      await seed(page, s.scenario);
++      await page.setViewportSize({ width: 1024, height: 900 });
++      await page.goto(s.route);
++      await setTheme(page, theme);
++      await page.reload(); // theme applied at load: no colour transition in flight
++      await page.waitForLoadState("networkidle");
++      await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++      if (s.act) await s.act(page);
++      const summary = page.locator("summary", { hasText: "Demo controls" });
++      if ((await summary.count()) && !(await page.locator("details[open]").count())) await summary.click();
++      const rows = await textContrast(page);
++      const fails = textFailures(rows);
++      const boundaries = await inputBoundaries(page);
++      const rings = await focusRings(page, 30);
++      recordContrast("repair-contrast-public.jsonl", { screen: `${s.route} [${s.scenario}]`, theme, rows: rows.length, fails, faded: rows.filter((r) => r.faded && !r.disabled), boundaries, rings });
++      expect.soft(fails, `${s.route} ${theme}: text below threshold`).toEqual([]);
++      expect.soft(boundaries.filter((b) => b.ratio < b.required), `${s.route} ${theme}: input boundary`).toEqual([]);
++      expect.soft(rings.filter((r) => r.ratio < r.required), `${s.route} ${theme}: focus ring`).toEqual([]);
++    }
++  });
++}
+--- /dev/null
++++ b/e2e/public.zoom.spec.ts
+@@ -0,0 +1,24 @@
++import { expect, test } from "@playwright/test";
++import { setTheme, THEMES } from "./gate-m";
++
++// REPAIR_001: 200% zoom EMULATION for public screens. A 1440 CSS-px window at
++// 200% browser zoom lays out at 720 CSS px with device pixel ratio 2; this
++// context reproduces that geometry (it is not the browser's zoom setting).
++test.use({ viewport: { width: 720, height: 450 }, deviceScaleFactor: 2 });
++
++for (const route of ["/demo/register/plan", "/demo/register/owner", "/login"]) {
++  test(`200% zoom emulation ${route}: no horizontal overflow, primary action reachable`, async ({ page }) => {
++    for (const theme of THEMES) {
++      await page.goto(route);
++      await setTheme(page, theme);
++      await page.reload();
++      await page.waitForLoadState("networkidle");
++      const g = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, dpr: window.devicePixelRatio }));
++      expect(g.dpr).toBe(2);
++      expect(g.sw).toBeLessThanOrEqual(g.cw);
++      const action = page.getByRole("button", { name: /^(Continue|Sign in)$/ }).first();
++      await action.scrollIntoViewIfNeeded();
++      await expect(action).toBeInViewport();
++    }
++  });
++}
+--- /dev/null
++++ b/src/__tests__/portal-dashboard.test.tsx
+@@ -0,0 +1,78 @@
++/**
++ * @jest-environment jsdom
++ */
++// REPAIR_001 component layer: the real DashboardView inside the real
++// AccountDemoProvider (per-tab sessionStorage namespace, 350ms mock latency).
++import { act, fireEvent, render, screen } from '@testing-library/react';
++import { useEffect } from 'react';
++import { DashboardView } from '@/components/portal/account/DashboardView';
++import { AccountDemoProvider, useAccount } from '@/services/portal';
++
++const push = jest.fn();
++jest.mock('next/navigation', () => ({ useRouter: () => ({ push, replace: jest.fn(), refresh: jest.fn() }) }));
++jest.mock('@/components/ui/use-toast', () => ({ useToast: () => ({ toast: jest.fn() }) }));
++
++const KEY = 'a1b2c3d4e5f60718';
++
++function Scenario({ id }: { id: string }) {
++  const { hydrated, account } = useAccount();
++  useEffect(() => {
++    if (hydrated) account.harness.selectScenario(id);
++  }, [hydrated, account, id]);
++  return null;
++}
++
++function mount(children: React.ReactNode) {
++  return render(<AccountDemoProvider accountKey={KEY}>{children}</AccountDemoProvider>);
++}
++
++beforeEach(() => sessionStorage.clear());
++
++describe('DashboardView — account load error (Q2-F02)', () => {
++  it('keeps the error view through remounts until Try again, then shows a coherent account', async () => {
++    const first = mount(
++      <>
++        <Scenario id="load_error" />
++        <DashboardView />
++      </>,
++    );
++    expect(await screen.findByTestId('load-retry', {}, { timeout: 3000 })).toBeTruthy();
++    // Let any further load the effect could start settle; the error must remain.
++    await act(() => new Promise((r) => setTimeout(r, 800)));
++    expect(screen.getByTestId('load-retry')).toBeTruthy();
++    first.unmount();
++
++    // Remount = route change back to /dashboard, or a reload (state persists per tab).
++    mount(<DashboardView />);
++    expect(await screen.findByTestId('load-retry', {}, { timeout: 3000 })).toBeTruthy();
++    expect(screen.queryByTestId('monthly-total')).toBeNull();
++
++    fireEvent.click(screen.getByTestId('load-retry'));
++    expect(screen.getByTestId('load-retry').getAttribute('aria-busy')).toBe('true');
++    expect((await screen.findByTestId('monthly-total', {}, { timeout: 3000 })).textContent).toBe('$148.00');
++    expect(screen.getByTestId('store-count').textContent).toBe('2');
++  });
++});
++
++describe('DashboardView — return from Stripe (R1-N01)', () => {
++  it('shows the last-known summary under the refreshing banner, then the refreshed result', async () => {
++    function Returned() {
++      const { hydrated, account } = useAccount();
++      useEffect(() => {
++        if (hydrated) account.returnFromPortal('no_change');
++      }, [hydrated, account]);
++      return null;
++    }
++    mount(
++      <>
++        <Returned />
++        <DashboardView />
++      </>,
++    );
++    expect(await screen.findByText('Welcome back from Stripe — refreshing your summary', {}, { timeout: 3000 })).toBeTruthy();
++    expect(screen.getByTestId('monthly-total').textContent).toBe('$148.00');
++    expect(screen.getByTestId('refresh-line').textContent).toBe('Refreshing…');
++    expect(await screen.findByText(/Nothing changed on this account/, {}, { timeout: 3000 })).toBeTruthy();
++    expect(screen.getByTestId('refresh-line').textContent).toMatch(/after returning from Stripe/);
++  });
++});
+--- /dev/null
++++ b/src/__tests__/portal-stripe-route.test.tsx
+@@ -0,0 +1,96 @@
++// REPAIR_001 Q2-F03: the shared /demo/stripe route. Query values can add the
++// login requirement, never remove it — duplicates, order and case included.
++// Roles are MOCKED (no live auth).
++jest.mock('@/utils/supabase/server', () => ({ createClient: jest.fn() }));
++jest.mock('@/utils/get-user-role', () => ({ getUserRole: jest.fn() }));
++jest.mock('@/components/portal/handoff/CheckoutStandIn', () => ({ CheckoutStandIn: jest.fn(() => null) }));
++jest.mock('@/components/portal/handoff/PortalStandIn', () => ({ PortalStandIn: jest.fn(() => null) }));
++
++import { isValidElement, type ReactElement } from 'react';
++import StripePage from '@/app/(handoff)/demo/stripe/page';
++import { CheckoutStandIn } from '@/components/portal/handoff/CheckoutStandIn';
++import { PortalStandIn } from '@/components/portal/handoff/PortalStandIn';
++import { classifyStripeStandIn } from '@/services/portal/stripeRoute';
++import { createClient } from '@/utils/supabase/server';
++import { getUserRole } from '@/utils/get-user-role';
++import { redirect } from 'next/navigation';
++
++const createClientMock = createClient as jest.MockedFunction<typeof createClient>;
++const getUserRoleMock = getUserRole as jest.MockedFunction<typeof getUserRole>;
++
++function signedIn(user: Record<string, unknown> | null) {
++  createClientMock.mockResolvedValue({ auth: { getUser: jest.fn().mockResolvedValue({ data: { user } }) } } as any);
++}
++const ADMIN = { id: 'user-1', email: 'staff@example.test', user_metadata: { full_name: 'Staff Person' } };
++const page = (params: Record<string, string | string[] | undefined>) => StripePage({ searchParams: Promise.resolve(params) });
++
++describe('classifyStripeStandIn', () => {
++  it.each([
++    [{}, 'public', 'checkout'],
++    [{ mode: 'checkout' }, 'public', 'checkout'],
++    [{ mode: ['checkout', 'checkout'] }, 'public', 'checkout'],
++    [{ mode: 'portal' }, 'account', 'portal'],
++    [{ mode: 'card' }, 'account', 'card'],
++    [{ mode: ['checkout', 'portal'] }, 'account', 'portal'],
++    [{ mode: ['portal', 'checkout'] }, 'account', 'portal'],
++    [{ mode: ['card', 'card'] }, 'account', 'card'],
++    [{ mode: ['checkout', 'card'] }, 'account', 'card'],
++    [{ mode: ['card', 'portal'] }, 'account', 'portal'],
++    [{ mode: 'Portal' }, 'account', 'portal'],
++    [{ mode: ' CARD ' }, 'account', 'card'],
++    [{ mode: 'portal\u0000' }, 'account', 'checkout'],
++    [{ mode: 'admin' }, 'account', 'checkout'],
++    [{ mode: '' }, 'account', 'checkout'],
++    [{ mode: ['checkout', 'unknown'] }, 'account', 'checkout'],
++  ] as const)('%j → %s/%s', (params, access, mode) => {
++    expect(classifyStripeStandIn(params as never)).toMatchObject({ access, mode });
++  });
++
++  it('purpose: first allowed value, else manage; never free text', () => {
++    expect(classifyStripeStandIn({ mode: 'portal', purpose: 'cancel' }).purpose).toBe('cancel');
++    expect(classifyStripeStandIn({ mode: 'portal', purpose: ['bogus', 'RESUME'] }).purpose).toBe('resume');
++    expect(classifyStripeStandIn({ mode: 'portal', purpose: 'https://evil.example/' }).purpose).toBe('manage');
++  });
++});
++
++describe('/demo/stripe page (server)', () => {
++  it.each([
++    [{ mode: 'portal' }],
++    [{ mode: 'card' }],
++    [{ mode: ['checkout', 'portal'] }],
++    [{ mode: ['portal', 'checkout'] }],
++    [{ mode: ['card', 'card'] }],
++    [{ mode: 'PORTAL' }],
++    [{ mode: 'unknown' }],
++  ])('signed-out %j → redirect /login before anything renders', async (params) => {
++    signedIn(null);
++    await expect(page(params)).rejects.toThrow('NEXT_REDIRECT:/login');
++    expect(redirect).toHaveBeenCalledWith('/login');
++    expect(CheckoutStandIn).not.toHaveBeenCalled();
++    expect(PortalStandIn).not.toHaveBeenCalled();
++  });
++
++  it.each([['member'], [null]])('role %p with account mode → redirect /login', async (role) => {
++    signedIn(ADMIN);
++    getUserRoleMock.mockResolvedValue(role as any);
++    await expect(page({ mode: ['checkout', 'portal'] })).rejects.toThrow('NEXT_REDIRECT:/login');
++  });
++
++  it.each([[{}], [{ mode: 'checkout' }]])('public checkout %j renders without any auth lookup', async (params) => {
++    const el = (await page(params)) as ReactElement;
++    expect(isValidElement(el) && el.type).toBe(CheckoutStandIn);
++    expect(createClientMock).not.toHaveBeenCalled();
++  });
++
++  it.each([
++    ['admin', { mode: ['checkout', 'portal'], purpose: 'cancel' }, 'portal', 'cancel'],
++    ['superadmin', { mode: ['card', 'card'], purpose: 'change_card' }, 'card', 'change_card'],
++  ] as const)('%s with %j → %s stand-in inside the account provider', async (role, params, mode, purpose) => {
++    signedIn(ADMIN);
++    getUserRoleMock.mockResolvedValue(role as any);
++    const el = (await page(params as never)) as ReactElement<{ accountKey: string; children: ReactElement<{ mode: string; purpose: string }> }>;
++    expect(el.props.accountKey).toMatch(/^[0-9a-f]{16}$/);
++    expect(el.props.children.type).toBe(PortalStandIn);
++    expect(el.props.children.props).toEqual({ mode, purpose });
++  });
++});
+--- /dev/null
++++ b/src/services/portal/stripeRoute.ts
+@@ -0,0 +1,30 @@
++// Portal FFM — classification of the shared /demo/stripe stand-in route
++// (RULINGS R-009; REPAIR_001 Q2-F03). Pure: no React, no auth calls.
++//
++// Query values can only ADD the login requirement, never remove it. Every
++// `mode` value is considered (repeated parameters, any order), trimmed and
++// lower-cased. The route is public ONLY when `mode` is absent or every value is
++// `checkout`; an account value (portal | card) or any unrecognised value fails
++// closed to "account" (real admin/superadmin session required).
++import { BILLING_PURPOSES, type BillingPurpose } from './account';
++
++export type StripeStandInMode = 'checkout' | 'portal' | 'card';
++export type QueryValue = string | string[] | undefined;
++export interface StripeStandInRoute {
++  access: 'public' | 'account';
++  mode: StripeStandInMode;
++  purpose: BillingPurpose;
++}
++
++const values = (v: QueryValue): string[] =>
++  (v === undefined ? [] : Array.isArray(v) ? v : [v]).map((x) => String(x).trim().toLowerCase());
++
++export function classifyStripeStandIn(params: Record<string, QueryValue>): StripeStandInRoute {
++  const modes = values(params.mode);
++  const purpose = (values(params.purpose).find((p) => (BILLING_PURPOSES as readonly string[]).includes(p)) ??
++    'manage') as BillingPurpose;
++  if (modes.includes('portal')) return { access: 'account', mode: 'portal', purpose };
++  if (modes.includes('card')) return { access: 'account', mode: 'card', purpose };
++  if (modes.every((m) => m === 'checkout')) return { access: 'public', mode: 'checkout', purpose };
++  return { access: 'account', mode: 'checkout', purpose };
++}

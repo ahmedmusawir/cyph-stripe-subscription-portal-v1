@@ -1,0 +1,41 @@
+[
+  {
+    "surface": "unknown",
+    "theme": "dark",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "",
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/25 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-4 py-2",
+        "ratio": 2.9941945342929457,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      },
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "",
+        "class": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/25 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-4 py-2",
+        "ratio": 2.9941945342929457,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "keyboardRestore": true
+  }
+]

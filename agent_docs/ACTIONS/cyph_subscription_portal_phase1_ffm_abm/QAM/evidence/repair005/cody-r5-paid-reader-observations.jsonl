@@ -1,0 +1,5 @@
+{"flag":"none","iteration":0,"checkout":"paid","payment":null,"claimsFailed":false,"claimsPending":false,"claimsMissing":true,"retry":0,"refresh":0}
+{"flag":"pending","iteration":0,"checkout":"paid","payment":"pending","claimsFailed":false,"claimsPending":true,"claimsMissing":false,"retry":0,"refresh":1}
+{"flag":"failed","iteration":0,"checkout":"paid","payment":"failed","claimsFailed":true,"claimsPending":false,"claimsMissing":false,"retry":1,"refresh":0}
+{"flag":"confirmed","iteration":0,"checkout":"paid","payment":"confirmed","claimsFailed":false,"claimsPending":false,"claimsMissing":false,"retry":0,"refresh":1}
+{"flag":"confirmed","iteration":1,"checkout":"paid","payment":"confirmed","claimsFailed":false,"claimsPending":false,"claimsMissing":false,"retry":0,"refresh":1}

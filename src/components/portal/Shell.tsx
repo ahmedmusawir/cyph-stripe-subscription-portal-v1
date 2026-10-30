@@ -3,71 +3,58 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, LogOut, Menu, type LucideIcon } from "lucide-react";
+import { ArrowLeft, ChevronDown, LogOut, Menu } from "lucide-react";
 import SpinnerLarge from "@/components/common/SpinnerLarge";
 import ThemeToggler from "@/components/global/ThemeToggler";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { clearDemoStorage } from "@/services/portal";
+import type { PortalStaffRole } from "@/types/auth";
+import { Brand } from "./Brand";
+import { BRAND } from "./brand";
+import { Footer, SkipLink } from "./Footer";
+import { Initials } from "./PageHeader";
+import { AccountStrip } from "./AccountStrip";
 
-// Subscription Portal app shell. Login stands alone (no shell).
-// Nav is a single placeholder item until the FFM defines the portal's screens.
-// The foot label reflects the TEMPORARY super-admin-only gate in
-// (portal)/layout.tsx — it changes when customer roles land.
+// Authenticated account shell (UI_SPEC §1): top bar + centered content, no
+// rail. Rendered only inside the server-protected (account) layout, which
+// admits real admin OR superadmin sessions (R-008/R-009). The account menu
+// shows the REAL signed-in identity; the strip below names the SYNTHETIC
+// account and persona being previewed.
 //
-// Mobile-first contract (Rule Zero):
-// - 375px: sticky top bar (brand · theme toggle · 44px hamburger). Nav lives in
-//   a left slide-over drawer (w-3/4): brand head, the SAME nav items (coral LEFT
-//   accent active state), divider, user foot + sign-out.
-//   Drawer closes on backdrop tap, Escape, and navigation. Theme toggle stays
-//   OUTSIDE the drawer (top level).
-// - 768px (md): narrow rail (248px < 20rem) becomes persistent; top bar and
-//   drawer disappear. Doctrine: UI-UX manual Rule Zero sidebar rule.
-// - 1024px (lg): no shell change (content grids widen per screen).
-// - Touch targets: hamburger and drawer items ≥ 44px.
-interface NavItem {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-}
-
-const NAV: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-];
-
-function initials(name: string): string {
-  return name
-    .split(" ")
-    .map((p) => p[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
+// Mobile-first: < md the right side collapses to theme toggle + 44px hamburger
+// opening the existing left Sheet (Radix: focus trap, Escape, focus return).
+const ROLE_LABEL: Record<PortalStaffRole, string> = {
+  superadmin: "Super Admin",
+  admin: "Admin",
+};
 
 export function Shell({
   user,
   children,
 }: {
-  user: { displayName: string; email: string };
+  user: { displayName: string; role: PortalStaffRole };
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  // Nav pending state. Next 16 keeps the OLD page visible during client-side
-  // navigation (loading.tsx never paints when prefetch data is stale), so nav
-  // clicks route through startTransition and isPending drives a spinner in the
-  // content slot. loading.tsx still covers hard loads / first paint.
+  // Next 16 keeps the old page visible during client navigation; nav clicks go
+  // through startTransition and isPending shows the kit spinner in the slot.
   const [isPending, startTransition] = useTransition();
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
-  // Close-on-navigation: route change dismisses the mobile drawer.
   useEffect(() => {
     setDrawerOpen(false);
   }, [pathname]);
 
   function navigate(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
-    // Modifier / middle clicks keep native Link behavior (new tab etc.).
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     e.preventDefault();
     setDrawerOpen(false);
@@ -75,119 +62,107 @@ export function Shell({
   }
 
   async function signOut() {
+    // Demo state first (both namespaces), then the real logout.
+    clearDemoStorage("all");
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     router.push("/login");
     router.refresh();
   }
 
-  // Brand: logo-color.svg is self-contained (coral tile + white drop) — safe on
-  // both Mist and Slate. Wordmark is token-colored HTML (never logo-lockup.svg:
-  // its baked dark text dies on dark).
-  const brand = (
-    <div className="flex items-center gap-2.5">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo-color.svg" alt="Cyber Pharma" className="h-8 w-8" />
-      <div className="leading-tight">
-        <p className="text-sm font-bold uppercase tracking-wide text-foreground">Cyber Pharma</p>
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-          Subscription Portal
-        </p>
-      </div>
-    </div>
-  );
-
-  const foot = (
-    <div className="flex items-center gap-3 border-t border-border p-4">
-      <span className="grid h-9 w-9 shrink-0 place-items-center bg-primary/15 text-xs font-bold text-primary">
-        {initials(user.displayName)}
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-foreground">{user.displayName}</p>
-        <p className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">
-          Super Admin
-        </p>
-      </div>
-      <button
-        type="button"
-        onClick={signOut}
-        aria-label="Sign out"
-        className="grid h-11 w-11 place-items-center text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <LogOut className="h-4 w-4" />
-      </button>
-    </div>
-  );
-
-  const navLinks = (
-    <nav className="flex-1 space-y-1 px-2 py-2">
-      {NAV.map(({ href, label, icon: Icon }) => (
-        <Link
-          key={href}
-          href={href}
-          onClick={(e) => navigate(e, href)}
-          className={cn(
-            "flex items-center gap-3 border-l-[3px] px-3 py-2 text-sm transition-colors max-md:py-3",
-            isActive(href)
-              ? "border-primary bg-primary/10 font-medium text-primary"
-              : "border-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
-          )}
-        >
-          <Icon className="h-4 w-4" />
-          {label}
-        </Link>
-      ))}
-    </nav>
-  );
+  const roleLabel = ROLE_LABEL[user.role];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Desktop sidebar (≥ md) */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col border-r border-border bg-card md:flex">
-        <div className="p-4">{brand}</div>
-        {navLinks}
-        <div className="px-2 pb-2">
-          <ThemeToggler />
-        </div>
-        {foot}
-      </aside>
-
-      {/* Mobile top bar (< md): brand · theme toggle · hamburger. Nav lives in the drawer. */}
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card p-3 md:hidden">
-        {brand}
-        <div className="flex items-center gap-1">
-          <ThemeToggler />
-          <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-            <SheetTrigger
-              aria-label="Open navigation"
-              className="grid h-11 w-11 place-items-center text-foreground transition-colors hover:text-primary"
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <SkipLink />
+      <header className="sticky top-0 z-30 border-b border-border bg-card">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5">
+          <Brand href="/dashboard" />
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Account">
+            <Link
+              href="/demo/references/owedbook"
+              onClick={(e) => navigate(e, "/demo/references/owedbook")}
+              className="inline-flex h-11 items-center gap-1.5 px-3 text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <Menu className="h-6 w-6" />
-            </SheetTrigger>
-            <SheetContent aria-describedby={undefined}>
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <div className="p-4">{brand}</div>
-              {navLinks}
-              {foot}
-            </SheetContent>
-          </Sheet>
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Back to {BRAND.owedBook}
+            </Link>
+            <ThemeToggler />
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className="ml-1 inline-flex h-11 items-center gap-2 border border-border px-2.5 pr-3 text-sm text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                data-testid="account-menu"
+              >
+                <Initials name={user.displayName} size="sm" />
+                <span className="max-w-[12rem] truncate font-medium">{user.displayName}</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[14rem]">
+                <DropdownMenuLabel className="font-normal">
+                  <span className="block truncate text-sm font-semibold">{user.displayName}</span>
+                  <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">{roleLabel} · real account</span>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => startTransition(() => router.push("/dashboard"))}>Account &amp; Billing</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => startTransition(() => router.push("/demo/references/owedbook"))}>Back to {BRAND.owedBook}</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => void signOut()} data-testid="sign-out">
+                  <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </nav>
+          <div className="flex items-center gap-1 md:hidden">
+            <ThemeToggler />
+            <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
+              <SheetTrigger
+                aria-label="Open account menu"
+                className="grid h-11 w-11 place-items-center text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                data-testid="menu-trigger"
+              >
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              </SheetTrigger>
+              <SheetContent aria-describedby={undefined}>
+                <SheetTitle className="sr-only">Account menu</SheetTitle>
+                <div className="border-b border-border p-4 pr-14">
+                  <Brand href="/dashboard" />
+                </div>
+                <div className="flex items-center gap-3 border-b border-border p-4">
+                  <Initials name={user.displayName} />
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-foreground">{user.displayName}</p>
+                    <p className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">{roleLabel} · real account</p>
+                  </div>
+                </div>
+                <nav className="flex flex-col px-4 py-2" aria-label="Account">
+                  <Link href="/dashboard" onClick={(e) => navigate(e, "/dashboard")} className="flex min-h-[44px] items-center text-sm font-medium text-foreground">
+                    Account &amp; Billing
+                  </Link>
+                  <Link href="/demo/references/owedbook" onClick={(e) => navigate(e, "/demo/references/owedbook")} className="flex min-h-[44px] items-center text-sm font-medium text-foreground">
+                    Back to {BRAND.owedBook}
+                  </Link>
+                  <button type="button" onClick={() => void signOut()} className="flex min-h-[44px] items-center text-left text-sm font-medium text-muted-foreground hover:text-foreground">
+                    Sign out
+                  </button>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </header>
-
-      {/* Content region — spinner replaces ONLY this slot while a nav is in
-          flight; the rail / top bar never remount. */}
-      <main className="md:pl-[248px]">
-        <div className="mx-auto max-w-6xl px-5 py-6">
-          {isPending ? (
-            // Operator's kit spinner by explicit direction (Rule Zero-B
-            // exception logged — hardcoded palette colors live inside it).
-            <div className="grid min-h-[60vh] place-items-center">
-              <SpinnerLarge />
-            </div>
-          ) : (
-            children
-          )}
-        </div>
+      <AccountStrip realName={user.displayName} roleLabel={roleLabel} />
+      <main id="main" tabIndex={-1} className="w-full flex-1 focus:outline-none">
+        {isPending ? (
+          // Operator's kit spinner by explicit direction (Rule Zero-B exception
+          // logged — hardcoded palette colors live inside it).
+          <div className="grid min-h-[60vh] place-items-center">
+            <SpinnerLarge />
+          </div>
+        ) : (
+          children
+        )}
       </main>
+      <Footer />
     </div>
   );
 }

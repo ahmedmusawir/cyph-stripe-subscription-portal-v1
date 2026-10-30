@@ -1,0 +1,13 @@
+{
+  "before": {
+    "dpr": 1,
+    "width": 1440
+  },
+  "after": {
+    "dpr": 2,
+    "width": 720,
+    "scroll": 720
+  },
+  "zoom": 2,
+  "actualBrowserSetting": true
+}

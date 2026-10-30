@@ -1,0 +1,18 @@
+{
+  "time": "2026-10-28T08:08:23.262Z",
+  "logoutRequests": 1,
+  "signInAttempts": 1,
+  "loginHTTP": 200,
+  "login": true,
+  "refresh": {
+    "staleExpiryInjected": true,
+    "tokenRequests": 2,
+    "protectedPageVisible": true
+  },
+  "lightHandoffError": true,
+  "demoNamespacesBefore": 2,
+  "logoutHTTP": 200,
+  "demoNamespacesAfter": 0,
+  "protectedDeniedAfterLogout": true,
+  "logoutPassed": true
+}

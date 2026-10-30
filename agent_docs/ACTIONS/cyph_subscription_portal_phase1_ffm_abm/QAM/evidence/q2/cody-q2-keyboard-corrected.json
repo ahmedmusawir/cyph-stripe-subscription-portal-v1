@@ -1,0 +1,95 @@
+[
+  {
+    "target": "Continue",
+    "tabs": 9
+  },
+  {
+    "target": "First name",
+    "tabs": 1
+  },
+  {
+    "target": "Last name",
+    "tabs": 1
+  },
+  {
+    "target": "Work email",
+    "tabs": 1
+  },
+  {
+    "target": "Mobile phone",
+    "tabs": 1
+  },
+  {
+    "target": "Your role",
+    "tabs": 1
+  },
+  {
+    "target": "Continue",
+    "tabs": 3
+  },
+  {
+    "target": "Pharmacy name",
+    "tabs": 1
+  },
+  {
+    "target": "Street address",
+    "tabs": 1
+  },
+  {
+    "target": "City",
+    "tabs": 1
+  },
+  {
+    "target": "State",
+    "tabs": 1
+  },
+  {
+    "target": "ZIP",
+    "tabs": 1
+  },
+  {
+    "target": "NCPDP number",
+    "tabs": 1
+  },
+  {
+    "target": "NPI",
+    "tabs": 1
+  },
+  {
+    "target": "Store phone",
+    "tabs": 1
+  },
+  {
+    "target": "Pharmacy software",
+    "tabs": 1
+  },
+  {
+    "target": "Continue to review",
+    "tabs": 3
+  },
+  {
+    "target": "c1",
+    "tabs": 3
+  },
+  {
+    "target": "c2",
+    "tabs": 1
+  },
+  {
+    "target": "continue-payment",
+    "tabs": 2
+  },
+  {
+    "target": "outcome-paid",
+    "tabs": 4
+  },
+  {
+    "target": "activation-refresh",
+    "tabs": 6
+  },
+  {
+    "result": "PASS",
+    "workflow": "tab-only registration through activation",
+    "mouseActions": 0
+  }
+]

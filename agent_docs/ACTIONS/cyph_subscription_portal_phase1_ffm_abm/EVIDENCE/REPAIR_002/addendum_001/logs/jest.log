@@ -1,0 +1,8 @@
+
+Test Suites: 13 passed, 13 total
+Tests:       183 passed, 183 total
+Snapshots:   0 total
+Time:        7.837 s
+Ran all test suites.
+Test results written to: agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002/addendum_001/data/jest.json
+jest exit 0

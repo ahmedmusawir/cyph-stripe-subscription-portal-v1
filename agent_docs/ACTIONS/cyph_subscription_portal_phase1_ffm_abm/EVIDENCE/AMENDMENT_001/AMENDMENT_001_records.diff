@@ -1,0 +1,171 @@
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
+index 0da69fe..ca8e20e 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
+@@ -1,5 +1,5 @@
+ # Engineering acceptance ledger
+-Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.1 (R-008/R-009). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
++Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.2 (R-008/R-009/R-011). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
+ 
+ | AC | Engineering claim | Evidence | Independent disposition |
+ |---|---|---|---|
+@@ -8,7 +8,8 @@ Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANC
+ | AC-03 | MET — real admin vs synthetic persona labelled in strip/menu; non-owner payload is `{kind:'denied', ownerContactLabel}` only; service denies add/billing | `portal-account.test.ts` (persona tests); account e2e personas | See matrix |
+ | AC-04 | MET — every C01–C17 + sign-in state reachable; missing context returns to a safe step with notice | ER §6; public/account e2e | See matrix |
+ | AC-05 | MET — count ≥1, N records required, reduce asks/keeps, 1/2/3 exercised | `portal-registration.test.ts`; e2e count reduction, 3-store journey | See matrix |
+-| AC-06 | MET — required fields, NCPDP 7 / NPI 10 as strings, conditional fields, summary focus, job title grants nothing | `portal-registration.test.ts` validation; e2e validation | See matrix |
++| AC-06 | MET — required fields, NCPDP 7 / NPI 10 as strings, conditional fields, summary focus, no job-title field (R-011, AMENDMENT_001) | `portal-registration.test.ts` validation; e2e validation | See matrix |
++| AC-06a | ENGINEERING SELF-CHECK (R-011, AMENDMENT_001) — required unchecked owner declaration with exact label; blocks owner step, deep links and mock checkout at the service; survives Back/reload; v1 drafts migrate unaccepted; Me / Someone else keeps billing with the owner; no ownership-proof claims | `portal-registration.test.ts` "owner declaration (R-011)"; `portal-owner.test.tsx`; `e2e/public.owner-declaration.spec.ts`; `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` | Pending independent QA |
+ | AC-07 | MET — back/edit/reload keep drafts; edits invalidate quote+consent; separate public/account namespaces; reset/logout/identity change clear; no secrets stored | e2e reload + storage check; `portal-storage.test.ts` | See matrix |
+ | AC-08 | MET — 9900/14800/19700; DEMO10 −1000 due-now only; unavailable ≠ 0; add 2450 | literal-expectation tests in `portal-registration.test.ts`, `portal-account.test.ts`; e2e $197.00/$187.00/$24.50 | See matrix |
+ | AC-09 | MET — two consents initial, one add; expired (injected clock)/stale revision rejected without mutation; refresh clears consent; busy disables; consent disabled until a current quote | engine tests; e2e consent error | See matrix |
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
+index 44c0c4a..2bd5bf4 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
+@@ -1,5 +1,5 @@
+ # Acceptance specification — FFM-ABM-001-SUBSCRIPTION-PORTAL
+-Version 1.1 · 27 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.1 replaces AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
++Version 1.2 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
+ 
+ ## Basis and grading
+ APP_BRIEF v1.1, DATA_CONTRACT v1.1, IMPLEMENTATION_CONTRACT v1.0, received UI_SPEC v1.0 with R-004. Each AC is required for the declared FFM scope. No arbitrary screen/test count replaces behavior. All mock checks run in a locally served app or isolated service tests; real access checks use only the authorized existing shared-dev auth target. Deployment/live billing/SSO are excluded.
+@@ -44,12 +44,19 @@ Every evidence record includes input/precondition, expected result, actual resul
+ **Evidence:** Count/review consistency and confirm/cancel evidence.
+ 
+ ## AC-06 — Owner/pharmacy validation
+-**Requirement:** Required names/email/mobile/role and pharmacy fields validate. NCPDP seven digits and NPI ten digits remain strings; Other software and other-admin fields required conditionally. Errors retain inputs and focus linked summary. Job title never grants permission.
++**Requirement:** Required names/email/mobile, the owner declaration (AC-06a) and pharmacy fields validate. NCPDP seven digits and NPI ten digits remain strings; Other software and other-admin fields required conditionally. Errors retain inputs and focus linked summary. No job-title field exists (R-011).
+ 
+ **Verification:** Form/service positives and negatives.
+ 
+ **Evidence:** Leading-zero, conditional-field and focus observations.
+ 
++## AC-06a — Owner declaration (R-011)
++**Requirement:** Registration is owner-only. C02 shows a required, initially unchecked checkbox labelled exactly "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.", with an accessible label, an inline error and an error-summary link, separate from terms/payment consent. Missing it blocks owner progression, deep links past the owner step and the mock checkout submission (service boundary). An accepted declaration survives Back and reload; drafts saved before R-011 never acquire acceptance; seeded acceptance is a labelled synthetic fixture. Me / Someone else keeps account ownership and billing with the registering owner; Someone else never transfers ownership, billing or permission to buy more stores; one designated admin per store. UI and documents never claim that email or payment proves ownership or delegated authority.
++
++**Verification:** Service tests, component test, browser journeys (keyboard, 375/1440, light/dark), storage-migration check.
++
++**Evidence:** Missing/accepted/migrated declaration observations and copy review.
++
+ ## AC-07 — Draft/edit continuity
+ **Requirement:** Back/edit navigation and same-tab reload preserve synthetic owner/pharmacy/admin data. Quote invalidates after material edits. The public registration draft and the account mock state are separate; reset clears its own namespace, logout clears both, identity change clears account state. No secrets/real business data are persisted.
+ 
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+index 4c5c2ef..7271853 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+@@ -33,3 +33,7 @@ Mock business mode only; commercial/policy placeholders intentional; no Stripe/e
+ 
+ ## 8. Processes, export, next action
+ Owned: `next start -p 3001` from session scratchpad copy `run-r008/` (PID in `../../STATE.md`). Not owned, untouched: PID 40320 (:3457). `.auth/` deleted. Export: `../../EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E2_REVIEW_001.zip` (+ `~/Downloads/` copy), indexed and privacy-scanned. **Next: Tony reviews and commits the candidate, creates `qa/ffm-abm-001-subscription-portal`; then Cody starts Q1 at `QAM/QAM_ENTRY.md`.**
++
++## 9. Amendments after Q2 (appended; sections above are the E2 record)
++- **REPAIR_001 (R-010)**, committed by the Director as `0d43a4c`: Q2-F01/F02/F03/O04/G06 + R1-N01. Report `../../EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md`.
++- **AMENDMENT_001 (R-011, 29 Oct 2026)** — Coach-approved owner-only registration, Director-authorized before final certification. The C02 job-title select is removed; a required, initially unchecked owner declaration ("I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.") is enforced in the UI and in the mock service (owner step, deep links, checkout). v1 drafts migrate unaccepted. Me / Someone else copy clarifies that ownership, billing and permission to buy stores stay with the owner. Ownership-transfer copy is clarified with placeholders. ACCEPTANCE_SPEC v1.2 (AC-06 text, new AC-06a); DATA_CONTRACT v1.3; portal-contract v1.2. Report: `../../EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`. **Independent QA must cover AC-06a and re-run the REPAIR_001 retest on the combined candidate.**
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+index 70129d8..60f22f4 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+@@ -72,3 +72,19 @@ Future amendment record: ID; date/seat; approving source; original observation;
+ - **Boundaries:** no DB/schema/role changes, new accounts, live Stripe/email/provisioning/SSO, deployment or Git mutations; real login/logout/session infrastructure, the admin-OR-superadmin predicate (R-008), public registration (R-009), dependencies and lockfile preserved. Cody's QAM records are historical evidence and are not edited.
+ - **Contract effect:** none. ACCEPTANCE_SPEC v1.1 / IMPLEMENTATION_CONTRACT v1.1 unchanged; repairs bring the product to the existing contract and approved design. The 20-store cap was never an approved business limit (repeat-N pricing); removing it is a conformance repair, not a new policy.
+ - **Return:** `EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md` and `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_001_REVIEW.zip` (+ byte-identical `~/Downloads/` copy). Next: Director commit → Cody independent retest → JARVIS adjudication. Engineering does not self-certify.
++
++## R-011 — Owner-only registration: explicit owner declaration replaces the job-title dropdown (business decision + Director authorization)
++- **ID / date / seat:** R-011 · 29 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer); business decision is Coach's, implementation authorized by the Director (Tony).
++- **Approving source:** Director dispatch, 29 Oct 2026: "Coach approved owner-only registration and removal of the job-title dropdown. He requires an explicit owner declaration. Tony authorizes this frontend amendment now, before final certification. Preserve the repairs you just completed." … "Email verification establishes control of an inbox. Neither email verification nor payment proves pharmacy ownership or delegated authority. Do not claim otherwise in UI or documentation."
++- **Base:** `qa/ffm-abm-001-subscription-portal` @ `0d43a4c343909467487b327e654e0650b21c9336` (Director commit of REPAIR_001).
++- **Exact decision (frontend / mock contract only):**
++  1. The C02 "Your role" dropdown (Owner / Pharmacist in charge / Manager / Other) and `OwnerDraft.businessRole` are removed.
++  2. A required, initially unchecked checkbox with the exact label "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies." is added to C02, with an accessible label, an inline error and an error-summary entry. It is stored as `OwnerDraft.ownerDeclarationAccepted` (must be exactly `true`). It is separate from `ConsentView` (terms, recurring charge, price change).
++  3. The mock service enforces it: `validateOwner` fails without it, so `firstIncomplete`/`isDraftComplete` keep the draft on the owner step and `startCheckout` refuses submission. Drafts persisted before R-011 (public storage version 1) are migrated **without** acceptance; the job title is dropped. Seeded scenarios carry acceptance only through the synthetic `OWNER_JORDAN` fixture, labelled as such.
++  4. "Who will be this store's admin? Me / Someone else" stays. The registering owner keeps account ownership and billing. "Me" = the owner also manages that store. "Someone else" appoints a store admin and does not transfer ownership, billing or permission to buy more stores. One designated admin per store remains the rule.
++  5. Ownership-transfer support copy is kept and clarified: there is no self-service transfer form or working support integration; unresolved details are explicit placeholders (`[SUPPORT EMAIL]`, `[OWNERSHIP TRANSFER PROCESS TBD]`, ownership review process `[TBD]`).
++  6. The declaration is a self-declaration. Neither email nor payment proves ownership or delegated authority; the UI says so and no ownership verification is claimed. Registration, payment, provisioning and access-link delivery remain simulated; no live email verification is introduced.
++- **Unchanged:** database, RLS, stored roles, live auth, Stripe, Mission Control, OwedBook; the real admin/superadmin reviewer gate (R-008/R-009); the real authenticated admin is not relabelled as a provisioned Owner; pharmacy-software choices (separate stakeholder decision); REPAIR_001 behaviour.
++- **Affected ACs/files:** AC-06 (validation) and a new AC-06a (owner declaration); DATA_CONTRACT v1.2→v1.3 (§4 OwnerDraft, §5 owner identity/admin assignment); `_project/portal-contract.ts` v1.1→v1.2; `_project/UI_SPEC.md` C02/C03 wording; ACCEPTANCE_SPEC v1.1→v1.2; ACCEPTANCE_LEDGER; QAM engineering handoff. Received design bytes (`_design/`, `_extraction/`) are preserved as history.
++- **Required regression:** missing declaration blocks owner progression and the mock checkout; accepted declaration survives Back and reload; pre-R-011 drafts do not acquire acceptance; the job title no longer exists or affects registration; Me / Someone else keeps billing ownership; keyboard, mobile and both themes usable; REPAIR_001 regressions still pass.
++- **Production note:** the eventual production ownership model (verification, delegated authority, transfer) is separate backend work and is not decided here.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
+index ce81543..1e36a3e 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
+@@ -1,6 +1,6 @@
+ # DATA CONTRACT — Subscription Portal design and mock journeys
+ 
+-> Version: 1.2 · Date: 27 October 2026 (Asia/Dhaka) · v1.2 applies Director rulings R-008/R-009
++> Version: 1.3 · Date: 29 October 2026 (Asia/Dhaka) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
+ > Status: FFM contract under RULINGS R-001/R-005 · Owner: Architect
+ > Purpose: screen fields, mock relationships, transitions and permissions. NOT production SQL or a migration contract.
+ 
+@@ -40,7 +40,7 @@ Mock capability flags determine the visual fixtures. They are never proof of pro
+ |---|---|---|
+ | PortalSessionView | `signedIn`, `displayName`, `persona`, `accountId?`, `canViewBilling`, `canManageBilling`, `canAddStore`, `isDemo` | Header, permitted actions, denied state |
+ | PlanView | `id`, `name`, `interval`, `includedStoreCount`, `baseAmountCents?`, `additionalStoreAmountCents?`, `benefits[]`, `commercialStatus: provisional|approved` | Plan and review panels |
+-| OwnerDraft | `firstName`, `lastName`, `email`, `mobile`, `businessRole`, `legalBusinessName?` | Owner form/review |
++| OwnerDraft | `firstName`, `lastName`, `email`, `mobile`, `ownerDeclarationAccepted`, `legalBusinessName?` | Owner form/review |
+ | PharmacyDraft | `id`, `name`, `street`, `city`, `state`, `zip`, `ncpdp`, `npi`, `phone`, `software`, `softwareOther?`, `adminAssignment` | Initial and add-store forms |
+ | AdminAssignment | `kind: owner|other`, `fullName?`, `email?` | Other-admin fields required only for `other` |
+ | RegistrationDraft | `id`, `planId`, `requestedStoreCount`, `owner`, `pharmacies[]`, `code?`, `consents`, `state`, `resumeAvailable` | Wizard progress, edits, abandoned checkout |
+@@ -54,16 +54,16 @@ Mock capability flags determine the visual fixtures. They are never proof of pro
+ | HandoffView | `destination: stripe_checkout|stripe_portal|owedbook|account_setup`, `purpose`, `returnContext`, `isDemo`, `status` | Clear external destination, return/retry |
+ | AccessEmailView | `recipientKind: owner|store_admin`, `recipientName`, `recipientEmailMasked`, `pharmacyNames[]`, `subject`, `linkState`, `expiryLabel` | Email preview; no real token or send |
+ 
+-`businessRole` is a self-described job title (owner, pharmacist in charge, manager, other), not a permission grant. NCPDP/NPI identify a claimed pharmacy; they are not proof of ownership.
++`ownerDeclarationAccepted` records the registering person's explicit owner self-declaration (R-011); it starts unaccepted, must be exactly `true`, is separate from `ConsentView`, and grants no permission. Registration is owner-only. Neither email (control of an inbox) nor payment proves pharmacy ownership or delegated authority; nothing in the FFM verifies ownership. NCPDP/NPI identify a claimed pharmacy; they are not proof of ownership.
+ 
+ ## 5. Field and validation behavior
+ 
+ | Concern | Design/FFM rule |
+ |---|---|
+-| Owner identity | Require names, email, mobile and business role; legal invoice name optional. Trim email; show ordinary format validation. |
++| Owner identity | Require names, email, mobile and the owner declaration (R-011: required checkbox, initially unchecked, exact label "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies."); legal invoice name optional. Trim email; show ordinary format validation. The mock service rejects a missing declaration and refuses checkout; drafts saved before R-011 are migrated without acceptance. |
+ | Pharmacy details | Required business details above; NCPDP 7-digit format, NPI 10-digit format for UI demonstration. Do not label either “ownership verified.” |
+ | Software | Liberty / Pioneer / Other from Coach; Other reveals a name field. No software credentials. |
+-| Admin assignment | Owner selected by default; Other reveals full name/email. Explain separate billing-owner and store-admin access. |
++| Admin assignment | Me / Someone else; Someone else reveals full name/email. One designated admin per store. The registering owner keeps account ownership and billing either way: "Me" means the owner also manages the store; "Someone else" appoints a store admin and never transfers ownership, billing or permission to buy more stores (R-011). |
+ | Multiple initial stores | Proposed resolution: `pharmacies.length === requestedStoreCount` before payment. Repeat the pharmacy form; identify “Pharmacy 1 of N.” Count reduction asks before discarding entered records. |
+ | Duplicate pharmacy | Conflict fixture prevents submission; keep data, show sign-in/support routes, disclose no other owner's identity. |
+ | Existing owner email | Design sign-in/continue path. Live anti-enumeration and account-linking behavior remain implementation work. |
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+index afacd48..4c5b625 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+@@ -1,6 +1,6 @@
+ # UI_SPEC — Cyber Pharma Subscription Portal
+ 
+-> **Version:** 1.0 + R-009 wording · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** approved design (RULINGS R-001/R-004); this active copy applies R-009 sign-in wording. The received design copy under `_design/approved_v1_0/` is preserved unchanged.
++> **Version:** 1.0 + R-009 wording + R-011 owner declaration · **Date:** 27 October 2026 (Asia/Dhaka) · **Status:** approved design (RULINGS R-001/R-004); this active copy applies R-009 sign-in wording. The received design copy under `_design/approved_v1_0/` is preserved unchanged.
+ > **Design mode:** Demo (functional clarity; token discipline mandatory) · **Designer:** Fable · **Architect:** JARVIS · **Director:** Tony
+ > **Repository baseline:** `cyph-stripe-subscription-portal-v1` foundation commit `1d15918` · **Module:** FFM-ABM-001-SUBSCRIPTION-PORTAL
+ > **Inputs:** `APP_BRIEF.md` v1.0, `DATA_CONTRACT.md` v1.0, `DESIGNER_HANDOFF.md` v1.0, Coach's 17-board HTML, Architect feedback 27 Oct (v0.2 corrections, all applied)
+@@ -76,7 +76,7 @@
+ - **Human checkpoint:** the reduce confirmation.
+ 
+ ### C02 Owner details — `signup-owner.html`
+-- **Fields:** first name*, last name*, work email* (help: access link goes here), mobile*, role* (Owner / Pharmacist in charge / Manager / Other — self-description, explicitly "doesn't change what you can do"), legal business name (optional, for invoices).
++- **Fields:** first name*, last name*, work email* (help: access link goes here), mobile*, legal business name (optional, for invoices), owner declaration* — required checkbox, initially unchecked: "I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies." Help text: owner-only registration; a self-declaration; email and payment don't prove ownership. Separate from terms/payment consent. *(R-011, 29 Oct 2026: replaces the retired role select Owner / Pharmacist in charge / Manager / Other; the received design copy under `_design/` is preserved as history.)*
+ - **Gating:** Continue always clickable; submit validates → `errors` state (summary + per-field) and focus moves to the summary.
+ - **States:** `filled` = returning via Back with retained values. `existing_email` = info alert with "Sign in instead" (primary) / "Use a different email"; copy says "may already have an account" (anti-enumeration is implementation work). `saving` = busy CTA.
+ 
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/portal-contract.ts b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/portal-contract.ts
+index e33810d..61184fc 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/portal-contract.ts
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/portal-contract.ts
+@@ -1,4 +1,4 @@
+-/** FFM contract v1.1. Pure types; no SDK/runtime implementation. */
++/** FFM contract v1.2 (R-011: owner declaration replaces businessRole). Pure types; no SDK/runtime implementation. */
+ export type Cents = number; // Integer, >=0; validate at mock-service boundary.
+ export type ISODate = string;
+ export type Persona = 'prospective_owner' | 'billing_owner' | 'store_admin' | 'member';
+@@ -17,7 +17,8 @@ export interface PlanView {
+ }
+ export interface OwnerDraft {
+  firstName: string; lastName: string; email: string; mobile: string;
+- businessRole: 'owner' | 'pharmacist_in_charge' | 'manager' | 'other'; legalBusinessName?: string;
++ /** R-011: explicit owner self-declaration (initially false; must be exactly true). Not proof of ownership. */
++ ownerDeclarationAccepted: boolean; legalBusinessName?: string;
+ }
+ export type AdminAssignment = {kind:'owner'} | {kind:'other'; fullName:string; email:string};
+ export interface PharmacyDraft {

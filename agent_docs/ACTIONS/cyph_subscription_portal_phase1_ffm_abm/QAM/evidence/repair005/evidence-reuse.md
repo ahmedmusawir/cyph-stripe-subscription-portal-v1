@@ -1,0 +1,5 @@
+# Applicability and provenance
+
+PriorR4manifest390552c2...d2bb1/package8f2dff8c...874b3. Currentmanifest diff lists6changed/newinputs: registration engine/barrel, publicActivationView and tests. Accountengine/layout,auth/session/role,Stripequeryroute,styles/Alertfocus,config/dependencies unchanged. Reuse priorrealadmin/auth/Retry/StripeHTML-RSC/account observations withtheiroriginalcandidate/provenance. Current240Jest rerunsmockedrole/account/boundary tests;no unnecessarysign-ins/logout/fullaccountcampaign.
+
+Original46QAtransition/predecessor probes copied directly fromretainedCody lane, outputpaths/config adapted only. CorrectedC07spec selected;supersededexpectations preserved ashistory,not newfindings. Engineering adaptedruns remaininputs,not acceptance. Current66publicbrowser rerun changedactivation/recovery plusprior safeguards/21stores. NewQAoracle derives224expectedphase/permission/effects independently, thencomparesengineering summaries;additionalreaders/methods separately tested. Actual8zoom results collected anew;prior method only reused. Exactpredecessor source andstoredfixtures retained. Tonyacceptance attributed separately.

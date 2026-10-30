@@ -9,8 +9,8 @@ The module's `FFM_ENTRY.md` and `playbook/` are the executable project-specific 
 | Historical instruction/example | This module's binding adaptation |
 |---|---|
 | Stop for each subphase/operator gate | E1 plan approval once; E2 internal checks continuously |
-| Create new auth wrapper / build roles | Preserve existing auth/session service and real superadmin gate |
-| Admin/member/superadmin fixture scope | Synthetic customer personas behind real staff gate; DATA_CONTRACT owns shapes |
+| Create new auth wrapper / build roles | Preserve existing auth/session service; account management uses the R-008 admin-or-superadmin rule; registration is public (R-009) |
+| Admin/member/superadmin fixture scope | Synthetic customer personas inside the real-login account surface; DATA_CONTRACT owns shapes |
 | Deploy to Cloud Run during verification | Explicitly excluded; deployment scripts remain disabled |
 | Every component requires tests | Risk-based service and workflow tests, not implementation-mirroring tests |
 | Grep requires zero Supabase imports anywhere in app | No new business-client imports; preserve documented existing auth wiring |

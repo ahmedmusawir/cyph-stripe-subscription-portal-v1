@@ -1,35 +1,39 @@
 # Engineering acceptance ledger
-Owner: Engineer. These are claims, not independent verdicts.
+Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.8 (R-008/R-009/R-011/R-012/R-013 + addenda 1–2/R-014 + addendum 1). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
 
 | AC | Engineering claim | Evidence | Independent disposition |
 |---|---|---|---|
-| AC-01 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-02 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-03 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-04 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-05 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-06 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-07 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-08 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-09 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-10 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-11 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-12 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-13 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-14 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-15 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-16 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-17 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-18 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-19 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-20 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-21 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-22 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-23 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-24 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-25 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-26 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-27 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-28 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-29 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
-| AC-30 | NOT EXECUTED | None yet | See QAM/AC_EVIDENCE_MATRIX.md |
+| AC-01 | MET (mocked member) — public entry/registration work anonymously; account routes and account-side modes → /login with no payload; admin & superadmin admitted; member/role-less denied (mocked roles); forged values grant nothing | ER §3–4; `e2e/public.boundaries.spec.ts`, `public.journeys.spec.ts`, `account.journeys.spec.ts`; `src/__tests__/portal-access.test.tsx`, `login-form.test.tsx` | See QAM/AC_EVIDENCE_MATRIX.md |
+| AC-02 | MET — real login/logout through existing routes; R-008 role rule only; logout clears both namespaces; mock flows never submit credentials. Note: inherited logout is GLOBAL scope | ER §3; `e2e/logout.final.spec.ts`; `portal-storage.test.ts` | See matrix |
+| AC-03 | MET — real admin vs synthetic persona labelled in strip/menu; non-owner payload is `{kind:'denied', ownerContactLabel}` only; service denies add/billing | `portal-account.test.ts` (persona tests); account e2e personas | See matrix |
+| AC-04 | MET — every C01–C17 + sign-in state reachable; missing context returns to a safe step with notice | ER §6; public/account e2e | See matrix |
+| AC-05 | MET — count ≥1, N records required, reduce asks/keeps, 1/2/3 exercised. REPAIR_002 (R-012) self-check: no count-sized allocation (billion-count push probe 0), steps fill in order, step 100+ reachable (R2-N02), reduction/restoration, 21-store journey | `portal-registration.test.ts` incl. "count-driven work is bounded (R-012, CR-F02)"; `portal-checkout-hold.test.tsx`; `e2e/public.repair002.spec.ts`; `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` | CR-F02 pending independent retest |
+| AC-06 | MET — required fields, NCPDP 7 / NPI 10 as strings, conditional fields, summary focus, no job-title field (R-011, AMENDMENT_001) | `portal-registration.test.ts` validation; e2e validation | See matrix |
+| AC-06a | ENGINEERING SELF-CHECK (R-011, AMENDMENT_001) — required unchecked owner declaration with exact label; blocks owner step, deep links and mock checkout at the service; survives Back/reload; v1 drafts migrate unaccepted; Me / Someone else keeps billing with the owner; no ownership-proof claims | `portal-registration.test.ts` "owner declaration (R-011)"; `portal-owner.test.tsx`; `e2e/public.owner-declaration.spec.ts`; `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`. REPAIR_002 (R-012) self-check: pending checkout closed on withdrawal/legacy restore; replay, outcomes, unknown and activation re-check the current declaration; submitted payments held; recovery only via explicit acceptance + fresh quote/consent | + `portal-registration.test.ts` "pending checkout respects current prerequisites (R-012, CR-F01)"; `portal-checkout-hold.test.tsx`; `e2e/public.repair002.spec.ts`; `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` | Gate Q FAILED on 24cf075 (CR-F01); pending independent retest |
+| AC-07 | MET — back/edit/reload keep drafts; edits invalidate quote+consent; separate public/account namespaces; reset/logout/identity change clear; no secrets stored | e2e reload + storage check; `portal-storage.test.ts` | See matrix |
+| AC-08 | MET — 9900/14800/19700; DEMO10 −1000 due-now only; unavailable ≠ 0; add 2450 | literal-expectation tests in `portal-registration.test.ts`, `portal-account.test.ts`; e2e $197.00/$187.00/$24.50 | See matrix |
+| AC-09 | MET — two consents initial, one add; expired (injected clock)/stale revision rejected without mutation; refresh clears consent; busy disables; consent disabled until a current quote | engine tests; e2e consent error | See matrix |
+| AC-10 | MET — labelled stand-in, no inputs; back/close/decline keep draft inactive; forged success URL changes nothing. REPAIR_003 (R-013) self-check: checkout bound to its quoted scope; processing/unknown payment can't confirm edited details; restore confirms the original scope; closed keys refused, open-checkout replay unchanged. REPAIR_004 (R-013 addendum 1) self-check: legacy v2 checkouts bind only from retained evidence; the R-011 open-edited case is held unbound | e2e journeys + forged-URL test; `portal-registration.test.ts` "R-013" + "REPAIR_004" blocks; `portal-checkout-hold.test.tsx`; `e2e/public.repair003.spec.ts`, `e2e/public.repair004.spec.ts`; `EVIDENCE/REPAIR_003_ENGINEERING_REPORT.md`, `EVIDENCE/REPAIR_004_ENGINEERING_REPORT.md` | R3-F01 (Cody, REPAIR_003 RETEST_001) pending independent retest; R4-N01 (self-found) closed by REPAIR_004 addendum 1 (R-013 addendum 2: submitted payments refuse every checkout outcome, replay, restart and new checkout; `e2e/public.repair004-addendum.spec.ts`), pending independent retest. REPAIR_005 (R-014): checkout record governs; stale flags never confirm, discard or reverse (`portal-registration.test.ts` "REPAIR_005" matrix; `e2e/public.repair005.spec.ts`) | R4-F01/R4-F02 (Cody, REPAIR_004 RETEST_001) pending independent retest |
+| AC-11 | MET — three tracks, delayed never asks to repay, email failure → simulated resend, no login. REPAIR_004 addendum 1: waiting never offers to resume checkout; unprovable completed history shown as unavailable. REPAIR_005 (R-014): Refresh/retry only in processing/failed phases. REPAIR_006 (R-014 addendum 1): paid always reads as paid; resend only paid + setup ready (`e2e/public.repair006.spec.ts`) | engine activation tests; e2e activation; `portal-checkout-hold.test.tsx`; `e2e/public.repair004-addendum.spec.ts`, `e2e/public.repair005.spec.ts` | R4-F01/R4-F02, R5-F01/R5-F02 pending independent retest; R5-O03 recorded as nonblocking (Lead) |
+| AC-12 | MET — nominated admin keeps owner access; separate previews from submitted draft; nothing sent. REPAIR_004 (R-013 addendum 1): after payment, invitation claim/preview/store list come from the paid scope | engine preview test; e2e email preview; `portal-registration.test.ts` "R3-F02" block; `portal-checkout-hold.test.tsx`; `e2e/public.repair004.spec.ts` | R3-F02 (Cody, REPAIR_003 RETEST_001) pending independent retest |
+| AC-13 | MET — abandoned/declined resumable; expired restarts; unknown pauses payment. REPAIR_003 (R-013): unknown + edit holds "Stripe confirms payment"; nothing-charged → fresh quote/consent/new key | engine + e2e checkout tests; `e2e/public.repair003.spec.ts` | R2-F01 pending independent retest |
+| AC-14 | MET — valid/expired/used/request/sent/error; neutral wording; no editable email; valid → labelled downstream boundary | engine link tests; e2e access link | See matrix |
+| AC-15 | MET — summary/count/prices/next payment/cards consistent; invitation pending ≠ unpaid; loading/error/retry/empty | account e2e; engine load-error test | See matrix |
+| AC-16 | MET — add-store from dashboard and OwedBook reference; draft kept on cancel/card change/failure; duplicates (own vs elsewhere) without identity | account e2e; engine duplicate test | See matrix |
+| AC-17 | MET — same key ×3 → one store; failure unchanged; unknown blocks second attempt; 1→2 and 2→3 | engine idempotency tests; e2e double-click, failure, unknown | See matrix |
+| AC-18 | MET — attention: one increment, setup pending, invitation held, recovery completes same store | engine attention test; e2e attention | See matrix |
+| AC-19 | MET — portal stand-in for manage/cancel/resume/card/invoices; refreshing → unchanged/updated; launch error retry; no dates invented | engine billing tests; account e2e portal | See matrix |
+| AC-20 | CLAIMED — amounts labelled illustrative; placeholders visible; brand in `src/components/portal/brand.ts`; proposed rule chip | source + screenshots `EVIDENCE/E2/screenshots/` | See matrix |
+| AC-21 | CLAIMED — top bar + centered content, tokens byte-match design (+ R-004 link rule), Button/Pill deltas central, theme persists | `src/app/globals.scss`; screenshots; visual comparison by Engineer (not independent) | See matrix |
+| AC-22 | MET (Engineering) — Gate M 136 public + 84 account measurements, 0 failures; Sheet/Escape/focus return; table/card at 768 | ER §5; `EVIDENCE/E2/gate-m-*.jsonl` | See matrix |
+| AC-23 | PARTIAL — keyboard plan→owner, error-summary focus, aria-live/busy/invalid wiring; 200% zoom proxy; no AT walk; contrast not re-measured per state. REPAIR_004 (R3-O03): dark focus ring inside alerts ≥3:1 against tint and offset (`e2e/public.repair004.spec.ts`) | ER §5 gaps | See matrix |
+| AC-24 | MET — facade/types only in components; SDK-free types; services enforce rules; no server-global state | `portal-boundaries.test.ts` | See matrix |
+| AC-25 | MET (browser) — no new APIs/SDKs/DB/role writes/deploy; browser hosts only localhost:3001; account URLs gated, registration public. GAP: server-side egress not captured | ER §4 | See matrix |
+| AC-26 | MET — protected diff empty; GET login 405; removed routes 404; `/` now → plan (R-009) | ER §4; boundaries e2e | See matrix |
+| AC-27 | MET with disclosed limits — build 0, tsc 0 (scratch), jest 106/106, Playwright 59/59; lint NOT CONFIGURED | `EVIDENCE/E2/01–05` | See matrix |
+| AC-28 | CLAIMED — handoff + indexed ZIP with privacy scan (validated against synthetic leak and clean control and the real credential values) | QAM/HANDOFFS/ENGINEERING_HANDOFF.md; ZIP receipt | See matrix |
+| AC-29 | MET — enumerated scenarios (public: registration only; account: scenarios/personas), reset, hostile text inert | engine scenario tests; e2e hostile text; components test | See matrix |
+| AC-30 | Manual acceptance RECORDED — Tony reported his walkthrough acceptance (incl. login/logout and the copy/demo-control changes), 29 Oct 2026, Director-reported. Architect closeout: documentation closeout completed 30 Oct 2026 by Engineering under the Gate Q decision. (Superseded 30 Oct 2026: "NOT EXECUTED — Director ride after independent QA".) | `EVIDENCE/FINAL_CANDIDATE_PREPARATION_001.md`; `EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md` | Recorded per Gate Q decision; not a claim Tony tested every later byte; integration tracked separately |
+
+## Gate Q disposition — 30 October 2026 (JARVIS / QA Lead)
+The "Engineering claim" column above is Engineering's record and stays that; it is not independent evidence, and its self-check counts are not current QA results. Independent disposition for the accepted snapshot (base `d6fe678` + uncommitted repairs through REPAIR_006; manifest `f7181d3c…e9ab`; plan `9017fa6d…4987`) is the Lead's decision `QAM/HANDOFFS/CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md`: **PASS, with R5-O03 retained as nonblocking (strict assertion remains FAILED).** Where a row above says "pending independent retest", the retest has been performed and adjudicated by that decision (R5-F01 and R5-F02 CLOSED; earlier findings' required repairs accepted with recorded provenance and evidence-reuse limits). C08 is outside this repair scope (inert demo/reference; no live-auth certification). Not certified: live payments, production provisioning/email, deployed operation, full Safari/assistive-technology audit, universal accessibility, fresh real-admin run in REPAIR_006, Gate D. Commit binding: BOUND to `f27261734fd0a3ac96253aa6c55e3b9e911125a8` (30 Oct 2026).

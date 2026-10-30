@@ -1,0 +1,86 @@
+[
+  {
+    "surface": "processing",
+    "theme": "light",
+    "ringRGB": [
+      202.0,
+      58.0,
+      22.0
+    ],
+    "outerRGB": [
+      218.2,
+      217.0,
+      211.2
+    ],
+    "innerRGB": [
+      225.0,
+      229.0,
+      234.0
+    ],
+    "outerRatio": 3.5984995562030786,
+    "innerRatio": 4.020556728484067
+  },
+  {
+    "surface": "unknown",
+    "theme": "light",
+    "ringRGB": [
+      202.0,
+      58.0,
+      22.0
+    ],
+    "outerRGB": [
+      245.2,
+      240.4,
+      230.1
+    ],
+    "innerRGB": [
+      225.0,
+      229.0,
+      234.0
+    ],
+    "outerRatio": 4.492274108684448,
+    "innerRatio": 4.020556728484067
+  },
+  {
+    "surface": "processing",
+    "theme": "dark",
+    "ringRGB": [
+      249.0,
+      128.0,
+      98.0
+    ],
+    "outerRGB": [
+      67.0,
+      65.60000000000001,
+      61.9
+    ],
+    "innerRGB": [
+      47.0,
+      53.0,
+      65.0
+    ],
+    "outerRatio": 3.990427145684703,
+    "innerRatio": 4.859231378552693
+  },
+  {
+    "surface": "unknown",
+    "theme": "dark",
+    "ringRGB": [
+      249.0,
+      128.0,
+      98.0
+    ],
+    "outerRGB": [
+      77.80000000000001,
+      77.3,
+      73.60000000000001
+    ],
+    "innerRGB": [
+      47.0,
+      53.0,
+      65.0
+    ],
+    "outerRatio": 3.33007718609685,
+    "innerRatio": 4.859231378552693
+  }
+]

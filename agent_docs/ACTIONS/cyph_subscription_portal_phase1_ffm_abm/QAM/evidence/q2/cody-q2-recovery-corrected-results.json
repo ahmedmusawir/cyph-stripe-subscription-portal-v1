@@ -1,0 +1,169 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-q2-94251be/qa-recovery-corrected.config.ts",
+    "rootDir": "/tmp/cody-q2-94251be/qa-tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-q2-recovery-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-q2-94251be/qa-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.recovery-corrected\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-q2-recovery-corrected-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "public.recovery-corrected.spec.ts",
+      "file": "public.recovery-corrected.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "T11 delayed paid setup recovers without repayment; email failure resends",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30050,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery-corrected.spec.ts",
+                        "column": 385,
+                        "line": 3
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#demo-activation-plan')\u001b[22m\n\u001b[2m    - locator resolved to <select id=\"demo-activation-plan\" class=\"h-11 w-full border border-input bg-background px-2 text-sm text-foreground\">…</select>\u001b[22m\n\u001b[2m  - attempting select option action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    57 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying select option action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  1 | import {test,expect} from '@playwright/test';\n  2 | async function seed(page:any,id:string){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption(id);await page.getByRole('button',{name:'Load',exact:true}).click();await page.waitForLoadState('networkidle');}\n> 3 | test('T11 delayed paid setup recovers without repayment; email failure resends',async({page})=>{await seed(page,'activation_delayed');await expect(page.getByTestId(\"activation-tracks\").getByText(\"Paid; setup is late. You don't need to pay again.\",{exact:true})).toBeVisible();await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-activation-plan').selectOption('ready');await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");await seed(page,'activation_email_failed');await expect(page.getByText(\"We couldn't send your access email\",{exact:true})).toBeVisible();await page.getByRole('button',{name:/Resend/}).click();await expect(page.getByTestId('activation-tracks')).toContainText('Sent');});\n    |                                                                                                                                                                                                                                                                                                                                                                                                 ^\n  4 | test('T14 access-link error, retry, neutral sent state',async({page})=>{await seed(page,'link_request_error');await page.getByTestId('request-link').click();await expect(page.getByText(\"We couldn't send a new link\",{exact:true})).toBeVisible();await page.getByTestId('request-link').click();await expect(page.getByTestId('link-sent')).toBeVisible();await expect(page.locator('input[type=email]')).toHaveCount(0)});\n  5 | test('T13 unknown resolves not-charged safely and declined resumes',async({page})=>{await seed(page,'checkout_unknown');await expect(page.getByTestId('incomplete-continue')).toBeDisabled();await page.getByTestId('unknown-not-charged').click();await expect(page.getByTestId('incomplete-abandoned')).toBeVisible();await seed(page,'checkout_declined');await page.getByTestId('incomplete-continue').click();await expect(page.getByTestId('due-today')).toBeVisible();await expect(page.locator('#c1')).not.toBeChecked()});\n  6 | test('T08 invalid code leaves correct price; public tabs are isolated',async({page,context})=>{await seed(page,'prefilled_two_store');await page.getByLabel(/Discount or APA/).fill('NOTVALID');await page.getByRole('button',{name:'Apply',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$148.00');const second=await context.newPage();await second.goto('/demo/register/plan');await expect(second.locator('#stores')).toHaveText('1');await second.close()});\n    at /tmp/cody-q2-94251be/qa-tests/public.recovery-corrected.spec.ts:3:385"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:05:29.007Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-q2-recovery-output/public.recovery-corrected--7ac17-yment-email-failure-resends/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b8f01da78c2b2c26b0e2-bc164bcc8a7fe220d762",
+          "file": "public.recovery-corrected.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "T14 access-link error, retry, neutral sent state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1888,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:06:00.000Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b8f01da78c2b2c26b0e2-63c7b3ff6be9108b56c9",
+          "file": "public.recovery-corrected.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:05:28.264Z",
+    "duration": 33918.199,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

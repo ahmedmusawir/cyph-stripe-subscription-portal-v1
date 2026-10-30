@@ -1,0 +1,87 @@
+
+Running 6 tests using 1 worker
+
+  ✘  1 qa-extra/migration-display.spec.ts:3:5 › actual r011 edited v2 checkout stays unmatched instead of inventing paid scope (3.0s)
+  ✓  2 qa-extra/migration-display.spec.ts:4:48 › r012 processing edited v2 reload remains unmatched with no restore/payment (2.6s)
+  ✓  3 qa-extra/migration-display.spec.ts:4:48 › r012 unknown edited v2 reload remains unmatched with no restore/payment (2.6s)
+  ✘  4 qa-extra/migration-display.spec.ts:5:5 › completed activation does not claim invitation to a later edited admin (2.4s)
+  ✓  5 qa-extra/original-submitted.spec.ts:3:48 › processing: editing submitted pharmacy cannot silently change confirmed scope (4.4s)
+  ✓  6 qa-extra/original-submitted.spec.ts:3:48 › unknown: editing submitted pharmacy cannot silently change confirmed scope (4.7s)
+
+
+  1) qa-extra/migration-display.spec.ts:3:5 › actual r011 edited v2 checkout stays unmatched instead of inventing paid scope 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeUndefined[2m()[22m
+
+    Received: [31m{"dueNowCents": 14800, "pharmacies": [{"adminAssignment": {"kind": "owner"}, "city": "Springfield", "id": "demo_ph_main", "name": "Example Main Street Pharmacy", "ncpdp": "0000000", "npi": "0000000000", "phone": "(555) 010-0150", "software": "Liberty", "state": "Alabama", "street": "120 Main Street", "zip": "00000"}, {"adminAssignment": {"kind": "owner"}, "city": "Springfield", "id": "demo_reg_ph_2", "name": "Legacy extra", "ncpdp": "0000045", "npi": "0000000045", "phone": "(555) 010-0150", "software": "Liberty", "state": "Alabama", "street": "120 Main Street", "zip": "00000"}], "storeCount": 2}[39m
+
+      1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';const key='cyph-portal-demo:v1:public';
+      2 | async function inject(page:any,file:string,path:string){await page.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await page.evaluate(({key,v}:any)=>sessionStorage.setItem(key,JSON.stringify(v)),{key,v});await page.goto(path);await page.waitForLoadState('networkidle');await page.waitForTimeout(1200)}
+    > 3 | test('actual r011 edited v2 checkout stays unmatched instead of inventing paid scope',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-open-edited-fixture.json','/demo/stripe');const paid=page.getByTestId('outcome-paid');const available=await paid.isVisible();if(available){await paid.click();await page.waitForURL('**/demo/activation')}const observed=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{scope:s.checkout?.scope,payment:s.activation?.paymentState,count:s.draft.requestedStoreCount}},key);fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-browser.json',JSON.stringify({paidAvailable:available,...observed},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-browser.png',fullPage:true});expect(observed.scope).toBeUndefined();expect(observed.payment).not.toBe('confirmed')});
+        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^
+      4 | for(const mode of ['processing','unknown'])test(`r012 ${mode} edited v2 reload remains unmatched with no restore/payment`,async({page})=>{const route=mode==='processing'?'/demo/activation':'/demo/checkout-incomplete';await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-${mode}-fixture.json`,route);for(let i=0;i<2;i++){await expect(page.getByText("We can't match this payment to your current details",{exact:true})).toBeVisible();await expect(page.getByTestId('restore-scope')).toHaveCount(0);await expect(page.getByTestId(mode==='processing'?'activation-refresh':'unknown-paid')).toBeDisabled();await page.reload()}if(mode==='unknown')await expect(page.getByTestId('unknown-not-charged')).toBeEnabled()});
+      5 | test('completed activation does not claim invitation to a later edited admin',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-completed-admin-fixture.json','/demo/activation');const main=await page.locator('main').innerText();const scope=await page.evaluate(k=>JSON.parse(sessionStorage.getItem(k)!).state.s.checkout.scope,key);fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-admin-display.json',JSON.stringify({recordedAdmin:scope.pharmacies[0].adminAssignment,claimsReplacementInvitation:main.includes('a separate store invitation went to Replacement Admin'),replacementPreview:main.includes("Preview Replacement Admin")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-admin-display.png',fullPage:true});expect(main).not.toContain('a separate store invitation went to Replacement Admin');expect(main).not.toContain('Preview Replacement Admin')});
+      6 |
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/qa-extra/migration-display.spec.ts:3:1189
+
+    Error Context: ../out/before/cody-r3-extra-output/migration-display-actual-r-ddd05-ead-of-inventing-paid-scope/error-context.md
+
+  2) qa-extra/migration-display.spec.ts:5:5 › completed activation does not claim invitation to a later edited admin 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+    Expected substring: not [32m"a separate store invitation went to Replacement Admin"[39m
+    Received string:        [31m"DEMO[39m
+    [31mIllustrative pricing.[39m
+    [31mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[39m
+    [31m[39m
+    [31mACTIVATION[39m
+    [31m[39m
+    [31mYou're in. Check your email.[39m
+    [31m[39m
+    [31mPayment is confirmed and your pharmacies are set up. We sent your access link to j•••@demo-pharmacy.example.[39m
+    [31m[39m
+    [31mActivation progress[39m
+    [31m[39m
+    [31mPayment[39m
+    [31m— Done[39m
+    [31m[39m
+    [31mConfirmed by Stripe · $99.00 (illustrative)[39m
+    [31m[39m
+    [31mPharmacy setup[39m
+    [31m— Done[39m
+    [31m[39m
+    [31mExample Main Street Pharmacy is set up in OwedBook.[39m
+    [31m[39m
+    [31mAccess email[39m
+    [31m— Done[39m
+    [31m[39m
+    [31mSent to j•••@demo-pharmacy.example · [7ma separate store invitation went to Replacement Admin[27m.[39m
+    [31m[39m
+    [31mOpen the email “Set up your Pharmacy Books account”[39m
+    [31m[39m
+    [31mThe link hands you to account setup. It works once and for a limited time [LINK LIFETIME TBD]. We don't sign you in from this page, and this demo never creates an account.[39m
+    [31m[39m
+    [31mPREVIEW THE ACCESS EMAIL[39m
+    [31mPREVIEW REPLACEMENT ADMIN'S INVITATION[39m
+    [31mDidn't get it?[39m
+    [31m[39m
+    [31mGive it a few minutes and check your spam folder. Still nothing? Send it again.[39m
+    [31m[39m
+    [31mRESEND ACCESS EMAIL[39m
+    [31m[39m
+    [31mWrong email address? Contact [SUPPORT EMAIL]. For your security we don't change it from this page."[39m
+
+      3 | test('actual r011 edited v2 checkout stays unmatched instead of inventing paid scope',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-open-edited-fixture.json','/demo/stripe');const paid=page.getByTestId('outcome-paid');const available=await paid.isVisible();if(available){await paid.click();await page.waitForURL('**/demo/activation')}const observed=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{scope:s.checkout?.scope,payment:s.activation?.paymentState,count:s.draft.requestedStoreCount}},key);fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-browser.json',JSON.stringify({paidAvailable:available,...observed},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-browser.png',fullPage:true});expect(observed.scope).toBeUndefined();expect(observed.payment).not.toBe('confirmed')});
+      4 | for(const mode of ['processing','unknown'])test(`r012 ${mode} edited v2 reload remains unmatched with no restore/payment`,async({page})=>{const route=mode==='processing'?'/demo/activation':'/demo/checkout-incomplete';await inject(page,`/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-legacy-${mode}-fixture.json`,route);for(let i=0;i<2;i++){await expect(page.getByText("We can't match this payment to your current details",{exact:true})).toBeVisible();await expect(page.getByTestId('restore-scope')).toHaveCount(0);await expect(page.getByTestId(mode==='processing'?'activation-refresh':'unknown-paid')).toBeDisabled();await page.reload()}if(mode==='unknown')await expect(page.getByTestId('unknown-not-charged')).toBeEnabled()});
+    > 5 | test('completed activation does not claim invitation to a later edited admin',async({page})=>{await inject(page,'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-completed-admin-fixture.json','/demo/activation');const main=await page.locator('main').innerText();const scope=await page.evaluate(k=>JSON.parse(sessionStorage.getItem(k)!).state.s.checkout.scope,key);fs.writeFileSync('/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-admin-display.json',JSON.stringify({recordedAdmin:scope.pharmacies[0].adminAssignment,claimsReplacementInvitation:main.includes('a separate store invitation went to Replacement Admin'),replacementPreview:main.includes("Preview Replacement Admin")},null,2));await page.screenshot({path:'/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/before/cody-r3-admin-display.png',fullPage:true});expect(main).not.toContain('a separate store invitation went to Replacement Admin');expect(main).not.toContain('Preview Replacement Admin')});
+        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^
+      6 |
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/app/qa-extra/migration-display.spec.ts:5:1140
+
+    Error Context: ../out/before/cody-r3-extra-output/migration-display-complete-4d62d-ion-to-a-later-edited-admin/error-context.md
+
+  2 failed
+    qa-extra/migration-display.spec.ts:3:5 › actual r011 edited v2 checkout stays unmatched instead of inventing paid scope 
+    qa-extra/migration-display.spec.ts:5:5 › completed activation does not claim invitation to a later edited admin 
+  4 passed (22.6s)

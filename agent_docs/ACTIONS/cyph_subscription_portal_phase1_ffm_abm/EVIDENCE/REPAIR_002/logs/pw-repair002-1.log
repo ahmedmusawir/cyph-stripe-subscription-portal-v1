@@ -1,0 +1,100 @@
+
+Running 15 tests using 1 worker
+
+  ✘   1 [public] › e2e/public.repair002.spec.ts:77:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works (14.6s)
+  ✓   2 [public] › e2e/public.repair002.spec.ts:104:5 › CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout (5.5s)
+  ✓   3 [public] › e2e/public.repair002.spec.ts:116:5 › CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works (9.3s)
+  ✓   4 [public] › e2e/public.repair002.spec.ts:137:5 › a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details (5.3s)
+  ✓   5 [public] › e2e/public.repair002.spec.ts:156:5 › processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again (5.9s)
+  ✓   6 [public] › e2e/public.repair002.spec.ts:176:5 › unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available (1.3s)
+  ✓   7 [public] › e2e/public.repair002.spec.ts:190:5 › R2-N01: changing the store count while checkout is open closes it (5.3s)
+  ✘   8 [public] › e2e/public.repair002.spec.ts:201:5 › valid open checkout: review ↔ stand-in round trips and reloads replay one checkout, then pay once (8.8s)
+  ✘   9 [public] › e2e/public.repair002.spec.ts:218:5 › CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order (6.9s)
+  ✓  10 [public] › e2e/public.repair002.spec.ts:243:5 › CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order (2.2s)
+  ✓  11 [public] › e2e/public.repair002.spec.ts:266:5 › 21 pharmacies: full journey through review, checkout and activation at $1,079.00 (22.4s)
+  ✓  12 [public] › e2e/public.repair002.spec.ts:348:7 › R-012 surface: stand-in closed — Gate M 375/1440 and contrast, light/dark (12.6s)
+  ✓  13 [public] › e2e/public.repair002.spec.ts:348:7 › R-012 surface: stand-in hold — Gate M 375/1440 and contrast, light/dark (12.4s)
+  ✓  14 [public] › e2e/public.repair002.spec.ts:348:7 › R-012 surface: activation hold — Gate M 375/1440 and contrast, light/dark (10.1s)
+  ✓  15 [public] › e2e/public.repair002.spec.ts:348:7 › R-012 surface: unknown hold — Gate M 375/1440 and contrast, light/dark (10.1s)
+
+
+  1) [public] › e2e/public.repair002.spec.ts:77:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Welcome back — your details are saved')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Welcome back — your details are saved')[22m
+
+
+      57 |   await expect(page).toHaveURL(/pharmacies\?store=1/);
+      58 |   await page.goto("/demo/register/review");
+    > 59 |   await expect(page.getByText("Welcome back — your details are saved")).toBeVisible();
+         |                                                                         ^
+      60 |   await page.getByRole("button", { name: "Get a fresh quote" }).click();
+      61 |   await expect(page.getByTestId("due-today")).toHaveText("$99.00");
+      62 |   await expect(page.locator("#c1")).not.toBeChecked();
+        at recoverAndPay (/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair002.spec.ts:59:73)
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair002.spec.ts:101:3
+
+    Error Context: test-results/public.repair002-CR-F01-A--21cea-r-no-payment-recovery-works-public/error-context.md
+
+  2) [public] › e2e/public.repair002.spec.ts:201:5 › valid open checkout: review ↔ stand-in round trips and reloads replay one checkout, then pay once 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('checkout-preview')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('checkout-preview')[22m
+
+
+      206 |   await page.getByRole("link", { name: "Back to checkout" }).click();
+      207 |   await page.reload();
+    > 208 |   await expect(page.getByTestId("checkout-preview")).toBeVisible({ timeout: 5000 });
+          |                                                      ^
+      209 |   expect((await snap(page)).key).toBe(first.key);
+      210 |   await page.getByTestId("outcome-paid").click();
+      211 |   await page.waitForURL("**/demo/activation");
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair002.spec.ts:208:54
+
+    Error Context: test-results/public.repair002-valid-ope-87b38--one-checkout-then-pay-once-public/error-context.md
+
+  3) [public] › e2e/public.repair002.spec.ts:218:5 › CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order 
+
+    Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Expected pattern: [32m/pharmacies\?store=2/[39m
+    Received string:  [31m"http://localhost:3106/demo/register/pharmacies?store=999999999"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m    9 × unexpected value "http://localhost:3106/demo/register/pharmacies?store=999999999"[22m
+
+
+      230 |   await expect(page.locator("main")).toContainText("$49,000,000,050.00");
+      231 |   await page.goto("/demo/register/pharmacies?store=999999999");
+    > 232 |   await expect(page).toHaveURL(/pharmacies\?store=2/);
+          |                      ^
+      233 |   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pharmacy 2 of 1000000000");
+      234 |   expect(Date.now() - started).toBeLessThan(15_000);
+      235 |   const sizes = await page.evaluate((k) => {
+        at /home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/e2e/public.repair002.spec.ts:232:22
+
+    Error Context: test-results/public.repair002-CR-F02-a--73716-nd-deep-links-fill-in-order-public/error-context.md
+
+  3 failed
+    [public] › e2e/public.repair002.spec.ts:77:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works 
+    [public] › e2e/public.repair002.spec.ts:201:5 › valid open checkout: review ↔ stand-in round trips and reloads replay one checkout, then pay once 
+    [public] › e2e/public.repair002.spec.ts:218:5 › CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order 
+  12 passed (2.3m)

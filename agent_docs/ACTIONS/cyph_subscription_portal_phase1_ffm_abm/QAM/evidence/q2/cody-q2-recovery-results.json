@@ -1,0 +1,275 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-q2-94251be/qa-recovery.config.ts",
+    "rootDir": "/tmp/cody-q2-94251be/qa-tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-q2-recovery-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-q2-94251be/qa-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.recovery\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-q2-recovery-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "public.recovery.spec.ts",
+      "file": "public.recovery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "T11 delayed paid setup recovers without repayment; email failure resends",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1182,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('You don\\'t need to pay again.')\nExpected: visible\nError: strict mode violation: getByText('You don\\'t need to pay again.') resolved to 2 elements:\n    1) <p class=\"text-sm text-muted-foreground\">Paid; setup is late. You don't need to pay again.</p> aka getByText('Paid; setup is late. You don\\'')\n    2) <div class=\"mt-0.5 text-sm text-muted-foreground\">…</div> aka getByText('You don\\'t need to pay again. We\\'ll email your access link as soon as setup')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('You don\\'t need to pay again.')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('You don\\'t need to pay again.')\nExpected: visible\nError: strict mode violation: getByText('You don\\'t need to pay again.') resolved to 2 elements:\n    1) <p class=\"text-sm text-muted-foreground\">Paid; setup is late. You don't need to pay again.</p> aka getByText('Paid; setup is late. You don\\'')\n    2) <div class=\"mt-0.5 text-sm text-muted-foreground\">…</div> aka getByText('You don\\'t need to pay again. We\\'ll email your access link as soon as setup')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('You don\\'t need to pay again.')\u001b[22m\n\n    at /tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts:3:210",
+                    "location": {
+                      "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts",
+                      "column": 210,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import {test,expect} from '@playwright/test';\n  2 | async function seed(page:any,id:string){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption(id);await page.getByRole('button',{name:'Load',exact:true}).click();await page.waitForLoadState('networkidle');}\n> 3 | test('T11 delayed paid setup recovers without repayment; email failure resends',async({page})=>{await seed(page,'activation_delayed');await expect(page.getByText(\"You don't need to pay again.\",{exact:false})).toBeVisible();await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-activation-plan').selectOption('ready');await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");await seed(page,'activation_email_failed');await expect(page.getByText(\"We couldn't send your access email\",{exact:true})).toBeVisible();await page.getByRole('button',{name:/Resend/}).click();await expect(page.getByTestId('activation-tracks')).toContainText('Sent');});\n    |                                                                                                                                                                                                                  ^\n  4 | test('T14 access-link error, retry, neutral sent state',async({page})=>{await seed(page,'link_request_error');await page.getByTestId('request-link').click();await expect(page.getByText(\"We couldn't send a new link\",{exact:true})).toBeVisible();await page.getByTestId('request-link').click();await expect(page.getByTestId('link-request-sent')).toBeVisible();await expect(page.locator('input[type=email]')).toHaveCount(0)});\n  5 | test('T13 unknown resolves not-charged safely and declined resumes',async({page})=>{await seed(page,'checkout_unknown');await expect(page.getByTestId('incomplete-continue')).toBeDisabled();await page.getByTestId('unknown-not-charged').click();await expect(page.getByTestId('incomplete-abandoned')).toBeVisible();await seed(page,'checkout_declined');await page.getByTestId('incomplete-continue').click();await expect(page.getByTestId('due-today')).toBeVisible();await expect(page.locator('#c1')).not.toBeChecked()});\n  6 | test('T08 invalid code leaves correct price; public tabs are isolated',async({page,context})=>{await seed(page,'prefilled_two_store');await page.getByLabel(/Discount or APA/).fill('NOTVALID');await page.getByRole('button',{name:'Apply',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$148.00');const second=await context.newPage();await second.goto('/demo/register/plan');await expect(second.locator('#stores')).toHaveText('1');await second.close()});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts",
+                        "column": 210,
+                        "line": 3
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('You don\\'t need to pay again.')\nExpected: visible\nError: strict mode violation: getByText('You don\\'t need to pay again.') resolved to 2 elements:\n    1) <p class=\"text-sm text-muted-foreground\">Paid; setup is late. You don't need to pay again.</p> aka getByText('Paid; setup is late. You don\\'')\n    2) <div class=\"mt-0.5 text-sm text-muted-foreground\">…</div> aka getByText('You don\\'t need to pay again. We\\'ll email your access link as soon as setup')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('You don\\'t need to pay again.')\u001b[22m\n\n\n  1 | import {test,expect} from '@playwright/test';\n  2 | async function seed(page:any,id:string){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption(id);await page.getByRole('button',{name:'Load',exact:true}).click();await page.waitForLoadState('networkidle');}\n> 3 | test('T11 delayed paid setup recovers without repayment; email failure resends',async({page})=>{await seed(page,'activation_delayed');await expect(page.getByText(\"You don't need to pay again.\",{exact:false})).toBeVisible();await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-activation-plan').selectOption('ready');await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");await seed(page,'activation_email_failed');await expect(page.getByText(\"We couldn't send your access email\",{exact:true})).toBeVisible();await page.getByRole('button',{name:/Resend/}).click();await expect(page.getByTestId('activation-tracks')).toContainText('Sent');});\n    |                                                                                                                                                                                                                  ^\n  4 | test('T14 access-link error, retry, neutral sent state',async({page})=>{await seed(page,'link_request_error');await page.getByTestId('request-link').click();await expect(page.getByText(\"We couldn't send a new link\",{exact:true})).toBeVisible();await page.getByTestId('request-link').click();await expect(page.getByTestId('link-request-sent')).toBeVisible();await expect(page.locator('input[type=email]')).toHaveCount(0)});\n  5 | test('T13 unknown resolves not-charged safely and declined resumes',async({page})=>{await seed(page,'checkout_unknown');await expect(page.getByTestId('incomplete-continue')).toBeDisabled();await page.getByTestId('unknown-not-charged').click();await expect(page.getByTestId('incomplete-abandoned')).toBeVisible();await seed(page,'checkout_declined');await page.getByTestId('incomplete-continue').click();await expect(page.getByTestId('due-today')).toBeVisible();await expect(page.locator('#c1')).not.toBeChecked()});\n  6 | test('T08 invalid code leaves correct price; public tabs are isolated',async({page,context})=>{await seed(page,'prefilled_two_store');await page.getByLabel(/Discount or APA/).fill('NOTVALID');await page.getByRole('button',{name:'Apply',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$148.00');const second=await context.newPage();await second.goto('/demo/register/plan');await expect(second.locator('#stores')).toHaveText('1');await second.close()});\n    at /tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts:3:210"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:04:06.600Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-q2-recovery-output/public.recovery-T11-delaye-6aea7-yment-email-failure-resends/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts",
+                    "column": 210,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c38301d246b03559e31a-7a3d7ca87dc4ae52b593",
+          "file": "public.recovery.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "T14 access-link error, retry, neutral sent state",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6533,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('link-request-sent')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('link-request-sent')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('link-request-sent')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('link-request-sent')\u001b[22m\n\n    at /tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts:4:344",
+                    "location": {
+                      "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts",
+                      "column": 344,
+                      "line": 4
+                    },
+                    "snippet": "  2 | async function seed(page:any,id:string){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption(id);await page.getByRole('button',{name:'Load',exact:true}).click();await page.waitForLoadState('networkidle');}\n  3 | test('T11 delayed paid setup recovers without repayment; email failure resends',async({page})=>{await seed(page,'activation_delayed');await expect(page.getByText(\"You don't need to pay again.\",{exact:false})).toBeVisible();await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-activation-plan').selectOption('ready');await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");await seed(page,'activation_email_failed');await expect(page.getByText(\"We couldn't send your access email\",{exact:true})).toBeVisible();await page.getByRole('button',{name:/Resend/}).click();await expect(page.getByTestId('activation-tracks')).toContainText('Sent');});\n> 4 | test('T14 access-link error, retry, neutral sent state',async({page})=>{await seed(page,'link_request_error');await page.getByTestId('request-link').click();await expect(page.getByText(\"We couldn't send a new link\",{exact:true})).toBeVisible();await page.getByTestId('request-link').click();await expect(page.getByTestId('link-request-sent')).toBeVisible();await expect(page.locator('input[type=email]')).toHaveCount(0)});\n    |                                                                                                                                                                                                                                                                                                                                                        ^\n  5 | test('T13 unknown resolves not-charged safely and declined resumes',async({page})=>{await seed(page,'checkout_unknown');await expect(page.getByTestId('incomplete-continue')).toBeDisabled();await page.getByTestId('unknown-not-charged').click();await expect(page.getByTestId('incomplete-abandoned')).toBeVisible();await seed(page,'checkout_declined');await page.getByTestId('incomplete-continue').click();await expect(page.getByTestId('due-today')).toBeVisible();await expect(page.locator('#c1')).not.toBeChecked()});\n  6 | test('T08 invalid code leaves correct price; public tabs are isolated',async({page,context})=>{await seed(page,'prefilled_two_store');await page.getByLabel(/Discount or APA/).fill('NOTVALID');await page.getByRole('button',{name:'Apply',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$148.00');const second=await context.newPage();await second.goto('/demo/register/plan');await expect(second.locator('#stores')).toHaveText('1');await second.close()});\n  7 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts",
+                        "column": 344,
+                        "line": 4
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('link-request-sent')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('link-request-sent')\u001b[22m\n\n\n  2 | async function seed(page:any,id:string){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption(id);await page.getByRole('button',{name:'Load',exact:true}).click();await page.waitForLoadState('networkidle');}\n  3 | test('T11 delayed paid setup recovers without repayment; email failure resends',async({page})=>{await seed(page,'activation_delayed');await expect(page.getByText(\"You don't need to pay again.\",{exact:false})).toBeVisible();await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-activation-plan').selectOption('ready');await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");await seed(page,'activation_email_failed');await expect(page.getByText(\"We couldn't send your access email\",{exact:true})).toBeVisible();await page.getByRole('button',{name:/Resend/}).click();await expect(page.getByTestId('activation-tracks')).toContainText('Sent');});\n> 4 | test('T14 access-link error, retry, neutral sent state',async({page})=>{await seed(page,'link_request_error');await page.getByTestId('request-link').click();await expect(page.getByText(\"We couldn't send a new link\",{exact:true})).toBeVisible();await page.getByTestId('request-link').click();await expect(page.getByTestId('link-request-sent')).toBeVisible();await expect(page.locator('input[type=email]')).toHaveCount(0)});\n    |                                                                                                                                                                                                                                                                                                                                                        ^\n  5 | test('T13 unknown resolves not-charged safely and declined resumes',async({page})=>{await seed(page,'checkout_unknown');await expect(page.getByTestId('incomplete-continue')).toBeDisabled();await page.getByTestId('unknown-not-charged').click();await expect(page.getByTestId('incomplete-abandoned')).toBeVisible();await seed(page,'checkout_declined');await page.getByTestId('incomplete-continue').click();await expect(page.getByTestId('due-today')).toBeVisible();await expect(page.locator('#c1')).not.toBeChecked()});\n  6 | test('T08 invalid code leaves correct price; public tabs are isolated',async({page,context})=>{await seed(page,'prefilled_two_store');await page.getByLabel(/Discount or APA/).fill('NOTVALID');await page.getByRole('button',{name:'Apply',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$148.00');const second=await context.newPage();await second.goto('/demo/register/plan');await expect(second.locator('#stores')).toHaveText('1');await second.close()});\n  7 |\n    at /tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts:4:344"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:04:08.784Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-q2-recovery-output/public.recovery-T14-access-31e94-or-retry-neutral-sent-state/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-q2-94251be/qa-tests/public.recovery.spec.ts",
+                    "column": 344,
+                    "line": 4
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c38301d246b03559e31a-57a045e9741e3e7333e3",
+          "file": "public.recovery.spec.ts",
+          "line": 4,
+          "column": 5
+        },
+        {
+          "title": "T13 unknown resolves not-charged safely and declined resumes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3261,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:04:16.288Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c38301d246b03559e31a-dbf3c6f7e157d5df62aa",
+          "file": "public.recovery.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "T08 invalid code leaves correct price; public tabs are isolated",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1526,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:04:19.763Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c38301d246b03559e31a-5ec2e1be392dd0839cb5",
+          "file": "public.recovery.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:04:05.891Z",
+    "duration": 15505.179999999998,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

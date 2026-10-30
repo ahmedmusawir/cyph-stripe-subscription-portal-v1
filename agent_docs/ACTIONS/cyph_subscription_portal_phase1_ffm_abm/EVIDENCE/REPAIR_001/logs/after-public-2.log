@@ -1,0 +1,51 @@
+
+Running 47 tests using 1 worker
+
+[1/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=checkout&mode=portal → /login, no account payload (HTML and RSC)
+[2/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=portal&mode=checkout → /login, no account payload (HTML and RSC)
+[3/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=card&mode=card → /login, no account payload (HTML and RSC)
+[4/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=checkout&mode=card → /login, no account payload (HTML and RSC)
+[5/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=card&mode=portal → /login, no account payload (HTML and RSC)
+[6/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=portal → /login, no account payload (HTML and RSC)
+[7/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=card → /login, no account payload (HTML and RSC)
+[8/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=Portal → /login, no account payload (HTML and RSC)
+[9/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=%20portal%20 → /login, no account payload (HTML and RSC)
+[10/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=CARD&purpose=change_card → /login, no account payload (HTML and RSC)
+[11/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=portal&purpose=cancel&purpose=manage → /login, no account payload (HTML and RSC)
+[12/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode=unknown → /login, no account payload (HTML and RSC)
+[13/47] [public] › e2e/public.repair.spec.ts:25:7 › F03 anonymous /demo/stripe?mode= → /login, no account payload (HTML and RSC)
+[14/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe
+[15/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe?mode=checkout
+[16/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe?mode=checkout&mode=checkout
+[17/47] [public] › e2e/public.repair.spec.ts:43:7 › F03 public initial checkout stays public: /demo/stripe?mode=CHECKOUT
+[18/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm? → same-origin /login, no session
+[19/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?type=email → same-origin /login, no session
+[20/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash= → same-origin /login, no session
+[21/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=bogus → same-origin /login, no session
+[22/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email → same-origin /login, no session
+[23/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email&next=https://evil.example/ → same-origin /login, no session
+[24/47] [public] › e2e/public.repair.spec.ts:63:7 › AC-26 /api/auth/confirm?type=recovery&next=//evil.example → same-origin /login, no session
+[25/47] [public] › e2e/public.repair.spec.ts:78:5 › G06: plan counter passes 20; 21 stores price by repeat-N
+[26/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [fresh]
+[27/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/plan [quote_unavailable]
+[28/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [prefilled_two_store]
+[29/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/owner [fresh]
+[30/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/pharmacies?store=2 [prefilled_two_store]
+[31/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/register/review [prefilled_three_store]
+[32/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/stripe [prefilled_one_store]
+[33/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_abandoned]
+[34/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_declined]
+[35/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_unknown]
+[36/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/checkout-incomplete [checkout_expired]
+[37/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_waiting]
+[38/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_delayed]
+[39/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_email_failed]
+[40/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_payment_failed]
+[41/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/activation [activation_ready]
+[42/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_expired]
+[43/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_used]
+[44/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/access-link [link_request_error]
+[45/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /demo/references/email?variant=owner [prefilled_two_store]
+[46/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login [fresh]
+[47/47] [public] › e2e/public.repair.spec.ts:133:7 › F01 contrast: /login?reason=session_expired [fresh]
+  47 passed (1.5m)

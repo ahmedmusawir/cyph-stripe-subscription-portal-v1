@@ -1,0 +1,12 @@
+{"screen":"/demo/checkout-incomplete [checkout_unknown]","width":375,"theme":"light","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_unknown]","width":1440,"theme":"light","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_unknown]","width":375,"theme":"dark","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_unknown]","width":1440,"theme":"dark","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_abandoned]","width":375,"theme":"light","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_abandoned]","width":1440,"theme":"light","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_abandoned]","width":375,"theme":"dark","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_abandoned]","width":1440,"theme":"dark","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_declined]","width":375,"theme":"light","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_declined]","width":1440,"theme":"light","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_declined]","width":375,"theme":"dark","fails":[]}
+{"screen":"/demo/checkout-incomplete [checkout_declined]","width":1440,"theme":"dark","fails":[]}

@@ -1,0 +1,89 @@
+
+Running 4 tests using 1 worker
+
+  ✘  1 [public] › e2e/public.repair005.spec.ts:55:5 › R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key (8.7s)
+  ✘  2 [public] › e2e/public.repair005.spec.ts:79:5 › R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery (8.6s)
+  ✓  3 [public] › e2e/public.repair005.spec.ts:112:5 › R4-F02 paid branch: the same record can still be confirmed by Stripe (4.1s)
+  ✘  4 [public] › e2e/public.repair005.spec.ts:121:5 › REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (8.8s)
+
+
+  1) [public] › e2e/public.repair005.spec.ts:55:5 › R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('activation-not-charged')
+    Expected substring: [32m"Nothing was charged"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-not-charged')[22m
+
+
+      57 |   await asLegacy(page, "/demo/activation", notChargedStale);
+      58 |   for (let i = 0; i < 2; i++) {
+    > 59 |     await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged");
+         |                                                              ^
+      60 |     await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
+      61 |     expect(await snap(page)).toEqual({ checkout: "abandoned", key, payment: "pending" });
+      62 |     await page.reload();
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r009/app/e2e/public.repair005.spec.ts:59:62
+
+    Error Context: test-results/public.repair005-R4-F01-no-17766-lid-recovery-with-a-new-key-public/error-context.md
+
+  2) [public] › e2e/public.repair005.spec.ts:79:5 › R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('activation-unknown')
+    Expected substring: [32m"still checking whether a payment went through"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-unknown')[22m
+
+
+      81 |   await asLegacy(page, "/demo/activation", unknownWithFailed);
+      82 |   for (let i = 0; i < 2; i++) {
+    > 83 |     await expect(page.getByTestId("activation-unknown")).toContainText("still checking whether a payment went through");
+         |                                                          ^
+      84 |     await expect(page.getByRole("button", { name: "Try payment again" })).toHaveCount(0);
+      85 |     await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
+      86 |     expect(await snap(page)).toEqual({ checkout: "unknown", key, payment: "failed" });
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r009/app/e2e/public.repair005.spec.ts:83:58
+
+    Error Context: test-results/public.repair005-R4-F02-un-fac5b-lves-it-first-then-recovery-public/error-context.md
+
+  3) [public] › e2e/public.repair005.spec.ts:121:5 › REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('activation-not-charged')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-not-charged')[22m
+
+
+      135 |         await setTheme(page, theme);
+      136 |         await page.reload();
+    > 137 |         await expect(page.getByTestId(sc.ready)).toBeVisible({ timeout: 5000 });
+          |                                                  ^
+      138 |         const g = await measure(page, `/demo/activation [REPAIR_005 ${sc.name}]`, width, theme);
+      139 |         record("gate-m-repair005.jsonl", g);
+      140 |         assertGate(g);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r009/app/e2e/public.repair005.spec.ts:137:50
+
+    Error Context: test-results/public.repair005-REPAIR-00-6e255-Gate-M-contrast-screenshots-public/error-context.md
+
+  3 failed
+    [public] › e2e/public.repair005.spec.ts:55:5 › R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key 
+    [public] › e2e/public.repair005.spec.ts:79:5 › R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery 
+    [public] › e2e/public.repair005.spec.ts:121:5 › REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+  1 passed (33.3s)

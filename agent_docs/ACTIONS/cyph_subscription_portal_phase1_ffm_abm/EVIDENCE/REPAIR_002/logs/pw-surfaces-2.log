@@ -1,0 +1,9 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repair002.spec.ts:369:7 › R-012 surface: stand-in closed — Gate M 375/1440 and contrast, light/dark (12.6s)
+  ✓  2 [public] › e2e/public.repair002.spec.ts:369:7 › R-012 surface: stand-in hold — Gate M 375/1440 and contrast, light/dark (12.2s)
+  ✓  3 [public] › e2e/public.repair002.spec.ts:369:7 › R-012 surface: activation hold — Gate M 375/1440 and contrast, light/dark (9.9s)
+  ✓  4 [public] › e2e/public.repair002.spec.ts:369:7 › R-012 surface: unknown hold — Gate M 375/1440 and contrast, light/dark (10.0s)
+
+  4 passed (46.0s)

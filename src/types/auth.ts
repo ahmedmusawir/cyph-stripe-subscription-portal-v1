@@ -1,13 +1,14 @@
 // Subscription Portal — auth identity types.
 //
-// TEMPORARY GATE (cleanup 2026-10-26): the portal still uses the inherited
-// super-admin-only gate. `SuperAdminUser` is returned ONLY when the server-side
-// role check (user_roles.role === 'superadmin') passes. Customer-facing
-// authorization (owner/member or portal roles) will be specified in the FFM
-// and replaces this type — do not extend it ad hoc.
-export interface SuperAdminUser {
+// TEMPORARY RULE (Director ruling R-008, 2026-10-27): account management is open
+// to existing `admin` OR `superadmin` accounts (user_roles.role, checked
+// server-side). `member` stays denied. Customer-facing authorization will be
+// specified later and replaces this type — do not extend it ad hoc.
+export type PortalStaffRole = 'superadmin' | 'admin';
+
+export interface PortalStaffUser {
   id: string; // Supabase auth.users.id (uuid)
   email: string;
   displayName: string; // best-available; falls back to email local-part
-  isSuperAdmin: true; // invariant for any session that reaches the shell
+  role: PortalStaffRole; // from user_roles, never user_metadata
 }

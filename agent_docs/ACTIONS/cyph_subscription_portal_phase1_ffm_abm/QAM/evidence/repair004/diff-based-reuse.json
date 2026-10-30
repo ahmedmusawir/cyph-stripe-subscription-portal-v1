@@ -1,0 +1,20 @@
+{
+  "priorManifest": "61a39c96c5162cc36e027d852affeca76fcc82617c631121c3c0870af63bf502",
+  "changedOrAddedInputs": [
+    "e2e/public.repair004-addendum.spec.ts",
+    "e2e/public.repair004.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/__tests__/portal-registration.test.ts",
+    "src/components/portal/Alert.tsx",
+    "src/components/portal/activation/ActivationView.tsx",
+    "src/components/portal/activation/CheckoutIncompleteView.tsx",
+    "src/components/portal/handoff/CheckoutStandIn.tsx",
+    "src/components/portal/references/EmailPreview.tsx",
+    "src/components/portal/references/EmailReferenceView.tsx",
+    "src/components/portal/register/ReviewView.tsx",
+    "src/services/portal/index.ts",
+    "src/services/portal/registration.ts"
+  ],
+  "removedInputs": [],
+  "caveat": "Alert shared dark ring changed; 16 controlled production-CSS samples validate new focus surface bounds. Prior account business/layout evidence reused; not new signed-in screenshot verdict."
+}

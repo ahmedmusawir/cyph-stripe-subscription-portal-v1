@@ -1,0 +1,143 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-combined-24cf075/qa-unchecked.config.ts",
+    "rootDir": "/tmp/cody-combined-24cf075/qa-extra",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-combined-extra-corrected-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-combined-24cf075/qa-extra",
+        "testIgnore": [],
+        "testMatch": [
+          "/unchecked-pending\\.spec\\.ts/"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-combined-unchecked-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "unchecked-pending.spec.ts",
+      "file": "unchecked-pending.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "unchecking owner after checkout creation cannot still confirm payment",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5992,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m\n    at /tmp/cody-combined-24cf075/qa-extra/unchecked-pending.spec.ts:2:1523",
+                    "location": {
+                      "file": "/tmp/cody-combined-24cf075/qa-extra/unchecked-pending.spec.ts",
+                      "column": 1523,
+                      "line": 2
+                    },
+                    "snippet": "  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';\n> 2 | test('unchecking owner after checkout creation cannot still confirm payment',async({page})=>{await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.goto('/demo/register/owner');await page.locator('#owner-declaration').uncheck();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.locator('#owner-declaration-err')).toBeVisible();await page.goto('/demo/stripe');await page.waitForTimeout(1200);const permitted=await page.getByTestId('outcome-paid').isVisible();if(permitted){await page.screenshot({path:'/tmp/cody-combined-unchecked-pending.png',fullPage:true});await page.getByTestId('outcome-paid').click();await page.waitForURL('**/demo/activation');}const state=await page.evaluate(()=>{const s=JSON.parse(sessionStorage.getItem('cyph-portal-demo:v1:public')!).state.s;return{accepted:s.draft.owner.ownerDeclarationAccepted,checkout:s.checkout?.status,payment:s.activation?.paymentState}});fs.writeFileSync('/tmp/cody-combined-unchecked-pending.json',JSON.stringify({paidControlAvailable:permitted,...state}));expect(state.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^\n  3 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-combined-24cf075/qa-extra/unchecked-pending.spec.ts",
+                        "column": 1523,
+                        "line": 2
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m\n\n  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';\n> 2 | test('unchecking owner after checkout creation cannot still confirm payment',async({page})=>{await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.goto('/demo/register/owner');await page.locator('#owner-declaration').uncheck();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.locator('#owner-declaration-err')).toBeVisible();await page.goto('/demo/stripe');await page.waitForTimeout(1200);const permitted=await page.getByTestId('outcome-paid').isVisible();if(permitted){await page.screenshot({path:'/tmp/cody-combined-unchecked-pending.png',fullPage:true});await page.getByTestId('outcome-paid').click();await page.waitForURL('**/demo/activation');}const state=await page.evaluate(()=>{const s=JSON.parse(sessionStorage.getItem('cyph-portal-demo:v1:public')!).state.s;return{accepted:s.draft.owner.ownerDeclarationAccepted,checkout:s.checkout?.status,payment:s.activation?.paymentState}});fs.writeFileSync('/tmp/cody-combined-unchecked-pending.json',JSON.stringify({paidControlAvailable:permitted,...state}));expect(state.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^\n  3 |\n    at /tmp/cody-combined-24cf075/qa-extra/unchecked-pending.spec.ts:2:1523"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T05:57:21.821Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-combined-extra-corrected-output/unchecked-pending-unchecki-ffd45-annot-still-confirm-payment/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-combined-24cf075/qa-extra/unchecked-pending.spec.ts",
+                    "column": 1523,
+                    "line": 2
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "65e3a9aae2e1918fdbf8-e89aba429e35479e29d3",
+          "file": "unchecked-pending.spec.ts",
+          "line": 2,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-29T05:57:21.084Z",
+    "duration": 7043.152,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

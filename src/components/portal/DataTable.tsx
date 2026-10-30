@@ -31,6 +31,12 @@ export interface DataTableProps<T> {
   onRowClick?: (row: T) => void;
   empty?: React.ReactNode;
   className?: string;
+  /** Classes for the ≥ md table wrapper (e.g. the bordered card around it). */
+  tableClassName?: string;
+  /** Screen-specific < md card body; replaces the generic stacked rows. */
+  renderMobileCard?: (row: T) => React.ReactNode;
+  /** Accessible name for the < md list. */
+  mobileLabel?: string;
 }
 
 const alignClass = (align?: "left" | "right" | "center") =>
@@ -43,6 +49,9 @@ export function DataTable<T>({
   onRowClick,
   empty,
   className,
+  tableClassName,
+  renderMobileCard,
+  mobileLabel,
 }: DataTableProps<T>) {
   if (rows.length === 0 && empty) return <>{empty}</>;
 
@@ -52,7 +61,7 @@ export function DataTable<T>({
   return (
     <div className={className}>
       {/* Desktop / tablet ≥ md */}
-      <div className="hidden md:block">
+      <div className={cn("hidden md:block", tableClassName)}>
         <Table>
           <TableHeader className="sticky top-0 bg-card">
             <TableRow>
@@ -85,7 +94,7 @@ export function DataTable<T>({
       </div>
 
       {/* Mobile < md — stacked blocks; header hidden, primary cell first */}
-      <ul className="flex flex-col gap-3 md:hidden">
+      <ul className="flex flex-col gap-3 md:hidden" aria-label={mobileLabel}>
         {rows.map((row) => (
           <li
             key={getRowKey(row)}
@@ -95,17 +104,23 @@ export function DataTable<T>({
               onRowClick && "cursor-pointer",
             )}
           >
-            <div className="mb-2 text-sm font-semibold text-foreground">{primary.cell(row)}</div>
-            <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm tabular-nums">
-              {rest.map((c) => (
-                <React.Fragment key={c.key}>
-                  <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                    {c.header}
-                  </dt>
-                  <dd className="text-right text-foreground">{c.cell(row)}</dd>
-                </React.Fragment>
-              ))}
-            </dl>
+            {renderMobileCard ? (
+              renderMobileCard(row)
+            ) : (
+              <>
+                <div className="mb-2 text-sm font-semibold text-foreground">{primary.cell(row)}</div>
+                <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm tabular-nums">
+                  {rest.map((c) => (
+                    <React.Fragment key={c.key}>
+                      <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                        {c.header}
+                      </dt>
+                      <dd className="text-right text-foreground">{c.cell(row)}</dd>
+                    </React.Fragment>
+                  ))}
+                </dl>
+              </>
+            )}
           </li>
         ))}
       </ul>

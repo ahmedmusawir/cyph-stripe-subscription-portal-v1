@@ -1,0 +1,2 @@
+import {defineConfig} from '@playwright/test';
+export default defineConfig({testDir:'./qa-tests',outputDir:'/tmp/cody-q2-test-output',workers:1,retries:0,timeout:60000,reporter:[['list'],['json',{outputFile:'/tmp/cody-q2-browser.json'}]],use:{baseURL:'http://localhost:3108',channel:'chrome',trace:'off',video:'off',screenshot:'off'},projects:[{name:'public',testMatch:/public\..*\.spec\.ts/},{name:'gate-public',testMatch:/gate-m\.public\.spec\.ts/},{name:'account',testMatch:/account\..*\.spec\.ts/}]});

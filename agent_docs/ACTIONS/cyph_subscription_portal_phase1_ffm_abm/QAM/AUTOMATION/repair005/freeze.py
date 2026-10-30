@@ -1,0 +1,32 @@
+from pathlib import Path
+import subprocess,json,hashlib,zipfile,shutil,difflib,re,datetime
+r=Path.cwd();m=r/'agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm';q=m/'QAM';e=q/'evidence/repair005';a=q/'AUTOMATION/repair005';e.mkdir(exist_ok=True);a.mkdir(exist_ok=True);s=Path('/tmp/cody-r5-snapshot');s.mkdir(exist_ok=False);base=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();assert base=='d6fe67839961fcbbf801b0bb04d3a2522e7b1f36';assert subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='qa/ffm-abm-001-subscription-portal'
+p=Path('/home/moose/Downloads/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_REVIEW.zip');want='7a78e610e04992aeca96bed6c2b068c4d4c97137b8d265669865817b49a5c1fc';assert hashlib.sha256(p.read_bytes()).hexdigest()==want;z=zipfile.ZipFile(p);idx=json.loads(z.read('FILE_INDEX.json'));assert len(z.namelist())==100 and len(idx['files'])==99 and z.testzip() is None;assert set(z.namelist())=={x['path'] for x in idx['files']}|{'FILE_INDEX.json'}
+for x in idx['files']:assert hashlib.sha256(z.read(x['path'])).hexdigest()==x['sha256'] and len(z.read(x['path']))==x['bytes']
+patch=z.read('REPAIR_005/cumulative_vs_d6fe678.diff');paths=[x.decode() for x in re.findall(rb'^diff --git a/(.*?) b/',patch,re.M)];v=Path('/tmp/cody-r5-patch-verify');v.mkdir(exist_ok=True)
+for n in paths:
+ b=subprocess.run(['git','show',base+':'+n],capture_output=True)
+ if b.returncode==0:(v/n).parent.mkdir(parents=True,exist_ok=True);(v/n).write_bytes(b.stdout)
+x=subprocess.run(['patch','-p1','--batch'],input=patch,cwd=v,capture_output=True);assert x.returncode==0,x.stdout.decode()
+for n in paths:assert (r/n).read_bytes()==(v/n).read_bytes(),n
+changed=subprocess.check_output(['git','diff','HEAD','--name-only','--','src','e2e'],text=True).splitlines()+subprocess.check_output(['git','ls-files','--others','--exclude-standard','--','src','e2e'],text=True).splitlines();assert sorted(changed)==sorted(paths)
+tracked=subprocess.check_output(['git','ls-files'],text=True).splitlines();inputs=[n for n in tracked if n.startswith(('src/','e2e/','public/')) or '/' not in n and not n.endswith('.md') and not n.startswith('.env')]+subprocess.check_output(['git','ls-files','--others','--exclude-standard','--','src','e2e','public'],text=True).splitlines();rows=[]
+for n in sorted(set(inputs)):
+ b=(r/n).read_bytes();old=subprocess.run(['git','show',base+':'+n],capture_output=True)
+ if old.returncode!=0 or b!=old.stdout:assert n in paths,n
+ (s/n).parent.mkdir(parents=True,exist_ok=True);(s/n).write_bytes(b);rows.append({'path':n,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+b=(json.dumps({'base':base,'candidate':'REPAIR_005 uncommitted frozen snapshot including addenda001/002','files':rows},indent=2)+'\n').encode();mh=hashlib.sha256(b).hexdigest();(e/'snapshot-input-manifest.json').write_bytes(b);(e/'snapshot-cumulative.diff').write_bytes(patch);(e/'snapshot-identity.json').write_text(json.dumps({'base':base,'manifestSHA256':mh,'snapshot':str(s),'timeUTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),'inputCount':len(rows)},indent=2));(e/'package-verification.json').write_text(json.dumps({'zipSHA256':want,'members':100,'indexed':99,'hashesVerified':True,'sourceMechanism':'No source/ tree in package; cumulative patch reconstructed from Git base and all reviewed product/test results byte-matched','reconstructedPaths':paths,'diffCorrespondence':True},indent=2));(e/'identity-start.txt').write_text(subprocess.check_output(['git','status','--short'],text=True))
+for n in ['QAM_TEST_PLAN.md','QAM_EXECUTION_REPORT.md','AC_EVIDENCE_MATRIX.md','FINDINGS.md','QAM_CLEANUP_REPORT.md']:(a/('prior-'+n)).write_bytes((q/n).read_bytes())
+old=(q/'QAM_TEST_PLAN.md').read_text();add=f'''
+## Delegated focused REPAIR_005 retest
+JARVIS release; uncommitted frozen candidate base {base}, manifest SHA256 {mh}. Owned /tmp/cody-r5-snapshot port3115. Execute only frozen inputs; no newQ1/commit prerequisite.
+R5-01 R4-F01 exact predecessor-generated processing→unknown payload; current nothingcharged terminal clearsactivation; stale/repeatedrefresh/service/directactivation/reload refuse withoutstatechange; validresume/freshquote/consent/key.
+R5-02 R4-F02 exact unknown+failed predecessorpayload; resume/restart/staleoutcomes/replay/newcheckout cannotdiscardunknown; UIreflectscheckout; explicitpaid andnothingcharged resolutions; repeatedcalls/reload/directroutes.
+R5-03 Independently derive R014phase/outcome oracle, assess engineering224cellmatrix with exactpostconditions and refusalsstateidentity, not countmatching. Actualpredecessors plus boundedmixedflags; relevantwriters/readers (includingpaid/conflictingflags,open,terminal,no-record), completedhistory and currentprocessing/failure,validopenreplay/cancel/freshkey preserved.
+R5-04 Cleanproductionbuild/producttypecheck/currentJest under512MB/timebounds afterextremeprobeinspection; selected publiccheckout/activation/recoverybrowserregression retainingmigration/admin/C07/owner/scope/spentkeys,boundedallocation andfull21stores. CorrectedC07assertions used; supersededattemptspreserved.
+R5-05 Newnotices/mobile375/desktop1440/boththemes,keyboardfocus,independentcalibratedcontrast and actualChrome200% setting/readback/CDP. Diff-basedreuse unaffectedaccount/auth/routes;0unnecessarysign-ins/logout.
+R5-06 PreservefailuresandhistoricalOOM; QAhelperscorrectedtransparently, no productrepair/softening/greenretries. Indexedprivacy/hash/integrityvalidatedZIP+identicalDownloads,ownedcleanup,stopJARVIS. Tonyacceptancerecorded,noduplicateride/certification. Latercommit mustmatchmanifest.
+''';(q/'QAM_TEST_PLAN.md').write_text(old+add);ph=hashlib.sha256((q/'QAM_TEST_PLAN.md').read_bytes()).hexdigest();(e/'plan-addendum.diff').write_text(''.join(difflib.unified_diff(old.splitlines(True),(old+add).splitlines(True),fromfile='prior-plan',tofile='final-plan')))
+with (q/'QAM_APPROVAL.md').open('a') as f:f.write(f'\n## REPAIR_005 delegated approval/release\nCurrent JARVIS focused retest dispatch, Tony authorizes uncommitted snapshot. Base {base}; manifest {mh}; finalized plan {ph} bound before execution. Exact scope R3-01–06 above; no commit prerequisite, no new Q1.\n')
+with (q/'QAM_STATE.md').open('a') as f:f.write(f'\n## Current REPAIR_005_RETEST_001 RUNNING\nBase {base}; snapshot manifest {mh}; plan {ph}. No certification; Tony acceptance remains recorded.\n')
+shutil.copyfile('/tmp/cody-r5-freeze.py',a/'freeze.py');print({'manifest':mh,'plan':ph,'files':len(rows)})

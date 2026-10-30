@@ -1,0 +1,20 @@
+{
+  "priorManifest": "cc3518f797df96edb2f48e6127b869869d0f80c9d6d01b878bdd0c1a0175213a",
+  "changedOrAddedInputs": [
+    "e2e/public.owner-declaration.spec.ts",
+    "e2e/public.repair002.spec.ts",
+    "e2e/public.repair003.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/__tests__/portal-registration.test.ts",
+    "src/components/portal/activation/ActivationView.tsx",
+    "src/components/portal/activation/CheckoutIncompleteView.tsx",
+    "src/components/portal/handoff/CheckoutStandIn.tsx",
+    "src/components/portal/register/ReviewView.tsx",
+    "src/services/portal/index.ts",
+    "src/services/portal/registration.ts",
+    "src/services/portal/registrationService.ts",
+    "src/types/portal/state.ts"
+  ],
+  "removedInputs": [],
+  "unchangedAccountAuthRouteEvidence": "R2 owned3112,85browser/184Jest,real admin2logins/no logout; prior combined001 logout/refresh remains applicable via prior protected-path proof"
+}

@@ -1,0 +1,2 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({ testDir: "./eng-e2e", workers: 1, retries: 0, timeout: 60000, outputDir: "/tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r007/out/pw-eng-output", reporter: "list", use: { baseURL: "http://localhost:3109", channel: "chrome", trace: "off", video: "off", screenshot: "off" } });

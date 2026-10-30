@@ -1,0 +1,22 @@
+# Anonymous GET /demo/stripe?<q> — status + redirect (curl, no cookies)
+## Baseline candidate 94251be on owned :3102 (recorded 2026-10-28 ~15:45 +06, from session transcript)
+mode=checkout&mode=portal    200
+mode=portal&mode=checkout    200
+mode=card&mode=card          200
+mode=portal                  307 /login
+mode=card                    307 /login
+mode=checkout                200
+(none)                       200
+mode=Portal                  200
+mode=%20portal               200
+## Repaired build on owned :3103 (2026-10-28 16:20:52 +0600)
+mode=checkout&mode=portal    307 /login
+mode=portal&mode=checkout    307 /login
+mode=card&mode=card          307 /login
+mode=portal                  307 /login
+mode=card                    307 /login
+mode=checkout                200 
+(none)                       200 
+mode=Portal                  307 /login
+mode=%20portal               307 /login
+mode=checkout&mode=checkout  200 

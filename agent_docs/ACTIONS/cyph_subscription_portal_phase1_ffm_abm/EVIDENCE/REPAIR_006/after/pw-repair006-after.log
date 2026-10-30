@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (5.0s)
+  ✓  2 [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (5.0s)
+  ✓  3 [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (4.9s)
+  ✓  4 [public] › e2e/public.repair006.spec.ts:76:5 › R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key (7.4s)
+  ✓  5 [public] › e2e/public.repair006.spec.ts:104:5 › R5-F02 preserved: valid paid resend, from the email-failed scenario and from a sent email (5.5s)
+  ✓  6 [public] › e2e/public.repair006.spec.ts:118:5 › REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots (6.0s)
+
+  6 passed (34.8s)

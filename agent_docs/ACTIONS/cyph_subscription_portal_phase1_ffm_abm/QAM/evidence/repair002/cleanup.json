@@ -1,0 +1,20 @@
+{
+  "ownedPID": 990581,
+  "ownedPort": 3112,
+  "signal": "SIGTERM",
+  "removed": [
+    "/tmp/cody-r2-zoom-profile",
+    "/tmp/cody-r2-pw-output",
+    "/tmp/cody-r2-extra-output",
+    "/tmp/cody-r2-extra-corrected-output",
+    "/tmp/cody-r2-snapshot/.env.local"
+  ],
+  "unrelatedPIDsAlive": {
+    "970525": true,
+    "40320": true
+  },
+  "signInAttempts": 2,
+  "globalLogoutRequests": 0,
+  "authStateWritten": false,
+  "credentialsFileUntouched": true
+}

@@ -1,0 +1,22 @@
+FAIL qa-transition/submitted.test.ts
+  ● discarded legacy unknown can open a prohibited second checkout
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      15 | test('covered scope drives admin preview, with saved draft confined to unfinished variant',()=>{let s=r.createRegistration('prefilled_one_store');s=r.savePharmacy(s,0,{...s.draft.pharmacies[0],adminAssignment:{kind:'other',fullName:'Original Admin',email:'original@demo-pharmacy.example'}}).state;s=r.requestQuote(s,d).state;s=r.startCheckout(s,{quoteId:s.quote!.id,consents,operationKey:'admin_original_key'},d).state;s=r.resolveCheckout(s,'paid').state;s=r.refreshActivation(s).state;s=r.savePharmacy(s,0,{...s.draft.pharmacies[0],name:'Edited never paid pharmacy',adminAssignment:{kind:'other',fullName:'Replacement Admin',email:'replacement@demo-pharmacy.example'}}).state;const previews=r.accessEmailPreviews(s);expect(previews.store_admin.recipientName).toBe('Original Admin');expect(previews.owner.pharmacyNames).toEqual(['Example Main Street Pharmacy']);expect(previews.checkout_unfinished.pharmacyNames).toEqual(['Edited never paid pharmacy']);fs.writeFileSync('/tmp/cody-r4-covered-admin-fixture.json',JSON.stringify({state:{s},version:3}));const failed={...s,activation:{...s.activation!,emailState:'failed' as const}};fs.writeFileSync('/tmp/cody-r4-covered-admin-emailfailed-fixture.json',JSON.stringify({state:{s:failed},version:3}))});
+      16 | test('seed proof binds exact seed without quote; edited same-key seed remains unmatched',()=>{const seeded=r.createRegistration('checkout_unknown');const s=JSON.parse(JSON.stringify(seeded));delete s.checkout.scope;s.quote=null;expect(r.bindLegacyScope(s).checkout?.scope).toEqual(seeded.checkout?.scope);s.draft.pharmacies[0].name='Not seed';expect(r.bindLegacyScope(s).checkout?.scope).toBeUndefined()});
+    > 17 | test('discarded legacy unknown can open a prohibited second checkout',()=>{const prior=JSON.parse(fs.readFileSync('/tmp/cody-r4-unknown-failed-fixture.json','utf8')).state.s;let s=r.resumeSignup(prior).state;s=r.requestQuote(s,d).state;const next=r.startCheckout(s,{quoteId:s.quote!.id,consents,operationKey:'second_unknown_checkout'},d);log({case:'legacy-unknown-second-checkout',oldCheckout:prior.checkout.status,resumeDiscarded:s.checkout===null,secondAccepted:next.result.ok,newKey:next.state.checkout?.operationKey});expect(next.result.ok).toBe(false)});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^
+      18 |
+
+      at Object.<anonymous> (qa-transition/submitted.test.ts:17:546)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 37 skipped, 38 total
+Snapshots:   0 total
+Time:        0.655 s, estimated 1 s
+Ran all test suites with tests matching "discarded legacy unknown".
+Test results written to: ../cody-r4-second-checkout.json

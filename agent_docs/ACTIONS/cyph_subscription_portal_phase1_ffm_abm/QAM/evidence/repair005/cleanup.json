@@ -1,0 +1,21 @@
+{
+  "ownedPID": 1324100,
+  "port": 3115,
+  "signal": "SIGTERM",
+  "removed": [
+    "/tmp/cody-r5-zoom-profile",
+    "/tmp/cody-r5-pw-output",
+    "/tmp/cody-r5-corrected-browser-output",
+    "/tmp/cody-r5-readers-output",
+    "/tmp/cody-r5-fixture-branches-output",
+    "/tmp/cody-r5-snapshot/.env.local"
+  ],
+  "unrelatedPIDsAlive": {
+    "970525": true,
+    "40320": true
+  },
+  "signIns": 0,
+  "logouts": 0,
+  "credentialsUsedForAuth": false,
+  "authStateWritten": false
+}

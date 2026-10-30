@@ -1,0 +1,707 @@
+diff --git a/e2e/gate-m.public.spec.ts b/e2e/gate-m.public.spec.ts
+index 29331e0..723eaae 100644
+--- a/e2e/gate-m.public.spec.ts
++++ b/e2e/gate-m.public.spec.ts
+@@ -90,7 +90,10 @@ test("keyboard: plan → owner form reachable and submittable without a mouse",
+     await page.keyboard.type(v);
+     await page.keyboard.press("Tab");
+   }
+-  await page.keyboard.press("ArrowDown"); // native select: choose first role
++  await page.keyboard.press("Tab"); // past the optional legal business name
++  await expect(page.locator("#owner-declaration")).toBeFocused(); // R-011 owner declaration
++  await page.keyboard.press("Space");
++  await expect(page.locator("#owner-declaration")).toBeChecked();
+   await page.getByRole("button", { name: "Continue" }).focus();
+   await page.keyboard.press("Enter");
+   await expect(page).toHaveURL(/pharmacies\?store=1/);
+diff --git a/e2e/public.journeys.spec.ts b/e2e/public.journeys.spec.ts
+index 0b74195..56e1bd1 100644
+--- a/e2e/public.journeys.spec.ts
++++ b/e2e/public.journeys.spec.ts
+@@ -9,7 +9,7 @@ async function fillOwner(page: Page) {
+   await page.getByLabel("Last name").fill("Ellis");
+   await page.getByLabel("Work email").fill("jordan@demo-pharmacy.example");
+   await page.getByLabel("Mobile phone").fill("(555) 010-0144");
+-  await page.getByLabel("Your role").selectOption("owner");
++  await page.getByRole("checkbox", { name: /I confirm that I am the pharmacy owner/ }).check(); // R-011
+ }
+ 
+ async function fillPharmacy(page: Page, n: number, other?: { name: string; email: string }) {
+diff --git a/src/__tests__/portal-registration.test.ts b/src/__tests__/portal-registration.test.ts
+index 2b5ce61..8d7d88e 100644
+--- a/src/__tests__/portal-registration.test.ts
++++ b/src/__tests__/portal-registration.test.ts
+@@ -37,7 +37,7 @@ const owner = {
+   lastName: 'Ellis',
+   email: 'jordan@demo-pharmacy.example',
+   mobile: '(555) 010-0144',
+-  businessRole: 'owner' as const,
++  ownerDeclarationAccepted: true,
+ };
+ 
+ /** Walk the real steps: count → owner → N pharmacies → quote. */
+@@ -181,9 +181,76 @@ describe('validation', () => {
+     expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
+   });
+ 
+-  it('job title never grants anything: only the four self-descriptions are accepted', () => {
+-    const step = reg.saveOwner(reg.createRegistration('fresh'), { ...owner, businessRole: 'superadmin' as never });
+-    expect((step.result as { fieldErrors: Record<string, string> }).fieldErrors).toHaveProperty('businessRole');
++});
++
++// R-011: owner-only registration with an explicit owner declaration (Coach-approved).
++describe('owner declaration (R-011)', () => {
++  const errorsOf = (step: { result: unknown }) => (step.result as { fieldErrors?: Record<string, string> }).fieldErrors ?? {};
++
++  it('a fresh draft starts unaccepted; seeded scenarios carry the synthetic fixture acceptance', () => {
++    expect(reg.createRegistration('fresh').draft.owner.ownerDeclarationAccepted).toBeUndefined();
++    expect(reg.createRegistration('prefilled_two_store').draft.owner.ownerDeclarationAccepted).toBe(true);
++  });
++
++  it.each([[undefined], [false], ['true'], [1], [null]])('declaration %p blocks the owner step at the service', (value) => {
++    const step = reg.saveOwner(reg.createRegistration('fresh'), { ...owner, ownerDeclarationAccepted: value as never });
++    expect(step.result).toMatchObject({ ok: false, code: 'validation' });
++    expect(errorsOf(step)).toEqual({ ownerDeclaration: 'Confirm that you are the pharmacy owner to continue.' });
++  });
++
++  // A quote only prices the store count; the mock SUBMISSION is startCheckout.
++  it('missing declaration blocks review and the mock checkout submission even when every other field is complete', () => {
++    let s = completeDraft(2);
++    s = reg.keepOwner(s, { ...owner, ownerDeclarationAccepted: false }).state;
++    expect(reg.firstIncomplete(s.draft)).toEqual({ step: 'owner' });
++    expect(reg.isDraftComplete(s.draft)).toBe(false);
++    const quoted = reg.requestQuote(completeDraft(2), deps).state;
++    const unaccepted = reg.keepOwner(quoted, { ...owner, ownerDeclarationAccepted: false }).state;
++    const consents = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++    const start = reg.startCheckout(unaccepted, { quoteId: quoted.quote!.id, consents, operationKey: KEY }, deps);
++    expect(start.result).toMatchObject({ ok: false, code: 'missing_context' });
++    expect(start.state.checkout).toBeNull();
++  });
++
++  it('an accepted declaration survives Back (keep) and a reload (JSON round trip)', () => {
++    const saved = reg.saveOwner(reg.createRegistration('fresh'), owner).state;
++    const back = reg.keepOwner(saved, { ...saved.draft.owner, firstName: 'Jordan' }).state;
++    const reloaded = JSON.parse(JSON.stringify(back));
++    expect(reloaded.draft.owner.ownerDeclarationAccepted).toBe(true);
++    expect(reg.saveOwner(reloaded, reloaded.draft.owner).result.ok).toBe(true);
++  });
++
++  it('a pre-R-011 draft (job title, no declaration) is migrated WITHOUT acceptance', () => {
++    const v1 = JSON.parse(JSON.stringify(reg.requestQuote(completeDraft(2), deps).state));
++    delete v1.draft.owner.ownerDeclarationAccepted;
++    v1.draft.owner.businessRole = 'owner';
++    const migrated = reg.migrateRegistration(v1);
++    expect(migrated.draft.owner).not.toHaveProperty('businessRole');
++    expect(migrated.draft.owner.ownerDeclarationAccepted).toBe(false);
++    expect(migrated.quote).toBeNull();
++    expect(reg.firstIncomplete(migrated.draft)).toEqual({ step: 'owner' });
++    expect(migrated.draft.pharmacies).toEqual(v1.draft.pharmacies); // entered details are kept
++    expect(reg.migrateRegistration(null).draft.owner).toEqual({});
++  });
++
++  it('a job title no longer exists or affects registration', () => {
++    const step = reg.saveOwner(reg.createRegistration('fresh'), { ...owner, businessRole: 'superadmin' } as never);
++    expect(step.result.ok).toBe(true);
++    expect(step.state.draft.owner).not.toHaveProperty('businessRole');
++    const without = reg.saveOwner(reg.createRegistration('fresh'), owner);
++    expect(step.state.draft.owner).toEqual(without.state.draft.owner);
++  });
++
++  it('Me / Someone else never moves ownership: the registering owner stays the billing/access recipient', () => {
++    let s = reg.createRegistration('fresh');
++    s = reg.setStoreCount(s, 2).state;
++    s = reg.saveOwner(s, owner).state;
++    s = reg.savePharmacy(s, 0, pharmacy(1)).state; // Me
++    s = reg.savePharmacy(s, 1, pharmacy(2, { adminAssignment: { kind: 'other', fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' } })).state;
++    const previews = reg.accessEmailPreviews(s);
++    expect(previews.owner).toMatchObject({ recipientKind: 'owner', recipientName: 'Jordan Ellis' });
++    expect(previews.store_admin).toMatchObject({ recipientKind: 'store_admin', recipientName: 'Sam Ortiz' });
++    expect(s.draft.owner).toMatchObject({ email: 'jordan@demo-pharmacy.example', ownerDeclarationAccepted: true });
+   });
+ });
+ 
+diff --git a/src/components/portal/PharmacyFields.tsx b/src/components/portal/PharmacyFields.tsx
+index efbea69..b210a0d 100644
+--- a/src/components/portal/PharmacyFields.tsx
++++ b/src/components/portal/PharmacyFields.tsx
+@@ -140,7 +140,7 @@ export function PharmacyFields({
+           Who will be this store&apos;s admin? <span className="text-destructive">*</span>
+         </p>
+         <p className="text-xs text-muted-foreground">
+-          Each store has one admin who invites the team and manages the store in OwedBook. You stay the billing owner either way — store admins who are not the billing owner cannot manage billing, and you can be both.
++          Each store has one designated admin, who invites the team and manages the store in OwedBook. Either way, you keep account ownership and billing.
+         </p>
+         <div className="grid gap-3 sm:grid-cols-2">
+           <RadioCard
+@@ -149,7 +149,7 @@ export function PharmacyFields({
+             checked={form.admin === "owner"}
+             onSelect={() => onChange({ ...form, admin: "owner" })}
+             title={`Me (${ownerName})`}
+-            description="You'll be both billing owner and this store's admin."
++            description="You also manage this store as its admin, in addition to owning the account."
+           />
+           <RadioCard
+             name="admin"
+@@ -159,8 +159,8 @@ export function PharmacyFields({
+             title="Someone else"
+             description={
+               context === "signup"
+-                ? "We'll ask for their name and email. They get a separate store invitation after payment; you still get your own access link."
+-                : "They get a store invitation once the store is added. Billing stays with you."
++                ? "You appoint a store admin and we'll ask for their name and email. They get a separate store invitation after payment; you still get your own access link. This doesn't transfer ownership, billing or permission to buy more stores."
++                : "You appoint a store admin; they get a store invitation once the store is added. Ownership, billing and adding stores stay with you."
+             }
+           />
+         </div>
+diff --git a/src/components/portal/account/AddStoreView.tsx b/src/components/portal/account/AddStoreView.tsx
+index 8d6d16c..64ade02 100644
+--- a/src/components/portal/account/AddStoreView.tsx
++++ b/src/components/portal/account/AddStoreView.tsx
+@@ -137,7 +137,7 @@ export function AddStoreView() {
+                 <li>
+                   Check <Link href="/dashboard" className="portal-link">Pharmacies on this plan</Link> in Account &amp; Billing.
+                 </li>
+-                <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll verify ownership.</li>
++                <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll review it (ownership review process [TBD]).</li>
+                 <li>Typo? Check the number and try again.</li>
+               </ul>
+             </Alert>
+diff --git a/src/components/portal/account/DashboardView.tsx b/src/components/portal/account/DashboardView.tsx
+index 7b5336e..45a312a 100644
+--- a/src/components/portal/account/DashboardView.tsx
++++ b/src/components/portal/account/DashboardView.tsx
+@@ -163,7 +163,7 @@ export function DashboardView() {
+           </div>
+         </div>
+         <p className="mt-4 text-xs text-muted-foreground">
+-          Think you should be the billing owner? Contact <Placeholder>[SUPPORT EMAIL]</Placeholder>; ownership is verified separately.
++          Think you should be the billing owner? There&apos;s no self-service ownership transfer. Contact <Placeholder>[SUPPORT EMAIL]</Placeholder>; the transfer process is <Placeholder>[OWNERSHIP TRANSFER PROCESS TBD]</Placeholder>.
+         </p>
+       </PageContainer>
+     );
+@@ -470,7 +470,7 @@ export function DashboardView() {
+             </div>
+           </div>
+           <p className="mt-3 text-xs text-muted-foreground">
+-            Only the billing owner can manage billing. You can also be a store admin of your own pharmacies; nominating someone else as store admin never transfers billing ownership. To change the billing owner, contact <Placeholder>[SUPPORT EMAIL]</Placeholder>.
++            Only the billing owner can manage billing. You can also be a store admin of your own pharmacies; appointing someone else as store admin never transfers ownership or billing. There&apos;s no self-service ownership transfer: to change the billing owner, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> (process <Placeholder>[OWNERSHIP TRANSFER PROCESS TBD]</Placeholder>).
+           </p>
+         </section>
+         {sub.status !== "canceled" ? (
+diff --git a/src/components/portal/register/OwnerView.tsx b/src/components/portal/register/OwnerView.tsx
+index e4659e8..85928d7 100644
+--- a/src/components/portal/register/OwnerView.tsx
++++ b/src/components/portal/register/OwnerView.tsx
+@@ -3,34 +3,27 @@
+ import { useEffect, useRef, useState } from "react";
+ import Link from "next/link";
+ import { useRouter } from "next/navigation";
+-import { ArrowLeft, Loader2 } from "lucide-react";
++import { AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
+ import { Button } from "@/components/ui/button";
+ import type { OwnerDraft } from "@/types/portal/contract";
+ import { Alert, DemoNotice } from "../Alert";
+ import { ErrorSummary, summarize } from "../ErrorSummary";
+-import { RequiredNote, SelectField, TextField } from "../FormField";
++import { RequiredNote, TextField } from "../FormField";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+ import { Stepper } from "../Stepper";
+ import { MissingContextNotice } from "./MissingContext";
+-import { registration, useRegistration } from "@/services/portal";
+-
+-const ROLES = [
+-  { value: "owner", label: "Owner" },
+-  { value: "pharmacist_in_charge", label: "Pharmacist in charge" },
+-  { value: "manager", label: "Manager" },
+-  { value: "other", label: "Other" },
+-] as const;
++import { OWNER_DECLARATION, registration, useRegistration } from "@/services/portal";
+ 
+ const FIELDS = [
+   { key: "firstName", fieldId: "first", label: "First name" },
+   { key: "lastName", fieldId: "last", label: "Last name" },
+   { key: "email", fieldId: "email", label: "Work email" },
+   { key: "mobile", fieldId: "mobile", label: "Mobile phone" },
+-  { key: "businessRole", fieldId: "role", label: "Your role" },
++  { key: "ownerDeclaration", fieldId: "owner-declaration", label: "Owner declaration" },
+ ] as const;
+ 
+-type Form = { firstName: string; lastName: string; email: string; mobile: string; businessRole: string; legalBusinessName: string };
++type Form = { firstName: string; lastName: string; email: string; mobile: string; ownerDeclarationAccepted: boolean; legalBusinessName: string };
+ 
+ // C02 Owner details (+ C16 existing-email branch).
+ export function OwnerView({ notice }: { notice: boolean }) {
+@@ -52,7 +45,7 @@ export function OwnerView({ notice }: { notice: boolean }) {
+         lastName: o.lastName ?? "",
+         email: o.email ?? "",
+         mobile: o.mobile ?? "",
+-        businessRole: o.businessRole ?? "",
++        ownerDeclarationAccepted: o.ownerDeclarationAccepted === true,
+         legalBusinessName: o.legalBusinessName ?? "",
+       });
+     }
+@@ -64,7 +57,7 @@ export function OwnerView({ notice }: { notice: boolean }) {
+ 
+   if (!hydrated || !form) return <PageContainer><ViewSkeleton /></PageContainer>;
+ 
+-  const set = (k: keyof Form) => (v: string) => setForm({ ...form, [k]: v });
++  const set = (k: Exclude<keyof Form, "ownerDeclarationAccepted">) => (v: string) => setForm({ ...form, [k]: v });
+ 
+   function toOwner(f: Form): Partial<OwnerDraft> {
+     return {
+@@ -72,7 +65,7 @@ export function OwnerView({ notice }: { notice: boolean }) {
+       lastName: f.lastName,
+       email: f.email,
+       mobile: f.mobile,
+-      businessRole: (f.businessRole || undefined) as OwnerDraft["businessRole"] | undefined,
++      ownerDeclarationAccepted: f.ownerDeclarationAccepted,
+       legalBusinessName: f.legalBusinessName || undefined,
+     };
+   }
+@@ -156,16 +149,6 @@ export function OwnerView({ notice }: { notice: boolean }) {
+             help="Your sign-in and access link go here. Use an inbox you check daily."
+           />
+           <TextField id="mobile" type="tel" inputMode="tel" autoComplete="tel" label="Mobile phone" required value={form.mobile} onValue={set("mobile")} error={errors.mobile} />
+-          <SelectField
+-            id="role"
+-            label="Your role"
+-            required
+-            value={form.businessRole}
+-            onValue={set("businessRole")}
+-            options={ROLES}
+-            error={errors.businessRole}
+-            help="How you describe your job. This doesn't change what you can do in the app."
+-          />
+           <TextField
+             id="legal"
+             label="Legal business name"
+@@ -177,6 +160,34 @@ export function OwnerView({ notice }: { notice: boolean }) {
+             help="The name that should appear on receipts. Leave blank to use your pharmacy's name."
+           />
+         </div>
++        <fieldset className="min-w-0 border border-border bg-card p-4 sm:p-5" data-testid="owner-declaration-panel">
++          <legend className="sr-only">Owner declaration (required)</legend>
++          <label htmlFor="owner-declaration" className="flex min-h-[44px] cursor-pointer items-start gap-3 text-sm text-foreground">
++            <input
++              id="owner-declaration"
++              type="checkbox"
++              className="mt-0.5 h-5 w-5 shrink-0"
++              checked={form.ownerDeclarationAccepted}
++              onChange={(e) => setForm({ ...form, ownerDeclarationAccepted: e.target.checked })}
++              aria-required="true"
++              aria-invalid={errors.ownerDeclaration ? true : undefined}
++              aria-describedby={["owner-declaration-help", errors.ownerDeclaration ? "owner-declaration-err" : null].filter(Boolean).join(" ")}
++            />
++            <span>
++              {OWNER_DECLARATION} <span className="text-destructive" aria-hidden="true">*</span>
++              <span className="sr-only">(required)</span>
++            </span>
++          </label>
++          <p id="owner-declaration-help" className="ml-8 mt-1 text-xs text-muted-foreground">
++            Registration is for pharmacy owners only. This is your own declaration: email and payment don&apos;t prove ownership, and any ownership check happens separately. It is separate from the terms and payment agreements you&apos;ll see before checkout.
++          </p>
++          {errors.ownerDeclaration ? (
++            <p id="owner-declaration-err" className="ml-8 mt-1 flex items-center gap-1.5 text-xs font-medium text-destructive">
++              <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
++              {errors.ownerDeclaration}
++            </p>
++          ) : null}
++        </fieldset>
+         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+           <Button
+             type="button"
+diff --git a/src/components/portal/register/PharmacyStepView.tsx b/src/components/portal/register/PharmacyStepView.tsx
+index 1d6a6e3..40ce344 100644
+--- a/src/components/portal/register/PharmacyStepView.tsx
++++ b/src/components/portal/register/PharmacyStepView.tsx
+@@ -115,7 +115,7 @@ export function PharmacyStepView({ storeParam, notice }: { storeParam: number; n
+               <li>
+                 Already subscribed? <Link href="/login" className="portal-link">Sign in</Link> and use Add a store.
+               </li>
+-              <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll verify ownership.</li>
++              <li>Believe this pharmacy is yours? Contact [SUPPORT EMAIL] and we&apos;ll review it (ownership review process [TBD]).</li>
+               <li>Typo? Check the number and try again.</li>
+             </ul>
+           </Alert>
+diff --git a/src/components/portal/register/ReviewView.tsx b/src/components/portal/register/ReviewView.tsx
+index 9319f5d..730e639 100644
+--- a/src/components/portal/register/ReviewView.tsx
++++ b/src/components/portal/register/ReviewView.tsx
+@@ -23,12 +23,6 @@ import {
+   useRegistration,
+ } from "@/services/portal";
+ 
+-const ROLE_TEXT: Record<string, string> = {
+-  owner: "Owner",
+-  pharmacist_in_charge: "Pharmacist in charge",
+-  manager: "Manager",
+-  other: "Other",
+-};
+ 
+ // C04 Review, code and consent. The CTA needs a current quote (same draft
+ // revision, unexpired) and both consents; the service re-checks all of it.
+@@ -208,7 +202,12 @@ export function ReviewView() {
+               {ownerName} <RoleLabel>Owner</RoleLabel>
+             </p>
+             <p className="text-sm text-muted-foreground">
+-              <span className="break-all">{owner.email}</span> · <span className="whitespace-nowrap">{owner.mobile}</span> · {ROLE_TEXT[owner.businessRole ?? ""] ?? ""}
++              <span className="break-all">{owner.email}</span> · <span className="whitespace-nowrap">{owner.mobile}</span>
++            </p>
++            <p className="mt-1 text-xs text-muted-foreground" data-testid="review-owner-declaration">
++              {owner.ownerDeclarationAccepted === true
++                ? "Owner declaration confirmed (your own statement; ownership isn't verified by email or payment)."
++                : "Owner declaration not confirmed — edit the owner step."}
+             </p>
+             {owner.legalBusinessName ? <p className="text-sm text-muted-foreground">Invoices to: {owner.legalBusinessName}</p> : null}
+           </section>
+diff --git a/src/mocks/portal/fixtures.ts b/src/mocks/portal/fixtures.ts
+index 978db97..cfbb18f 100644
+--- a/src/mocks/portal/fixtures.ts
++++ b/src/mocks/portal/fixtures.ts
+@@ -22,7 +22,10 @@ export const OWNER_JORDAN: OwnerDraft = {
+   lastName: 'Ellis',
+   email: 'jordan@demo-pharmacy.example',
+   mobile: '(555) 010-0144',
+-  businessRole: 'owner',
++  // SYNTHETIC demo fixture: the owner declaration is pre-accepted only so the
++  // seeded review scenarios can open on later steps. A real or fresh draft
++  // always starts unaccepted (R-011).
++  ownerDeclarationAccepted: true,
+   legalBusinessName: 'Main Street Pharmacy LLC',
+ };
+ 
+diff --git a/src/services/portal/catalog.ts b/src/services/portal/catalog.ts
+index ec15e8f..3341e05 100644
+--- a/src/services/portal/catalog.ts
++++ b/src/services/portal/catalog.ts
+@@ -10,3 +10,11 @@ export const DEMO_HINTS = {
+   existingEmail: EMAIL_EXISTING_ACCOUNT,
+   code: 'DEMO10',
+ } as const;
++
++/**
++ * R-011 (Coach-approved owner-only registration): exact owner declaration.
++ * Required, starts unchecked, separate from terms/payment consent. A
++ * self-declaration only — not proof of ownership.
++ */
++export const OWNER_DECLARATION =
++  'I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.';
+diff --git a/src/services/portal/index.ts b/src/services/portal/index.ts
+index f9b0bc5..85b979b 100644
+--- a/src/services/portal/index.ts
++++ b/src/services/portal/index.ts
+@@ -23,7 +23,7 @@ export {
+   isQuoteExpired as isAddQuoteExpired,
+ } from './account';
+ export type { AccountReadModel, AccountViewModel, PharmacyListItem, BillingPurpose, AddStoreAvailability } from './account';
+-export { PLAN_VIEW, US_STATE_NAMES, DEMO_HINTS } from './catalog';
++export { PLAN_VIEW, US_STATE_NAMES, DEMO_HINTS, OWNER_DECLARATION } from './catalog';
+ export { classifyStripeStandIn } from './stripeRoute';
+ export {
+   REGISTRATION_SCENARIOS,
+diff --git a/src/services/portal/registration.ts b/src/services/portal/registration.ts
+index 4a292bd..2afa147 100644
+--- a/src/services/portal/registration.ts
++++ b/src/services/portal/registration.ts
+@@ -234,9 +234,41 @@ export function setStoreCount(state: RegistrationState, n: unknown): Step<Regist
+   return ok(next, next.draft);
+ }
+ 
++/**
++ * Owner fields the draft may hold (R-011). Anything else, such as the retired
++ * self-described `businessRole`, is dropped, and the owner declaration is kept
++ * only when it is exactly `true` — it is never inferred.
++ */
++function ownerFields(owner: Partial<OwnerDraft> | undefined): Partial<OwnerDraft> {
++  const o = owner ?? {};
++  const pick = (v: unknown) => (typeof v === 'string' ? v : undefined);
++  const out: Partial<OwnerDraft> = {
++    firstName: pick(o.firstName),
++    lastName: pick(o.lastName),
++    email: pick(o.email),
++    mobile: pick(o.mobile),
++    ownerDeclarationAccepted: o.ownerDeclarationAccepted === true,
++    legalBusinessName: pick(o.legalBusinessName),
++  };
++  for (const k of Object.keys(out) as (keyof OwnerDraft)[]) if (out[k] === undefined) delete out[k];
++  return out;
++}
++
++/**
++ * Persisted public drafts written before R-011 (storage version 1) carried a
++ * job title and no owner declaration. They are kept, but the declaration is NOT
++ * assumed: it stays unaccepted, so the owner step must be completed again
++ * before a quote or checkout. Any held quote is dropped for the same reason.
++ */
++export function migrateRegistration(persisted: unknown): RegistrationState {
++  const old = persisted as Partial<RegistrationState> | null;
++  if (!old || typeof old !== 'object' || !old.draft || typeof old.draft !== 'object') return createRegistration('fresh');
++  return { ...old, draft: { ...old.draft, owner: ownerFields(old.draft.owner) }, quote: null } as RegistrationState;
++}
++
+ /** Back/navigation away: keep what was typed without validating. */
+ export function keepOwner(state: RegistrationState, owner: Partial<OwnerDraft>): Step<RegistrationDraft> {
+-  const next = { ...state, draft: { ...state.draft, owner: { ...owner } } };
++  const next = { ...state, draft: { ...state.draft, owner: ownerFields(owner) } };
+   return ok(next, next.draft);
+ }
+ 
+@@ -254,7 +286,8 @@ export function keepPharmacy(state: RegistrationState, index: number, pharmacy:
+ }
+ 
+ export function saveOwner(state: RegistrationState, owner: Partial<OwnerDraft>): Step<RegistrationDraft> {
+-  const clean: Partial<OwnerDraft> = { ...owner, email: owner.email?.trim() };
++  const picked = ownerFields(owner);
++  const clean: Partial<OwnerDraft> = { ...picked, email: picked.email?.trim() };
+   const errors = validateOwner(clean);
+   const kept = { ...state, draft: { ...state.draft, owner: clean } };
+   if (hasErrors(errors)) return fail(kept, 'validation', 'Some fields need attention.', errors);
+diff --git a/src/services/portal/registrationService.ts b/src/services/portal/registrationService.ts
+index 56fdb06..ce265a9 100644
+--- a/src/services/portal/registrationService.ts
++++ b/src/services/portal/registrationService.ts
+@@ -38,7 +38,11 @@ export const registrationStore = createStore<RegistrationStore>()(
+     }),
+     {
+       name: PUBLIC_STORAGE_KEY,
+-      version: 1,
++      // v2 (R-011): owner declaration replaces the job title; v1 drafts are
++      // migrated WITHOUT accepting the declaration.
++      version: 2,
++      migrate: (persisted, from) =>
++        from < 2 ? { s: engine.migrateRegistration((persisted as { s?: unknown } | null)?.s) } : (persisted as { s: RegistrationState }),
+       storage: createJSONStorage(() => sessionStorage),
+       partialize: (store) => ({ s: store.s }),
+       skipHydration: true,
+diff --git a/src/services/portal/validation.ts b/src/services/portal/validation.ts
+index cf89def..713cc62 100644
+--- a/src/services/portal/validation.ts
++++ b/src/services/portal/validation.ts
+@@ -5,12 +5,6 @@ import type { AdminAssignment, OwnerDraft, PharmacyDraft } from '@/types/portal/
+ export type FieldErrors = Record<string, string>;
+ 
+ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+-const BUSINESS_ROLES: readonly OwnerDraft['businessRole'][] = [
+-  'owner',
+-  'pharmacist_in_charge',
+-  'manager',
+-  'other',
+-];
+ const SOFTWARE: readonly PharmacyDraft['software'][] = ['Liberty', 'Pioneer', 'Other'];
+ 
+ function blank(value: unknown): boolean {
+@@ -32,8 +26,10 @@ export function validateOwner(owner: Partial<OwnerDraft>): FieldErrors {
+   if (blank(owner.email)) errors.email = 'Enter your work email.';
+   else if (!isEmail(owner.email)) errors.email = 'Enter an email address like name@pharmacy.com.';
+   if (phoneDigits(owner.mobile) < 10) errors.mobile = 'Enter a phone number we can text.';
+-  if (!owner.businessRole || !BUSINESS_ROLES.includes(owner.businessRole))
+-    errors.businessRole = 'Choose the role that best describes you.';
++  // R-011: owner-only registration. The declaration must be exactly `true`;
++  // it is a self-declaration and proves nothing (neither does email or payment).
++  if (owner.ownerDeclarationAccepted !== true)
++    errors.ownerDeclaration = 'Confirm that you are the pharmacy owner to continue.';
+   return errors;
+ }
+ 
+diff --git a/src/types/portal/contract.ts b/src/types/portal/contract.ts
+index d1984ad..c085e25 100644
+--- a/src/types/portal/contract.ts
++++ b/src/types/portal/contract.ts
+@@ -1,4 +1,4 @@
+-// Portal FFM contract — copied from the module's _project/portal-contract.ts (v1.1).
++// Portal FFM contract — copied from the module's _project/portal-contract.ts (v1.2, R-011).
+ // Pure types; no SDK/runtime implementation. Field meanings are owned by DATA_CONTRACT.
+ export type Cents = number; // Integer, >=0; validate at mock-service boundary.
+ export type ISODate = string;
+@@ -18,7 +18,8 @@ export interface PlanView {
+ }
+ export interface OwnerDraft {
+  firstName: string; lastName: string; email: string; mobile: string;
+- businessRole: 'owner' | 'pharmacist_in_charge' | 'manager' | 'other'; legalBusinessName?: string;
++ /** R-011: explicit owner self-declaration (initially false; must be exactly true). Not proof of ownership. */
++ ownerDeclarationAccepted: boolean; legalBusinessName?: string;
+ }
+ export type AdminAssignment = {kind:'owner'} | {kind:'other'; fullName:string; email:string};
+ export interface PharmacyDraft {
+--- /dev/null
++++ b/e2e/public.owner-declaration.spec.ts
+@@ -0,0 +1,116 @@
++import { expect, test, type Page } from "@playwright/test";
++import { assertGate, measure, setTheme, THEMES } from "./gate-m";
++
++// R-011: owner-only registration with an explicit owner declaration (anonymous).
++const KEY = "cyph-portal-demo:v1:public";
++const DECLARATION = /I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies\./;
++
++async function fresh(page: Page) {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  await page.getByRole("button", { name: "Continue" }).click();
++  await expect(page).toHaveURL(/\/demo\/register\/owner/);
++}
++async function fillOwner(page: Page) {
++  await page.getByLabel("First name").fill("Jordan");
++  await page.getByLabel("Last name").fill("Ellis");
++  await page.getByLabel("Work email").fill("jordan@demo-pharmacy.example");
++  await page.getByLabel("Mobile phone").fill("(555) 010-0144");
++}
++
++test("no job-title dropdown; declaration is unchecked and required; missing it blocks progression", async ({ page }) => {
++  await fresh(page);
++  await expect(page.getByLabel("Your role")).toHaveCount(0);
++  await expect(page.locator("#role")).toHaveCount(0);
++  await expect(page.locator("main")).not.toContainText("Pharmacist in charge");
++  const box = page.getByRole("checkbox", { name: DECLARATION });
++  await expect(box).not.toBeChecked();
++  await fillOwner(page);
++  await page.getByRole("button", { name: "Continue" }).click();
++  await expect(page).toHaveURL(/\/demo\/register\/owner/);
++  await expect(page.locator("#owner-declaration-err")).toHaveText("Confirm that you are the pharmacy owner to continue.");
++  await expect(box).toHaveAttribute("aria-invalid", "true");
++  const summaryLink = page.getByRole("link", { name: /Owner declaration/ });
++  await expect(summaryLink).toBeVisible();
++  // Deep links past the owner step are refused while the declaration is missing.
++  await page.goto("/demo/register/review");
++  await expect(page).toHaveURL(/\/demo\/register\/(owner|plan)/);
++});
++
++test("accepted declaration survives Back and reload; separate from terms/payment consent", async ({ page }) => {
++  await fresh(page);
++  await fillOwner(page);
++  await page.getByRole("checkbox", { name: DECLARATION }).check();
++  await page.getByRole("button", { name: "Back" }).click();
++  await expect(page).toHaveURL(/\/demo\/register\/plan/);
++  await page.getByRole("button", { name: "Continue" }).click();
++  await expect(page.getByRole("checkbox", { name: DECLARATION })).toBeChecked();
++  await page.reload();
++  await expect(page.getByRole("checkbox", { name: DECLARATION })).toBeChecked();
++  await page.getByRole("button", { name: "Continue" }).click();
++  await expect(page).toHaveURL(/pharmacies\?store=1/);
++  const stored = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k) || "null"), KEY);
++  expect(stored.state.s.draft.owner.ownerDeclarationAccepted).toBe(true);
++  expect(stored.state.s.draft.owner).not.toHaveProperty("businessRole");
++  // Terms / recurring-charge consent are untouched by the declaration.
++  expect(stored.state.s.draft.consents).toMatchObject({ termsAccepted: false, recurringChargeAccepted: false });
++});
++
++test("a pre-amendment (v1) draft does not acquire acceptance", async ({ page }) => {
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption("prefilled_two_store");
++  await page.getByRole("button", { name: "Load" }).click();
++  await page.waitForLoadState("networkidle");
++  // Rewrite the stored draft as the old shape: job title, no declaration, storage version 1.
++  await page.evaluate((k) => {
++    const raw = JSON.parse(sessionStorage.getItem(k)!);
++    delete raw.state.s.draft.owner.ownerDeclarationAccepted;
++    raw.state.s.draft.owner.businessRole = "owner";
++    raw.version = 1;
++    sessionStorage.setItem(k, JSON.stringify(raw));
++  }, KEY);
++  await page.goto("/demo/register/review");
++  await expect(page).toHaveURL(/\/demo\/register\/owner/);
++  const box = page.getByRole("checkbox", { name: DECLARATION });
++  await expect(box).not.toBeChecked();
++  await expect(page.getByLabel("First name")).toHaveValue("Jordan"); // other details kept
++  const stored = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k) || "null"), KEY);
++  expect(stored.version).toBe(2);
++  expect(stored.state.s.draft.owner.ownerDeclarationAccepted).toBe(false);
++  expect(stored.state.s.draft.owner).not.toHaveProperty("businessRole");
++});
++
++test("Me / Someone else copy keeps ownership and billing with the registering owner", async ({ page }) => {
++  await fresh(page);
++  await fillOwner(page);
++  await page.getByRole("checkbox", { name: DECLARATION }).check();
++  await page.getByRole("button", { name: "Continue" }).click();
++  await expect(page).toHaveURL(/pharmacies\?store=1/);
++  const main = page.locator("main");
++  await expect(main).toContainText("Each store has one designated admin");
++  await expect(main).toContainText("you keep account ownership and billing");
++  await expect(page.getByRole("radio", { name: /^Me/ })).toBeVisible();
++  await expect(main).toContainText("This doesn't transfer ownership, billing or permission to buy more stores.");
++});
++
++test("keyboard + mobile + both themes: declaration usable at 375 and 1440", async ({ page }) => {
++  for (const theme of THEMES)
++    for (const width of [375, 1440]) {
++      await page.setViewportSize({ width, height: 900 });
++      await fresh(page);
++      await setTheme(page, theme);
++      await page.reload();
++      const box = page.locator("#owner-declaration");
++      await page.getByLabel("Mobile phone").focus();
++      await page.keyboard.press("Tab");
++      await page.keyboard.press("Tab");
++      await expect(box).toBeFocused();
++      await page.keyboard.press("Space");
++      await expect(box).toBeChecked();
++      const label = await page.locator("label[for=owner-declaration]").boundingBox();
++      expect(label!.height).toBeGreaterThanOrEqual(44);
++      assertGate(await measure(page, "/demo/register/owner#declaration", width, theme));
++    }
++});
+--- /dev/null
++++ b/src/__tests__/portal-owner.test.tsx
+@@ -0,0 +1,59 @@
++/**
++ * @jest-environment jsdom
++ */
++// R-011 component layer: the real OwnerView on the real public registration store.
++import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
++import { OwnerView } from '@/components/portal/register/OwnerView';
++import { OWNER_DECLARATION, registrationHarness } from '@/services/portal';
++
++const push = jest.fn();
++jest.mock('next/navigation', () => ({ useRouter: () => ({ push, replace: jest.fn(), refresh: jest.fn() }) }));
++
++function fill() {
++  fireEvent.change(screen.getByLabelText(/First name/), { target: { value: 'Jordan' } });
++  fireEvent.change(screen.getByLabelText(/Last name/), { target: { value: 'Ellis' } });
++  fireEvent.change(screen.getByLabelText(/Work email/), { target: { value: 'jordan@demo-pharmacy.example' } });
++  fireEvent.change(screen.getByLabelText(/Mobile phone/), { target: { value: '(555) 010-0144' } });
++}
++
++beforeEach(() => {
++  sessionStorage.clear();
++  push.mockClear();
++  act(() => {
++    registrationHarness.selectScenario('fresh');
++  });
++});
++
++describe('OwnerView — owner declaration (R-011)', () => {
++  it('has no job-title control and an unchecked, exactly worded, required declaration', async () => {
++    render(<OwnerView notice={false} />);
++    const box = (await screen.findByRole('checkbox', { name: new RegExp(OWNER_DECLARATION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) })) as HTMLInputElement;
++    expect(box.checked).toBe(false);
++    expect(box.getAttribute('aria-required')).toBe('true');
++    expect(screen.queryByLabelText(/Your role/)).toBeNull();
++    expect(screen.queryByRole('combobox')).toBeNull();
++    expect(screen.queryByText(/Pharmacist in charge/)).toBeNull();
++  });
++
++  it('blocks Continue without the declaration: summary + inline error, no navigation', async () => {
++    render(<OwnerView notice={false} />);
++    await screen.findByRole('checkbox');
++    fill();
++    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
++    const inline = await screen.findByText('Confirm that you are the pharmacy owner to continue.', { selector: '#owner-declaration-err' }, { timeout: 3000 });
++    expect(inline).toBeTruthy();
++    expect(screen.getByRole('checkbox').getAttribute('aria-invalid')).toBe('true');
++    expect(screen.getByRole('checkbox').getAttribute('aria-describedby')).toContain('owner-declaration-err');
++    expect(screen.getByRole('link', { name: /Owner declaration/ }).getAttribute('href')).toBe('#owner-declaration');
++    expect(push).not.toHaveBeenCalled();
++  });
++
++  it('continues once the owner ticks the declaration', async () => {
++    render(<OwnerView notice={false} />);
++    await screen.findByRole('checkbox');
++    fill();
++    fireEvent.click(screen.getByRole('checkbox'));
++    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
++    await waitFor(() => expect(push).toHaveBeenCalledWith('/demo/register/pharmacies?store=1'), { timeout: 3000 });
++  });
++});

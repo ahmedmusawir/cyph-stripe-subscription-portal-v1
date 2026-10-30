@@ -1,0 +1,52 @@
+
+Running 2 tests using 1 worker
+
+(node:781634) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:781634) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 qa-tests/public.recovery-corrected.spec.ts:3:5 › T11 delayed paid setup recovers without repayment; email failure resends (30.1s)
+(node:781944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:781944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 qa-tests/public.recovery-corrected.spec.ts:4:5 › T14 access-link error, retry, neutral sent state (1.9s)
+
+
+  1) qa-tests/public.recovery-corrected.spec.ts:3:5 › T11 delayed paid setup recovers without repayment; email failure resends 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('#demo-activation-plan')[22m
+    [2m    - locator resolved to <select id="demo-activation-plan" class="h-11 w-full border border-input bg-background px-2 text-sm text-foreground">…</select>[22m
+    [2m  - attempting select option action[22m
+    [2m    2 × waiting for element to be visible and enabled[22m
+    [2m      - element is not visible[22m
+    [2m    - retrying select option action[22m
+    [2m    - waiting 20ms[22m
+    [2m    2 × waiting for element to be visible and enabled[22m
+    [2m      - element is not visible[22m
+    [2m    - retrying select option action[22m
+    [2m      - waiting 100ms[22m
+    [2m    57 × waiting for element to be visible and enabled[22m
+    [2m       - element is not visible[22m
+    [2m     - retrying select option action[22m
+    [2m       - waiting 500ms[22m
+
+
+      1 | import {test,expect} from '@playwright/test';
+      2 | async function seed(page:any,id:string){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption(id);await page.getByRole('button',{name:'Load',exact:true}).click();await page.waitForLoadState('networkidle');}
+    > 3 | test('T11 delayed paid setup recovers without repayment; email failure resends',async({page})=>{await seed(page,'activation_delayed');await expect(page.getByTestId("activation-tracks").getByText("Paid; setup is late. You don't need to pay again.",{exact:true})).toBeVisible();await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-activation-plan').selectOption('ready');await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText("You're in. Check your email.");await seed(page,'activation_email_failed');await expect(page.getByText("We couldn't send your access email",{exact:true})).toBeVisible();await page.getByRole('button',{name:/Resend/}).click();await expect(page.getByTestId('activation-tracks')).toContainText('Sent');});
+        |                                                                                                                                                                                                                                                                                                                                                                                                 ^
+      4 | test('T14 access-link error, retry, neutral sent state',async({page})=>{await seed(page,'link_request_error');await page.getByTestId('request-link').click();await expect(page.getByText("We couldn't send a new link",{exact:true})).toBeVisible();await page.getByTestId('request-link').click();await expect(page.getByTestId('link-sent')).toBeVisible();await expect(page.locator('input[type=email]')).toHaveCount(0)});
+      5 | test('T13 unknown resolves not-charged safely and declined resumes',async({page})=>{await seed(page,'checkout_unknown');await expect(page.getByTestId('incomplete-continue')).toBeDisabled();await page.getByTestId('unknown-not-charged').click();await expect(page.getByTestId('incomplete-abandoned')).toBeVisible();await seed(page,'checkout_declined');await page.getByTestId('incomplete-continue').click();await expect(page.getByTestId('due-today')).toBeVisible();await expect(page.locator('#c1')).not.toBeChecked()});
+      6 | test('T08 invalid code leaves correct price; public tabs are isolated',async({page,context})=>{await seed(page,'prefilled_two_store');await page.getByLabel(/Discount or APA/).fill('NOTVALID');await page.getByRole('button',{name:'Apply',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$148.00');const second=await context.newPage();await second.goto('/demo/register/plan');await expect(second.locator('#stores')).toHaveText('1');await second.close()});
+        at /tmp/cody-q2-94251be/qa-tests/public.recovery-corrected.spec.ts:3:385
+
+    Error Context: ../cody-q2-recovery-output/public.recovery-corrected--7ac17-yment-email-failure-resends/error-context.md
+
+  1 failed
+    qa-tests/public.recovery-corrected.spec.ts:3:5 › T11 delayed paid setup recovers without repayment; email failure resends 
+  1 passed (33.9s)

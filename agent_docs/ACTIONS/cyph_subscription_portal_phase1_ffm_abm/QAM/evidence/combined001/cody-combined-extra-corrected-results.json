@@ -1,0 +1,211 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-combined-24cf075/qa-extra-corrected.config.ts",
+    "rootDir": "/tmp/cody-combined-24cf075/qa-extra",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-combined-extra-corrected-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-combined-24cf075/qa-extra",
+        "testIgnore": [],
+        "testMatch": [
+          "/combined-corrected\\.spec\\.ts/"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-combined-extra-corrected-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "combined-corrected.spec.ts",
+      "file": "combined-corrected.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "independent AC06a exact declaration and unchecking invalidates progression/summary",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2702,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T05:54:55.740Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "222898d20e49007aa4de-c6cd2dd2c6fbe1857c33",
+          "file": "combined-corrected.spec.ts",
+          "line": 4,
+          "column": 5
+        },
+        {
+          "title": "legacy pending checkout migration cannot bypass declaration",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5623,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m\n    at /tmp/cody-combined-24cf075/qa-extra/combined-corrected.spec.ts:5:1132",
+                    "location": {
+                      "file": "/tmp/cody-combined-24cf075/qa-extra/combined-corrected.spec.ts",
+                      "column": 1132,
+                      "line": 5
+                    },
+                    "snippet": "  3 | async function seed(page:any){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');}\n  4 | test('independent AC06a exact declaration and unchecking invalidates progression/summary',async({page})=>{await seed(page);await expect(page.locator('main')).toContainText(\"Owner declaration confirmed (your own statement; ownership isn't verified by email or payment).\");await page.goto('/demo/register/owner');const box=page.locator('#owner-declaration');await expect(box).toBeChecked();expect(await box.evaluate(el=>Array.from(el.parentElement!.querySelector('span')!.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim())).toBe(declaration);await box.uncheck();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByTestId('error-summary')).toBeFocused();await expect(page.locator('#owner-declaration-err')).toBeVisible();await page.reload();await expect(box).not.toBeChecked();await page.goto('/demo/register/review');await expect(page).toHaveURL(/register\\/owner/);await page.goto('/demo/stripe');await expect(page.getByTestId('outcome-paid')).toHaveCount(0)});\n> 5 | test('legacy pending checkout migration cannot bypass declaration',async({page})=>{await seed(page);await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.evaluate(k=>{const v=JSON.parse(sessionStorage.getItem(k)!);delete v.state.s.draft.owner.ownerDeclarationAccepted;v.state.s.draft.owner.businessRole='owner';v.version=1;sessionStorage.setItem(k,JSON.stringify(v))},KEY);await page.reload();await page.waitForTimeout(1500);const allowed=await page.getByTestId('outcome-paid').isVisible();if(allowed){await page.getByTestId('outcome-paid').click();await page.waitForURL('**/demo/activation');}const result=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{accepted:s.draft.owner.ownerDeclarationAccepted,quoteCleared:s.quote===null,checkout:s.checkout?.status,payment:s.activation?.paymentState}},KEY);fs.writeFileSync('/tmp/cody-combined-legacy-browser-settled.json',JSON.stringify({paidControlAvailable:allowed,...result}));expect(result.payment).not.toBe('confirmed');});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^\n  6 | test('21 pharmacies normal forms through review checkout activation with literal price',async({page})=>{test.setTimeout(180000);await page.goto('/demo/register/plan');for(let i=1;i<21;i++)await page.getByRole('button',{name:'More pharmacies'}).click();await page.getByRole('button',{name:'Continue',exact:true}).click();for(const [label,value] of [['First name','Jordan'],['Last name','Ellis'],['Work email','jordan@demo-pharmacy.example'],['Mobile phone','(555) 010-0101']])await page.getByLabel(label).fill(value);await page.locator('#owner-declaration').check();await page.getByRole('button',{name:'Continue',exact:true}).click();for(let n=1;n<=21;n++){await expect(page.getByRole('heading',{level:1})).toHaveText(`Pharmacy ${n} of 21`);for(const [label,value] of [['Pharmacy name',`Example Large Journey ${n}`],['Street address',`${n} Test Road`],['City','Springfield'],['ZIP','00000'],['NCPDP number','00001'+String(n).padStart(2,'0')],['NPI','00000001'+String(n).padStart(2,'0')],['Store phone','(555) 010-0101']])await page.getByLabel(label).fill(value);await page.getByLabel('State').selectOption('Alabama');await page.getByLabel('Pharmacy software').selectOption('Liberty');await page.getByRole('button',{name:n===21?'Continue to review':`Continue to pharmacy ${n+1} of 21`,exact:true}).click();}await expect(page.getByTestId('review-pharmacy')).toHaveCount(21);await expect(page.getByTestId('due-today')).toHaveText('$1,079.00');await expect(page.getByTestId('recurring')).toHaveText('$1,079.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('stripe-due')).toContainText('$1,079.00');await page.getByTestId('outcome-paid').click();await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");const x=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{requested:s.draft.requestedStoreCount,count:s.draft.pharmacies.length,names:s.draft.pharmacies.map((x:any)=>x.name),due:s.quote.dueNowCents,payment:s.activation.paymentState,setup:s.activation.provisioningState}},KEY);expect(x.count).toBe(21);expect(new Set(x.names).size).toBe(21);expect(x.due).toBe(107900);expect(x.payment).toBe('confirmed');fs.writeFileSync('/tmp/cody-combined-21journey.json',JSON.stringify(x,null,2));});\n  7 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-combined-24cf075/qa-extra/combined-corrected.spec.ts",
+                        "column": 1132,
+                        "line": 5
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m\n\n  3 | async function seed(page:any){await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');}\n  4 | test('independent AC06a exact declaration and unchecking invalidates progression/summary',async({page})=>{await seed(page);await expect(page.locator('main')).toContainText(\"Owner declaration confirmed (your own statement; ownership isn't verified by email or payment).\");await page.goto('/demo/register/owner');const box=page.locator('#owner-declaration');await expect(box).toBeChecked();expect(await box.evaluate(el=>Array.from(el.parentElement!.querySelector('span')!.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim())).toBe(declaration);await box.uncheck();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByTestId('error-summary')).toBeFocused();await expect(page.locator('#owner-declaration-err')).toBeVisible();await page.reload();await expect(box).not.toBeChecked();await page.goto('/demo/register/review');await expect(page).toHaveURL(/register\\/owner/);await page.goto('/demo/stripe');await expect(page.getByTestId('outcome-paid')).toHaveCount(0)});\n> 5 | test('legacy pending checkout migration cannot bypass declaration',async({page})=>{await seed(page);await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.evaluate(k=>{const v=JSON.parse(sessionStorage.getItem(k)!);delete v.state.s.draft.owner.ownerDeclarationAccepted;v.state.s.draft.owner.businessRole='owner';v.version=1;sessionStorage.setItem(k,JSON.stringify(v))},KEY);await page.reload();await page.waitForTimeout(1500);const allowed=await page.getByTestId('outcome-paid').isVisible();if(allowed){await page.getByTestId('outcome-paid').click();await page.waitForURL('**/demo/activation');}const result=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{accepted:s.draft.owner.ownerDeclarationAccepted,quoteCleared:s.quote===null,checkout:s.checkout?.status,payment:s.activation?.paymentState}},KEY);fs.writeFileSync('/tmp/cody-combined-legacy-browser-settled.json',JSON.stringify({paidControlAvailable:allowed,...result}));expect(result.payment).not.toBe('confirmed');});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^\n  6 | test('21 pharmacies normal forms through review checkout activation with literal price',async({page})=>{test.setTimeout(180000);await page.goto('/demo/register/plan');for(let i=1;i<21;i++)await page.getByRole('button',{name:'More pharmacies'}).click();await page.getByRole('button',{name:'Continue',exact:true}).click();for(const [label,value] of [['First name','Jordan'],['Last name','Ellis'],['Work email','jordan@demo-pharmacy.example'],['Mobile phone','(555) 010-0101']])await page.getByLabel(label).fill(value);await page.locator('#owner-declaration').check();await page.getByRole('button',{name:'Continue',exact:true}).click();for(let n=1;n<=21;n++){await expect(page.getByRole('heading',{level:1})).toHaveText(`Pharmacy ${n} of 21`);for(const [label,value] of [['Pharmacy name',`Example Large Journey ${n}`],['Street address',`${n} Test Road`],['City','Springfield'],['ZIP','00000'],['NCPDP number','00001'+String(n).padStart(2,'0')],['NPI','00000001'+String(n).padStart(2,'0')],['Store phone','(555) 010-0101']])await page.getByLabel(label).fill(value);await page.getByLabel('State').selectOption('Alabama');await page.getByLabel('Pharmacy software').selectOption('Liberty');await page.getByRole('button',{name:n===21?'Continue to review':`Continue to pharmacy ${n+1} of 21`,exact:true}).click();}await expect(page.getByTestId('review-pharmacy')).toHaveCount(21);await expect(page.getByTestId('due-today')).toHaveText('$1,079.00');await expect(page.getByTestId('recurring')).toHaveText('$1,079.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('stripe-due')).toContainText('$1,079.00');await page.getByTestId('outcome-paid').click();await page.getByTestId('activation-refresh').click();await expect(page.getByRole('heading',{level:1})).toHaveText(\"You're in. Check your email.\");const x=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{requested:s.draft.requestedStoreCount,count:s.draft.pharmacies.length,names:s.draft.pharmacies.map((x:any)=>x.name),due:s.quote.dueNowCents,payment:s.activation.paymentState,setup:s.activation.provisioningState}},KEY);expect(x.count).toBe(21);expect(new Set(x.names).size).toBe(21);expect(x.due).toBe(107900);expect(x.payment).toBe('confirmed');fs.writeFileSync('/tmp/cody-combined-21journey.json',JSON.stringify(x,null,2));});\n  7 |\n    at /tmp/cody-combined-24cf075/qa-extra/combined-corrected.spec.ts:5:1132"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T05:54:58.661Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-combined-extra-corrected-output/combined-corrected-legacy--1e040-n-cannot-bypass-declaration/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-combined-24cf075/qa-extra/combined-corrected.spec.ts",
+                    "column": 1132,
+                    "line": 5
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "222898d20e49007aa4de-82bd69b75d17002c7efa",
+          "file": "combined-corrected.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "21 pharmacies normal forms through review checkout activation with literal price",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T05:55:05.034Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "222898d20e49007aa4de-6c8f2a8978c2e5a2599f",
+          "file": "combined-corrected.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-29T05:54:54.986Z",
+    "duration": 31671.857,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,40 @@
+
+Running 7 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 processing: Review, reload, direct navigation and Back never close the submitted payment or open another (7.6s)
+  ✘  2 [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 unknown: Review, reload, direct navigation and Back never close the submitted payment or open another (9.1s)
+  ✓  3 [public] › e2e/public.repair004-addendum.spec.ts:79:5 › R4-N01 preserved: an unsubmitted open checkout can still be closed from Review and paid with a new key (6.5s)
+  ✓  4 [public] › e2e/public.repair004-addendum.spec.ts:94:5 › R4-N01 preserved: a genuine payment failure recovers through a fresh quote and a new checkout (3.2s)
+  ✓  5 [public] › e2e/public.repair004-addendum.spec.ts:111:5 › R4-N01 preserved: unknown → nothing charged recovers through a fresh quote and a new checkout (6.7s)
+  ✓  6 [public] › e2e/public.repair004-addendum.spec.ts:141:5 › completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt (4.6s)
+  ✓  7 [public] › e2e/public.repair004-addendum.spec.ts:160:5 › REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (16.7s)
+
+
+  1) [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 unknown: Review, reload, direct navigation and Back never close the submitted payment or open another 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('review-submitted')
+    Expected substring: [32m"already submitted a payment"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('review-submitted')[22m
+
+
+      59 |       await expect(page.getByRole("button", { name: "Edit my details instead" })).toHaveCount(0);
+      60 |       await expect(page.getByText("Your checkout on Stripe is still open")).toHaveCount(0);
+    > 61 |       await expect(page.getByTestId("review-submitted")).toContainText("already submitted a payment");
+         |                                                          ^
+      62 |       await expect(page.getByTestId("continue-payment")).toBeDisabled();
+      63 |       await page.reload();
+      64 |     }
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r008/app/e2e/public.repair004-addendum.spec.ts:61:58
+
+    Error Context: test-results/public.repair004-addendum--16ee1-ted-payment-or-open-another-public/error-context.md
+
+  1 failed
+    [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 unknown: Review, reload, direct navigation and Back never close the submitted payment or open another 
+  6 passed (56.4s)

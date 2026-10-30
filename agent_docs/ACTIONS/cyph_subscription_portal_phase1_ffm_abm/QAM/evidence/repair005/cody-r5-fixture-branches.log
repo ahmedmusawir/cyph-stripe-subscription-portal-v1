@@ -1,0 +1,11 @@
+
+Running 2 tests using 1 worker
+
+(node:1329648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1329648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 qa-fixture-branches/actual-predecessor.spec.ts:2:49 › exact predecessor unknown+failed resolves paid authoritatively (1.1s)
+  ✓  2 qa-fixture-branches/actual-predecessor.spec.ts:2:49 › exact predecessor unknown+failed resolves not_charged authoritatively (3.5s)
+
+  2 passed (5.7s)

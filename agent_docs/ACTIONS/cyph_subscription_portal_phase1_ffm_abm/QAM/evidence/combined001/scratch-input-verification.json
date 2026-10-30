@@ -1,0 +1,9 @@
+{
+  "candidate": "24cf075dc3c6252bc22712b067cbf9a8680f24fa",
+  "checked": 163,
+  "mismatches": [],
+  "missing": [
+    ".gitignore"
+  ],
+  "note": "generated next-env.d.ts may differ after Next build; candidate source/tests/package/lock copied byte-exact before build"
+}

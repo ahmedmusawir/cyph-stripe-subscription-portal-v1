@@ -1,0 +1,435 @@
+diff -ruN src/components/portal/activation/ActivationView.tsx src/components/portal/activation/ActivationView.tsx
+--- src/components/portal/activation/ActivationView.tsx	2026-10-30 07:22:36.914777019 +0600
++++ src/components/portal/activation/ActivationView.tsx	2026-10-30 08:54:41.708314297 +0600
+@@ -9,7 +9,7 @@
+ import { Alert, DemoNotice, Placeholder } from "../Alert";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+-import { checkoutHold, formatCents, formatTime, paymentPhase, registration, useRegistration, type CheckoutScope } from "@/services/portal";
++import { checkoutHold, consistentActivation, formatCents, formatTime, paymentPhase, registration, useRegistration, type CheckoutScope } from "@/services/portal";
+ 
+ type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
+ 
+@@ -77,21 +77,11 @@
+ 
+   if (!hydrated) return <PageContainer><ViewSkeleton /></PageContainer>;
+ 
+-  const a = state.activation;
+-  if (!a) {
+-    return (
+-      <PageContainer>
+-        <DemoNotice />
+-        <Alert tone="info" title="There's no payment to track yet">
+-          Activation starts after checkout. <Link href="/demo/register/review" className="portal-link">Go to review</Link>
+-        </Alert>
+-      </PageContainer>
+-    );
+-  }
+-
+-  // REPAIR_005: the checkout record governs what this page may offer. A stale activation
+-  // flag never shows Refresh or "Try payment again" for a payment that is unknown or closed.
++  // REPAIR_005/006: the checkout record governs what this page may offer, before the
++  // activation record is read at all. A stale or missing activation flag never shows
++  // Refresh, "Try payment again" or "no payment" for a payment that is paid, unknown or closed.
+   const phase = paymentPhase(state);
++  const a = consistentActivation(state);
+   if (phase === "unknown") {
+     return (
+       <PageContainer>
+@@ -105,7 +95,7 @@
+       </PageContainer>
+     );
+   }
+-  if (phase !== "processing" && phase !== "paid" && phase !== "failed") {
++  if (phase === "not_charged") {
+     return (
+       <PageContainer>
+         <DemoNotice />
+@@ -118,6 +108,33 @@
+       </PageContainer>
+     );
+   }
++  if (phase === "paid" && !a) {
++    // R5-F01: paid, but the activation record is missing or disagrees. Setup and email
++    // outcomes aren't known, so none is claimed and nothing can be retried or refreshed.
++    const scope = state.checkout?.scope;
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <PageHeader eyebrow="Activation" title="Payment confirmed" />
++        <div className="mt-5" data-testid="activation-paid-status-unavailable">
++          <Alert tone="info" title="We can't show setup or access-email status here">
++            Stripe confirmed your payment{scope ? ` of ${formatCents(scope.dueNowCents)} (illustrative)` : ""}, so you don&apos;t need to pay again. Setup and access-email status aren&apos;t available on this page right now. If your access email hasn&apos;t arrived, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
++          </Alert>
++        </div>
++      </PageContainer>
++    );
++  }
++  if (!a) {
++    // No checkout, or one still open on the stand-in: no payment has been submitted.
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <Alert tone="info" title="There's no payment to track yet">
++          Activation starts after checkout. <Link href="/demo/register/review" className="portal-link">Go to review</Link>
++        </Alert>
++      </PageContainer>
++    );
++  }
+ 
+   const { draft } = state;
+   // R-013: the payment covers what its checkout was quoted for, not later edits.
+diff -ruN src/services/portal/index.ts src/services/portal/index.ts
+--- src/services/portal/index.ts	2026-10-30 07:22:16.971242208 +0600
++++ src/services/portal/index.ts	2026-10-30 08:54:21.109305177 +0600
+@@ -9,6 +9,7 @@
+ export {
+   accessEmailPreviews,
+   checkoutHold,
++  consistentActivation,
+   coveredDetails,
+   estimateAvailable,
+   firstIncomplete,
+diff -ruN src/services/portal/registration.ts src/services/portal/registration.ts
+--- src/services/portal/registration.ts	2026-10-30 07:23:57.307396653 +0600
++++ src/services/portal/registration.ts	2026-10-30 08:54:21.108974374 +0600
+@@ -784,9 +784,27 @@
+ // Activation, access email, access link
+ // ---------------------------------------------------------------------------
+ 
++/**
++ * The activation record as a reader may present it (REPAIR_006): only where it agrees
++ * with the payment phase (R-014). A paid checkout whose activation is absent or
++ * conflicting is reported as paid with setup/email status unavailable, never as
++ * the stale flag; closed or open checkouts have nothing to track.
++ */
++export function consistentActivation(state: RegistrationState): ActivationView | null {
++  const a = state.activation;
++  const phase = paymentPhase(state);
++  const agrees =
++    (phase === 'processing' && a?.paymentState === 'pending') ||
++    (phase === 'failed' && a?.paymentState === 'failed') ||
++    (phase === 'paid' && a?.paymentState === 'confirmed');
++  return agrees ? a : null;
++}
++
+ export function readActivation(state: RegistrationState): Result<ActivationView> {
+-  return state.activation
+-    ? { ok: true, value: state.activation }
++  const a = consistentActivation(state);
++  if (a) return { ok: true, value: a };
++  return paymentPhase(state) === 'paid'
++    ? { ok: false, code: 'missing_context', message: "Payment is confirmed, but setup and email status aren't available." }
+     : { ok: false, code: 'missing_context', message: 'There is no payment to track yet.' };
+ }
+ 
+@@ -837,8 +855,9 @@
+ 
+ /** Simulated resend; nothing is sent. */
+ export function resendAccessEmail(state: RegistrationState, deps: ServiceDeps): Step<ActivationView> {
+-  const a = state.activation;
+-  if (!a || a.paymentState !== 'confirmed' || a.provisioningState !== 'ready')
++  // Only a paid checkout whose recorded setup finished may resend (REPAIR_006, R5-F02).
++  const a = consistentActivation(state);
++  if (paymentPhase(state) !== 'paid' || !a || a.provisioningState !== 'ready')
+     return fail(state, 'conflict', 'The access email can be resent once setup is finished.');
+   const next = { ...a, emailState: 'sent' as const };
+   return ok({ ...state, activation: next, emailResentAt: iso(deps.now()), draft: { ...state.draft, state: 'access_email_ready' } }, next);
+diff -ruN src/__tests__/portal-checkout-hold.test.tsx src/__tests__/portal-checkout-hold.test.tsx
+--- src/__tests__/portal-checkout-hold.test.tsx	2026-10-30 07:27:37.285472705 +0600
++++ src/__tests__/portal-checkout-hold.test.tsx	2026-10-30 08:55:46.223095953 +0600
+@@ -502,3 +502,56 @@
+     view.unmount();
+   });
+ });
++
++describe('Activation reads the payment phase first (REPAIR_006, R5-F01/R5-F02)', () => {
++  async function completed() {
++    await openCheckout('demo_r6_key_0001');
++    await act(async () => {
++      await registration.resolveCheckout('paid');
++      await registration.refreshActivation();
++    });
++  }
++  async function withActivation(activation: RegistrationState['activation']) {
++    const stored = { ...JSON.parse(JSON.stringify(s())), activation };
++    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: stored }, version: 3 }));
++    await act(async () => {
++      await registrationStore.persist.rehydrate();
++    });
++  }
++
++  for (const flag of ['absent', 'pending', 'failed'] as const)
++    it(`paid with ${flag} activation: shown as paid, setup/email not claimed, no retry/refresh/resend`, async () => {
++      await completed();
++      const a = s().activation!;
++      await withActivation(flag === 'absent' ? null : { ...a, paymentState: flag, provisioningState: 'not_started', emailState: 'not_started' });
++      render(<ActivationView />);
++      const text = document.body.textContent ?? '';
++      expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Payment confirmed');
++      expect(screen.getByTestId('activation-paid-status-unavailable').textContent).toMatch(/Setup and access-email status aren't available/);
++      expect(text).toMatch(/\$99\.00/);
++      for (const claim of [/Payment didn't go through/, /Waiting for payment confirmation/, /There's no payment to track yet/, /set up in OwedBook/, /Sent to/]) expect(text).not.toMatch(claim);
++      for (const name of ['Try payment again', 'Refresh status', 'Resend access email']) expect(screen.queryByRole('button', { name })).toBeNull();
++      expect(s().checkout?.status).toBe('paid');
++    });
++
++  it('actual unknown → nothing charged path shows the terminal notice and C14 recovery', async () => {
++    await openCheckout('demo_r6_key_0002');
++    await act(async () => {
++      await registration.resolveCheckout('unknown');
++      await registration.resolveUnknownPayment('not_charged');
++    });
++    expect(s().activation).toBeNull();
++    render(<ActivationView />);
++    expect(screen.getByTestId('activation-not-charged').textContent).toMatch(/Nothing was charged for this payment/);
++    expect(screen.getByRole('link', { name: 'Continue my signup' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
++    expect(screen.queryByText("There's no payment to track yet")).toBeNull();
++  });
++
++  it('valid paid resend still works from the page', async () => {
++    await completed();
++    render(<ActivationView />);
++    fireEvent.click(screen.getByTestId('resend'));
++    await waitFor(() => expect(s().emailResentAt).not.toBeNull(), { timeout: 3000 });
++    expect(s().activation?.emailState).toBe('sent');
++  });
++});
+diff -ruN src/__tests__/portal-registration.test.ts src/__tests__/portal-registration.test.ts
+--- src/__tests__/portal-registration.test.ts	2026-10-30 07:26:17.498140938 +0600
++++ src/__tests__/portal-registration.test.ts	2026-10-30 08:56:26.691142976 +0600
+@@ -1222,3 +1222,80 @@
+     expect(rows).toHaveLength(Object.keys(base).length * Object.keys(flags).length * Object.keys(actions).length);
+   });
+ });
++
++describe('payment-phase readers and resend (REPAIR_006, R5-F01/R5-F02)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  function opened(): RegistrationState {
++    const s = reg.requestQuote(completeDraft(1), deps).state;
++    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++  }
++  const ready = () => reg.refreshActivation(reg.resolveCheckout(opened(), 'paid').state).state;
++  const view = ready().activation!;
++  const FLAGS: Record<string, RegistrationState['activation']> = {
++    absent: null,
++    pending: { ...view, paymentState: 'pending', provisioningState: 'not_started', emailState: 'not_started' },
++    failed: { ...view, paymentState: 'failed', provisioningState: 'not_started', emailState: 'not_started' },
++    'confirmed, setup ready, email failed': { ...view, emailState: 'failed' },
++  };
++  const CHECKOUTS: Record<string, () => RegistrationState> = {
++    none: () => ({ ...reg.requestQuote(completeDraft(1), deps).state }),
++    open: opened,
++    declined: () => reg.resolveCheckout(opened(), 'declined').state,
++    unknown: () => reg.resolveCheckout(opened(), 'unknown').state,
++    abandoned: () => reg.resolveCheckout(opened(), 'back').state,
++    expired: () => ({ ...opened(), checkout: { ...opened().checkout!, status: 'expired' as const } }),
++  };
++
++  it('R5-F02: resend is refused without mutation unless the checkout is paid and its setup finished', () => {
++    const rows: unknown[] = [];
++    for (const [checkout, make] of Object.entries(CHECKOUTS))
++      for (const [flag, activation] of Object.entries(FLAGS)) {
++        const s = { ...make(), activation };
++        const step = reg.resendAccessEmail(s, deps);
++        rows.push({ checkout, flag, phase: reg.paymentPhase(s), ok: step.result.ok });
++        expect([checkout, flag, step.result]).toEqual([checkout, flag, expect.objectContaining({ ok: false, code: 'conflict' })]);
++        expect(step.state).toBe(s);
++      }
++    // Paid with a missing or conflicting activation: also refused, unchanged.
++    for (const flag of ['absent', 'pending', 'failed']) {
++      const s = { ...ready(), activation: FLAGS[flag] };
++      const step = reg.resendAccessEmail(s, deps);
++      expect([flag, step.result.ok]).toEqual([flag, false]);
++      expect(step.state).toBe(s);
++    }
++    // Paid but setup not finished: refused.
++    const settingUp = reg.resolveCheckout(opened(), 'paid').state;
++    expect(reg.resendAccessEmail(settingUp, deps).state).toBe(settingUp);
++    expect(rows).toHaveLength(Object.keys(CHECKOUTS).length * Object.keys(FLAGS).length);
++  });
++
++  it('R5-F02 preserved: a paid record whose setup finished can resend, from sent or failed email', () => {
++    for (const emailState of ['sent', 'failed'] as const) {
++      const s = { ...ready(), activation: { ...ready().activation!, emailState } };
++      const step = reg.resendAccessEmail(s, deps);
++      expect(step.result.ok).toBe(true);
++      expect(step.state.activation?.emailState).toBe('sent');
++      expect(step.state.emailResentAt).not.toBeNull();
++      expect(step.state.checkout).toEqual(s.checkout);
++    }
++  });
++
++  it('R5-F01: readers present the activation only where it agrees with the phase; paid stays paid', () => {
++    for (const flag of ['absent', 'pending', 'failed']) {
++      const s = { ...ready(), activation: FLAGS[flag] };
++      expect(reg.paymentPhase(s)).toBe('paid');
++      expect(reg.consistentActivation(s)).toBeNull();
++      expect(reg.readActivation(s)).toMatchObject({ ok: false, message: expect.stringMatching(/Payment is confirmed/) });
++      for (const step of [reg.refreshActivation(s), reg.resumeSignup(s), reg.restartSignup(s)]) {
++        expect(step.result.ok).toBe(false);
++        expect(step.state).toBe(s);
++      }
++    }
++    const done = ready();
++    expect(reg.consistentActivation(done)).toBe(done.activation);
++    expect(reg.readActivation(ready()).ok).toBe(true);
++    // The actual nothing-charged path leaves no activation and nothing to read.
++    const terminal = reg.resolveUnknownPayment(reg.resolveCheckout(opened(), 'unknown').state, 'not_charged').state;
++    expect([reg.paymentPhase(terminal), terminal.activation, reg.readActivation(terminal).ok]).toEqual(['not_charged', null, false]);
++  });
++});
+diff -ruN e2e/public.repair002.spec.ts e2e/public.repair002.spec.ts
+--- e2e/public.repair002.spec.ts	2026-10-29 16:21:58.256390291 +0600
++++ e2e/public.repair002.spec.ts	2026-10-30 09:07:17.717245943 +0600
+@@ -93,7 +93,9 @@
+   }
+   // Activation and the incomplete page don't offer a back door either.
+   await page.goto("/demo/activation");
+-  await expect(page.getByText("There's no payment to track yet")).toBeVisible();
++  // REPAIR_006: the closed checkout's phase is read first, so Activation shows its terminal no-charge notice.
++  await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged");
++  await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
+   await page.goto("/demo/checkout-incomplete");
+   await expect(page.getByTestId("incomplete-abandoned")).toContainText("The owner declaration was withdrawn");
+   await page.getByTestId("incomplete-continue").click();
+diff -ruN e2e/public.repair006.spec.ts e2e/public.repair006.spec.ts
+--- e2e/public.repair006.spec.ts	1970-01-01 06:00:00.000000000 +0600
++++ e2e/public.repair006.spec.ts	2026-10-30 08:56:36.464886419 +0600
+@@ -0,0 +1,136 @@
++import { expect, test, type Page } from "@playwright/test";
++import { recordContrast, textContrast, textFailures } from "./contrast";
++import { assertGate, measure, record, setTheme, THEMES } from "./gate-m";
++
++// REPAIR_006 anonymous regressions. No credentials are used here.
++// R5-F01: Activation reads the payment phase first; paid never appears unpaid, failed or retryable.
++// R5-F02: resend only for a paid checkout whose setup finished.
++const KEY = "cyph-portal-demo:v1:public";
++type Json = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
++
++const snap = (page: Page) =>
++  page.evaluate((k) => {
++    const s = JSON.parse(sessionStorage.getItem(k)!).state.s;
++    return { checkout: (s.checkout?.status ?? null) as string | null, key: (s.checkout?.operationKey ?? null) as string | null, payment: (s.activation?.paymentState ?? null) as string | null };
++  }, KEY);
++
++async function settle(page: Page, url: string) {
++  await page.goto(url);
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++}
++
++async function openCheckout(page: Page) {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption("prefilled_one_store");
++  await page.getByRole("button", { name: "Load", exact: true }).click();
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++}
++
++async function completed(page: Page) {
++  await openCheckout(page);
++  await page.getByTestId("outcome-paid").click();
++  await page.waitForURL("**/demo/activation");
++  await page.getByTestId("activation-refresh").click();
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("You're in. Check your email.");
++}
++
++async function storeActivation(page: Page, edit: (a: Json) => Json | null) {
++  const raw = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!), KEY);
++  raw.state.s.activation = edit(raw.state.s.activation);
++  await page.evaluate(({ k, v }) => sessionStorage.setItem(k, JSON.stringify(v)), { k: KEY, v: raw });
++  await settle(page, "/demo/activation");
++}
++
++const FLAGS: Record<string, (a: Json) => Json | null> = {
++  absent: () => null,
++  pending: (a) => ({ ...a, paymentState: "pending", provisioningState: "not_started", emailState: "not_started" }),
++  failed: (a) => ({ ...a, paymentState: "failed", provisioningState: "not_started", emailState: "not_started" }),
++};
++
++for (const [flag, edit] of Object.entries(FLAGS))
++  test(`R5-F01 paid with ${flag} activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable`, async ({ page }) => {
++    await completed(page);
++    const key = (await snap(page)).key;
++    await storeActivation(page, edit);
++    for (let i = 0; i < 2; i++) {
++      await expect(page.getByRole("heading", { level: 1 })).toHaveText("Payment confirmed");
++      await expect(page.getByTestId("activation-paid-status-unavailable")).toContainText("Setup and access-email status aren't available");
++      const text = await page.locator("main").innerText();
++      for (const claim of ["Payment didn't go through", "Waiting for payment confirmation", "There's no payment to track yet", "set up in OwedBook", "Sent to "]) expect(text).not.toContain(claim);
++      for (const name of ["Try payment again", "Refresh status", "Resend access email"]) await expect(page.getByRole("button", { name })).toHaveCount(0);
++      expect(await snap(page)).toMatchObject({ checkout: "paid", key });
++      await page.reload();
++    }
++    // Review and C14 also treat it as paid.
++    await settle(page, "/demo/register/review");
++    await page.waitForURL("**/demo/activation");
++  });
++
++test("R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key", async ({ page }) => {
++  await openCheckout(page);
++  const key = (await snap(page)).key;
++  await page.getByTestId("outcome-unknown").click();
++  await page.waitForURL("**/demo/checkout-incomplete");
++  await page.getByTestId("unknown-not-charged").click();
++  await expect(page.getByTestId("incomplete-abandoned")).toBeVisible();
++  expect(await snap(page)).toEqual({ checkout: "abandoned", key, payment: null });
++  for (let i = 0; i < 2; i++) {
++    await settle(page, "/demo/activation");
++    await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged for this payment");
++    await expect(page.getByText("There's no payment to track yet")).toHaveCount(0);
++    await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
++    await page.reload();
++  }
++  await page.getByRole("link", { name: "Continue my signup" }).click();
++  await page.waitForURL("**/demo/checkout-incomplete");
++  await page.getByTestId("incomplete-continue").click();
++  await page.waitForURL("**/demo/register/review");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const fresh = await snap(page);
++  expect(fresh.checkout).toBe("pending");
++  expect(fresh.key).not.toBe(key);
++});
++
++test("R5-F02 preserved: valid paid resend, from the email-failed scenario and from a sent email", async ({ page }) => {
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption("activation_email_failed");
++  await page.getByRole("button", { name: "Load", exact: true }).click();
++  await settle(page, "/demo/activation");
++  await page.getByTestId("resend").click();
++  await expect(page.getByRole("status").filter({ hasText: "Sent again at" })).toBeVisible();
++  expect(await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!).state.s.activation.emailState, KEY)).toBe("sent");
++  await completed(page);
++  await page.getByTestId("resend").click();
++  await expect(page.getByRole("status").filter({ hasText: "Sent again at" })).toBeVisible();
++});
++
++test("REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots", async ({ page }) => {
++  await completed(page);
++  await storeActivation(page, FLAGS.failed);
++  for (const theme of THEMES)
++    for (const width of [375, 1440]) {
++      await page.setViewportSize({ width, height: 900 });
++      await settle(page, "/demo/activation");
++      await setTheme(page, theme);
++      await page.reload();
++      await expect(page.getByTestId("activation-paid-status-unavailable")).toBeVisible();
++      const g = await measure(page, "/demo/activation [REPAIR_006 paid-status-unavailable]", width, theme);
++      record("gate-m-repair006.jsonl", g);
++      assertGate(g);
++      const fails = textFailures(await textContrast(page));
++      recordContrast("contrast-repair006.jsonl", { screen: "/demo/activation [REPAIR_006 paid-status-unavailable]", width, theme, fails });
++      expect.soft(fails, `${theme} ${width}`).toEqual([]);
++      await page.screenshot({ path: `test-results/repair006-paid-status-unavailable_${theme}_${width}.png`, fullPage: true });
++    }
++});

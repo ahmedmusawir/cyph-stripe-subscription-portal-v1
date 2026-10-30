@@ -1,0 +1,22 @@
+ M RECOVERY.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md
+ M agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md
+ M agent_docs/SESSIONS/session_2026-10-29.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/q2/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/COMBINED_RETEST_001_IDENTITY_STOP.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/CYPH_Q1_LEAD_DECISION_001_2026-10-28_SUPERSEDED.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_001.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_002.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q2_REVIEW_001.zip
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/Q1_RECEIPT.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/Q2_RECEIPT.json
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/REVIEW_START_HERE.md
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/combined001/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/q1/
+?? agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/q2/

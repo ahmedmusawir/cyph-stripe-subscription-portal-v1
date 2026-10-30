@@ -1,0 +1,770 @@
+[
+  {
+    "path": ".dockerignore",
+    "same": true
+  },
+  {
+    "path": ".env.example",
+    "same": true
+  },
+  {
+    "path": "CHANGELOG.md",
+    "same": true
+  },
+  {
+    "path": "CLAUDE.md",
+    "same": true
+  },
+  {
+    "path": "DEPLOYMENT_CHECKLIST.md",
+    "same": true
+  },
+  {
+    "path": "Dockerfile",
+    "same": true
+  },
+  {
+    "path": "README.md",
+    "same": true
+  },
+  {
+    "path": "RECOVERY.md",
+    "same": true
+  },
+  {
+    "path": "WINDSURF.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS.zip",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLAUDE.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS/next-deploy-execute/SKILL.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS/next-deploy-execute/examples/PHASE_0_TO_1_WALKTHROUGH.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS/next-deploy-execute/references/ANTI_PATTERNS.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS/next-deploy-generate/SKILL.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/CLOUD_DEPLOYMENT_SKILLS/next-deploy-generate/references/TEMPLATES.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/_OLD/CLAUDE.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/_OLD/next-deploy-execute/SKILL.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/_OLD/next-deploy-generate/SKILL.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/CLOUD_DEPLOYMENT_SKILLS/_OLD/next-deploy-generate/references/TEMPLATES.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/README.txt",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/CLAUDE.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/README.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/SKILL.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/examples/cyber-pharma-v1-phase2-recon-2026-06-08.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/references/ANTI_PATTERNS.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/references/EVIDENCE_DISCIPLINE.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/templates/RECON_MISSION.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-recon-skill-v1.1/stark-recon/templates/RECON_REPORT_TEMPLATE.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/SKILL.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/references/ANTI_PATTERNS.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/references/DECISION_TEMPLATES.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/references/PLAYBOOK.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/00-pre-flight.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/01-baseline.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/02-safe-wins.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/03-triage.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/04-execute.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/05-bookkeep.md",
+    "same": true
+  },
+  {
+    "path": "_SKILLS/stark-repo-security-skill-v1.1/repo-security-audit/workflow/06-re-baseline.md",
+    "same": true
+  },
+  {
+    "path": "cloudbuild.yaml",
+    "same": true
+  },
+  {
+    "path": "components.json",
+    "same": true
+  },
+  {
+    "path": "deploy.sh",
+    "same": true
+  },
+  {
+    "path": "e2e/account.journeys.spec.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/admin.setup.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/gate-m.public.spec.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/gate-m.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/helpers.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/logout.final.spec.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/public.boundaries.spec.ts",
+    "same": true
+  },
+  {
+    "path": "e2e/public.journeys.spec.ts",
+    "same": true
+  },
+  {
+    "path": "init-app.sh",
+    "same": true
+  },
+  {
+    "path": "jest.config.js",
+    "same": true
+  },
+  {
+    "path": "next.config.js",
+    "same": true
+  },
+  {
+    "path": "package-lock.json",
+    "same": true
+  },
+  {
+    "path": "package.json",
+    "same": true
+  },
+  {
+    "path": "playwright.config.ts",
+    "same": true
+  },
+  {
+    "path": "postcss.config.js",
+    "same": true
+  },
+  {
+    "path": "public/favicon-512.png",
+    "same": true
+  },
+  {
+    "path": "public/logo-color.svg",
+    "same": true
+  },
+  {
+    "path": "public/logo-lockup.svg",
+    "same": true
+  },
+  {
+    "path": "public/logo-mono.svg",
+    "same": true
+  },
+  {
+    "path": "scripts/install-gcloud.sh",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/get-user-role.test.ts",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/jest.setup.ts",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/login-form.test.tsx",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/portal-access.test.tsx",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/portal-account.test.ts",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/portal-boundaries.test.ts",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/portal-components.test.tsx",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/portal-registration.test.ts",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/portal-storage.test.ts",
+    "same": true
+  },
+  {
+    "path": "src/__tests__/proxy.test.ts",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/dashboard/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/demo/references/owedbook/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/demo/stores/add/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/demo/stores/confirm/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/demo/stores/result/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/layout.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(account)/loading.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(handoff)/demo/stripe/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(handoff)/layout.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/access-link/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/activation/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/checkout-incomplete/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/references/email/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/register/owner/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/register/pharmacies/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/register/plan/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/demo/register/review/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/(public)/layout.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/api/auth/confirm/route.ts",
+    "same": true
+  },
+  {
+    "path": "src/app/api/auth/login/route.ts",
+    "same": true
+  },
+  {
+    "path": "src/app/api/auth/logout/route.ts",
+    "same": true
+  },
+  {
+    "path": "src/app/demo/sign-in/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/favicon.ico",
+    "same": true
+  },
+  {
+    "path": "src/app/globals.scss",
+    "same": true
+  },
+  {
+    "path": "src/app/icon.png",
+    "same": true
+  },
+  {
+    "path": "src/app/layout.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/login/LoginPageContent.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/login/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/not-found.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/page.tsx",
+    "same": true
+  },
+  {
+    "path": "src/app/providers/ThemeProvider.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/common/SpinnerLarge.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/global/ThemeToggler.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/AccountStrip.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Alert.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Brand.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Counter.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/DataTable.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/EmptyState.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/ErrorSummary.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/ExternalHandoffPanel.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Footer.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/FormField.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/HandoffShell.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Loading.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/PageHeader.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/PharmacyFields.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Pill.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/PublicDemoControls.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/PublicShell.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/RadioCard.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Shell.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/Stepper.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/AccountGate.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/AddStoreView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/ConfirmStoreView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/DashboardView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/OwedBookReferenceView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/StoreResultView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/account/status.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/activation/AccessLinkView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/activation/ActivationView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/activation/CheckoutIncompleteView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/brand.ts",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/handoff/CheckoutStandIn.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/handoff/PortalStandIn.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/hooks.ts",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/references/EmailPreview.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/references/EmailReferenceView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/register/MissingContext.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/register/OwnerView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/register/PharmacyStepView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/register/PlanView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/portal/register/ReviewView.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/alert-dialog.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/breadcrumb.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/button.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/dialog.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/dropdown-menu.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/input.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/label.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/separator.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/sheet.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/skeleton.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/table.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/textarea.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/toast.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/toaster.tsx",
+    "same": true
+  },
+  {
+    "path": "src/components/ui/use-toast.ts",
+    "same": true
+  },
+  {
+    "path": "src/lib/utils.ts",
+    "same": true
+  },
+  {
+    "path": "src/mocks/portal/fixtures.ts",
+    "same": true
+  },
+  {
+    "path": "src/proxy.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/auth/access.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/auth/session.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/account.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/accountService.tsx",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/catalog.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/format.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/index.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/latency.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/pricing.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/registration.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/registrationService.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/storage.ts",
+    "same": true
+  },
+  {
+    "path": "src/services/portal/validation.ts",
+    "same": true
+  },
+  {
+    "path": "src/types/auth.ts",
+    "same": true
+  },
+  {
+    "path": "src/types/portal/contract.ts",
+    "same": true
+  },
+  {
+    "path": "src/types/portal/state.ts",
+    "same": true
+  },
+  {
+    "path": "src/types/tailwind-merge.d.ts",
+    "same": true
+  },
+  {
+    "path": "src/utils/get-user-role.ts",
+    "same": true
+  },
+  {
+    "path": "src/utils/supabase/admin.ts",
+    "same": true
+  },
+  {
+    "path": "src/utils/supabase/client.ts",
+    "same": true
+  },
+  {
+    "path": "src/utils/supabase/middleware.ts",
+    "same": true
+  },
+  {
+    "path": "src/utils/supabase/server.ts",
+    "same": true
+  },
+  {
+    "path": "supabase/README.md",
+    "same": true
+  },
+  {
+    "path": "supabase/migration_add_profiles.sql",
+    "same": true
+  },
+  {
+    "path": "supabase/setup.sql",
+    "same": true
+  },
+  {
+    "path": "tailwind.config.ts",
+    "same": true
+  },
+  {
+    "path": "tsconfig.json",
+    "same": true
+  }
+]

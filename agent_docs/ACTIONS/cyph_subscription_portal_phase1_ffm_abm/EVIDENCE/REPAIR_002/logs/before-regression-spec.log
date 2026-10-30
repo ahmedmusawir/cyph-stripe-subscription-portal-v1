@@ -1,0 +1,281 @@
+
+Running 12 tests using 1 worker
+
+  ✘   1 [public] › e2e/public.repair002.spec.ts:79:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works (4.2s)
+  ✘   2 [public] › e2e/public.repair002.spec.ts:106:5 › CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout (3.9s)
+  ✘   3 [public] › e2e/public.repair002.spec.ts:118:5 › CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works (10.2s)
+  ✘   4 [public] › e2e/public.repair002.spec.ts:139:5 › a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details (10.2s)
+  ✘   5 [public] › e2e/public.repair002.spec.ts:158:5 › processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again (9.3s)
+  ✘   6 [public] › e2e/public.repair002.spec.ts:178:5 › unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available (6.0s)
+  ✘   7 [public] › e2e/public.repair002.spec.ts:192:5 › R2-N01: changing the store count while checkout is open closes it (3.7s)
+  ✓   8 [public] › e2e/public.repair002.spec.ts:203:5 › valid open checkout: review ↔ stand-in round trips and reloads replay one checkout, then pay once (6.4s)
+  ✘   9 [public] › e2e/public.repair002.spec.ts:221:5 › R2-N02: pharmacy step 100 of 100 is reachable (no hidden two-digit step limit) (6.5s)
+  ✘  10 [public] › e2e/public.repair002.spec.ts:239:5 › CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order (6.9s)
+  ✘  11 [public] › e2e/public.repair002.spec.ts:264:5 › CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order (988ms)
+  ✓  12 [public] › e2e/public.repair002.spec.ts:287:5 › 21 pharmacies: full journey through review, checkout and activation at $1,079.00 (23.6s)
+
+
+  1) [public] › e2e/public.repair002.spec.ts:79:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [32m- Expected  - 3[39m
+    [31m+ Received  + 3[39m
+
+    [2m  Object {[22m
+    [2m    "accepted": false,[22m
+    [32m-   "checkout": "abandoned",[39m
+    [32m-   "closedReason": "owner_declaration",[39m
+    [31m+   "checkout": "pending",[39m
+    [31m+   "closedReason": null,[39m
+    [2m    "payment": null,[22m
+    [32m-   "quoteCleared": true,[39m
+    [31m+   "quoteCleared": false,[39m
+    [2m  }[22m
+
+      84 |   await page.getByRole("button", { name: "Continue", exact: true }).click();
+      85 |   await expect(page.locator("#owner-declaration-err")).toHaveText("Confirm that you are the pharmacy owner to continue.");
+    > 86 |   expect(await snap(page)).toMatchObject({ accepted: false, checkout: "abandoned", closedReason: "owner_declaration", quoteCleared: true, payment: null });
+         |                            ^
+      87 |
+      88 |   for (let i = 0; i < 2; i++) {
+      89 |     await revisitStripe(page);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:86:28
+
+    Error Context: test-results/public.repair002-CR-F01-A--21cea-r-no-payment-recovery-works-public/error-context.md
+
+  2) [public] › e2e/public.repair002.spec.ts:106:5 › CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [32m- Expected  - 2[39m
+    [31m+ Received  + 2[39m
+
+    [2m  Object {[22m
+    [2m    "accepted": false,[22m
+    [32m-   "checkout": "abandoned",[39m
+    [32m-   "closedReason": "owner_declaration",[39m
+    [31m+   "checkout": "pending",[39m
+    [31m+   "closedReason": null,[39m
+    [2m  }[22m
+
+      110 |   await page.getByRole("button", { name: "Back" }).click();
+      111 |   await expect(page).toHaveURL(/\/demo\/register\/plan/);
+    > 112 |   expect(await snap(page)).toMatchObject({ accepted: false, checkout: "abandoned", closedReason: "owner_declaration" });
+          |                            ^
+      113 |   await revisitStripe(page);
+      114 |   await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
+      115 | });
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:112:28
+
+    Error Context: test-results/public.repair002-CR-F01-A--2bf3d-ck-also-closes-the-checkout-public/error-context.md
+
+  3) [public] › e2e/public.repair002.spec.ts:118:5 › CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByTestId('outcome-paid')
+    Expected: [32m0[39m
+    Received: [31m1[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('outcome-paid')[22m
+    [2m    9 × locator resolved to 1 element[22m
+    [2m      - unexpected value "1"[22m
+
+
+      129 |   await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
+      130 |   await page.waitForTimeout(1500);
+    > 131 |   await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
+          |                                                  ^
+      132 |   await expect(page.getByTestId("checkout-closed")).toBeVisible();
+      133 |   const migrated = await snap(page);
+      134 |   expect(migrated).toMatchObject({ version: 2, accepted: false, quoteCleared: true, checkout: "abandoned", closedReason: "owner_declaration", payment: null });
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:131:50
+
+    Error Context: test-results/public.repair002-CR-F01-B--4e865-d-unaccepted-recovery-works-public/error-context.md
+
+  4) [public] › e2e/public.repair002.spec.ts:139:5 › a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('checkout-hold')
+    Expected substring: [32m"Confirm the owner declaration before paying"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('checkout-hold')[22m
+
+
+      145 |   }, KEY);
+      146 |   await revisitStripe(page);
+    > 147 |   await expect(page.getByTestId("checkout-hold")).toContainText("Confirm the owner declaration before paying");
+          |                                                   ^
+      148 |   await expect(page.getByRole("button", { name: /Payment succeeds|Payment processing/ })).toHaveCount(0);
+      149 |   // Keyboard-only: Tab to the details link and follow it.
+      150 |   const link = page.getByRole("link", { name: "Go to my details" });
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:147:51
+
+    Error Context: test-results/public.repair002-a-stored--7f401-in-keyboard-path-to-details-public/error-context.md
+
+  5) [public] › e2e/public.repair002.spec.ts:158:5 › processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('activation-hold')
+    Expected substring: [32m"Confirm the owner declaration to continue"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-hold')[22m
+
+
+      164 |   await page.getByRole("button", { name: "Back" }).click();
+      165 |   await page.goto("/demo/activation");
+    > 166 |   await expect(page.getByTestId("activation-hold")).toContainText("Confirm the owner declaration to continue");
+          |                                                     ^
+      167 |   await expect(page.getByTestId("activation-refresh")).toBeDisabled();
+      168 |   expect(await snap(page)).toMatchObject({ checkout: "pending", payment: "pending", closedReason: null });
+      169 |   await page.goto("/demo/register/owner");
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:166:53
+
+    Error Context: test-results/public.repair002-processin-1fda3-sabled-until-accepted-again-public/error-context.md
+
+  6) [public] › e2e/public.repair002.spec.ts:178:5 › unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('unknown-hold')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('unknown-hold')[22m
+
+
+      182 |   await page.getByRole("button", { name: "Back" }).click();
+      183 |   await page.goto("/demo/checkout-incomplete");
+    > 184 |   await expect(page.getByTestId("unknown-hold")).toBeVisible();
+          |                                                  ^
+      185 |   await expect(page.getByTestId("unknown-paid")).toBeDisabled();
+      186 |   await page.getByTestId("unknown-not-charged").click();
+      187 |   await expect.poll(async () => (await snap(page)).checkout).toBe("abandoned");
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:184:50
+
+    Error Context: test-results/public.repair002-unknown-p-b3488-e-nothing-charged-available-public/error-context.md
+
+  7) [public] › e2e/public.repair002.spec.ts:192:5 › R2-N01: changing the store count while checkout is open closes it 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatchObject[2m([22m[32mexpected[39m[2m)[22m
+
+    [32m- Expected  - 2[39m
+    [31m+ Received  + 2[39m
+
+    [2m  Object {[22m
+    [32m-   "checkout": "abandoned",[39m
+    [32m-   "closedReason": "details_changed",[39m
+    [31m+   "checkout": "pending",[39m
+    [31m+   "closedReason": null,[39m
+    [2m    "quoteCleared": true,[22m
+    [2m  }[22m
+
+      194 |   await page.goto("/demo/register/plan");
+      195 |   await page.getByRole("button", { name: "More pharmacies" }).click();
+    > 196 |   expect(await snap(page)).toMatchObject({ checkout: "abandoned", closedReason: "details_changed", quoteCleared: true });
+          |                            ^
+      197 |   await revisitStripe(page);
+      198 |   await expect(page.getByTestId("checkout-closed")).toContainText("Your signup details changed after checkout opened");
+      199 |   await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:196:28
+
+    Error Context: test-results/public.repair002-R2-N01-ch-7f2f6--checkout-is-open-closes-it-public/error-context.md
+
+  8) [public] › e2e/public.repair002.spec.ts:221:5 › R2-N02: pharmacy step 100 of 100 is reachable (no hidden two-digit step limit) 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByRole('heading', { level: 1 })
+    Expected: [32m"Pharmacy 1[7m00[27m of 100"[39m
+    Received: [31m"Pharmacy 1 of 100"[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveText" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('heading', { level: 1 })[22m
+    [2m    9 × locator resolved to <h1 class="mt-1 text-[26px] font-bold leading-tight text-foreground md:text-[32px]">Pharmacy 1 of 100</h1>[22m
+    [2m      - unexpected value "Pharmacy 1 of 100"[22m
+
+
+      231 |   }, KEY);
+      232 |   await page.goto("/demo/register/pharmacies?store=100");
+    > 233 |   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pharmacy 100 of 100");
+          |                                                         ^
+      234 |   await expect(page).toHaveURL(/store=100/);
+      235 |   await page.goto("/demo/register/review");
+      236 |   await expect(page).toHaveURL(/pharmacies\?store=100/);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:233:57
+
+    Error Context: test-results/public.repair002-R2-N02-ph-32c55-idden-two-digit-step-limit--public/error-context.md
+
+  9) [public] › e2e/public.repair002.spec.ts:239:5 › CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order 
+
+    Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Expected pattern: [32m/pharmacies\?store=2/[39m
+    Received string:  [31m"http://localhost:3105/demo/register/pharmacies?store=999999999"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m    9 × unexpected value "http://localhost:3105/demo/register/pharmacies?store=999999999"[22m
+
+
+      251 |   await expect(page.locator("main")).toContainText("$49,000,000,050.00");
+      252 |   await page.goto("/demo/register/pharmacies?store=999999999");
+    > 253 |   await expect(page).toHaveURL(/pharmacies\?store=2/);
+          |                      ^
+      254 |   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pharmacy 2 of 1000000000");
+      255 |   expect(Date.now() - started).toBeLessThan(15_000);
+      256 |   const sizes = await page.evaluate((k) => {
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:253:22
+
+    Error Context: test-results/public.repair002-CR-F02-a--73716-nd-deep-links-fill-in-order-public/error-context.md
+
+  10) [public] › e2e/public.repair002.spec.ts:264:5 › CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m2[39m
+    Received: [31m3[39m
+
+      272 |   await expect(page.locator("output#stores")).toHaveText("3");
+      273 |   const entries = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!).state.s.draft.pharmacies.length, KEY);
+    > 274 |   expect(entries).toBe(2); // the restored third store is not pre-allocated
+          |                   ^
+      275 |   await page.goto("/demo/register/review");
+      276 |   await expect(page).toHaveURL(/pharmacies\?store=3/);
+      277 |   await expect(page.getByLabel("Pharmacy name")).toHaveValue("");
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r003/base/e2e/public.repair002.spec.ts:274:19
+
+    Error Context: test-results/public.repair002-CR-F02-co-40d16-s-the-missing-step-in-order-public/error-context.md
+
+  10 failed
+    [public] › e2e/public.repair002.spec.ts:79:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works 
+    [public] › e2e/public.repair002.spec.ts:106:5 › CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout 
+    [public] › e2e/public.repair002.spec.ts:118:5 › CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works 
+    [public] › e2e/public.repair002.spec.ts:139:5 › a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details 
+    [public] › e2e/public.repair002.spec.ts:158:5 › processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again 
+    [public] › e2e/public.repair002.spec.ts:178:5 › unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available 
+    [public] › e2e/public.repair002.spec.ts:192:5 › R2-N01: changing the store count while checkout is open closes it 
+    [public] › e2e/public.repair002.spec.ts:221:5 › R2-N02: pharmacy step 100 of 100 is reachable (no hidden two-digit step limit) 
+    [public] › e2e/public.repair002.spec.ts:239:5 › CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order 
+    [public] › e2e/public.repair002.spec.ts:264:5 › CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order 
+  2 passed (1.7m)

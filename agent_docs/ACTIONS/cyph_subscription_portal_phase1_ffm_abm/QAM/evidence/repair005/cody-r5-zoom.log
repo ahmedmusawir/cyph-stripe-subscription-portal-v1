@@ -1,0 +1,66 @@
+[
+  {
+    surface: 'unknown',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'legacyClosed',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'resolved',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'paid',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'unknown',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'legacyClosed',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'resolved',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  },
+  {
+    surface: 'paid',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    keyboard: true,
+    error: undefined
+  }
+]

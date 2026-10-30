@@ -1,0 +1,101 @@
+# post-fix rebuild (Dashboard pill self-start only)
+▲ Next.js 16.4.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.js took 20ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.6s
+  Running TypeScript ...
+  Finished TypeScript in 7.0s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/20) ...
+  Generating static pages using 3 workers (5/20) 
+  Generating static pages using 3 workers (10/20) 
+  Generating static pages using 3 workers (15/20) 
+✓ Generating static pages using 3 workers (20/20) in 464ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/auth/confirm
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /dashboard
+├ ○ /demo/access-link
+├ ○ /demo/activation
+├ ○ /demo/checkout-incomplete
+├ ƒ /demo/references/email
+├ ƒ /demo/references/owedbook
+├ ƒ /demo/register/owner
+├ ƒ /demo/register/pharmacies
+├ ƒ /demo/register/plan
+├ ○ /demo/register/review
+├ ƒ /demo/sign-in
+├ ƒ /demo/stores/add
+├ ƒ /demo/stores/confirm
+├ ƒ /demo/stores/result
+├ ƒ /demo/stripe
+├ ○ /icon.png
+└ ƒ /login
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+tsc exit=0
+Test Suites: 9 passed, 9 total
+Tests:       106 passed, 106 total
+Snapshots:   0 total
+Time:        1.923 s
+Ran all test suites.
+
+Running 42 tests using 1 worker
+
+  ✓   1 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /dashboard → /login with no account payload (HTML and RSC) (282ms)
+  ✓   2 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/stores/add → /login with no account payload (HTML and RSC) (115ms)
+  ✓   3 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/stores/confirm → /login with no account payload (HTML and RSC) (90ms)
+  ✓   4 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/stores/result → /login with no account payload (HTML and RSC) (58ms)
+  ✓   5 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/references/owedbook → /login with no account payload (HTML and RSC) (57ms)
+  ✓   6 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/stripe?mode=portal → /login with no account payload (HTML and RSC) (77ms)
+  ✓   7 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/stripe?mode=portal&purpose=cancel → /login with no account payload (HTML and RSC) (50ms)
+  ✓   8 [public] › e2e/public.boundaries.spec.ts:20:7 › anonymous /demo/stripe?mode=card → /login with no account payload (HTML and RSC) (57ms)
+  ✓   9 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/register/plan → 200 without login (49ms)
+  ✓  10 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/register/owner → 200 without login (31ms)
+  ✓  11 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/register/pharmacies → 200 without login (22ms)
+  ✓  12 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/register/review → 200 without login (32ms)
+  ✓  13 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/stripe → 200 without login (18ms)
+  ✓  14 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/activation → 200 without login (29ms)
+  ✓  15 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/checkout-incomplete → 200 without login (18ms)
+  ✓  16 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/access-link → 200 without login (16ms)
+  ✓  17 [public] › e2e/public.boundaries.spec.ts:52:7 › public /demo/references/email → 200 without login (18ms)
+  ✓  18 [public] › e2e/public.boundaries.spec.ts:52:7 › public /login → 200 without login (21ms)
+  ✓  19 [public] › e2e/public.boundaries.spec.ts:58:5 › forged role values in query, cookies and storage grant nothing (1.0s)
+  ✓  20 [public] › e2e/public.boundaries.spec.ts:78:5 › foundation regressions: GET login 405, removed routes 404, /demo/sign-in → /login (114ms)
+  ✓  21 [public] › e2e/public.boundaries.spec.ts:86:5 › session expired banner via enum only (451ms)
+  ✓  22 [public] › e2e/public.journeys.spec.ts:52:5 › / opens the public plan screen with a sign-in path to the real /login (640ms)
+  ✓  23 [public] › e2e/public.journeys.spec.ts:65:5 › anonymous 1-store registration end to end, never asked to log in, no external hosts (6.7s)
+  ✓  24 [public] › e2e/public.journeys.spec.ts:104:5 › 3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through (4.3s)
+  ✓  25 [public] › e2e/public.journeys.spec.ts:123:5 › count reduction asks before discarding entered pharmacies (3.6s)
+  ✓  26 [public] › e2e/public.journeys.spec.ts:136:5 › validation keeps input, focuses the summary, flags duplicates without naming the owner (2.8s)
+  ✓  27 [public] › e2e/public.journeys.spec.ts:156:5 › abandoned checkout resumes with values; unknown payment pauses payment (8.2s)
+  ✓  28 [public] › e2e/public.journeys.spec.ts:178:5 › forged success URL or direct visits change nothing (577ms)
+  ✓  29 [public] › e2e/public.journeys.spec.ts:188:5 › hostile text renders as text (2.5s)
+  ✓  30 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/register/plan [prefilled_two_store] (10.6s)
+  ✓  31 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/register/owner [prefilled_two_store] (10.5s)
+  ✓  32 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/register/pharmacies?store=2 [prefilled_two_store] (10.7s)
+  ✓  33 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/register/review [prefilled_three_store] (11.2s)
+  ✓  34 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/activation [activation_ready] (10.8s)
+  ✓  35 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/activation [activation_delayed] (10.5s)
+  ✓  36 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/checkout-incomplete [checkout_unknown] (10.7s)
+  ✓  37 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/access-link [link_expired] (10.4s)
+  ✓  38 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /demo/references/email?variant=store_admin [prefilled_two_store] (10.7s)
+  ✓  39 [gate-m-public] › e2e/gate-m.public.spec.ts:30:7 › Gate M /login [fresh] (10.2s)
+  ✓  40 [gate-m-public] › e2e/gate-m.public.spec.ts:51:5 › Gate M checkout stand-in and review split at 1024 (3.2s)
+  ✓  41 [gate-m-public] › e2e/gate-m.public.spec.ts:78:5 › keyboard: plan → owner form reachable and submittable without a mouse (1.7s)
+  ✓  42 [gate-m-public] › e2e/gate-m.public.spec.ts:99:5 › 200% zoom proxy: review and plan reflow at half-width without overflow (3.1s)
+
+  42 passed (2.5m)
+exit=0

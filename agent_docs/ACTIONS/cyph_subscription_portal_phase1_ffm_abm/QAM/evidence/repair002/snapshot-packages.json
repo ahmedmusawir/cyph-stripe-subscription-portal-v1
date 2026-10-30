@@ -1,0 +1,20 @@
+[
+  {
+    "file": "FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip",
+    "sha256": "1c8a54658e2b9b79c61f68f8ad1633191fb0f692e2b9ebf111b3f7b0fd9a70f2",
+    "members": 81,
+    "indexVerified": true
+  },
+  {
+    "file": "FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip",
+    "sha256": "f852ff94664b0e0a664582c213a8334d8b779758e3f8f2c8fbd88a4b1c0019e7",
+    "members": 34,
+    "indexVerified": true
+  },
+  {
+    "file": "FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip",
+    "sha256": "ce6683df74a466fd5b8ce2c8ccf57bc59824fdb4f99d3a70ddca9d1e2ceec195",
+    "members": 53,
+    "indexVerified": true
+  }
+]

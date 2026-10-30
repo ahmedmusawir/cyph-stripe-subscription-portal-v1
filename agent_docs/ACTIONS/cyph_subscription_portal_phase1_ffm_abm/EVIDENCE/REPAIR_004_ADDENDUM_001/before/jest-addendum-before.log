@@ -1,0 +1,446 @@
+FAIL src/__tests__/portal-registration.test.ts
+  ● a submitted payment cannot be discarded or retried (REPAIR_004 addendum 1, R4-N01) › processing: no checkout outcome, resume, restart or new checkout applies, before or after a reload
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+        "paid",
+    -   false,
+    +   true,
+      ]
+
+      1012 |         for (const outcome of reg.CHECKOUT_OUTCOMES) {
+      1013 |           const step = reg.resolveCheckout(s, outcome);
+    > 1014 |           expect([outcome, step.result.ok]).toEqual([outcome, false]);
+           |                                             ^
+      1015 |           expect(step.state).toBe(s);
+      1016 |         }
+      1017 |         // Review's "Edit my details instead" was resolveCheckout('back') then resumeSignup.
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1014:45)
+
+  ● a submitted payment cannot be discarded or retried (REPAIR_004 addendum 1, R4-N01) › unknown: no checkout outcome, resume, restart or new checkout applies, before or after a reload
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      1017 |         // Review's "Edit my details instead" was resolveCheckout('back') then resumeSignup.
+      1018 |         expect(reg.resumeSignup(reg.resolveCheckout(s, 'back').state).result.ok).toBe(false);
+    > 1019 |         expect(reg.restartSignup(s).result).toMatchObject({ ok: false, code: 'conflict' });
+           |                                             ^
+      1020 |         for (const key of [KEY, OTHER]) expect(start(reg.requestQuote(s, deps).state, key).result).toMatchObject({ ok: false, code: 'conflict' });
+      1021 |         expect(s.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+      1022 |       }
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1019:45)
+
+  ● a submitted payment cannot be discarded or retried (REPAIR_004 addendum 1, R4-N01) › a completed payment cannot be restarted or reopened
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      1048 |     const s = reg.refreshActivation(submitted('processing')).state;
+      1049 |     expect(s.checkout?.status).toBe('paid');
+    > 1050 |     expect(reg.restartSignup(s).result).toMatchObject({ ok: false, code: 'conflict' });
+           |                                         ^
+      1051 |     expect(reg.resolveCheckout(s, 'back').result.ok).toBe(false);
+      1052 |     expect(start(reg.requestQuote(s, deps).state, OTHER).result.ok).toBe(false);
+      1053 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1050:41)
+
+  ● a completed payment whose scope cannot be established (REPAIR_004 addendum 1) › keeps its completed status and history, and no covered details are invented from the edited draft
+
+    expect(received).toBeNull()
+
+    Received: {"pharmacies": [{"adminAssignment": {"email": "replacement@demo-pharmacy.example", "fullName": "Replacement Admin", "kind": "other"}, "city": "Springfield", "id": "demo_reg_ph_1", "name": "Edited after payment", "ncpdp": "0000011", "npi": "0000000011", "phone": "(555) 010-0199", "software": "Liberty", "state": "Alabama", "street": "1 Test Street", "zip": "00000"}], "storeCount": 1}
+
+      1071 |     expect(s.checkout?.scope).toBeUndefined();
+      1072 |     expect(s.activation).toMatchObject({ paymentState: 'confirmed', provisioningState: 'ready', emailState: 'sent' });
+    > 1073 |     expect(reg.coveredDetails(s)).toBeNull();
+           |                                   ^
+      1074 |     const previews = reg.accessEmailPreviews(s);
+      1075 |     expect(previews.owner.pharmacyNames).toEqual([]);
+      1076 |     expect(JSON.stringify([previews.owner, previews.store_admin, previews.expired_resend])).not.toMatch(/Edited after payment|Replacement Admin/);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1073:35)
+
+FAIL src/__tests__/portal-checkout-hold.test.tsx (6.937 s)
+  ● a submitted payment on screen (REPAIR_004 addendum 1, R4-N01) › processing: Review offers no way to close it or pay again, and the service refuses both
+
+    expect(received).toBeNull()
+
+    Received: <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-4 py-2" type="button">Edit my details instead</button>
+
+      370 |       const before = s();
+      371 |       render(<ReviewView />);
+    > 372 |       expect(screen.queryByRole('button', { name: 'Edit my details instead' })).toBeNull();
+          |                                                                                 ^
+      373 |       expect(screen.queryByText('Your checkout on Stripe is still open')).toBeNull();
+      374 |       const notice = screen.getByTestId('review-submitted');
+      375 |       expect(notice.textContent).toMatch(/already submitted a payment/);
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:372:81)
+
+  ● a submitted payment on screen (REPAIR_004 addendum 1, R4-N01) › unknown: Review offers no way to close it or pay again, and the service refuses both
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="review-submitted"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-6xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"max-w-3xl"[39m
+          [36m>[39m
+            [36m<nav[39m
+              [33maria-label[39m=[32m"Signup progress"[39m
+              [33mclass[39m=[32m"mb-6"[39m
+            [36m>[39m
+              [36m<ol[39m
+                [33mclass[39m=[32m"hidden items-center gap-2 text-sm sm:flex"[39m
+              [36m>[39m
+                [36m<li[39m
+                  [33mclass[39m=[32m"flex items-center gap-2"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"grid h-6 w-6 place-items-center text-[11px] font-bold border border-success bg-success/10 text-foreground"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"lucide lucide-check h-3.5 w-3.5"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"24"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M20 6 9 17l-5-5"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium text-foreground"[39m
+                  [36m>[39m
+                    [0mPlan[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"sr-only"[39m
+                    [36m>[39m
+                      [0m (done)[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</li>[39m
+                [36m<li[39m
+                  [33mclass[39m=[32m"flex items-center gap-2"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"h-px w-8 bg-border"[39m
+                  [36m/>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"grid h-6 w-6 place-items-center text-[11px] font-bold border border-success bg-success/10 text-foreground"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"lucide lucide-check h-3.5 w-3.5"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"24"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M20 6 9 17l-5-5"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium text-foreground"[39m
+                  [36m>[39m
+                    [0mOwner[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"sr-only"[39m
+                    [36m>[39m
+                      [0m (done)[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</li>[39m
+                [36m<li[39m
+                  [33mclass[39m=[32m"flex items-center gap-2"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"h-px w-8 bg-border"[39m
+                  [36m/>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"grid h-6 w-6 place-items-center text-[11px] font-bold border border-success bg-success/10 text-foreground"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"lucide lucide-check h-3.5 w-3.5"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"24"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M20 6 9 17l-5-5"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium text-foreground"[39m
+                  [36m>[39m
+                    [0mPharmacy[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"sr-only"[39m
+                    [36m>[39m
+                      [0m (done)[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</li>[39m
+                [36m<li[39m
+                  [33maria-current[39m=[32m"step"[39m
+                  [33mclass[39m=[32m"flex items-center gap-2"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39...
+
+      372 |       expect(screen.queryByRole('button', { name: 'Edit my details instead' })).toBeNull();
+      373 |       expect(screen.queryByText('Your checkout on Stripe is still open')).toBeNull();
+    > 374 |       const notice = screen.getByTestId('review-submitted');
+          |                             ^
+      375 |       expect(notice.textContent).toMatch(/already submitted a payment/);
+      376 |       expect(notice.textContent).toMatch(/don't pay again/);
+      377 |       expect(screen.getByRole('link', { name: 'See payment status' }).getAttribute('href')).toBe(outcome === 'processing' ? '/demo/activation' : '/demo/checkout-incomplete');
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:374:29)
+
+  ● a submitted payment on screen (REPAIR_004 addendum 1, R4-N01) › processing: the stand-in shows the submitted notice with no payment outcomes
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="checkout-submitted"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33maria-live[39m=[32m"polite"[39m
+            [33mclass[39m=[32m"border border-border bg-card p-5"[39m
+            [33mdata-testid[39m=[32m"checkout-leaving"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-xl font-bold text-foreground"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-loader-circle h-5 w-5 animate-spin"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [0mOpening Stripe's secure checkout…[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-2 text-sm text-muted-foreground"[39m
+            [36m>[39m
+              [0mYou're leaving Pharmacy Books for a moment. Stripe handles the card details; we never see your card number. Standard plan · [0m
+              [0m1[0m
+              [0m [0m
+              [0mpharmacy[0m
+              [0m · [0m
+              [0m$99.00[0m
+              [0m due today (illustrative).[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-4 border-t border-border pt-4"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"[39m
+              [36m>[39m
+                [0mWhat happens next[0m
+              [36m</p>[39m
+              [36m<ol[39m
+                [33mclass[39m=[32m"mt-2 list-inside list-decimal space-y-1 text-sm text-foreground"[39m
+              [36m>[39m
+                [36m<li>[39m
+                  [0mStripe's page opens in this tab.[0m
+                [36m</li>[39m
+                [36m<li>[39m
+                  [0mPay, or use Stripe's back link to return here with everything saved.[0m
+                [36m</li>[39m
+                [36m<li>[39m
+                  [0mAfter payment you come back to an activation page and we email your access link.[0m
+                [36m</li>[39m
+              [36m</ol>[39m
+            [36m</div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"mt-4 text-xs text-muted-foreground"[39m
+            [36m>[39m
+              [0mNot redirected?[0m
+              [0m [0m
+              [36m<button[39m
+                [33mclass[39m=[32m"portal-link"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mContinue to Stripe[0m
+              [36m</button>[39m
+              [0m ·[0m
+              [0m [0m
+              [36m<a[39m
+                [33mclass[39m=[32m"portal-link"[39m
+                [33mhref[39m=[32m"/demo/register/review"[39m
+              [36m>[39m
+                [0mBack to review[0m
+              [36m</a>[39m
+            [36m</p>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      388 |     await submit('processing');
+      389 |     render(<CheckoutStandIn />);
+    > 390 |     const notice = screen.getByTestId('checkout-submitted');
+          |                           ^
+      391 |     expect(notice.textContent).toMatch(/already submitted/);
+      392 |     for (const id of ['outcome-paid', 'outcome-back', 'outcome-closed', 'outcome-unknown', 'outcome-declined']) expect(screen.queryByTestId(id)).toBeNull();
+      393 |   });
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:390:27)
+
+  ● a submitted payment on screen (REPAIR_004 addendum 1, R4-N01) › processing: Activation no longer offers "resume checkout"
+
+    expect(received).toBeNull()
+
+    Received: <a class="portal-link" href="/demo/stripe">resume checkout</a>
+
+      396 |     await submit('processing');
+      397 |     render(<ActivationView />);
+    > 398 |     expect(screen.queryByRole('link', { name: 'resume checkout' })).toBeNull();
+          |                                                                     ^
+      399 |     expect(document.body.textContent).toMatch(/don't pay again/);
+      400 |   });
+      401 |
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:398:69)
+
+  ● a submitted payment on screen (REPAIR_004 addendum 1, R4-N01) › a completed record whose paid scope cannot be established shows unavailable history, not the edited draft
+
+    expect(received).not.toMatch(expected)
+
+    Expected pattern: not /\$/
+    Received string:      "Activation progressPayment — DoneConfirmed by Stripe · $99.00 (illustrative)Pharmacy setup — DoneEdited after payment is set up in OwedBook.Access email — DoneSent to j•••@demo-pharmacy.example."
+
+      418 |     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe("You're in. Check your email.");
+      419 |     expect(tracks).toMatch(/Confirmed by Stripe/);
+    > 420 |     expect(tracks).not.toMatch(/\$/);
+          |                        ^
+      421 |     expect(document.body.textContent).not.toMatch(/Edited after payment/);
+      422 |     expect(screen.getByTestId('history-unavailable').textContent).toMatch(/can't show which pharmacies or what amount/);
+      423 |     expect(screen.queryByRole('button', { name: /Try payment again/ })).toBeNull();
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:420:24)
+
+Test Suites: 2 failed, 2 total
+Tests:       9 failed, 110 skipped, 3 passed, 122 total
+Snapshots:   0 total
+Time:        7.896 s, estimated 20 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts|src/__tests__/portal-checkout-hold.test.tsx with tests matching "addendum 1".
+Test results written to: ../../../../../tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r008/out/before/jest-addendum-before.json

@@ -1,0 +1,3 @@
+{"case":"not-charged-stale-refresh","beforeCheckout":"abandoned","resultOK":false,"afterCheckout":"abandoned"}
+{"case":"legacy-unknown-failed-resume","beforeCheckout":"unknown","beforePayment":"failed","resultOK":false,"afterCheckout":"unknown","afterPayment":"failed"}
+{"case":"legacy-unknown-second-checkout","oldCheckout":"unknown","resumeDiscarded":false,"secondAccepted":false,"newKey":"original_key_r4"}
