@@ -1,19 +1,17 @@
 # Recovery State — cyph-stripe-subscription-portal-v1
 
-## ▶ Resume here (updated 2026-10-30 11:23, Asia/Dhaka)
+## ▶ Resume here (updated 2026-10-30 11:32, Asia/Dhaka)
 - **Status:**
   - Gate Q **PASS** (JARVIS / QA Lead) for the frozen snapshot (manifest `f7181d3c…e9ab`).
-  - **Bound** to commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8` (parent `d6fe678`): read-only check matched; receipt at module `QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`.
-  - Documentation closeout complete.
-  - Push/merge Director-owned. Deploy/Gate D **NOT DONE**.
-- **Waiting on:** Tony commits the receipt and pointer updates (documentation-only), then pushes `qa/ffm-abm-001-subscription-portal`. Commands are in the latest response file.
-- **If asked to verify the documentation commit:**
-  1. Run `git diff --name-only f272617 <DOC_SHA>`; every path must be under `agent_docs/` or be a root `*.md`.
-  2. Run the helper on `<DOC_SHA>` and expect `match: true`.
-  Read-only; no new test campaign.
-- **Preserved:** R5-O03 accepted nonblocking (strict assertion FAILED, not repaired); C08 out of scope; Tony's manual acceptance (Director-reported); Coach confirmations pending; the decision's limitations.
-- **Deferred (JARVIS, 30 Oct):** do NOT remove `setActivationPlan` / `ACTIVATION_PLANS`. No product change is authorized.
+  - **Bound** to `f27261734fd0a3ac96253aa6c55e3b9e911125a8`; binding-receipt docs commit `037a7cb`.
+  - **Director merged and pushed:** `main` = `b26b4dbc619bdd78f1ec4a58cc2551e806ac4a2d` (merge of `b1fbdda` + `037a7cb`), equal to `origin/main`. The QA branch and `origin/qa/…` are at `037a7cb`.
+  - Read-only check of `main`: helper match true, 0 mismatches, 0 extra inputs; tree identical to the QA branch.
+  - Deploy/Gate D **NOT DONE**.
+- **Next:** nothing is open for Engineering. Deployment and Gate D are separate and Director-scoped. If the module records should carry the merge SHA, that needs a Director/Architect request; the integration record is Director-owned.
+- **Preserved:** R5-O03 accepted nonblocking (strict assertion FAILED); C08 out of scope; Tony's manual acceptance; Coach pending; the decision's limitations. `setActivationPlan` cleanup deferred.
 - **Never touch:** servers on :3000 and :3457; Cody's `/tmp/cody-r6-*`; `.env*.local`. No Git by me.
+
+Last action (2026-10-30 11:32): **Main merge verified (read-only).** `main` `b26b4db` (merge of `b1fbdda` + `037a7cb`) = `origin/main`; `f272617` is an ancestor. Helper on `b26b4db`: match true, 0 mismatched, 0 additional. The tree equals the QA branch tip `037a7cb`. Only RECOVERY.md, the session file and a response file changed locally (uncommitted).
 
 Last action (2026-10-30 11:23): **Commit binding recorded.** Tony's commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8` verified read-only: helper exit 0, match true, 0 mismatched/missing, 0 additional inputs; committed set = reviewed 1,441-path list; nothing outside the filter that can reach the build changed. The Gate Q PASS snapshot is bound to it. Pointers updated. No product change; no test campaign.
 Pending: Tony's documentation commit (receipt + pointers) and push. Deployment/Gate D NOT DONE.
