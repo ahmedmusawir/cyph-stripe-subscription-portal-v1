@@ -1,0 +1,40 @@
+
+Running 19 tests using 1 worker
+
+(node:1375097) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1375097) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [current-readers] › qa-e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (5.3s)
+  ✓   2 [current-readers] › qa-e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (5.0s)
+  ✓   3 [current-readers] › qa-e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (4.9s)
+  ✓   4 [current-readers] › qa-e2e/public.repair006.spec.ts:76:5 › R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key (7.3s)
+  ✓   5 [current-readers] › qa-e2e/public.repair006.spec.ts:104:5 › R5-F02 preserved: valid paid resend, from the email-failed scenario and from a sent email (5.4s)
+  ✓   6 [current-readers] › qa-e2e/public.repair006.spec.ts:118:5 › REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots (5.9s)
+(node:1375527) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1375527) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   7 [phase-notices] › qa-e2e/public.repair005.spec.ts:55:5 › R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key (6.9s)
+  ✓   8 [phase-notices] › qa-e2e/public.repair005.spec.ts:79:5 › R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery (8.3s)
+  ✓   9 [phase-notices] › qa-e2e/public.repair005.spec.ts:112:5 › R4-F02 paid branch: the same record can still be confirmed by Stripe (3.9s)
+  ✓  10 [phase-notices] › qa-e2e/public.repair005.spec.ts:121:5 › REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (9.9s)
+(node:1375878) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1375878) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  11 [scope-admin] › qa-e2e/public.repair004.spec.ts:73:5 › R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads (6.1s)
+  ✓  12 [scope-admin] › qa-e2e/public.repair004.spec.ts:92:5 › R3-F01 known scope: an unedited legacy open checkout binds the quote it opened with and can be paid (5.3s)
+  ✓  13 [scope-admin] › qa-e2e/public.repair004.spec.ts:101:5 › R3-F01 recovery: an edited legacy unknown payment stays unmatched; nothing charged → fresh quote → new key (7.0s)
+  ✓  14 [scope-admin] › qa-e2e/public.repair004.spec.ts:159:5 › R3-F02: completed activation and its previews name no admin nominated after payment (4.1s)
+  ✓  15 [scope-admin] › qa-e2e/public.repair004.spec.ts:174:5 › R3-F02 control: an admin the payment covered is still the one named and previewed (3.7s)
+  ✓  16 [scope-admin] › qa-e2e/public.repair004.spec.ts:209:5 › R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores (11.3s)
+  ✓  17 [scope-admin] › qa-e2e/public.repair004.spec.ts:241:5 › REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (9.9s)
+(node:1377446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1377446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  18 [declaration-safeguard] › qa-e2e/public.repair002.spec.ts:79:5 › CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works (11.8s)
+  ✓  19 [declaration-safeguard] › qa-e2e/public.repair002.spec.ts:160:5 › processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again (5.9s)
+
+  19 passed (2.2m)

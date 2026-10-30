@@ -1,0 +1,8 @@
+{
+  "offered": true,
+  "after": {
+    "checkout": null,
+    "payment": null,
+    "due": "$99.00"
+  }
+}

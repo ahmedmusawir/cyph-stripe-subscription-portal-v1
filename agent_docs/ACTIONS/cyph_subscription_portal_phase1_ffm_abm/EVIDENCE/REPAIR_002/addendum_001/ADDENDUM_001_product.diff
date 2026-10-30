@@ -1,0 +1,102 @@
+diff --git a/e2e/public.repair002.spec.ts b/e2e/public.repair002.spec.ts
+index c72be52..8a06c13 100644
+--- a/e2e/public.repair002.spec.ts
++++ b/e2e/public.repair002.spec.ts
+@@ -393,3 +393,45 @@ for (const s of HOLD_SURFACES) {
+     }
+   });
+ }
++
++// ── Manual-review addendum: C14 introduction matches the payment state ───────
++const C14_INTRO: { scenario: string; intro: string; locked: boolean }[] = [
++  { scenario: "checkout_unknown", intro: "Your details are saved. We're checking your payment status. Please don't pay again yet.", locked: true },
++  { scenario: "checkout_abandoned", intro: "Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.", locked: false },
++  { scenario: "checkout_declined", intro: "Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.", locked: false },
++];
++for (const c of C14_INTRO) {
++  test(`C14 intro [${c.scenario}]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark`, async ({ page }) => {
++    test.setTimeout(90_000);
++    await load(page, c.scenario);
++    for (const theme of THEMES) {
++      for (const width of [375, 1440]) {
++        await page.setViewportSize({ width, height: 900 });
++        await page.goto("/demo/checkout-incomplete");
++        await setTheme(page, theme);
++        await page.reload();
++        await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++        const main = page.locator("main");
++        await expect(main).toContainText(c.intro);
++        if (c.locked) {
++          await expect(main).not.toContainText("Payment wasn't completed");
++          await expect(main).toContainText("We're checking whether a payment went through");
++        }
++        await expect(page.getByTestId("incomplete-continue")).toBeEnabled({ enabled: !c.locked });
++        const r = await measure(page, `/demo/checkout-incomplete [${c.scenario}]`, width, theme);
++        record("gate-m-c14-intro.jsonl", r);
++        assertGate(r);
++        const fails = textFailures(await textContrast(page));
++        recordContrast("contrast-c14-intro.jsonl", { screen: `/demo/checkout-incomplete [${c.scenario}]`, width, theme, fails });
++        expect.soft(fails, `${c.scenario} ${theme} ${width}: text below threshold`).toEqual([]);
++        await page.screenshot({ path: `test-results/c14-intro-${c.scenario}_${theme}_${width}.png`, fullPage: true });
++      }
++    }
++    if (c.locked) {
++      // Recovery still resolves explicitly: "nothing charged" → resumable.
++      await page.getByTestId("unknown-not-charged").click();
++      await expect(page.getByTestId("incomplete-abandoned")).toBeVisible();
++      await expect(page.locator("main")).toContainText("Payment wasn't completed");
++    }
++  });
++}
+diff --git a/src/__tests__/portal-checkout-hold.test.tsx b/src/__tests__/portal-checkout-hold.test.tsx
+index b8a8f60..f8ccf93 100644
+--- a/src/__tests__/portal-checkout-hold.test.tsx
++++ b/src/__tests__/portal-checkout-hold.test.tsx
+@@ -157,3 +157,27 @@ describe('persisted storage and the whole-draft facade', () => {
+     expect(Date.now() - started).toBeLessThan(2000);
+   });
+ });
++
++describe('C14 introduction matches the payment state (manual review, REPAIR_002 addendum)', () => {
++  const UNKNOWN_INTRO = "Your details are saved. We're checking your payment status. Please don't pay again yet.";
++  it('unknown payment: no "wasn\'t completed" claim; payment stays locked', () => {
++    act(() => {
++      registrationHarness.selectScenario('checkout_unknown');
++    });
++    render(<CheckoutIncompleteView />);
++    expect(screen.getByText(UNKNOWN_INTRO)).toBeTruthy();
++    expect(screen.queryByText(/Payment wasn't completed/)).toBeNull();
++    expect(screen.getByText(/We're checking whether a payment went through/)).toBeTruthy();
++    expect((screen.getByTestId('incomplete-continue') as HTMLButtonElement).disabled).toBe(true);
++  });
++
++  it.each(['checkout_abandoned', 'checkout_declined'] as const)('%s keeps the confirmed-unpaid introduction and recovery', (id) => {
++    act(() => {
++      registrationHarness.selectScenario(id);
++    });
++    render(<CheckoutIncompleteView />);
++    expect(screen.getByText("Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.")).toBeTruthy();
++    expect(screen.queryByText(UNKNOWN_INTRO)).toBeNull();
++    expect((screen.getByTestId('incomplete-continue') as HTMLButtonElement).disabled).toBe(false);
++  });
++});
+diff --git a/src/components/portal/activation/CheckoutIncompleteView.tsx b/src/components/portal/activation/CheckoutIncompleteView.tsx
+index 653ef84..140fa5c 100644
+--- a/src/components/portal/activation/CheckoutIncompleteView.tsx
++++ b/src/components/portal/activation/CheckoutIncompleteView.tsx
+@@ -62,7 +62,14 @@ export function CheckoutIncompleteView() {
+       <PageHeader
+         eyebrow="Signup"
+         title={status === "expired" ? "This saved signup has expired" : "Welcome back. Let's finish your signup."}
+-        lead={status === "expired" ? undefined : `Your details for ${n} ${n === 1 ? "pharmacy are" : "pharmacies are"} saved. Payment wasn't completed, so your account isn't active yet.`}
++        lead={
++          status === "expired"
++            ? undefined
++            : status === "unknown"
++              ? // The outcome isn't known yet, so don't say payment failed (manual review, REPAIR_002 addendum).
++                "Your details are saved. We're checking your payment status. Please don't pay again yet."
++              : `Your details for ${n} ${n === 1 ? "pharmacy are" : "pharmacies are"} saved. Payment wasn't completed, so your account isn't active yet.`
++        }
+       />
+       <div className="mt-5" data-testid={`incomplete-${status}`}>
+         {status === "abandoned" && state.checkout?.closedReason ? (

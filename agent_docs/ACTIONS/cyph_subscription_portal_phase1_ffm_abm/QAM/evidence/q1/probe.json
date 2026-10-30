@@ -1,0 +1,20 @@
+{
+  "phase": "Q1 bounded readiness only",
+  "time": "2026-10-28T06:45:29.551Z",
+  "signInAttempts": 1,
+  "globalLogouts": 0,
+  "credentialSchema": true,
+  "target": {
+    "https": true,
+    "supabaseHost": true,
+    "configuredHostRecordedPrivately": true
+  },
+  "publicEntry": "/demo/register/plan",
+  "publicBodyVisible": true,
+  "anonymousDashboard": {
+    "status": 307,
+    "location": "/login"
+  },
+  "adminDashboard": false,
+  "authResult": "BLOCKED: did not reach dashboard; no sensitive error captured"
+}

@@ -1,0 +1,379 @@
+FAIL src/__tests__/portal-registration.test.ts
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › a new checkout records the pharmacies, count, code and price it was quoted for
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: {"dueNowCents": 14800, "pharmacies": [ObjectContaining {"name": "Example Test Pharmacy 1"}, ObjectContaining {"name": "Example Test Pharmacy 2"}], "storeCount": 2}
+    Received: undefined
+
+      705 |   it('a new checkout records the pharmacies, count, code and price it was quoted for', () => {
+      706 |     const s = submitted('processing', 2);
+    > 707 |     expect(s.checkout?.scope).toEqual({
+          |                               ^
+      708 |       storeCount: 2,
+      709 |       pharmacies: [expect.objectContaining({ name: 'Example Test Pharmacy 1' }), expect.objectContaining({ name: 'Example Test Pharmacy 2' })],
+      710 |       dueNowCents: 14800,
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:707:31)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › processing: after a pharmacy name edit the original payment can't confirm the edited signup
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      721 |         // The in-flight payment is held, not closed or charged again.
+      722 |         expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+    > 723 |         expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                        ^
+      724 |         expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+      725 |         const step = confirm(mode, edited);
+      726 |         expect(step.result).toMatchObject({ ok: false });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:723:40)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › processing: after a store count 1 → 2 with a second pharmacy edit the original payment can't confirm the edited signup
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      721 |         // The in-flight payment is held, not closed or charged again.
+      722 |         expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+    > 723 |         expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                        ^
+      724 |         expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+      725 |         const step = confirm(mode, edited);
+      726 |         expect(step.result).toMatchObject({ ok: false });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:723:40)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › processing: after a discount code edit the original payment can't confirm the edited signup
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      721 |         // The in-flight payment is held, not closed or charged again.
+      722 |         expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+    > 723 |         expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                        ^
+      724 |         expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+      725 |         const step = confirm(mode, edited);
+      726 |         expect(step.result).toMatchObject({ ok: false });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:723:40)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › unknown: after a pharmacy name edit the original payment can't confirm the edited signup
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      721 |         // The in-flight payment is held, not closed or charged again.
+      722 |         expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+    > 723 |         expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                        ^
+      724 |         expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+      725 |         const step = confirm(mode, edited);
+      726 |         expect(step.result).toMatchObject({ ok: false });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:723:40)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › unknown: after a store count 1 → 2 with a second pharmacy edit the original payment can't confirm the edited signup
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      721 |         // The in-flight payment is held, not closed or charged again.
+      722 |         expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+    > 723 |         expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                        ^
+      724 |         expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+      725 |         const step = confirm(mode, edited);
+      726 |         expect(step.result).toMatchObject({ ok: false });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:723:40)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › unknown: after a discount code edit the original payment can't confirm the edited signup
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      721 |         // The in-flight payment is held, not closed or charged again.
+      722 |         expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+    > 723 |         expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                        ^
+      724 |         expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+      725 |         const step = confirm(mode, edited);
+      726 |         expect(step.result).toMatchObject({ ok: false });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:723:40)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › processing: "use the details I paid for" restores the submitted scope, then the payment confirms exactly that
+
+    TypeError: reg.restoreSubmittedScope is not a function
+
+      735 |       const before = submitted(mode);
+      736 |       const edited = EDITS['store count 1 → 2 with a second pharmacy'](before);
+    > 737 |       const restored = reg.restoreSubmittedScope(edited);
+          |                            ^
+      738 |       expect(restored.result.ok).toBe(true);
+      739 |       const s = restored.state;
+      740 |       expect(s.draft.requestedStoreCount).toBe(1);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:737:28)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › unknown: "use the details I paid for" restores the submitted scope, then the payment confirms exactly that
+
+    TypeError: reg.restoreSubmittedScope is not a function
+
+      735 |       const before = submitted(mode);
+      736 |       const edited = EDITS['store count 1 → 2 with a second pharmacy'](before);
+    > 737 |       const restored = reg.restoreSubmittedScope(edited);
+          |                            ^
+      738 |       expect(restored.result.ok).toBe(true);
+      739 |       const s = restored.state;
+      740 |       expect(s.draft.requestedStoreCount).toBe(1);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:737:28)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › typing the original values back in is the same scope; nothing to restore when nothing changed
+
+    TypeError: reg.restoreSubmittedScope is not a function
+
+      755 |     expect(reg.checkoutHold(back.draft, back.checkout)).toBeNull();
+      756 |     expect(reg.refreshActivation(back).state.activation?.paymentState).toBe('confirmed');
+    > 757 |     expect(reg.restoreSubmittedScope(before).result).toMatchObject({ ok: false, code: 'conflict' });
+          |                ^
+      758 |     // Not for open or paid checkouts either.
+      759 |     const paid = reg.refreshActivation(before).state;
+      760 |     expect(reg.restoreSubmittedScope(reg.setStoreCount(paid, 2).state).result.ok).toBe(false);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:757:16)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › a withdrawn declaration is reported first; after re-acceptance the scope hold remains until restored
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "scope_changed"
+    Received: null
+
+      766 |     expect(reg.checkoutHold(s.draft, s.checkout)).toBe('owner_declaration');
+      767 |     s = reg.saveOwner(s, owner).state;
+    > 768 |     expect(reg.checkoutHold(s.draft, s.checkout)).toBe('scope_changed');
+          |                                                   ^
+      769 |     s = reg.restoreSubmittedScope(s).state;
+      770 |     expect(reg.resolveUnknownPayment(s, 'paid').state.checkout?.status).toBe('paid');
+      771 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:768:51)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › honest recovery for the edited details: "nothing charged" then a fresh quote for the new scope and a new key
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      780 |     const fresh = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: 'demo_key_000020' }, deps);
+      781 |     expect(fresh.result.ok).toBe(true);
+    > 782 |     expect(fresh.state.checkout?.scope).toMatchObject({ storeCount: 2, dueNowCents: 14800 });
+          |                                         ^
+      783 |   });
+      784 |
+      785 |   it('a processing payment that fails still resolves while the details differ (no charge, nothing to bind)', () => {
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:782:41)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › seeded submitted scenarios carry the scope of their seeded details
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      793 |     for (const id of ['activation_waiting', 'checkout_unknown'] as const) {
+      794 |       const s = reg.createRegistration(id);
+    > 795 |       expect(s.checkout?.scope).toMatchObject({ storeCount: 2, dueNowCents: 14800 });
+          |                                 ^
+      796 |       expect(reg.checkoutHold(s.draft, s.checkout)).toBeNull();
+      797 |     }
+      798 |     expect(reg.refreshActivation(reg.createRegistration('activation_waiting')).state.activation?.paymentState).toBe('confirmed');
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:795:33)
+
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › storage written before R-013: an unedited submitted checkout is bound to its draft; an edited one stays held
+
+    TypeError: reg.bindLegacyScope is not a function
+
+      805 |       return copy;
+      806 |     };
+    > 807 |     const unedited = reg.bindLegacyScope(strip(submitted('processing')));
+          |                          ^
+      808 |     expect(unedited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+      809 |     expect(reg.refreshActivation(unedited).state.activation?.paymentState).toBe('confirmed');
+      810 |     const edited = reg.bindLegacyScope(strip(EDITS['pharmacy name'](submitted('unknown'))));
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:807:26)
+
+  ● a closed checkout key is never reused (R-013, R2-F02) › QA case: withdraw → re-accept → fresh quote and consent: the closed checkout's key is refused, a new key works
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      836 |     s = reg.requestQuote(s, deps).state;
+      837 |     const replay = start(s, OLD);
+    > 838 |     expect(replay.result).toMatchObject({ ok: false, code: 'conflict' });
+          |                           ^
+      839 |     expect(replay.state).toBe(s);
+      840 |     const fresh = start(s, NEW);
+      841 |     expect(fresh.result.ok).toBe(true);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:838:27)
+
+  ● a closed checkout key is never reused (R-013, R2-F02) › Back from Stripe, then resume: the old key is refused for the new checkout
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      855 |   ])('%s: the old key is refused for the new checkout', (_label, close) => {
+      856 |     const s = reg.requestQuote(close(opened()), deps).state;
+    > 857 |     expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+          |                                  ^
+      858 |     expect(start(s, NEW).result.ok).toBe(true);
+      859 |   });
+      860 |
+
+      at src/__tests__/portal-registration.test.ts:857:34
+
+  ● a closed checkout key is never reused (R-013, R2-F02) › declined, then resume: the old key is refused for the new checkout
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      855 |   ])('%s: the old key is refused for the new checkout', (_label, close) => {
+      856 |     const s = reg.requestQuote(close(opened()), deps).state;
+    > 857 |     expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+          |                                  ^
+      858 |     expect(start(s, NEW).result.ok).toBe(true);
+      859 |   });
+      860 |
+
+      at src/__tests__/portal-registration.test.ts:857:34
+
+  ● a closed checkout key is never reused (R-013, R2-F02) › unknown → nothing charged, then resume: the old key is refused for the new checkout
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      855 |   ])('%s: the old key is refused for the new checkout', (_label, close) => {
+      856 |     const s = reg.requestQuote(close(opened()), deps).state;
+    > 857 |     expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+          |                                  ^
+      858 |     expect(start(s, NEW).result.ok).toBe(true);
+      859 |   });
+      860 |
+
+      at src/__tests__/portal-registration.test.ts:857:34
+
+  ● a closed checkout key is never reused (R-013, R2-F02) › details changed while open: the old key is refused for the new checkout
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      855 |   ])('%s: the old key is refused for the new checkout', (_label, close) => {
+      856 |     const s = reg.requestQuote(close(opened()), deps).state;
+    > 857 |     expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+          |                                  ^
+      858 |     expect(start(s, NEW).result.ok).toBe(true);
+      859 |   });
+      860 |
+
+      at src/__tests__/portal-registration.test.ts:857:34
+
+  ● a closed checkout key is never reused (R-013, R2-F02) › starting a new signup after expiry keeps the spent keys
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 1
+
+      Object {
+    -   "code": "conflict",
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      863 |     let s = reg.restartSignup(expired).state;
+      864 |     s = reg.requestQuote(reg.saveOwner(reg.savePharmacy(s, 0, pharmacy(1)).state, owner).state, deps).state;
+    > 865 |     expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+          |                                  ^
+      866 |     expect(start(s, NEW).result.ok).toBe(true);
+      867 |   });
+      868 |
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:865:34)
+
+Test Suites: 1 failed, 1 total
+Tests:       20 failed, 62 skipped, 2 passed, 84 total
+Snapshots:   0 total
+Time:        0.533 s, estimated 1 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts with tests matching "R-013".
+Test results written to: agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/before/jest-r013-before.json

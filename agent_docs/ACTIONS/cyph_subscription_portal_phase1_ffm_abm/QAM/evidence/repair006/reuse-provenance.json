@@ -1,0 +1,24 @@
+{
+  "originalCandidate": "snapshot:fb3b8cdfbf390f5ce1b4546537160f3cf0422e014b09dbb584a8fed86fdb014d",
+  "originalBase": "d6fe67839961fcbbf801b0bb04d3a2522e7b1f36",
+  "originalPackageSHA256": "1d3154c4e51f021773941a45eb170f67a13f5da5fd7cdfa977543036763893dd",
+  "files": [
+    {
+      "path": "reused-evidence/cody-r5-oracle.jsonl",
+      "sha256": "e83bf1f7bc49f24f83e086c9f403b607c8f80f0c1dfc4454a6a5cf40124435bc"
+    },
+    {
+      "path": "reused-evidence/matrix-comparison.json",
+      "sha256": "b2ca64154016e5355b4f29440aace152c181731087b4a7115f1c64b42e66f95c"
+    },
+    {
+      "path": "reused-evidence/snapshot-input-manifest.json",
+      "sha256": "fb3b8cdfbf390f5ce1b4546537160f3cf0422e014b09dbb584a8fed86fdb014d"
+    },
+    {
+      "path": "reused-evidence/legacy-source-provenance.json",
+      "sha256": "2dc29e0032b27efa82e163be51751fdac282453d234e6970db71792f48edf1c2"
+    }
+  ],
+  "basis": "Actual function/global statement text comparison and full input manifest delta. Prior independent oracle conclusions reused with original provenance; current full Jest reruns the engineering matrix."
+}

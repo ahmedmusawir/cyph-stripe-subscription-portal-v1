@@ -6,7 +6,7 @@ import { DemoNotice } from "../Alert";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { PageHeader } from "../PageHeader";
 import { EmailPreview } from "./EmailPreview";
-import { accessEmailPreviews, EMAIL_VARIANTS, formatCents, initialRecurringCents, useRegistration, type EmailVariant } from "@/services/portal";
+import { accessEmailPreviews, coveredDetails, EMAIL_VARIANTS, formatCents, initialRecurringCents, useRegistration, type EmailVariant } from "@/services/portal";
 
 const TAB: Record<EmailVariant, string> = {
   owner: "Owner access",
@@ -28,11 +28,16 @@ export function EmailReferenceView({ variant }: { variant: EmailVariant }) {
 
   const emails = accessEmailPreviews(state);
   const draft = state.draft;
-  const n = draft.requestedStoreCount;
+  // Null: a payment whose details can't be established (REPAIR_004 addendum 1); claim none.
+  const covered = coveredDetails(state);
+  const n = covered?.storeCount;
   const owner = [draft.owner.firstName, draft.owner.lastName].filter(Boolean).join(" ") || "Jordan Ellis";
-  const nominated = draft.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+  const nominated = covered?.pharmacies.find((p) => p.adminAssignment?.kind === "other");
   const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
-  const planLine = `Standard plan · ${n} ${n === 1 ? "pharmacy" : "pharmacies"} · ${formatCents(initialRecurringCents(n))} / month (illustrative)`;
+  const planLine =
+    n === undefined
+      ? "Standard plan · monthly"
+      : `Standard plan · ${n} ${n === 1 ? "pharmacy" : "pharmacies"} · ${formatCents(initialRecurringCents(n))} / month (illustrative)`;
   const adminNote = admin ? `${admin.fullName} received a separate invitation to administer ${nominated?.name}.` : undefined;
 
   return (

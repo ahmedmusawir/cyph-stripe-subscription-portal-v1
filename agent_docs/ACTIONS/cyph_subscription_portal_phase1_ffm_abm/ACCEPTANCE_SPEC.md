@@ -1,5 +1,5 @@
 # Acceptance specification — FFM-ABM-001-SUBSCRIPTION-PORTAL
-Version 1.3 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.3 adds R-012 (REPAIR_002) text to AC-05 and AC-06a; no criterion is removed or relaxed. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
+Version 1.8 · 30 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.8 adds R-014 addendum 1 (REPAIR_006) text to AC-11; no criterion is removed or relaxed. v1.7 adds R-014 (REPAIR_005) text to AC-10, AC-11 and AC-13; no criterion is removed or relaxed. v1.6 adds R-013 addendum 2 (REPAIR_004 addendum 1) text to AC-10, AC-11 and AC-13; no criterion is removed or relaxed. v1.5 adds R-013 addendum 1 (REPAIR_004) text to AC-10, AC-12 and AC-13; no criterion is removed or relaxed. v1.4 adds R-013 (REPAIR_003) text to AC-10 and AC-13; no criterion is removed or relaxed. v1.3 adds R-012 (REPAIR_002) text to AC-05 and AC-06a; no criterion is removed or relaxed. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
 
 ## Basis and grading
 APP_BRIEF v1.1, DATA_CONTRACT v1.1, IMPLEMENTATION_CONTRACT v1.0, received UI_SPEC v1.0 with R-004. Each AC is required for the declared FFM scope. No arbitrary screen/test count replaces behavior. All mock checks run in a locally served app or isolated service tests; real access checks use only the authorized existing shared-dev auth target. Deployment/live billing/SSO are excluded.
@@ -79,28 +79,28 @@ Every evidence record includes input/precondition, expected result, actual resul
 **Evidence:** Rejected stale quote, cleared checks and no mutation.
 
 ## AC-10 — Initial checkout boundary
-**Requirement:** Checkout opens a local labelled Stripe stand-in with no editable card fields. Cancel/decline retain draft and inactive state. Browser return or forged success route alone neither authenticates nor confirms payment.
+**Requirement:** Checkout opens a local labelled Stripe stand-in with no editable card fields. Cancel/decline retain draft and inactive state. Browser return or forged success route alone neither authenticates nor confirms payment. (R-013) A checkout is bound to the scope it was quoted for (pharmacies, count, code, price): a submitted payment never confirms or provisions details edited after submission; the customer can restore the submitted details, and nothing is charged again. An operation key whose checkout was closed or replaced is refused at the service boundary; same-key replay of an open checkout stays idempotent. (R-013 addendum 1) A checkout stored before scopes were recorded is bound only from retained evidence (its own quote for the same draft revision, or an unchanged demo seed); otherwise it is held: no scope is invented, edited details never confirm, and the customer is told not to pay again. (R-013 addendum 2) A submitted payment (processing or unknown) is never closed, replayed, restarted or paid again from Review, the stand-in, back navigation, reload or a direct service call; it resolves only through Stripe's answer. (R-014) The checkout record governs: a stale activation flag never confirms a closed checkout, never discards an unknown one, and never reverses a paid one.
 
 **Verification:** Browser happy/decline/back and route-tamper negatives.
 
 **Evidence:** State transitions and zero billing-network requests.
 
 ## AC-11 — Activation separation
-**Requirement:** Waiting payment, confirmed/provisioning, ready, delayed, failed payment, failed email and resend states remain distinct. Paid/setup delay never asks to repay; email failure offers simulated resend. No automatic customer login.
+**Requirement:** Waiting payment, confirmed/provisioning, ready, delayed, failed payment, failed email and resend states remain distinct. Paid/setup delay never asks to repay; email failure offers simulated resend. No automatic customer login. (R-013 addendum 2) Waiting payment never offers to resume checkout. A completed payment whose paid details can't be established keeps its completed state and says those details are unavailable, never showing later draft edits as what was paid for. (R-014) Refresh is offered only while a payment is processing or being set up; "Try payment again" only for a recorded failure on a declined checkout. (R-014 addendum 1) A paid checkout always reads as paid; if its setup or email outcome isn't recorded consistently, the page says those outcomes are unavailable rather than claiming them. Resend is accepted only for a paid checkout whose recorded setup finished.
 
 **Verification:** Mock transition tests and representative browser states.
 
 **Evidence:** Three-track output with matching financial/setup/email state.
 
 ## AC-12 — Owner versus admin email
-**Requirement:** Choosing another admin keeps owner access and separately previews nominated-admin invitation. Names/store list match submitted draft. All recipients synthetic; preview actions never send mail.
+**Requirement:** Choosing another admin keeps owner access and separately previews nominated-admin invitation. Names/store list match submitted draft. All recipients synthetic; preview actions never send mail. (R-013 addendum 1) After payment, the invitation claim, its preview and the store list come from what the payment covered, never from later draft edits.
 
 **Verification:** Browser and service checks.
 
 **Evidence:** Owner/admin previews, labelled local handoffs.
 
 ## AC-13 — Abandoned and unknown checkout
-**Requirement:** Abandoned/declined is resumable with values retained; expired state clearly requires restart. Unknown payment pauses payment retry and offers safe status handling without declaring no charge.
+**Requirement:** Abandoned/declined is resumable with values retained; expired state clearly requires restart. Unknown payment pauses payment retry and offers safe status handling without declaring no charge. (R-013) If details change while payment is unknown, "Stripe confirms payment" is held until the submitted details are restored; "nothing charged" stays available and leads to a fresh quote, fresh consent and a new operation key. (R-013 addendum 1) The same holds for a stored unknown payment that can't be matched to any recorded scope: "Stripe confirms payment" stays held and "nothing charged" stays available. (R-013 addendum 2) Genuine payment failure and confirmed nothing-charged remain the only ways back to a fresh quote while a payment is submitted. (R-014) A nothing-charged resolution is terminal and leaves nothing to refresh; an unknown payment carrying an old failed flag is resolved on this page before any recovery.
 
 **Verification:** Browser scenarios and command rejection.
 

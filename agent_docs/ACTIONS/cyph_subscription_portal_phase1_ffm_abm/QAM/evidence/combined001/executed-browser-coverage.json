@@ -1,0 +1,1967 @@
+[
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /dashboard \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 258,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/stores/add \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 84,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/stores/confirm \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 77,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/stores/result \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 62,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/references/owedbook \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 49,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/stripe?mode=portal \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 63,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/stripe?mode=portal&purpose=cancel \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 51,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 20,
+    "title": "anonymous /demo/stripe?mode=card \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 41,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/register/plan \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 41,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/register/owner \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 21,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/register/pharmacies \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 18,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/register/review \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 26,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/stripe \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 20,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/activation \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 20,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/checkout-incomplete \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 19,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/access-link \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 19,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /demo/references/email \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 16,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 52,
+    "title": "public /login \u2192 200 without login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 18,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 58,
+    "title": "forged role values in query, cookies and storage grant nothing",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1077,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 78,
+    "title": "foundation regressions: GET login 405, removed routes 404, /demo/sign-in \u2192 /login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 90,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.boundaries.spec.ts",
+    "line": 86,
+    "title": "session expired banner via enum only",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 430,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 52,
+    "title": "/ opens the public plan screen with a sign-in path to the real /login",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 704,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 65,
+    "title": "anonymous 1-store registration end to end, never asked to log in, no external hosts",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6875,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 104,
+    "title": "3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4865,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 123,
+    "title": "count reduction asks before discarding entered pharmacies",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3587,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 136,
+    "title": "validation keeps input, focuses the summary, flags duplicates without naming the owner",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2758,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 156,
+    "title": "abandoned checkout resumes with values; unknown payment pauses payment",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7663,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 178,
+    "title": "forged success URL or direct visits change nothing",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 626,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.journeys.spec.ts",
+    "line": 188,
+    "title": "hostile text renders as text",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2113,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.owner-declaration.spec.ts",
+    "line": 22,
+    "title": "no job-title dropdown; declaration is unchecked and required; missing it blocks progression",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1403,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.owner-declaration.spec.ts",
+    "line": 41,
+    "title": "accepted declaration survives Back and reload; separate from terms/payment consent",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2000,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.owner-declaration.spec.ts",
+    "line": 60,
+    "title": "a pre-amendment (v1) draft does not acquire acceptance",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1285,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.owner-declaration.spec.ts",
+    "line": 85,
+    "title": "Me / Someone else copy keeps ownership and billing with the registering owner",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1683,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.owner-declaration.spec.ts",
+    "line": 98,
+    "title": "keyboard + mobile + both themes: declaration usable at 375 and 1440",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2712,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=checkout&mode=portal \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 45,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=portal&mode=checkout \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 45,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=card&mode=card \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 33,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=checkout&mode=card \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 45,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=card&mode=portal \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 50,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=portal \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 40,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=card \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 41,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=Portal \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 41,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=%20portal%20 \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 41,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=CARD&purpose=change_card \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 76,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=portal&purpose=cancel&purpose=manage \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 34,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode=unknown \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 41,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 25,
+    "title": "F03 anonymous /demo/stripe?mode= \u2192 /login, no account payload (HTML and RSC)",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 30,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 43,
+    "title": "F03 public initial checkout stays public: /demo/stripe",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 22,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 43,
+    "title": "F03 public initial checkout stays public: /demo/stripe?mode=checkout",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 20,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 43,
+    "title": "F03 public initial checkout stays public: /demo/stripe?mode=checkout&mode=checkout",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 17,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 43,
+    "title": "F03 public initial checkout stays public: /demo/stripe?mode=CHECKOUT",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 19,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm? \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 43,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm?type=email \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 21,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm?token_hash= \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 24,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=bogus \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3329,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 362,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm?token_hash=not-a-real-hash&type=email&next=https://evil.example/ \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 353,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 63,
+    "title": "AC-26 /api/auth/confirm?type=recovery&next=//evil.example \u2192 same-origin /login, no session",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 23,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 78,
+    "title": "G06: plan counter passes 20; 21 stores price by repeat-N",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1472,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/register/plan [fresh]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3762,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/register/plan [quote_unavailable]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3774,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/register/owner [prefilled_two_store]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4071,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/register/owner [fresh]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3900,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/register/pharmacies?store=2 [prefilled_two_store]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4056,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/register/review [prefilled_three_store]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4270,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/stripe [prefilled_one_store]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3847,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/checkout-incomplete [checkout_abandoned]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3961,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/checkout-incomplete [checkout_declined]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4024,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/checkout-incomplete [checkout_unknown]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3961,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/checkout-incomplete [checkout_expired]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3937,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/activation [activation_waiting]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3813,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/activation [activation_delayed]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3893,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/activation [activation_email_failed]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4052,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/activation [activation_payment_failed]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3810,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/activation [activation_ready]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4015,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/access-link [link_expired]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4014,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/access-link [link_used]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3831,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/access-link [link_request_error]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3804,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /demo/references/email?variant=owner [prefilled_two_store]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4085,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /login [fresh]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3652,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.repair.spec.ts",
+    "line": 133,
+    "title": "F01 contrast: /login?reason=session_expired [fresh]",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3914,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.zoom.spec.ts",
+    "line": 10,
+    "title": "200% zoom emulation /demo/register/plan: no horizontal overflow, primary action reachable",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1995,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.zoom.spec.ts",
+    "line": 10,
+    "title": "200% zoom emulation /demo/register/owner: no horizontal overflow, primary action reachable",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1960,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "public.zoom.spec.ts",
+    "line": 10,
+    "title": "200% zoom emulation /login: no horizontal overflow, primary action reachable",
+    "project": "public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1813,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/register/plan [prefilled_two_store]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10691,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/register/owner [prefilled_two_store]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10403,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/register/pharmacies?store=2 [prefilled_two_store]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10561,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/register/review [prefilled_three_store]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10976,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/activation [activation_ready]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10676,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/activation [activation_delayed]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10478,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/checkout-incomplete [checkout_unknown]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10704,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/access-link [link_expired]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10482,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /demo/references/email?variant=store_admin [prefilled_two_store]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10904,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 30,
+    "title": "Gate M /login [fresh]",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10183,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 51,
+    "title": "Gate M checkout stand-in and review split at 1024",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3184,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 78,
+    "title": "keyboard: plan \u2192 owner form reachable and submittable without a mouse",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1776,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "gate-m.public.spec.ts",
+    "line": 102,
+    "title": "200% zoom proxy: review and plan reflow at half-width without overflow",
+    "project": "gate-m-public",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3330,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 53,
+    "title": "real admin reaches account management; synthetic account is labelled",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8300,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 72,
+    "title": "add store 2 \u2192 3: $197.00, three distinct stores, invitation pending",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 9892,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 88,
+    "title": "1 \u2192 2 then failure leaves the plan unchanged; unknown blocks a second attempt",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 12326,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 111,
+    "title": "paid but setup needs attention: one increment, invitation held",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8813,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 123,
+    "title": "store admin and member personas get the owner-contact view, not billing data",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7447,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 135,
+    "title": "Stripe portal return: refreshing \u2192 cancellation scheduled; handoff error retry",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 12754,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 152,
+    "title": "reload keeps the account demo; reset restores baseline",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8837,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 170,
+    "title": "Gate M account /dashboard [two_store_active]",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 40381,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 170,
+    "title": "Gate M account /dashboard [past_due]",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 37255,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 170,
+    "title": "Gate M account /dashboard [no_pharmacies]",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 39968,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 170,
+    "title": "Gate M account /demo/stores/add [add_draft_restored]",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 35567,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 170,
+    "title": "Gate M account /demo/references/owedbook [two_store_active]",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 37060,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 170,
+    "title": "Gate M account /demo/stripe?mode=portal&purpose=manage [two_store_active]",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 33667,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 188,
+    "title": "Gate M confirm + table/card switch at 768",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6959,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.journeys.spec.ts",
+    "line": 207,
+    "title": "evidence screenshots (real identity masked)",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 25733,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 30,
+    "title": "F02: load error stays until Retry, survives navigation and reload, Retry recovers",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 11058,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 57,
+    "title": "F02: Retry shows a busy state, then a coherent account (both themes)",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8197,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 70,
+    "title": "O04: approved pharmacies section, cards, count and refresh line (mobile + desktop)",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3634,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 115,
+    "title": "O04: returned-from-Stripe and refreshing variants of the refresh line",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5600,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 125,
+    "title": "transient states are observable: loading, launching, saving, quote loading, confirming",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 12534,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 186,
+    "title": "keyboard only: add store \u2192 confirm \u2192 result with no pointer input",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 9469,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard active",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 17758,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard past due",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 15236,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard cancel scheduled",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 15109,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard canceled",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 15744,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard no pharmacies",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 16312,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard load error",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 17179,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: dashboard handoff error",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 16802,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: add store draft restored",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 15219,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: add store errors",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 15176,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: owedbook",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 14922,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 257,
+    "title": "F01 contrast: portal stand-in",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 14889,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 302,
+    "title": "O04 evidence screenshots (real identity masked)",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7254,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "file": "account.repair.spec.ts",
+    "line": 283,
+    "title": "200% zoom emulation / dashboard cards and add-store confirm reflow without overflow; actions reachable",
+    "project": "account",
+    "expected": "passed",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7439,
+        "retry": 0
+      }
+    ]
+  }
+]

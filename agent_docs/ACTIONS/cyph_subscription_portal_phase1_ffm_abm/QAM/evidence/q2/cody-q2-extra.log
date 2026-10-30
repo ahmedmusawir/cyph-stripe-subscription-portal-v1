@@ -1,0 +1,77 @@
+
+Running 7 tests using 1 worker
+
+(node:773819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:773819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 qa-tests/account.extra.spec.ts:5:5 › T04/T15/T21 all account scenarios, final pills and rendered contrast both themes (4.0m)
+(node:775935) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:775935) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 qa-tests/account.extra.spec.ts:13:5 › T09/T29 account clock invalidates current quote and refresh renews consent (8.1s)
+(node:776128) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:776128) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 qa-tests/account.extra.spec.ts:16:5 › T23 account keyboard tab navigation and billing handoff (11.2s)
+  ✓  4 qa-tests/account.extra.spec.ts:19:5 › T19 local card and resume handoff outcomes (9.2s)
+(node:776452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:776452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 qa-tests/public.extra.spec.ts:8:5 › T04/T29 all public scenarios both themes and state-specific surfaces (29.2s)
+  ✓  6 qa-tests/public.extra.spec.ts:13:5 › T09/T29 public clock expires quote immediately and refresh clears consent (1.7s)
+  ✓  7 qa-tests/public.extra.spec.ts:20:5 › T23 focused and hovered rendered contrast plus error states (1.5s)
+
+
+  1) qa-tests/account.extra.spec.ts:5:5 › T04/T15/T21 all account scenarios, final pills and rendered contrast both themes 
+
+    [31mTest timeout of 240000ms exceeded.[39m
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+    [2m  - waiting for getByTestId('load-retry')[22m
+
+
+       8 |  await seed(page,id);await setTheme(page,theme);await page.setViewportSize({width:375,height:900});await expect(page.locator('h1')).toBeVisible();const state=await page.evaluate(()=>{const k=Object.keys(sessionStorage).find(k=>k.includes(':account:'));return k?JSON.parse(sessionStorage.getItem(k)!).state.s.scenario:null});expect(state).toBe(id);
+       9 |  const geometry=await measure(page,new URL(page.url()).pathname,375,theme);const pills=await page.locator('main span.self-start').evaluateAll(els=>els.map(el=>({width:el.getBoundingClientRect().width,parent:el.parentElement!.getBoundingClientRect().width,align:getComputedStyle(el).alignSelf})));for(const pill of pills){expect(pill.align).toBe('flex-start');expect(pill.width).toBeLessThan(pill.parent)}record({id,theme,geometry,pills,contrast:await contrast(page)});assertGate(geometry);
+    > 10 |  if(id==='load_error'){await page.getByTestId('load-retry').click();await expect(page.getByTestId('monthly-total')).toBeVisible();}
+         |                                                             ^
+      11 |  }
+      12 | });
+      13 | test('T09/T29 account clock invalidates current quote and refresh renews consent',async({page})=>{
+        at /tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts:10:61
+
+    Error Context: ../cody-q2-extra-output/account.extra-T04-T15-T21--6932f-ndered-contrast-both-themes/error-context.md
+
+  2) qa-tests/account.extra.spec.ts:13:5 › T09/T29 account clock invalidates current quote and refresh renews consent 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('charged-today')
+    Expected: [32m"$24.50"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toHaveText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('charged-today')[22m
+
+
+      12 | });
+      13 | test('T09/T29 account clock invalidates current quote and refresh renews consent',async({page})=>{
+    > 14 |  await seed(page,'add_draft_restored');await page.getByTestId('review-price').click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await page.locator('#pc').check();await controls(page);await page.getByRole('button',{name:'Advance 31 minutes'}).click();await expect(page.getByText('This quote expired',{exact:true})).toBeVisible();await expect(page.getByTestId('confirm-add')).toBeDisabled();record({id:'account-clock',expiredVisible:true});await page.getByRole('button',{name:'Refresh quote',exact:true}).click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await expect(page.locator('#pc')).not.toBeChecked();
+         |                                                                                                                                       ^
+      15 | });
+      16 | test('T23 account keyboard tab navigation and billing handoff',async({page})=>{
+      17 |  await seed(page,'two_store_active');await page.locator('summary',{hasText:'Demo controls'}).click();await page.getByTestId('add-store').focus();await page.keyboard.press('Enter');await expect(page.getByLabel('Pharmacy name')).toBeVisible();await page.getByTestId('review-price').focus();await page.keyboard.press('Enter');await expect(page.getByTestId('error-summary')).toBeFocused();await page.keyboard.press('Tab');const focused=await page.evaluate(()=>({tag:document.activeElement?.tagName,outline:getComputedStyle(document.activeElement!).outlineStyle}));record({id:'keyboard-error-summary',focused});await page.goto('/dashboard');await page.getByTestId('manage-billing').focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/mode=portal/);await page.getByTestId('portal-no-change').focus();await page.keyboard.press('Enter');await expect(page.getByText('Nothing changed on this account')).toBeVisible();
+        at /tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts:14:135
+
+    Error Context: ../cody-q2-extra-output/account.extra-T09-T29-acco-b012a--and-refresh-renews-consent/error-context.md
+
+  2 failed
+    qa-tests/account.extra.spec.ts:5:5 › T04/T15/T21 all account scenarios, final pills and rendered contrast both themes 
+    qa-tests/account.extra.spec.ts:13:5 › T09/T29 account clock invalidates current quote and refresh renews consent 
+  5 passed (5.3m)

@@ -9,7 +9,8 @@ import { Alert, DemoNotice } from "../Alert";
 import { DemoOutcomes, ExternalHandoffPanel } from "../ExternalHandoffPanel";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { Pill } from "../Pill";
-import { checkoutHold, formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
+import { checkoutHold, formatCents, isSubmitted, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
+import { ScopeHold } from "../activation/ActivationView";
 
 // C05 initial-checkout boundary (PUBLIC). Our "leaving" page, then a labelled
 // stand-in for Stripe Checkout with NO editable card fields. Only the explicit
@@ -68,7 +69,40 @@ export function CheckoutStandIn() {
     );
   }
 
-  const hold = checkoutHold(draft);
+  const hold = checkoutHold(draft, checkout);
+  if (hold === "scope_changed") {
+    // R-013: a submitted payment whose details changed afterwards; activation offers the way back.
+    // A pre-R-013 checkout with no proof of what it was for can't be matched at all (REPAIR_004).
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <div data-testid="checkout-hold">
+          {checkout.scope ? (
+            <Alert tone="warning" title="Your details changed after you paid">
+              This payment can only go ahead for the details you submitted. Don&apos;t pay again.{" "}
+              <Link href="/demo/activation" className="portal-link">See activation status</Link>
+            </Alert>
+          ) : (
+            <ScopeHold paidFor={undefined} reference="demo_ck_01" />
+          )}
+        </div>
+      </PageContainer>
+    );
+  }
+  if (isSubmitted(state)) {
+    // R4-N01: payment was already submitted on Stripe; only Stripe's answer resolves it.
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <div data-testid="checkout-submitted">
+          <Alert tone="info" title="You've already submitted this payment">
+            Stripe is confirming it, so there&apos;s nothing to do on this page. Please don&apos;t pay again.{" "}
+            <Link href="/demo/activation" className="portal-link">See payment status</Link>
+          </Alert>
+        </div>
+      </PageContainer>
+    );
+  }
   if (hold) {
     // R-012: an open checkout can't be paid while its prerequisites are unmet.
     return (

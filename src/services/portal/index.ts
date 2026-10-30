@@ -9,14 +9,19 @@ export { formatDate, formatTime, maskEmail } from './format';
 export {
   accessEmailPreviews,
   checkoutHold,
+  consistentActivation,
+  coveredDetails,
   estimateAvailable,
   firstIncomplete,
   isEmailVariant,
   isPharmacyStep,
   isQuoteExpired,
+  isSubmitted,
+  paymentPhase,
   EMAIL_VARIANTS,
 } from './registration';
-export type { EmailVariant, CheckoutHold, CheckoutOutcome, RegistrationStep } from './registration';
+export type { EmailVariant, CheckoutHold, CheckoutOutcome, PaymentPhase, RegistrationStep } from './registration';
+export type { CheckoutScope } from '@/types/portal/state';
 export {
   addStoreAvailability,
   lastOperationPharmacy,

@@ -10,7 +10,8 @@ import { DemoOutcomes } from "../ExternalHandoffPanel";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { PageHeader } from "../PageHeader";
 import { Pill } from "../Pill";
-import { checkoutHold, formatCents, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+import { checkoutHold, formatCents, initialRecurringCents, isSubmitted, registration, useRegistration } from "@/services/portal";
+import { ScopeHold } from "./ActivationView";
 
 // C14 Checkout not completed: resumable · payment_unknown · declined · expired.
 // Unknown pauses payment ("don't pay again") without declaring no charge.
@@ -30,6 +31,9 @@ export function CheckoutIncompleteView() {
         <Alert tone="info" title="There's no unfinished checkout">
           {status === "paid" ? (
             <Link href="/demo/activation" className="portal-link">See activation status</Link>
+          ) : status === "pending" && isSubmitted(state) ? (
+            // R4-N01: a submitted payment isn't an open checkout.
+            <Link href="/demo/activation" className="portal-link">See payment status</Link>
           ) : status === "pending" ? (
             <Link href="/demo/stripe" className="portal-link">Back to the open checkout</Link>
           ) : (
@@ -41,7 +45,7 @@ export function CheckoutIncompleteView() {
   }
 
   const n = draft.requestedStoreCount;
-  const hold = checkoutHold(draft);
+  const hold = checkoutHold(draft, state.checkout);
   const names = draft.pharmacies.slice(0, n).map((p) => p.name).filter(Boolean).join(" · ");
   const due = quote?.dueNowCents ?? initialRecurringCents(n);
 
@@ -62,7 +66,14 @@ export function CheckoutIncompleteView() {
       <PageHeader
         eyebrow="Signup"
         title={status === "expired" ? "This saved signup has expired" : "Welcome back. Let's finish your signup."}
-        lead={status === "expired" ? undefined : `Your details for ${n} ${n === 1 ? "pharmacy are" : "pharmacies are"} saved. Payment wasn't completed, so your account isn't active yet.`}
+        lead={
+          status === "expired"
+            ? undefined
+            : status === "unknown"
+              ? // The outcome isn't known yet, so don't say payment failed (manual review, REPAIR_002 addendum).
+                "Your details are saved. We're checking your payment status. Please don't pay again yet."
+              : `Your details for ${n} ${n === 1 ? "pharmacy are" : "pharmacies are"} saved. Payment wasn't completed, so your account isn't active yet.`
+        }
       />
       <div className="mt-5" data-testid={`incomplete-${status}`}>
         {status === "abandoned" && state.checkout?.closedReason ? (
@@ -102,7 +113,11 @@ export function CheckoutIncompleteView() {
           {status === "unknown" ? (
             <>
               <p className="mt-2 text-xs text-muted-foreground">Payment is paused until we know whether the earlier attempt went through.</p>
-              {hold ? (
+              {hold === "scope_changed" ? (
+                <div className="mt-3" data-testid="unknown-hold">
+                  <ScopeHold paidFor={state.checkout?.scope} reference="demo_ck_01" />
+                </div>
+              ) : hold ? (
                 <p className="mt-2 text-xs text-muted-foreground" data-testid="unknown-hold">
                   Activation also waits for {hold === "owner_declaration" ? "the owner declaration" : "your remaining signup details"}.{" "}
                   <Link href="/demo/register/review" className="portal-link">Go to my details</Link>

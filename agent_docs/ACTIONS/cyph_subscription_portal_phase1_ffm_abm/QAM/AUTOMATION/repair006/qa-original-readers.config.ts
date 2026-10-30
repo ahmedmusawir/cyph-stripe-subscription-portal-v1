@@ -1,0 +1,1 @@
+import {defineConfig} from '@playwright/test';export default defineConfig({testDir:'./qa-readers',workers:1,retries:0,timeout:30000,outputDir:'/tmp/cody-r6-original-readers-output',reporter:[['list'],['json',{outputFile:'/tmp/cody-r6-original-readers.json'}]],use:{baseURL:'http://localhost:3116',channel:'chrome',trace:'off',video:'off',screenshot:'off'}});

@@ -1,0 +1,216 @@
+# Closeout 001 — reviewed commit path classes
+
+Generated 30 Oct 2026 from `git status --porcelain --untracked-files=all` (+ the closeout ZIP, created after this list). Total paths in `CLOSEOUT_001_COMMIT_PATHS.txt`: **1441** (A 22 + B 1419). Status at generation: modified 41, untracked 1400, deleted 0; staged 0.
+
+## A. Tested product/build inputs — 22 paths, every one a row of manifest `f7181d3c…e9ab`
+
+- `e2e/public.activation-scenarios.spec.ts` (??)
+- `e2e/public.owner-declaration.spec.ts` (M)
+- `e2e/public.repair002.spec.ts` (M)
+- `e2e/public.repair003.spec.ts` (??)
+- `e2e/public.repair004-addendum.spec.ts` (??)
+- `e2e/public.repair004.spec.ts` (??)
+- `e2e/public.repair005.spec.ts` (??)
+- `e2e/public.repair006.spec.ts` (??)
+- `src/__tests__/portal-checkout-hold.test.tsx` (M)
+- `src/__tests__/portal-registration.test.ts` (M)
+- `src/components/portal/Alert.tsx` (M)
+- `src/components/portal/PublicDemoControls.tsx` (M)
+- `src/components/portal/activation/ActivationView.tsx` (M)
+- `src/components/portal/activation/CheckoutIncompleteView.tsx` (M)
+- `src/components/portal/handoff/CheckoutStandIn.tsx` (M)
+- `src/components/portal/references/EmailPreview.tsx` (M)
+- `src/components/portal/references/EmailReferenceView.tsx` (M)
+- `src/components/portal/register/ReviewView.tsx` (M)
+- `src/services/portal/index.ts` (M)
+- `src/services/portal/registration.ts` (M)
+- `src/services/portal/registrationService.ts` (M)
+- `src/types/portal/state.ts` (M)
+
+## B. Durable QA/engineering evidence and closeout documentation — 1419 paths
+
+Grouped by folder (count of files):
+
+- `CHANGELOG.md` — 1
+- `RECOVERY.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/CLOSEOUT_001_COMMIT_PATHS.txt` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/CLOSEOUT_001_PATH_CLASSES.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_DOCUMENTATION_CLOSEOUT_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_ADDENDUM_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_006_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FINAL_CANDIDATE_PREPARATION_001.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FINAL_CANDIDATE_PREPARATION_001.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002/addendum_001` — 20
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002/addendum_002` — 37
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/BEFORE_AFTER.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/CLEANUP_AND_LIMITATIONS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/REPAIR_003_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/after` — 13
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/before` — 9
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/cumulative_vs_d6fe678.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/data` — 11
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/screenshots` — 16
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003/source` — 13
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_003_ENGINEERING_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/BEFORE_AFTER.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/CLEANUP_AND_LIMITATIONS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/REPAIR_004_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/REPAIR_004_records_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/after` — 28
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/before` — 29
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/cumulative_vs_d6fe678.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/data` — 15
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/probes` — 6
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/screenshots` — 23
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004/source` — 9
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/ADDENDUM_001_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/ADDENDUM_001_records_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/BEFORE_AFTER.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/CLEANUP_AND_LIMITATIONS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/after` — 10
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/before` — 10
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/cumulative_vs_d6fe678.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/data` — 17
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/screenshots` — 14
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001/source` — 11
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ADDENDUM_001_ENGINEERING_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_004_ENGINEERING_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/BEFORE_AFTER.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/CLEANUP_AND_LIMITATIONS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/REPAIR_005_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/REPAIR_005_records_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/TRANSITION_MATRIX.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/after` — 20
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/before` — 18
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/cumulative_vs_d6fe678.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/data` — 20
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/probes` — 3
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/screenshots` — 14
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005/source` — 6
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_005_ENGINEERING_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/BEFORE_AFTER.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/CLEANUP_AND_LIMITATIONS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/INSPECTED_PATHS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/REPAIR_006_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/REPAIR_006_records_incremental.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/after` — 22
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/before` — 19
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/cumulative_vs_d6fe678.diff` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/data` — 21
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/probes` — 3
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/screenshots` — 8
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006/source` — 7
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_006_ENGINEERING_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/FFM_ENTRY.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/combined001` — 36
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/q2` — 32
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair002` — 36
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair003` — 63
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair004` — 71
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair005` — 75
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair006` — 46
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/COMBINED_RETEST_001_IDENTITY_STOP.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/COMBINED_RETEST_001_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/CYPH_Q1_LEAD_DECISION_001_2026-10-28_SUPERSEDED.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_COMBINED_RETEST_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_001.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_002.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q2_REVIEW_001.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_RETEST_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_RETEST_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_RETEST_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_RETEST_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_006_RETEST_001_REVIEW.zip` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/Q1_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/Q2_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_002_RETEST_001_IDENTITY_STOP.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_002_RETEST_001_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_003_RETEST_001_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_004_RETEST_001_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_005_RETEST_001_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_006_LEAD_DISPOSITIONS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/REPAIR_006_RETEST_001_RECEIPT.json` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CERTIFICATION.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/REVIEW_START_HERE.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/combined001` — 64
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/q1` — 12
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/q2` — 51
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair002` — 86
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair003` — 61
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair004` — 83
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair005` — 78
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/evidence/repair006` — 71
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/README.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/IMPLEMENTATION_CONTRACT.md` — 1
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md` — 1
+- `agent_docs/PROJECT_POINTER.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-29_135500_repair-002-addendum-001.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-29_144500_repair-002-addendum-002.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-29_164500_repair-003-ffm-abm-001.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-29_184926_repair-004-ffm-abm-001.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-29_193602_repair-004-addendum-001.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-30_074154_repair-005-ffm-abm-001.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-30_092612_repair-006-ffm-abm-001.md` — 1
+- `agent_docs/RESPONSES/response_2026-10-30_105757_documentation-closeout-ffm-abm-001.md` — 1
+- `agent_docs/SESSIONS/session_2026-10-29.md` — 1
+- `agent_docs/SESSIONS/session_2026-10-30.md` — 1
+
+### B1. Checkpoint archives inside B — 17 ZIPs (kept as durable evidence; see DOCUMENTATION_CLOSEOUT_001 §6)
+
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_DOCUMENTATION_CLOSEOUT_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_ADDENDUM_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_006_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_COMBINED_RETEST_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_001.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_002.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q2_REVIEW_001.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_RETEST_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_RETEST_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_RETEST_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_RETEST_001_REVIEW.zip`
+- `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_006_RETEST_001_REVIEW.zip`
+
+## C. Excluded (ignored or outside the repository; never staged)
+
+- `.env.local` (git-ignored)
+- `.env.qa.local` (git-ignored)
+- `.next/` (git-ignored)
+- `next-env.d.ts` (git-ignored)
+- `node_modules/` (git-ignored)
+- `test-results/` (git-ignored)
+- `tsconfig.tsbuildinfo` (git-ignored)
+- `/tmp/cody-r6-snapshot` and `/tmp/cody-r6-*` (QA-retained frozen copy, outside the repo)
+- `~/Downloads/*` copies of review packages (outside the repo)
+
+## D. Unrelated paths requiring separate disposition — 0
+
+None. Every pending path belongs to this module, its session/response lineage, or the root CHANGELOG/RECOVERY records.

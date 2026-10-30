@@ -34,13 +34,15 @@ export function Alert({
   tabIndex?: number;
   icon?: React.ReactNode;
 }) {
+  // R3-O03: on a dark tint over a card the shared ring measured 2.99:1 against the
+  // tint; a lighter dark-only ring inside alerts clears 3:1 on every tone.
   return (
     <div
       id={id}
       tabIndex={tabIndex}
       role={role ?? (tone === "destructive" ? "alert" : "status")}
       aria-live={live ? "polite" : undefined}
-      className={cn("min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", TONE[tone], className)}
+      className={cn("min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:[--ring:12_93%_68%]", TONE[tone], className)}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 gap-3">

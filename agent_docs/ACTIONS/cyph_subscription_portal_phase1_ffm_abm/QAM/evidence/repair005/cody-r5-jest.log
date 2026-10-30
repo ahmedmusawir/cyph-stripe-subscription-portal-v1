@@ -1,0 +1,7 @@
+
+Test Suites: 13 passed, 13 total
+Tests:       240 passed, 240 total
+Snapshots:   0 total
+Time:        36.489 s
+Ran all test suites.
+Test results written to: ../cody-r5-jest.json

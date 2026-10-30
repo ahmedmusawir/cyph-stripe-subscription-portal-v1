@@ -1,0 +1,1 @@
+Paths: ["src/proxy.ts", "src/utils/supabase", "src/utils/get-user-role.ts", "src/app/api", "supabase", "Dockerfile", "next.config.js", "package-lock.json", "tsconfig.json", "jest.config.js"]

@@ -1,0 +1,22 @@
+[
+  {
+    "theme": "light",
+    "effectiveDark": false,
+    "color": "rgb(31, 38, 51)",
+    "background": "rgb(225, 229, 234)",
+    "border": "rgb(196, 202, 212)",
+    "ring": "rgb(249, 112, 78)",
+    "shadow": "rgb(255, 255, 255) 0px 0px 0px 2px, rgb(249, 112, 78) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "solid"
+  },
+  {
+    "theme": "dark",
+    "effectiveDark": true,
+    "color": "rgb(230, 233, 239)",
+    "background": "rgb(47, 53, 65)",
+    "border": "rgb(85, 93, 109)",
+    "ring": "rgb(249, 112, 78)",
+    "shadow": "rgb(59, 66, 78) 0px 0px 0px 2px, rgb(249, 112, 78) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "solid"
+  }
+]

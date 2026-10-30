@@ -1,0 +1,13 @@
+▲ Next.js 16.4.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.js took 20ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.9s
+  Running TypeScript ...
+qa-predecessors/r011/index.ts(4,49): error TS2307: Cannot find module './accountService' or its corresponding type declarations.
+qa-predecessors/r011/index.ts(5,36): error TS2307: Cannot find module './accountService' or its corresponding type declarations.
+qa-predecessors/r012/index.ts(4,49): error TS2307: Cannot find module './accountService' or its corresponding type declarations.
+qa-predecessors/r012/index.ts(5,36): error TS2307: Cannot find module './accountService' or its corresponding type declarations.
+Failed to type check.
+

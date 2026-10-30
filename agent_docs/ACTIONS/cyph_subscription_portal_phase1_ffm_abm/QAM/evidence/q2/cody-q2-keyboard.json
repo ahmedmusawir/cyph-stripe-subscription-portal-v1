@@ -1,0 +1,10 @@
+[
+  {
+    "target": "Continue",
+    "tabs": 9
+  },
+  {
+    "result": "FAIL",
+    "error": "keyboard.press: Target page, context or browser has been closed"
+  }
+]

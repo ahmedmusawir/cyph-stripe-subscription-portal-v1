@@ -1,0 +1,20 @@
+{
+  "priorManifest": "fb3b8cdfbf390f5ce1b4546537160f3cf0422e014b09dbb584a8fed86fdb014d",
+  "changedOrAddedInputs": [
+    "e2e/public.repair002.spec.ts",
+    "e2e/public.repair006.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/__tests__/portal-registration.test.ts",
+    "src/components/portal/activation/ActivationView.tsx",
+    "src/services/portal/index.ts",
+    "src/services/portal/registration.ts"
+  ],
+  "removedInputs": [],
+  "engineFunctionsChanged": [
+    "consistentActivation",
+    "readActivation",
+    "resendAccessEmail"
+  ],
+  "nonFunctionEngineStatementsUnchanged": true,
+  "scope": "Existing payment/scope/key/allocation methods and global inputs unchanged; account/auth/route/styles/config/dependencies unchanged. Activation reader dependency changed; affected cases rerun."
+}

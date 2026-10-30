@@ -1,0 +1,199 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-r2-snapshot/qa-extra.config.ts",
+    "rootDir": "/tmp/cody-r2-snapshot/qa-extra",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-r2-extra-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-r2-snapshot/qa-extra",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-r2-extra.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "submitted.spec.ts",
+      "file": "submitted.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "processing: editing submitted pharmacy cannot silently change confirmed scope",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 45031,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts",
+                        "column": 718,
+                        "line": 3
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('outcome-processing')\u001b[22m\n\n\n  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';\n  2 | const key='cyph-portal-demo:v1:public';\n> 3 | for(const mode of ['processing','unknown'])test(`${mode}: editing submitted pharmacy cannot silently change confirmed scope`,async({page})=>{await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.getByTestId(mode==='processing'?'outcome-processing':'outcome-unknown').click();await page.waitForURL(mode==='processing'?'**/demo/activation':'**/demo/checkout-incomplete');await page.goto('/demo/register/pharmacies');await page.locator('#ph-name').fill('Changed after submission');await page.getByRole('button',{name:'Continue to review',exact:true}).click();await page.goto(mode==='processing'?'/demo/activation':'/demo/checkout-incomplete');const control=page.getByTestId(mode==='processing'?'activation-refresh':'unknown-paid');await expect(control).toBeVisible();const enabled=await control.isEnabled();if(enabled){await control.click();await page.waitForTimeout(1000)}const result=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{count:s.draft.requestedStoreCount,names:s.draft.pharmacies.map((p:any)=>p.name),quote:s.quote,payment:s.activation?.paymentState,checkout:s.checkout?.status}},key);fs.appendFileSync('/tmp/cody-r2-submitted-browser.jsonl',JSON.stringify({mode,originalSubmittedCount:1,originalPriceCents:9900,confirmationEnabled:enabled,...result})+'\\n');await page.screenshot({path:`/tmp/cody-r2-submitted-${mode}.png`,fullPage:true});expect(result.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^\n  4 |\n    at /tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts:3:718"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:02.932Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-r2-extra-output/submitted-processing-editi-af998-ntly-change-confirmed-scope/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "da97740efe2d3ff61d44-9be81e8b3eb4e44cbe81",
+          "file": "submitted.spec.ts",
+          "line": 3,
+          "column": 48
+        },
+        {
+          "title": "unknown: editing submitted pharmacy cannot silently change confirmed scope",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5493,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m\n    at /tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts:3:1865",
+                    "location": {
+                      "file": "/tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts",
+                      "column": 1865,
+                      "line": 3
+                    },
+                    "snippet": "  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';\n  2 | const key='cyph-portal-demo:v1:public';\n> 3 | for(const mode of ['processing','unknown'])test(`${mode}: editing submitted pharmacy cannot silently change confirmed scope`,async({page})=>{await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.getByTestId(mode==='processing'?'outcome-processing':'outcome-unknown').click();await page.waitForURL(mode==='processing'?'**/demo/activation':'**/demo/checkout-incomplete');await page.goto('/demo/register/pharmacies');await page.locator('#ph-name').fill('Changed after submission');await page.getByRole('button',{name:'Continue to review',exact:true}).click();await page.goto(mode==='processing'?'/demo/activation':'/demo/checkout-incomplete');const control=page.getByTestId(mode==='processing'?'activation-refresh':'unknown-paid');await expect(control).toBeVisible();const enabled=await control.isEnabled();if(enabled){await control.click();await page.waitForTimeout(1000)}const result=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{count:s.draft.requestedStoreCount,names:s.draft.pharmacies.map((p:any)=>p.name),quote:s.quote,payment:s.activation?.paymentState,checkout:s.checkout?.status}},key);fs.appendFileSync('/tmp/cody-r2-submitted-browser.jsonl',JSON.stringify({mode,originalSubmittedCount:1,originalPriceCents:9900,confirmationEnabled:enabled,...result})+'\\n');await page.screenshot({path:`/tmp/cody-r2-submitted-${mode}.png`,fullPage:true});expect(result.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^\n  4 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts",
+                        "column": 1865,
+                        "line": 3
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"confirmed\"\u001b[39m\n\n  1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';\n  2 | const key='cyph-portal-demo:v1:public';\n> 3 | for(const mode of ['processing','unknown'])test(`${mode}: editing submitted pharmacy cannot silently change confirmed scope`,async({page})=>{await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.getByTestId(mode==='processing'?'outcome-processing':'outcome-unknown').click();await page.waitForURL(mode==='processing'?'**/demo/activation':'**/demo/checkout-incomplete');await page.goto('/demo/register/pharmacies');await page.locator('#ph-name').fill('Changed after submission');await page.getByRole('button',{name:'Continue to review',exact:true}).click();await page.goto(mode==='processing'?'/demo/activation':'/demo/checkout-incomplete');const control=page.getByTestId(mode==='processing'?'activation-refresh':'unknown-paid');await expect(control).toBeVisible();const enabled=await control.isEnabled();if(enabled){await control.click();await page.waitForTimeout(1000)}const result=await page.evaluate(k=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{count:s.draft.requestedStoreCount,names:s.draft.pharmacies.map((p:any)=>p.name),quote:s.quote,payment:s.activation?.paymentState,checkout:s.checkout?.status}},key);fs.appendFileSync('/tmp/cody-r2-submitted-browser.jsonl',JSON.stringify({mode,originalSubmittedCount:1,originalPriceCents:9900,confirmationEnabled:enabled,...result})+'\\n');await page.screenshot({path:`/tmp/cody-r2-submitted-${mode}.png`,fullPage:true});expect(result.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^\n  4 |\n    at /tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts:3:1865"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T09:56:49.057Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-r2-extra-output/submitted-unknown-editing--dc511-ntly-change-confirmed-scope/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-r2-snapshot/qa-extra/submitted.spec.ts",
+                    "column": 1865,
+                    "line": 3
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "da97740efe2d3ff61d44-8d68a6a8d67a61f37c6f",
+          "file": "submitted.spec.ts",
+          "line": 3,
+          "column": 48
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-29T09:56:02.187Z",
+    "duration": 52662.691,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

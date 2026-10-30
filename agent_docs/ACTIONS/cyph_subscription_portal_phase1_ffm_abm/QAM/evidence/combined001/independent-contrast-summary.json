@@ -1,0 +1,12 @@
+{
+  "surfaces": 12,
+  "rawMeasurements": 744,
+  "applicableMeasurements": 728,
+  "shortfalls": [],
+  "exclusions": "BODY tab wrap is not a focused control; disabled and faded controls excluded; raw measurements retained",
+  "minimumByKind": {
+    "text": 4.546856376736227,
+    "boundary": 3.0541647933718106,
+    "focus": 3.066806316813648
+  }
+}

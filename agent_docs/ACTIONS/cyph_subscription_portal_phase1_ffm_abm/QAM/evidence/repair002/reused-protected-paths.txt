@@ -1,0 +1,2 @@
+Compared prior combined001 commit24cf075 to current base d6fe678: no changes in src/app/api/auth, src/services/auth, src/utils/supabase, src/proxy.ts, src/utils/get-user-role.ts, src/services/portal/account.ts, src/services/portal/storage.ts.
+Snapshot overlays only five addendum paths, none of these. Prior logout/refresh applicability established; no logout rerun.

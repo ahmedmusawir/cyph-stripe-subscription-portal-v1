@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.journeys.spec.ts:156:5 › abandoned checkout resumes with values; unknown payment pauses payment (8.6s)
+  ✓  2 [public] › e2e/public.repair002.spec.ts:178:5 › unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available (1.4s)
+  ✓  3 [public] › e2e/public.repair002.spec.ts:369:7 › R-012 surface: unknown hold — Gate M 375/1440 and contrast, light/dark (10.1s)
+  ✓  4 [public] › e2e/public.repair002.spec.ts:404:7 › C14 intro [checkout_unknown]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark (2.6s)
+  ✓  5 [public] › e2e/public.repair002.spec.ts:404:7 › C14 intro [checkout_abandoned]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark (2.0s)
+  ✓  6 [public] › e2e/public.repair002.spec.ts:404:7 › C14 intro [checkout_declined]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark (2.0s)
+
+  6 passed (28.0s)

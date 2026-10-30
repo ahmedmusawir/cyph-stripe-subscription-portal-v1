@@ -77,7 +77,7 @@ test("a pre-amendment (v1) draft does not acquire acceptance", async ({ page }) 
   await expect(box).not.toBeChecked();
   await expect(page.getByLabel("First name")).toHaveValue("Jordan"); // other details kept
   const stored = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k) || "null"), KEY);
-  expect(stored.version).toBe(2);
+  expect(stored.version).toBe(3); // public storage v3 since R-013 (checkout scope)
   expect(stored.state.s.draft.owner.ownerDeclarationAccepted).toBe(false);
   expect(stored.state.s.draft.owner).not.toHaveProperty("businessRole");
 });

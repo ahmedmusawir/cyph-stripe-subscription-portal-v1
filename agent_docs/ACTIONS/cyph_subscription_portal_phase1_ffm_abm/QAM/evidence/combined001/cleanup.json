@@ -1,0 +1,18 @@
+{
+  "ownedServerPID": 896725,
+  "ownedPort": 3110,
+  "signal": "SIGTERM",
+  "removed": [
+    "/tmp/cody-combined-zoom-profile",
+    "/tmp/cody-combined-pw-output",
+    "/tmp/cody-combined-extra-output",
+    "/tmp/cody-combined-extra-corrected-output",
+    "/tmp/cody-combined-24cf075/.env.local"
+  ],
+  "unrelatedServerPID40320Alive": true,
+  "credentialsFileUntouched": true,
+  "persistentAuthStateCreated": false,
+  "signInAttempts": 4,
+  "globalLogoutRequests": 1,
+  "globalEffect": "Inherited global Supabase logout invoked once; may invalidate Tony and other sessions. Other human sessions not probed."
+}

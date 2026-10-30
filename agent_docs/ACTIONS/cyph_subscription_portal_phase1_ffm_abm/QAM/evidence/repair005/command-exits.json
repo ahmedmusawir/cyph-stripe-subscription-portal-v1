@@ -1,0 +1,14 @@
+{
+  "cwd": "/tmp/cody-r5-snapshot",
+  "cleanBuild": 0,
+  "productTypecheck": 0,
+  "currentJest240": 0,
+  "focusedBrowser66": 0,
+  "originalTransitions46": 0,
+  "correctedOriginalBrowser5": 0,
+  "exactFixtureBranches2": 0,
+  "oracleAndExtra231": 1,
+  "readerBrowser5": 1,
+  "actualZoom8": 0,
+  "note": "Core224 oracle cells pass;5 supplemental service expectations and4reader assertions fail. Instrument exit0 does not waive findings."
+}

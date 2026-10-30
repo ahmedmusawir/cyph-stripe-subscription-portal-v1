@@ -1,0 +1,62 @@
+{
+  "packages": [
+    {
+      "package": "FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_REVIEW.zip",
+      "sha256": "96075846a611ae5cc19ffc605c74321d4cc8f8a7c95c464cf93ad39967144464",
+      "members": 128,
+      "indexed": 127,
+      "allHashesVerified": true,
+      "reconstructedPaths": [
+        "e2e/public.owner-declaration.spec.ts",
+        "e2e/public.repair002.spec.ts",
+        "src/__tests__/portal-checkout-hold.test.tsx",
+        "src/__tests__/portal-registration.test.ts",
+        "src/components/portal/Alert.tsx",
+        "src/components/portal/PublicDemoControls.tsx",
+        "src/components/portal/activation/ActivationView.tsx",
+        "src/components/portal/activation/CheckoutIncompleteView.tsx",
+        "src/components/portal/handoff/CheckoutStandIn.tsx",
+        "src/components/portal/references/EmailReferenceView.tsx",
+        "src/components/portal/register/ReviewView.tsx",
+        "src/services/portal/index.ts",
+        "src/services/portal/registration.ts",
+        "src/services/portal/registrationService.ts",
+        "src/types/portal/state.ts",
+        "e2e/public.activation-scenarios.spec.ts",
+        "e2e/public.repair003.spec.ts",
+        "e2e/public.repair004.spec.ts"
+      ]
+    },
+    {
+      "package": "FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_ADDENDUM_001_REVIEW.zip",
+      "sha256": "0e577f7d16020ddf8c0d02c62be5121ca215273359ffb1b31f67f686e540ec40",
+      "members": 80,
+      "indexed": 79,
+      "allHashesVerified": true,
+      "reconstructedPaths": [
+        "e2e/public.owner-declaration.spec.ts",
+        "e2e/public.repair002.spec.ts",
+        "src/__tests__/portal-checkout-hold.test.tsx",
+        "src/__tests__/portal-registration.test.ts",
+        "src/components/portal/Alert.tsx",
+        "src/components/portal/PublicDemoControls.tsx",
+        "src/components/portal/activation/ActivationView.tsx",
+        "src/components/portal/activation/CheckoutIncompleteView.tsx",
+        "src/components/portal/handoff/CheckoutStandIn.tsx",
+        "src/components/portal/references/EmailPreview.tsx",
+        "src/components/portal/references/EmailReferenceView.tsx",
+        "src/components/portal/register/ReviewView.tsx",
+        "src/services/portal/index.ts",
+        "src/services/portal/registration.ts",
+        "src/services/portal/registrationService.ts",
+        "src/types/portal/state.ts",
+        "e2e/public.activation-scenarios.spec.ts",
+        "e2e/public.repair003.spec.ts",
+        "e2e/public.repair004-addendum.spec.ts",
+        "e2e/public.repair004.spec.ts"
+      ]
+    }
+  ],
+  "mainPlusIncrementalEqualsFinalCumulative": true,
+  "workingSourceCorrespondence": true
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "query": "mode=checkout",
+    "status": 200,
+    "location": null,
+    "accountPayload": false,
+    "expected": 200
+  },
+  {
+    "query": "mode=portal",
+    "status": 307,
+    "location": "/login",
+    "accountPayload": false,
+    "expected": 307
+  },
+  {
+    "query": "mode=card",
+    "status": 307,
+    "location": "/login",
+    "accountPayload": false,
+    "expected": 307
+  },
+  {
+    "query": "mode=checkout&mode=portal",
+    "status": 200,
+    "location": null,
+    "accountPayload": false,
+    "expected": 307
+  },
+  {
+    "query": "mode=portal&mode=checkout",
+    "status": 200,
+    "location": null,
+    "accountPayload": false,
+    "expected": 307
+  },
+  {
+    "query": "mode=card&mode=card",
+    "status": 200,
+    "location": null,
+    "accountPayload": false,
+    "expected": 307
+  },
+  {
+    "query": "mode=portal&return=https://example.invalid",
+    "status": 307,
+    "location": "/login",
+    "accountPayload": false,
+    "expected": 307
+  }
+]

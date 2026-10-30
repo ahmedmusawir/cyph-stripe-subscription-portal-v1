@@ -1,0 +1,12 @@
+{"route":"/demo/checkout-incomplete [checkout_unknown]","width":375,"theme":"light","scrollWidth":375,"clientWidth":375,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_unknown]","width":1440,"theme":"light","scrollWidth":1440,"clientWidth":1440,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_unknown]","width":375,"theme":"dark","scrollWidth":375,"clientWidth":375,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_unknown]","width":1440,"theme":"dark","scrollWidth":1440,"clientWidth":1440,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_abandoned]","width":375,"theme":"light","scrollWidth":375,"clientWidth":375,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_abandoned]","width":1440,"theme":"light","scrollWidth":1440,"clientWidth":1440,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_abandoned]","width":375,"theme":"dark","scrollWidth":375,"clientWidth":375,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_abandoned]","width":1440,"theme":"dark","scrollWidth":1440,"clientWidth":1440,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_declined]","width":375,"theme":"light","scrollWidth":375,"clientWidth":375,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_declined]","width":1440,"theme":"light","scrollWidth":1440,"clientWidth":1440,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_declined]","width":375,"theme":"dark","scrollWidth":375,"clientWidth":375,"smallTargets":[]}
+{"route":"/demo/checkout-incomplete [checkout_declined]","width":1440,"theme":"dark","scrollWidth":1440,"clientWidth":1440,"smallTargets":[]}

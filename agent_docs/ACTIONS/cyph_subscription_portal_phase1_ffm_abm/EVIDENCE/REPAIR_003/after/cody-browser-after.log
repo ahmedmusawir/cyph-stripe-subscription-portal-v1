@@ -1,0 +1,7 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 qa-extra/submitted-corrected.spec.ts:3:48 › processing: editing submitted pharmacy cannot silently change confirmed scope (4.3s)
+  ✓  2 qa-extra/submitted-corrected.spec.ts:3:48 › unknown: editing submitted pharmacy cannot silently change confirmed scope (4.6s)
+
+  2 passed (10.0s)

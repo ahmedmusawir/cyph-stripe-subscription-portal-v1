@@ -1,0 +1,32 @@
+[
+  {
+    "method": "POST",
+    "category": "supabase",
+    "path": "OTHER",
+    "requests": 3
+  },
+  {
+    "method": "POST",
+    "category": "supabase",
+    "path": "/auth/v1/token",
+    "requests": 6
+  },
+  {
+    "method": "GET",
+    "category": "supabase",
+    "path": "/rest/v1/user_roles",
+    "requests": 354
+  },
+  {
+    "method": "GET",
+    "category": "supabase",
+    "path": "/auth/v1/user",
+    "requests": 1506
+  },
+  {
+    "method": "POST",
+    "category": "supabase",
+    "path": "/auth/v1/logout",
+    "requests": 1
+  }
+]

@@ -4,16 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Pill } from "./Pill";
 import { Button } from "@/components/ui/button";
-import {
-  ACTIVATION_PLANS,
-  DEMO_HINTS,
-  REGISTRATION_SCENARIOS,
-  registrationHarness,
-  useRegistration,
-} from "@/services/portal";
+import { DEMO_HINTS, REGISTRATION_SCENARIOS, registrationHarness } from "@/services/portal";
 
 // Public Demo controls (RULINGS R-009): registration scenarios ONLY. They can
-// never reach account data, personas or the real session.
+// never reach account data, personas or the real session. Named activation
+// states are chosen only through Registration scenario → Load (R-012 addendum 2:
+// the separate "Next activation check" control changed nothing visible).
 const LABEL: Record<(typeof REGISTRATION_SCENARIOS)[number], string> = {
   fresh: "New visitor (empty)",
   prefilled_one_store: "Prefilled · 1 pharmacy",
@@ -52,7 +48,6 @@ const START: Partial<Record<(typeof REGISTRATION_SCENARIOS)[number], string>> = 
 
 export function PublicDemoControls() {
   const router = useRouter();
-  const { state, hydrated } = useRegistration();
   const [scenario, setScenario] = useState<string>("");
 
   function apply() {
@@ -72,7 +67,7 @@ export function PublicDemoControls() {
             </span>
             <span className="ml-auto font-semibold uppercase tracking-wide text-foreground underline decoration-1 underline-offset-4">Demo controls</span>
           </summary>
-          <div className="mt-2 grid gap-3 border-t border-border pb-2 pt-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-2 grid gap-3 border-t border-border pb-2 pt-3 sm:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-1.5">
               <label htmlFor="demo-reg-scenario" className="font-medium text-foreground">Registration scenario</label>
               <div className="flex gap-2">
@@ -84,19 +79,6 @@ export function PublicDemoControls() {
                 </select>
                 <Button type="button" variant="outline" disabled={!scenario} onClick={apply}>Load</Button>
               </div>
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="demo-activation-plan" className="font-medium text-foreground">Next activation check</label>
-              <select
-                id="demo-activation-plan"
-                value={hydrated ? state.activationPlan : "ready"}
-                onChange={(e) => registrationHarness.setActivationPlan(e.target.value as (typeof ACTIVATION_PLANS)[number])}
-                className="h-11 w-full border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {ACTIVATION_PLANS.map((p) => (
-                  <option key={p} value={p}>{p.replace("_", " ")}</option>
-                ))}
-              </select>
             </div>
             <div className="space-y-1.5">
               <p className="font-medium text-foreground">Clock (quote expiry)</p>
@@ -118,7 +100,7 @@ export function PublicDemoControls() {
                 Reset signup demo
               </Button>
             </div>
-            <p className="text-muted-foreground sm:col-span-2 lg:col-span-4">
+            <p className="text-muted-foreground sm:col-span-2 lg:col-span-3">
               Try code <span className="font-medium text-foreground">{DEMO_HINTS.code}</span>, NCPDP <span className="font-medium text-foreground">{DEMO_HINTS.duplicateNcpdp}</span> (already registered) or email <span className="break-all font-medium text-foreground">{DEMO_HINTS.existingEmail}</span> (existing account). Account management needs a real sign-in.
             </p>
           </div>

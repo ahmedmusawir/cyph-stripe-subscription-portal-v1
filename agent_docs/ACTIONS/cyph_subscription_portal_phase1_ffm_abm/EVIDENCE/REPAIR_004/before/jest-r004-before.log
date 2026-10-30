@@ -1,0 +1,164 @@
+FAIL src/__tests__/portal-registration.test.ts
+  ● a submitted payment stays bound to what it was quoted for (R-013, R2-F01) › storage written before R-013: an unedited submitted checkout is bound to its draft; an edited one stays held
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      816 |     // A paid record binds on the same evidence (REPAIR_004); one edited after payment does not.
+      817 |     const paid = strip(reg.refreshActivation(submitted('processing')).state);
+    > 818 |     expect(reg.bindLegacyScope(paid).checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                                       ^
+      819 |     const paidEdited = strip(EDITS['pharmacy name'](reg.refreshActivation(submitted('processing')).state));
+      820 |     expect(reg.bindLegacyScope(paidEdited)).toEqual(paidEdited);
+      821 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:818:55)
+
+  ● legacy storage binds a checkout only from retained evidence (REPAIR_004, R3-F01) › an R-011 open checkout edited without being closed gets no scope, cannot confirm and cannot be restored
+
+    expect(received).toBeUndefined()
+
+    Received: {"dueNowCents": 14800, "pharmacies": [{"adminAssignment": {"kind": "owner"}, "city": "Springfield", "id": "demo_reg_ph_1", "name": "Example Test Pharmacy 1", "ncpdp": "0000011", "npi": "0000000011", "phone": "(555) 010-0199", "software": "Liberty", "state": "Alabama", "street": "1 Test Street", "zip": "00000"}, {"adminAssignment": {"kind": "owner"}, "city": "Springfield", "name": "Example Test Pharmacy 2", "ncpdp": "0000012", "npi": "0000000012", "phone": "(555) 010-0199", "software": "Liberty", "state": "Alabama", "street": "1 Test Street", "zip": "00000"}], "storeCount": 2}
+
+      849 |     const legacy = reg.bindLegacyScope(r011Edited(opened()));
+      850 |     expect(legacy.checkout).toMatchObject({ status: 'pending', operationKey: KEY });
+    > 851 |     expect(legacy.checkout?.scope).toBeUndefined();
+          |                                    ^
+      852 |     expect(reg.checkoutHold(legacy.draft, legacy.checkout)).toBe('scope_changed');
+      853 |     for (const outcome of ['paid', 'processing'] as const) {
+      854 |       const step = reg.resolveCheckout(legacy, outcome);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:851:36)
+
+  ● legacy storage binds a checkout only from retained evidence (REPAIR_004, R3-F01) › a quote taken after the edit is not evidence for the open checkout
+
+    expect(received).toBeUndefined()
+
+    Received: {"dueNowCents": 14800, "pharmacies": [{"adminAssignment": {"kind": "owner"}, "city": "Springfield", "id": "demo_reg_ph_1", "name": "Example Test Pharmacy 1", "ncpdp": "0000011", "npi": "0000000011", "phone": "(555) 010-0199", "software": "Liberty", "state": "Alabama", "street": "1 Test Street", "zip": "00000"}, {"adminAssignment": {"kind": "owner"}, "city": "Springfield", "name": "Example Test Pharmacy 2", "ncpdp": "0000012", "npi": "0000000012", "phone": "(555) 010-0199", "software": "Liberty", "state": "Alabama", "street": "1 Test Street", "zip": "00000"}], "storeCount": 2}
+
+      865 |     const requoted = reg.requestQuote(r011Edited(opened()), deps).state;
+      866 |     expect(requoted.quote?.proposedStoreCount).toBe(2);
+    > 867 |     expect(reg.bindLegacyScope(requoted).checkout?.scope).toBeUndefined();
+          |                                                           ^
+      868 |   });
+      869 |
+      870 |   it('an unedited legacy open checkout binds the price of the quote it opened with, discount included', () => {
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:867:59)
+
+  ● legacy storage binds a checkout only from retained evidence (REPAIR_004, R3-F01) › storage v1: the quote proves the scope before migration drops it; the declaration is still not assumed
+
+    expect(received).toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: undefined
+
+      893 |     const migrated = reg.migrateRegistration(v1);
+      894 |     expect(migrated.quote).toBeNull();
+    > 895 |     expect(migrated.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+          |                                      ^
+      896 |     expect(migrated.draft.owner.ownerDeclarationAccepted).toBe(false);
+      897 |     expect(reg.refreshActivation(migrated).result.ok).toBe(false);
+      898 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:895:38)
+
+  ● completed activation reads what the payment covered (REPAIR_004, R3-F02) › an admin nominated after payment is not in the covered details or any preview; payment history is unchanged
+
+    TypeError: reg.coveredDetails is not a function
+
+      918 |     expect(s.checkout).toEqual(before.checkout);
+      919 |     expect(s.activation).toEqual(before.activation);
+    > 920 |     expect(reg.coveredDetails(s).pharmacies[0].adminAssignment).toEqual({ kind: 'owner' });
+          |                ^
+      921 |     expect(JSON.stringify(reg.accessEmailPreviews(s))).not.toMatch(/replacement/i);
+      922 |   });
+      923 |
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:920:16)
+
+  ● completed activation reads what the payment covered (REPAIR_004, R3-F02) › an admin the payment covered stays the invited admin after a later draft change
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "pharmacyNames": Array [
+          "Example Test Pharmacy 1",
+        ],
+    -   "recipientName": "Sam Ortiz",
+    +   "recipientName": "Replacement Admin",
+      }
+
+      925 |     const sam = { kind: 'other' as const, fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' };
+      926 |     const s = nominateLater(completed(sam));
+    > 927 |     expect(reg.accessEmailPreviews(s).store_admin).toMatchObject({ recipientName: 'Sam Ortiz', pharmacyNames: ['Example Test Pharmacy 1'] });
+          |                                                    ^
+      928 |   });
+      929 |
+      930 |   it('a closed checkout does not pin the previews; they follow the draft again', () => {
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:927:52)
+
+FAIL src/__tests__/portal-checkout-hold.test.tsx (5.124 s)
+  ● REPAIR_004 on screen (R3-F01, R3-F02) › R3-F01: an R-011 open checkout edited before the upgrade rehydrates unbound; the stand-in holds it with no payment outcome
+
+    expect(received).toBeUndefined()
+
+    Received: {"dueNowCents": 14800, "pharmacies": [{"adminAssignment": {"kind": "owner"}, "city": "Springfield", "id": "demo_ph_main", "name": "Example Main Street Pharmacy", "ncpdp": "0000000", "npi": "0000000000", "phone": "(555) 010-0150", "software": "Liberty", "state": "Alabama", "street": "120 Main Street", "zip": "00000"}, {"adminAssignment": {"kind": "owner"}, "city": "Springfield", "id": "demo_reg_ph_2", "name": "Legacy extra", "ncpdp": "0000045", "npi": "0000000045", "phone": "(555) 010-0150", "software": "Liberty", "state": "Alabama", "street": "120 Main Street", "zip": "00000"}], "storeCount": 2}
+
+      302 |     });
+      303 |     expect(s().checkout).toMatchObject({ status: 'pending', operationKey: 'demo_legacy_key_01' });
+    > 304 |     expect(s().checkout?.scope).toBeUndefined();
+          |                                 ^
+      305 |     render(<CheckoutStandIn />);
+      306 |     const hold = screen.getByTestId('checkout-hold');
+      307 |     expect(hold.textContent).toMatch(/can't match this payment to your current details/);
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:304:33)
+
+  ● REPAIR_004 on screen (R3-F01, R3-F02) › R3-F02: completed activation claims no invitation and offers no preview for an admin nominated after payment
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Sent to j•••@demo-pharmacy\.example\./
+    Received string:  "DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ActivationYou're in. Check your email.Payment is confirmed and your pharmacies are set up. We sent your access link to j•••@demo-pharmacy.example.Activation progressPayment — DoneConfirmed by Stripe · $99.00 (illustrative)Pharmacy setup — DoneExample Main Street Pharmacy is set up in OwedBook.Access email — DoneSent to j•••@demo-pharmacy.example · a separate store invitation went to Replacement Admin.Open the email “Set up your Pharmacy Books account”The link hands you to account setup. It works once and for a limited time [LINK LIFETIME TBD]. We don't sign you in from this page, and this demo never creates an account.Preview the access emailPreview Replacement Admin's invitationDidn't get it?Give it a few minutes and check your spam folder. Still nothing? Send it again.Resend access emailWrong email address? Contact [SUPPORT EMAIL]. For your security we don't change it from this page."
+
+      340 |     render(<ActivationView />);
+      341 |     const main = document.body.textContent ?? '';
+    > 342 |     expect(main).toMatch(/Sent to j•••@demo-pharmacy\.example\./);
+          |                  ^
+      343 |     expect(main).not.toMatch(/replacement admin/i);
+      344 |     expect(main).not.toMatch(/invitation/i);
+      345 |     expect(screen.getByTestId('activation-tracks').textContent).toMatch(/Example Main Street Pharmacy is set up/);
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:342:18)
+
+  ● REPAIR_004 on screen (R3-F01, R3-F02) › R3-F02: an admin the payment covered is still the one named after a later draft change
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /a separate store invitation went to Sam Ortiz/
+    Received string:  "DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ActivationYou're in. Check your email.Payment is confirmed and your pharmacies are set up. We sent your access link to j•••@demo-pharmacy.example.Activation progressPayment — DoneConfirmed by Stripe · $99.00 (illustrative)Pharmacy setup — DoneExample Main Street Pharmacy is set up in OwedBook.Access email — DoneSent to j•••@demo-pharmacy.example · a separate store invitation went to Replacement Admin.Open the email “Set up your Pharmacy Books account”The link hands you to account setup. It works once and for a limited time [LINK LIFETIME TBD]. We don't sign you in from this page, and this demo never creates an account.Preview the access emailPreview Replacement Admin's invitationDidn't get it?Give it a few minutes and check your spam folder. Still nothing? Send it again.Resend access emailWrong email address? Contact [SUPPORT EMAIL]. For your security we don't change it from this page."
+
+      350 |     render(<ActivationView />);
+      351 |     const main = document.body.textContent ?? '';
+    > 352 |     expect(main).toMatch(/a separate store invitation went to Sam Ortiz/);
+          |                  ^
+      353 |     expect(screen.getByRole('link', { name: "Preview Sam Ortiz's invitation" })).toBeTruthy();
+      354 |     expect(main).not.toMatch(/replacement admin/i);
+      355 |   });
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:352:18)
+
+Test Suites: 2 failed, 2 total
+Tests:       9 failed, 98 skipped, 3 passed, 110 total
+Snapshots:   0 total
+Time:        6.119 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts|src/__tests__/portal-checkout-hold.test.tsx with tests matching "REPAIR_004|storage written before".

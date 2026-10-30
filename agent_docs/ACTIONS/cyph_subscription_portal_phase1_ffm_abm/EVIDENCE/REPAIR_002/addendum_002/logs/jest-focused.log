@@ -1,0 +1,8 @@
+
+Test Suites: 3 passed, 3 total
+Tests:       76 passed, 76 total
+Snapshots:   0 total
+Time:        7.899 s
+Ran all test suites matching src/__tests__/portal-checkout-hold.test.tsx|src/__tests__/portal-registration.test.ts|src/__tests__/portal-components.test.tsx.
+Test results written to: agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002/addendum_002/data/jest-focused.json
+exit 0

@@ -1,0 +1,30 @@
+# Q2 findings — Executor observations; Lead adjudication required
+Candidate 94251beab08dd26d7f56f4b8f2299a1e841892c5. No product repairs. Prior Q1 findings/history remain in immutable Q1 packages and QAM_RECON_REPORT.
+
+## Q2-F01 — Light-theme rendered contrast below required threshold (AC-23, AC-21)
+Observed normal small text ratios 3.95:1 on tinted demo notice and 4.44:1 on several page surfaces, below 4.5:1. Independent DOM scan composites actual computed text/background colors across ancestors; black/white controls 21 and 1. Reproduced across public and account light-theme states. Evidence: contrast-shortfalls.json, extra*.jsonl, contrast-controls.json, masked account screenshots. Dark theme measured separately. Focus ring coral against white is below 3:1; light input boundary also below 3:1. These nontext cases require Lead applicability review; do not treat all borders as required meaningful boundaries. No blanket accessibility claim. Suggested classification: acceptance failure; Lead sets severity.
+
+## Q2-F02 — Account load-error scenario does not retain retry view (AC-04/15/29)
+Real admin → dashboard → Demo controls → Account load error (next load) → Load. Scenario stored as load_error, but after navigation settles dashboard displays ordinary subscription/pills; load-retry is absent. Hard retry click timed out in light and dark runs. Engine error/retry unit test passes; UI scenario does not provide reliable error/retry demonstration. Preserve both failures; no product repair. Root cause unproven (possible scenario navigation/remount consumes one-shot error). Evidence: extra-results/corrected-results JSON and logs; account scenario rows.
+
+## Q2-F03 — Repeated account mode parameters downgrade shared route to public checkout (AC-01)
+Anonymous GET /demo/stripe?mode=checkout&mode=portal, reverse order, and mode=card&mode=card return 200 rather than required login redirect. Positive controls single portal/card return 307 /login; checkout alone returns 200. No account payload markers observed in these downgraded bodies, so this is NOT evidence of account-data disclosure. Source compares string directly; arrays fall through to checkout. Contract says query parameters can add but never remove the auth requirement. Lead adjudicate contract failure and severity. Evidence: query-boundaries.json; shared route source at candidate. Repeated-parameter RSC variants not independently probed (limit).
+
+## Q2-O04 — Visual parity differences need Lead/design disposition (AC-21)
+Compared actual masked mobile light dashboard with approved account-billing__active_mist__mobile.png. Tokens/brand/panels broadly align and final count pill uses compact self-start as intended. Actual pharmacy cards put fields in stacked rows within an enclosing panel, whereas approved mobile design uses a two-column card arrangement without that surrounding pharmacy panel. Actual count is a bordered pill on the left versus plain right-side count in design; refresh line is absent in initial actual view. Demo strip and longer mock notice are known authorized differences. No claim of pixel parity; screenshots and reference provided for adjudication.
+
+## Q2-O05 — Clock feedback report narrowed (AC-09/29)
+Both public review and account confirmation: Advance 31 minutes updates offset, visibly expires active quote and disables payment; refresh clears consent. Public measured delta exactly 1860000 ms. Tony's broad inert report is not reproduced with active quotes. Controls have no explicit offset/result feedback when no active quote exists (source observation); this remains a usability observation, not a failed financial transition.
+
+## Q2-G06 — Coverage/instrument limits
+Live admin exercised; superadmin/member/role-less evidence remains controlled/mocked, as approved. No real-device Safari/full AT claim. Broad registry/state and layout coverage does not establish every one of 87 design-reference variants as an individually asserted browser state. Some busy/animation/transient variants and nontext contrast applicability remain unverified; detailed matrix marks limits, not blanket PASS. Read-only auth-confirm malformed-link runtime path not separately exercised; protected auth code diff unchanged. MAX_STORES=20 in pricing is a source-observed cap against broad repeat-N language; 1/2/3 covered, cap policy needs Lead interpretation (not a newly approved policy).
+
+## Execution/instrument corrections (not product fixes)
+- Setup auto-review blocked full .env.local symlink. Used physical dependencies and allowlisted public auth configuration only; no secret API keys or QA passwords in app/build environment.
+- Restored add-store fixture intentionally lacks identifiers/phone/software. Initial supplementary clock/zoom helpers assumed complete draft; added required synthetic inputs and reran affected checks; originals retained.
+- Initial supplemental scenario batch stopped at missing load-retry; remaining states separated with hard assertions intact. Proposal to use soft assertion rejected by automatic review and NOT used.
+- One worker login exceeded helper's 5-second expectation. No credential rejection established; later sessions and final login succeeded. Failure retained; outstanding light handoff assertion completed during final session with explicit 20-second dashboard readiness.
+- Keyboard helper initially used exact labels excluding required-field markers and unbounded evaluation loop; stopped owned helper, added explicit readiness timeout, corrected locator; final full Tab-only flow passed.
+- Recovery helper corrected duplicate text locator, incorrect link-sent test ID, and unconditional details toggle. Behavioral assertions unchanged; failed attempts retained.
+- Actual zoom first attempted chrome://settings in incognito (unsupported); anonymous persistent settings profile worked. Auth remained nonpersistent. Initial focus-color measurement raced hydration; corrected wait plus effective-theme check; both records retained.
+- Query probe initially used Response.status() instead of property; corrected helper before observations.

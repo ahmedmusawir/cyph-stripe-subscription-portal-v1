@@ -1,0 +1,44 @@
+
+Running 9 tests using 1 worker
+
+  ✘  1 [public] › e2e/public.activation-scenarios.spec.ts:30:5 › the 'Next activation check' control is gone; scenario, clock and reset controls remain (5.5s)
+  ✓  2 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_waiting: Load shows it as named, stays put, then "Refresh status" → Payment confirmed. Setting up your pharmacies… (4.2s)
+  ✓  3 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_provisioning: Load shows it as named, stays put, then "Refresh status" → You're in. Check your email. (3.7s)
+  ✓  4 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_delayed: Load shows it as named, stays put, then "Refresh status" → You're in. Check your email. (3.8s)
+  ✓  5 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_email_failed: Load shows it as named, stays put, then "Resend access email" → You're in. Check your email. (3.8s)
+  ✓  6 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_payment_failed: Load shows it as named, stays put, then "Try payment again" → Review and pay (3.9s)
+  ✓  7 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_ready: Load shows it as named, stays put, then "Resend access email" → You're in. Check your email. (3.8s)
+  ✓  8 [public] › e2e/public.activation-scenarios.spec.ts:136:5 › keyboard only: open Demo controls, choose a scenario, Load, then Refresh status (1.2s)
+  ✓  9 [public] › e2e/public.activation-scenarios.spec.ts:161:5 › mobile 375 + desktop 1440, light/dark: open demo strip and each activation state pass Gate M and contrast (6.8s)
+
+
+  1) [public] › e2e/public.activation-scenarios.spec.ts:30:5 › the 'Next activation check' control is gone; scenario, clock and reset controls remain 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByTestId('public-demo-strip').locator('#demo-activation-plan')
+    Expected: [32m0[39m
+    Received: [31m1[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('public-demo-strip').locator('#demo-activation-plan')[22m
+    [2m    9 × locator resolved to 1 element[22m
+    [2m      - unexpected value "1"[22m
+
+
+      32 |   await openControls(page);
+      33 |   const strip = page.getByTestId("public-demo-strip");
+    > 34 |   await expect(strip.locator("#demo-activation-plan")).toHaveCount(0);
+         |                                                        ^
+      35 |   await expect(strip).not.toContainText("Next activation check");
+      36 |   await expect(strip.locator("#demo-reg-scenario")).toBeVisible();
+      37 |   await expect(strip.getByRole("button", { name: "Load", exact: true })).toBeVisible();
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r005/base/e2e/public.activation-scenarios.spec.ts:34:56
+
+    Error Context: test-results/public.activation-scenario-d59e7-k-and-reset-controls-remain-public/error-context.md
+
+  1 failed
+    [public] › e2e/public.activation-scenarios.spec.ts:30:5 › the 'Next activation check' control is gone; scenario, clock and reset controls remain 
+  8 passed (39.2s)

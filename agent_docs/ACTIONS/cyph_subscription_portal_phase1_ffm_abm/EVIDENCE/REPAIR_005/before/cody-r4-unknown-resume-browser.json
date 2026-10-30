@@ -1,0 +1,13 @@
+{
+  "before": {
+    "checkout": "unknown",
+    "payment": "failed",
+    "key": "original_key_r4"
+  },
+  "retryOffered": true,
+  "after": {
+    "checkout": null,
+    "payment": null,
+    "key": null
+  }
+}

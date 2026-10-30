@@ -160,3 +160,70 @@ No commit, push, merge, deployment or certification by Engineering. Next: JARVIS
 
 ## 9. Package
 `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip`, with a byte-identical copy in `~/Downloads/`. Member list, sizes and SHA-256 are in `FILE_INDEX.json` and `00_INDEX.md` inside the ZIP. The ZIP's own hash and the privacy-scan result are in the response file, since a ZIP can't contain its own hash.
+
+## 10. Addendum 1 — C14 unknown-payment introduction (manual review, 29 Oct 2026 13:47–13:55)
+- **Finding (Director manual review):** on the saved-signup page (C14), the unknown-payment state's introduction said "Payment wasn't completed", while its warning says we're still checking whether payment went through. The sentence came from the received design, which used the resumable introduction for every state.
+- **Base:** HEAD `d6fe67839961fcbbf801b0bb04d3a2522e7b1f36`, the Director commit of REPAIR_002. `src` and `e2e` were clean at HEAD before the change.
+- **Change:** one product file, `src/components/portal/activation/CheckoutIncompleteView.tsx`. For `unknown` only, the introduction is now "Your details are saved. We're checking your payment status. Please don't pay again yet." Straight apostrophes match the page's existing copy.
+- **Unchanged:**
+  - Abandoned and declined keep "Your details for N pharmacies are saved. Payment wasn't completed, so your account isn't active yet."
+  - Expired keeps no introduction.
+  - The payment lock is unchanged: Continue and Review disabled, the "don't pay again" warning, and "Payment is paused…".
+  - Explicit recovery ("Stripe confirms nothing charged" leads to resumable) and the R-012 hold are unchanged.
+- **Tests:** `portal-checkout-hold.test.tsx` gained 3 component checks: unknown, abandoned and declined. `e2e/public.repair002.spec.ts` gained 3 rendered checks covering the same states at 375 and 1440, light and dark: wording, lock state, Gate M, contrast, screenshots, and unknown → nothing charged → resumable.
+- **Verification** on the owned build `r004/app`, :3107, from `git archive d6fe678` plus the tree (`src` and `e2e` byte-identical):
+  - `next build` exit 0; `tsc` 0
+  - Jest **13 suites, 183/183**
+  - Focused Playwright **6/6**: the 3 new checks, the existing "abandoned checkout resumes…; unknown payment pauses payment" journey, and the R-012 unknown-hold checks
+  - Gate M 12 measurements, 0 failures; contrast 12 entries, 0 failures
+  - Per the QA Lead, no full retest campaign
+- **Account and process:** 0 real sign-ins (public only). Server :3107 was stopped after its cwd was verified. The `r004` scratch copy was deleted. :3000 (PID 916513) and PID 40320 were untouched. No Git actions.
+- **Evidence:** `REPAIR_002/addendum_001/` (diff, logs, data, 12 screenshots). Package: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip`. The committed REPAIR_002 ZIP is unchanged.
+- **Updated candidate:** `d6fe678` plus this uncommitted addendum. It becomes a new SHA when the Director commits it; record that SHA before final certification.
+
+## 11. Addendum 2: activation demo controls (QA Lead authorization, 29 Oct 2026 14:20–14:45)
+- **Finding:** the Director tried every "Next activation check" option, saw no visible change, and saw the selection return to "ready". This is a **demo-usability finding; no engine failure was reproduced.**
+  - **Reproduction** on an owned build of `d6fe678` + ADDENDUM_001, 24 scenario × option combinations (`REPAIR_002/addendum_002/before/before-activation-plan-matrix.json`):
+    - Selecting an option never changed the visible screen, because it only applies to the next Refresh status.
+    - The email-failed, payment-failed and ready states have no Refresh status, so the option had no effect there.
+    - Loading any scenario resets the option to `ready`.
+    - Every Refresh outcome matched the engine rules.
+- **Base:** HEAD `d6fe67839961fcbbf801b0bb04d3a2522e7b1f36` (Cody's retest candidate) + the expected uncommitted ADDENDUM_001, which I preserved. No Git actions; Cody's build and records untouched.
+- **Change:** one product file, `src/components/portal/PublicDemoControls.tsx`.
+  - Removed the "Next activation check" select, along with its now-unused imports and the `useRegistration` read.
+  - The grid went from 4 columns to 3 at `lg`.
+  - Comment updated: Registration scenario → Load is the single way to choose a named activation state.
+  - Engine, scenarios, activation view and customer actions are unchanged.
+- **Now-unused (left in place, removal needs your approval):**
+  - `registrationHarness.setActivationPlan` (`registrationService.ts`)
+  - the `ACTIVATION_PLANS` re-export (`services/portal/index.ts`)
+
+  The engine's `setActivationPlan`/`activationPlan` stay in use by `refreshActivation`, the R-012 hold exception and the engine tests.
+- **Scenario evidence:** `REPAIR_002/addendum_002/SCENARIO_RESULTS.md`. All six named states load on `/demo/activation` as named, unchanged after a 2.5 s wait and a reload, with the stored state identical and the plan `ready`. Each customer action reaches the expected next state:
+
+  | Named state | Customer action | Next state |
+  |---|---|---|
+  | Waiting | Refresh | Provisioning, then a second Refresh → ready |
+  | Provisioning | Refresh | Ready |
+  | Delayed | Refresh | Ready |
+  | Email failed | Resend | Ready, with "Sent again" |
+  | Payment failed | Try payment again | Review: fresh $148.00 quote, unticked consent, no checkout or activation left open, so no duplicate payment |
+  | Ready | Resend | "Sent again" (no Refresh) |
+
+- **Verification** on the owned build `r005/app`, :3108, from `git archive d6fe678` + tree, with `src` and `e2e` byte-identical:
+  - `next build` exit 0; `tsc` 0
+  - Focused Jest 76/76: registration, checkout-hold (with the new demo-controls component test) and components
+  - New `e2e/public.activation-scenarios.spec.ts`: **9/9**
+    - control absent, with no customer action inside the demo strip
+    - the 6 scenario rows
+    - keyboard only: Tab to Demo controls → Enter → arrow-select a scenario → Load → Tab to Refresh status → Enter
+    - 375 and 1440 px, light and dark, for the open strip and every state
+  - Affected existing tests **35/35**: activation contrast, R-012 holds, the 21-store journey, Gate M public
+  - Gate M 180 measurements, 0 failures; contrast 0 failures
+  - The same spec on the **baseline**: only the "control is gone" check failed; the scenario, keyboard and mobile checks passed, which confirms no engine repair was needed (`logs/before-focused.log`)
+- **Account and process:** 0 real sign-ins. My server :3108 was stopped after its cwd was verified, and the `r005` copy was deleted after packaging. :3000 (PID 916513) and PID 40320 were untouched.
+- **Limitations:**
+  - The engine still supports non-`ready` plans; a session restored with an old non-ready plan would play that plan on the next Refresh. This is coherent, but there is no longer a UI to select it.
+  - Focused checks only, as instructed.
+  - Real browser zoom was not tested; only viewport emulation was used.
+- **Package:** `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip`. The earlier REPAIR_002 and ADDENDUM_001 ZIPs are unchanged.

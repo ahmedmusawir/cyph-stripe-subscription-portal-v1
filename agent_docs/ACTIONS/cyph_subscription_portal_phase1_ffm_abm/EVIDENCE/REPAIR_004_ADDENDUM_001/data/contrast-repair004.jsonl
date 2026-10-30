@@ -1,0 +1,8 @@
+{"screen":"/demo/stripe [REPAIR_004 stripe-unmatched]","width":375,"theme":"light","fails":[]}
+{"screen":"/demo/stripe [REPAIR_004 stripe-unmatched]","width":1440,"theme":"light","fails":[]}
+{"screen":"/demo/stripe [REPAIR_004 stripe-unmatched]","width":375,"theme":"dark","fails":[]}
+{"screen":"/demo/stripe [REPAIR_004 stripe-unmatched]","width":1440,"theme":"dark","fails":[]}
+{"screen":"/demo/activation [REPAIR_004 activation-completed]","width":375,"theme":"light","fails":[]}
+{"screen":"/demo/activation [REPAIR_004 activation-completed]","width":1440,"theme":"light","fails":[]}
+{"screen":"/demo/activation [REPAIR_004 activation-completed]","width":375,"theme":"dark","fails":[]}
+{"screen":"/demo/activation [REPAIR_004 activation-completed]","width":1440,"theme":"dark","fails":[]}

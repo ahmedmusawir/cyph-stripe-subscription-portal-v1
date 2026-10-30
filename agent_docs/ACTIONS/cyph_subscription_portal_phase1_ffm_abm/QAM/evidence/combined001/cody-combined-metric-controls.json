@@ -1,0 +1,53 @@
+{
+  "text": [
+    {
+      "kind": "text",
+      "tag": "P",
+      "id": "good",
+      "class": "",
+      "ratio": 21,
+      "required": 4.5,
+      "disabled": false,
+      "faded": false,
+      "effectiveDark": false
+    },
+    {
+      "kind": "text",
+      "tag": "P",
+      "id": "bad",
+      "class": "",
+      "ratio": 1,
+      "required": 4.5,
+      "disabled": false,
+      "faded": false,
+      "effectiveDark": false
+    }
+  ],
+  "bound": [
+    {
+      "kind": "boundary",
+      "tag": "INPUT",
+      "id": "boundary",
+      "class": "",
+      "ratio": 21,
+      "required": 3,
+      "disabled": false,
+      "faded": false,
+      "effectiveDark": false
+    }
+  ],
+  "focus": [
+    {
+      "kind": "focus",
+      "tag": "INPUT",
+      "id": "boundary",
+      "class": "",
+      "ratio": 21,
+      "required": 3,
+      "disabled": false,
+      "faded": false,
+      "effectiveDark": false
+    }
+  ],
+  "pass": true
+}

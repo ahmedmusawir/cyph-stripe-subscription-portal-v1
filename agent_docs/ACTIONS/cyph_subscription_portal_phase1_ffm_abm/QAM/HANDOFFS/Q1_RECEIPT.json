@@ -1,0 +1,9 @@
+{
+  "candidate": "94251beab08dd26d7f56f4b8f2299a1e841892c5",
+  "plan_sha256": "42ebdbc6ac88ddf6733416aaa0374be1cc852400a6f1679ca631891ef7ddc24d",
+  "zip": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q1_REVIEW_002.zip",
+  "zip_sha256": "db3b2875b8646c2cb9f138923d52fc5fe60245ccc55ae80474503215a0e6ead2",
+  "members": 36,
+  "privacyValueScan": "PASS",
+  "downloadsCopyIdentical": true
+}

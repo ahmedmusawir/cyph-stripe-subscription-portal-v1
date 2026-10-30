@@ -1,0 +1,138 @@
+[
+  {
+    "surface": "unknown",
+    "theme": "light",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": null
+  },
+  {
+    "surface": "legacyClosed",
+    "theme": "light",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": null
+  },
+  {
+    "surface": "resolved",
+    "theme": "light",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": "known terminal notice bypass reported separately"
+  },
+  {
+    "surface": "paid",
+    "theme": "light",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": null
+  },
+  {
+    "surface": "unknown",
+    "theme": "dark",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": null
+  },
+  {
+    "surface": "legacyClosed",
+    "theme": "dark",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": null
+  },
+  {
+    "surface": "resolved",
+    "theme": "dark",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": "known terminal notice bypass reported separately"
+  },
+  {
+    "surface": "paid",
+    "theme": "dark",
+    "zoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "cdpZoom": 2,
+    "actualZoom": true,
+    "shortfalls": [],
+    "keyboardAction": true,
+    "copyLimitation": null
+  }
+]

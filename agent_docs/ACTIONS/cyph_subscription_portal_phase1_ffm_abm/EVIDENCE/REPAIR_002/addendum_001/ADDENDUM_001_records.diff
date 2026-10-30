@@ -1,0 +1,92 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 56722f4..0cf0553 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,5 +1,10 @@
+ # CHANGELOG
+ 
++## 2026-10-29 07:55 UTC — [CC] Claude Code
++- **Updated:** `…/RULINGS.md` (R-012 addendum 1), `…/_project/UI_SPEC.md` (C14 unknown intro), `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9, `…/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` §10, `…/STATE.md`, `…/JOURNAL.md`, `RECOVERY.md`, session file.
++- **Added:** `…/EVIDENCE/REPAIR_002/addendum_001/`, `…/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip`.
++- **Reason:** Director manual-review finding — contradictory payment-status wording on C14 unknown state.
++
+ ## 2026-10-29 07:30 UTC — [CC] Claude Code
+ - **Updated:** `…/RULINGS.md` — R-012 REPAIR_002 (pending checkout respects current prerequisites; bounded repeat-N work).
+ - **Updated:** `…/ACCEPTANCE_SPEC.md` v1.3 (AC-05, AC-06a extended), `…/_project/DATA_CONTRACT.md` v1.4, `…/_project/UI_SPEC.md` (C05/C06/C14 hold/closed states), `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md
+index fbb36b8..702f868 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md
+@@ -160,3 +160,23 @@ No commit, push, merge, deployment or certification by Engineering. Next: JARVIS
+ 
+ ## 9. Package
+ `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip`, with a byte-identical copy in `~/Downloads/`. Member list, sizes and SHA-256 are in `FILE_INDEX.json` and `00_INDEX.md` inside the ZIP. The ZIP's own hash and the privacy-scan result are in the response file, since a ZIP can't contain its own hash.
++
++## 10. Addendum 1 — C14 unknown-payment introduction (manual review, 29 Oct 2026 13:47–13:55)
++- **Finding (Director manual review):** on the saved-signup page (C14), the unknown-payment state's introduction said "Payment wasn't completed", while its warning says we're still checking whether payment went through. The sentence came from the received design, which used the resumable introduction for every state.
++- **Base:** HEAD `d6fe67839961fcbbf801b0bb04d3a2522e7b1f36`, the Director commit of REPAIR_002. `src` and `e2e` were clean at HEAD before the change.
++- **Change:** one product file, `src/components/portal/activation/CheckoutIncompleteView.tsx`. For `unknown` only, the introduction is now "Your details are saved. We're checking your payment status. Please don't pay again yet." Straight apostrophes match the page's existing copy.
++- **Unchanged:**
++  - Abandoned and declined keep "Your details for N pharmacies are saved. Payment wasn't completed, so your account isn't active yet."
++  - Expired keeps no introduction.
++  - The payment lock is unchanged: Continue and Review disabled, the "don't pay again" warning, and "Payment is paused…".
++  - Explicit recovery ("Stripe confirms nothing charged" leads to resumable) and the R-012 hold are unchanged.
++- **Tests:** `portal-checkout-hold.test.tsx` gained 3 component checks: unknown, abandoned and declined. `e2e/public.repair002.spec.ts` gained 3 rendered checks covering the same states at 375 and 1440, light and dark: wording, lock state, Gate M, contrast, screenshots, and unknown → nothing charged → resumable.
++- **Verification** on the owned build `r004/app`, :3107, from `git archive d6fe678` plus the tree (`src` and `e2e` byte-identical):
++  - `next build` exit 0; `tsc` 0
++  - Jest **13 suites, 183/183**
++  - Focused Playwright **6/6**: the 3 new checks, the existing "abandoned checkout resumes…; unknown payment pauses payment" journey, and the R-012 unknown-hold checks
++  - Gate M 12 measurements, 0 failures; contrast 12 entries, 0 failures
++  - Per the QA Lead, no full retest campaign
++- **Account and process:** 0 real sign-ins (public only). Server :3107 was stopped after its cwd was verified. The `r004` scratch copy was deleted. :3000 (PID 916513) and PID 40320 were untouched. No Git actions.
++- **Evidence:** `REPAIR_002/addendum_001/` (diff, logs, data, 12 screenshots). Package: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip`. The committed REPAIR_002 ZIP is unchanged.
++- **Updated candidate:** `d6fe678` plus this uncommitted addendum. It becomes a new SHA when the Director commits it; record that SHA before final certification.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
+index 4b7fe1e..d198900 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
+@@ -46,3 +46,4 @@ Engineer appends meaningful checkpoints: time, identity, work, command/result ev
+ - The review copy already promised "editing … closes the open checkout"; `touch` never did. That gap is R2-N01, found while reproducing.
+ - Failed attempt: on the unrepaired baseline, billion-count test calls outside the push budget exhausted one Jest worker heap (4 GB) before I moved every extreme-count call inside the budget. Contained to that worker; recorded in the report.
+ - R2-N02 found because the CR-F02 deep-link test failed: the route parsed `?store=` with `\d{1,2}`.
++- 29 Oct (addendum 1): the contradictory C14 sentence came from the received design, which used the resumable introduction for every state. Changed for `unknown` only; straight apostrophes to match the page's existing copy.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+index 368cba2..14db8f9 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+@@ -38,3 +38,4 @@ Owned: `next start -p 3001` from session scratchpad copy `run-r008/` (PID in `..
+ - **REPAIR_001 (R-010)**, committed by the Director as `0d43a4c`: Q2-F01/F02/F03/O04/G06 + R1-N01. Report `../../EVIDENCE/REPAIR_001_ENGINEERING_REPORT.md`.
+ - **AMENDMENT_001 (R-011, 29 Oct 2026)** — Coach-approved owner-only registration, Director-authorized before final certification. The C02 job-title select is removed; a required, initially unchecked owner declaration ("I confirm that I am the pharmacy owner and am registering this account to manage its subscription and pharmacies.") is enforced in the UI and in the mock service (owner step, deep links, checkout). v1 drafts migrate unaccepted. Me / Someone else copy clarifies that ownership, billing and permission to buy stores stay with the owner. Ownership-transfer copy is clarified with placeholders. ACCEPTANCE_SPEC v1.2 (AC-06 text, new AC-06a); DATA_CONTRACT v1.3; portal-contract v1.2. Report: `../../EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md`. **Independent QA must cover AC-06a and re-run the REPAIR_001 retest on the combined candidate.**
+ - **REPAIR_002 (R-012, 29 Oct 2026)** — QA Lead dispatch after Gate Q FAIL on `24cf075` (CR-F01 blocker, CR-F02 robustness, Q2-O04 residual). An open checkout is closed when the declaration is withdrawn, a v1 draft is restored or the draft changes materially; every move toward payment re-checks the current draft at the service; submitted/unknown payments are held until explicit re-acceptance; paid history untouched. Repeat-N entries materialize only as filled (no count-sized allocation); step 100+ route fixed (R2-N02, self-found); R2-N01 (count change kept a stale open checkout payable) self-found and fixed. Plan Actions column uses the approved divider/spacing. ACCEPTANCE_SPEC v1.3 (AC-05, AC-06a extended); DATA_CONTRACT v1.4. Report: `../../EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md`. **Independent retest required: CR-F01 A/B, CR-F02, the O04 residual and regression on the combined candidate. Cody's combined001 tests that expect the defect (e.g. the 64-push abort) will now observe the repaired behaviour.**
++- **REPAIR_002 addendum 1 (R-012, 29 Oct 2026)** — manual-review copy fix on C14 `payment_unknown` only (intro no longer says "Payment wasn't completed"). Lock/recovery unchanged. Focused rendered check per the QA Lead (unknown, abandoned, declined; 375/1440, light/dark). Base `d6fe678`; record: `../../EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` §10.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+index 4c8fa81..bfa1cbd 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+@@ -105,3 +105,4 @@ Future amendment record: ID; date/seat; approving source; original observation;
+ - **Unchanged:** database, RLS/RBAC, stored roles, live auth, Stripe, email, provisioning, vendors, dependencies; the real admin/superadmin gate (R-008/R-009); exact R-011 declaration, unchecked default, strict boolean validation, review summary, Me / Someone else; quote/consent rules; REPAIR_001 behaviour.
+ - **Affected ACs/files:** AC-05 and AC-06a wording extended (ACCEPTANCE_SPEC v1.2→v1.3; nothing removed); DATA_CONTRACT v1.3→v1.4 (§6 initial purchase, §10 binding); UI_SPEC C05/C06/C14 hold/closed states; internal `src/types/portal/state.ts` (`closedReason`; not the frozen view contract, so `portal-contract.ts` is unchanged); ACCEPTANCE_LEDGER; QAM engineering handoff §9.
+ - **Required regression:** both CR-F01 reproductions (current UI; legacy draft) refused at service and UI, with valid recovery after explicit acceptance; reload/direct navigation; same-key replay; processing/unknown holds; completed history preserved; bounded CR-F02 instrumentation; 1/2/3/21 stores; count reduction/restoration; invalid counts; REPAIR_001 and AMENDMENT_001 regressions.
++- **R-012 addendum 1 (29 Oct 2026, manual review; Director finding, QA Lead instruction):** on C14, the `payment_unknown` introduction said "Payment wasn't completed" while its warning says payment is still being checked. For the unknown state **only**, the introduction is now "Your details are saved. We're checking your payment status. Please don't pay again yet." The payment lock (Continue/Review disabled, "don't pay again") and explicit demo recovery are unchanged; resumable/declined keep "Your details for N pharmacies are saved. Payment wasn't completed, so your account isn't active yet." This deviates from the received design copy (`_design/…/checkout-incomplete.html` used the resumable sentence for every state), which is preserved as history. Per the QA Lead, a focused rendered check of unknown and confirmed-unpaid states is sufficient; no separate full retest campaign. Base `d6fe678` (Director commit of REPAIR_002).
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
+index e97af46..26d5e79 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
+@@ -56,3 +56,4 @@ Safe resume point: if E2 is approved, re-verify branch/HEAD/dirt against this fi
+ - Self-checks: build 0 · tsc 0 · jest 13 suites 180/180 · Playwright 148/148 (public 100, Gate M public 13, account 35) · Gate M 236/0 · contrast 0 failures. Not QA certification.
+ - Report `EVIDENCE/REPAIR_002_ENGINEERING_REPORT.md` · ZIP `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_REVIEW.zip`.
+ - Next: JARVIS reviews → Tony commits → Cody retests → Tony walkthrough → JARVIS certification decision.
++- **REPAIR_002 addendum 1 (29 Oct 2026 13:47–13:55):** Director committed REPAIR_002 as `d6fe678`. Manual-review finding fixed: C14 unknown-payment introduction ("We're checking your payment status. Please don't pay again yet."). jest 183/183 · focused Playwright 6/6 · Gate M 12/0 · contrast 0. Uncommitted on `d6fe678`, pending Director commit. Package `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip`.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+index 03dac55..f6a1f6a 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+@@ -131,7 +131,7 @@
+ - Before leaving: cancel panel copy (account-wide effect; timing, charges, refunds, retention → `[POLICY TBD]`). After return: `cancel_scheduled` (Scheduled; Resume in Stripe), `canceled` (Start a new subscription; Past invoices in Stripe), `unchanged`, `refreshing`. No custom cancellation wizard.
+ 
+ ### C14 Checkout not completed — `checkout-incomplete.html`
+-- `resumable` (Stripe confirmed nothing charged → info), `payment_unknown` (warning + spinner; CTA paused; "don't pay again"), `declined` (destructive; CTA enabled), `expired` (`[HOLD PERIOD TBD]`; start a new signup). Saved-details panel with "Saved until" chip; "Review my details first".
++- `resumable` (Stripe confirmed nothing charged → info), `payment_unknown` (warning + spinner; CTA paused; "don't pay again"; introduction "Your details are saved. We're checking your payment status. Please don't pay again yet." — R-012 addendum 1; the other states keep "Payment wasn't completed, so your account isn't active yet."), `declined` (destructive; CTA enabled), `expired` (`[HOLD PERIOD TBD]`; start a new signup). Saved-details panel with "Saved until" chip; "Review my details first".
+ 
+ ### C17 Access link — `access-link.html`
+ - `valid` (spinner → downstream account setup, explicitly not designed here), `expired` / `used` (request a new link; no email shown or editable), `sending`, `request_sent` (neutral "if an account matches"), `error`.

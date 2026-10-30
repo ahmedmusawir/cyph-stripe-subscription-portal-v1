@@ -1,0 +1,147 @@
+
+Running 6 tests using 1 worker
+
+  ✘  1 [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (9.5s)
+  ✘  2 [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (9.6s)
+  ✘  3 [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable (9.5s)
+  ✘  4 [public] › e2e/public.repair006.spec.ts:76:5 › R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key (9.5s)
+  ✓  5 [public] › e2e/public.repair006.spec.ts:104:5 › R5-F02 preserved: valid paid resend, from the email-failed scenario and from a sent email (5.6s)
+  ✘  6 [public] › e2e/public.repair006.spec.ts:118:5 › REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots (9.7s)
+
+
+  1) [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByRole('heading', { level: 1 })
+    Expected: [32m"Payment confirmed"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toHaveText" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('heading', { level: 1 })[22m
+
+
+      61 |     await storeActivation(page, edit);
+      62 |     for (let i = 0; i < 2; i++) {
+    > 63 |       await expect(page.getByRole("heading", { level: 1 })).toHaveText("Payment confirmed");
+         |                                                             ^
+      64 |       await expect(page.getByTestId("activation-paid-status-unavailable")).toContainText("Setup and access-email status aren't available");
+      65 |       const text = await page.locator("main").innerText();
+      66 |       for (const claim of ["Payment didn't go through", "Waiting for payment confirmation", "There's no payment to track yet", "set up in OwedBook", "Sent to "]) expect(text).not.toContain(claim);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/e2e/public.repair006.spec.ts:63:61
+
+    Error Context: test-results/public.repair006-R5-F01-pa-40753-efresh-resend-reload-stable-public/error-context.md
+
+  2) [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByRole('heading', { level: 1 })
+    Expected: [32m"[7mP[27mayment confirm[7med[27m"[39m
+    Received: [31m"[7mWaiting for p[27mayment confirm[7mation[27m"[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveText" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('heading', { level: 1 })[22m
+    [2m    9 × locator resolved to <h1 class="mt-1 text-[26px] font-bold leading-tight text-foreground md:text-[32px]">Waiting for payment confirmation</h1>[22m
+    [2m      - unexpected value "Waiting for payment confirmation"[22m
+
+
+      61 |     await storeActivation(page, edit);
+      62 |     for (let i = 0; i < 2; i++) {
+    > 63 |       await expect(page.getByRole("heading", { level: 1 })).toHaveText("Payment confirmed");
+         |                                                             ^
+      64 |       await expect(page.getByTestId("activation-paid-status-unavailable")).toContainText("Setup and access-email status aren't available");
+      65 |       const text = await page.locator("main").innerText();
+      66 |       for (const claim of ["Payment didn't go through", "Waiting for payment confirmation", "There's no payment to track yet", "set up in OwedBook", "Sent to "]) expect(text).not.toContain(claim);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/e2e/public.repair006.spec.ts:63:61
+
+    Error Context: test-results/public.repair006-R5-F01-pa-e5ad9-efresh-resend-reload-stable-public/error-context.md
+
+  3) [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  getByRole('heading', { level: 1 })
+    Expected: [32m"Payment [7mconfirmed[27m"[39m
+    Received: [31m"Payment [7mdidn't go through[27m"[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveText" with timeout 5000ms[22m
+    [2m  - waiting for getByRole('heading', { level: 1 })[22m
+    [2m    9 × locator resolved to <h1 class="mt-1 text-[26px] font-bold leading-tight text-foreground md:text-[32px]">Payment didn't go through</h1>[22m
+    [2m      - unexpected value "Payment didn't go through"[22m
+
+
+      61 |     await storeActivation(page, edit);
+      62 |     for (let i = 0; i < 2; i++) {
+    > 63 |       await expect(page.getByRole("heading", { level: 1 })).toHaveText("Payment confirmed");
+         |                                                             ^
+      64 |       await expect(page.getByTestId("activation-paid-status-unavailable")).toContainText("Setup and access-email status aren't available");
+      65 |       const text = await page.locator("main").innerText();
+      66 |       for (const claim of ["Payment didn't go through", "Waiting for payment confirmation", "There's no payment to track yet", "set up in OwedBook", "Sent to "]) expect(text).not.toContain(claim);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/e2e/public.repair006.spec.ts:63:61
+
+    Error Context: test-results/public.repair006-R5-F01-pa-50a31-efresh-resend-reload-stable-public/error-context.md
+
+  4) [public] › e2e/public.repair006.spec.ts:76:5 › R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('activation-not-charged')
+    Expected substring: [32m"Nothing was charged for this payment"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-not-charged')[22m
+
+
+      84 |   for (let i = 0; i < 2; i++) {
+      85 |     await settle(page, "/demo/activation");
+    > 86 |     await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged for this payment");
+         |                                                              ^
+      87 |     await expect(page.getByText("There's no payment to track yet")).toHaveCount(0);
+      88 |     await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
+      89 |     await page.reload();
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/e2e/public.repair006.spec.ts:86:62
+
+    Error Context: test-results/public.repair006-R5-F01-ac-f29b7-ent-recovery-with-a-new-key-public/error-context.md
+
+  5) [public] › e2e/public.repair006.spec.ts:118:5 › REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('activation-paid-status-unavailable')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-paid-status-unavailable')[22m
+
+
+      125 |       await setTheme(page, theme);
+      126 |       await page.reload();
+    > 127 |       await expect(page.getByTestId("activation-paid-status-unavailable")).toBeVisible();
+          |                                                                            ^
+      128 |       const g = await measure(page, "/demo/activation [REPAIR_006 paid-status-unavailable]", width, theme);
+      129 |       record("gate-m-repair006.jsonl", g);
+      130 |       assertGate(g);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r010/app/e2e/public.repair006.spec.ts:127:76
+
+    Error Context: test-results/public.repair006-REPAIR-00-c98d4-Gate-M-contrast-screenshots-public/error-context.md
+
+  5 failed
+    [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable 
+    [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable 
+    [public] › e2e/public.repair006.spec.ts:58:7 › R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable 
+    [public] › e2e/public.repair006.spec.ts:76:5 › R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key 
+    [public] › e2e/public.repair006.spec.ts:118:5 › REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+  1 passed (58.6s)

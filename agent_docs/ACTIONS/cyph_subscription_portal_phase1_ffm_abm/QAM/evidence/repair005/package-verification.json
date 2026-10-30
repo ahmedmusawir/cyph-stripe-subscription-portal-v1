@@ -1,0 +1,31 @@
+{
+  "zipSHA256": "7a78e610e04992aeca96bed6c2b068c4d4c97137b8d265669865817b49a5c1fc",
+  "members": 100,
+  "indexed": 99,
+  "hashesVerified": true,
+  "sourceMechanism": "No source/ tree in package; cumulative patch reconstructed from Git base and all reviewed product/test results byte-matched",
+  "reconstructedPaths": [
+    "e2e/public.owner-declaration.spec.ts",
+    "e2e/public.repair002.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/__tests__/portal-registration.test.ts",
+    "src/components/portal/Alert.tsx",
+    "src/components/portal/PublicDemoControls.tsx",
+    "src/components/portal/activation/ActivationView.tsx",
+    "src/components/portal/activation/CheckoutIncompleteView.tsx",
+    "src/components/portal/handoff/CheckoutStandIn.tsx",
+    "src/components/portal/references/EmailPreview.tsx",
+    "src/components/portal/references/EmailReferenceView.tsx",
+    "src/components/portal/register/ReviewView.tsx",
+    "src/services/portal/index.ts",
+    "src/services/portal/registration.ts",
+    "src/services/portal/registrationService.ts",
+    "src/types/portal/state.ts",
+    "e2e/public.activation-scenarios.spec.ts",
+    "e2e/public.repair003.spec.ts",
+    "e2e/public.repair004-addendum.spec.ts",
+    "e2e/public.repair004.spec.ts",
+    "e2e/public.repair005.spec.ts"
+  ],
+  "diffCorrespondence": true
+}

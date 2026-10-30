@@ -1,0 +1,50 @@
+
+> cyph-stripe-subscription-portal-v1@0.1.0 build
+> next build
+
+▲ Next.js 16.4.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.js took 15ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.9s
+  Running TypeScript ...
+  Finished TypeScript in 7.8s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/20) ...
+  Generating static pages using 3 workers (5/20) 
+  Generating static pages using 3 workers (10/20) 
+  Generating static pages using 3 workers (15/20) 
+✓ Generating static pages using 3 workers (20/20) in 502ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/auth/confirm
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /dashboard
+├ ○ /demo/access-link
+├ ○ /demo/activation
+├ ○ /demo/checkout-incomplete
+├ ƒ /demo/references/email
+├ ƒ /demo/references/owedbook
+├ ƒ /demo/register/owner
+├ ƒ /demo/register/pharmacies
+├ ƒ /demo/register/plan
+├ ○ /demo/register/review
+├ ƒ /demo/sign-in
+├ ƒ /demo/stores/add
+├ ƒ /demo/stores/confirm
+├ ƒ /demo/stores/result
+├ ƒ /demo/stripe
+├ ○ /icon.png
+└ ƒ /login
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

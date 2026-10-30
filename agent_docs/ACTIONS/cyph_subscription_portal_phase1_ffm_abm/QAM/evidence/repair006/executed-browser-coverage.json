@@ -1,0 +1,353 @@
+[
+  {
+    "title": "cody-r6-browser.json / R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable",
+    "file": "public.repair006.spec.ts",
+    "project": "current-readers",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5305,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable",
+    "file": "public.repair006.spec.ts",
+    "project": "current-readers",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5020,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable",
+    "file": "public.repair006.spec.ts",
+    "project": "current-readers",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4936,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R5-F01 actual unknown \u2192 nothing charged: terminal notice, then coherent recovery with a new key",
+    "file": "public.repair006.spec.ts",
+    "project": "current-readers",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7264,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R5-F02 preserved: valid paid resend, from the email-failed scenario and from a sent email",
+    "file": "public.repair006.spec.ts",
+    "project": "current-readers",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5442,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+    "file": "public.repair006.spec.ts",
+    "project": "current-readers",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5889,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key",
+    "file": "public.repair005.spec.ts",
+    "project": "phase-notices",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6892,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery",
+    "file": "public.repair005.spec.ts",
+    "project": "phase-notices",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8342,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R4-F02 paid branch: the same record can still be confirmed by Stripe",
+    "file": "public.repair005.spec.ts",
+    "project": "phase-notices",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3940,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+    "file": "public.repair005.spec.ts",
+    "project": "phase-notices",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 9873,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6099,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R3-F01 known scope: an unedited legacy open checkout binds the quote it opened with and can be paid",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5321,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R3-F01 recovery: an edited legacy unknown payment stays unmatched; nothing charged \u2192 fresh quote \u2192 new key",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6970,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R3-F02: completed activation and its previews name no admin nominated after payment",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4105,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R3-F02 control: an admin the payment covered is still the one named and previewed",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3736,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 11300,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+    "file": "public.repair004.spec.ts",
+    "project": "scope-admin",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 9946,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works",
+    "file": "public.repair002.spec.ts",
+    "project": "declaration-safeguard",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 11754,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-browser.json / processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again",
+    "file": "public.repair002.spec.ts",
+    "project": "declaration-safeguard",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5869,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-original-readers.json / paid checkout remains visibly paid with activation flag none",
+    "file": "phase-display.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1574,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-original-readers.json / paid checkout remains visibly paid with activation flag pending",
+    "file": "phase-display.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1365,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-original-readers.json / paid checkout remains visibly paid with activation flag failed",
+    "file": "phase-display.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1422,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-original-readers.json / paid checkout remains visibly paid with activation flag confirmed",
+    "file": "phase-display.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1780,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-original-readers.json / resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared",
+    "file": "phase-display.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1137,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-ui-controls.json / paid none without scope neither invents amount nor setup/email at mobile/desktop and reload",
+    "file": "unavailable.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2206,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-ui-controls.json / paid pending without scope neither invents amount nor setup/email at mobile/desktop and reload",
+    "file": "unavailable.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2089,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "cody-r6-ui-controls.json / paid failed without scope neither invents amount nor setup/email at mobile/desktop and reload",
+    "file": "unavailable.spec.ts",
+    "project": "",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2145,
+        "retry": 0
+      }
+    ]
+  }
+]

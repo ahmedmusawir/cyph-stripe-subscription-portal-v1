@@ -1,0 +1,8 @@
+{
+  "independentCells": 224,
+  "engineeringCells": 224,
+  "allowed": 67,
+  "refused": 157,
+  "summaryMismatches": [],
+  "independentChecks": "Hard assertions on independently-derived phase/permission, exact checkout/payment/activation/key/scope/consent effects, spent keys, null clears, deep/identity-preserving refusals; additional reader/writer probes separate."
+}

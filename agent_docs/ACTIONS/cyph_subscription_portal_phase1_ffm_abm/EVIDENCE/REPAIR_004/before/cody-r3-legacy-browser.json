@@ -1,0 +1,41 @@
+{
+  "paidAvailable": true,
+  "scope": {
+    "storeCount": 2,
+    "pharmacies": [
+      {
+        "id": "demo_ph_main",
+        "name": "Example Main Street Pharmacy",
+        "street": "120 Main Street",
+        "city": "Springfield",
+        "state": "Alabama",
+        "zip": "00000",
+        "ncpdp": "0000000",
+        "npi": "0000000000",
+        "phone": "(555) 010-0150",
+        "software": "Liberty",
+        "adminAssignment": {
+          "kind": "owner"
+        }
+      },
+      {
+        "id": "demo_reg_ph_2",
+        "name": "Legacy extra",
+        "street": "120 Main Street",
+        "city": "Springfield",
+        "state": "Alabama",
+        "zip": "00000",
+        "ncpdp": "0000045",
+        "npi": "0000000045",
+        "phone": "(555) 010-0150",
+        "software": "Liberty",
+        "adminAssignment": {
+          "kind": "owner"
+        }
+      }
+    ],
+    "dueNowCents": 14800
+  },
+  "payment": "confirmed",
+  "count": 2
+}

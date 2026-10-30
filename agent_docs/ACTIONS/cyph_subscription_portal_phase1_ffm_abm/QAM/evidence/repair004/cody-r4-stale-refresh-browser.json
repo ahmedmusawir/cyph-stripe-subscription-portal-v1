@@ -1,0 +1,13 @@
+{
+  "before": {
+    "checkout": "abandoned",
+    "payment": "pending",
+    "key": "original_key_r4"
+  },
+  "refreshOffered": true,
+  "after": {
+    "checkout": "paid",
+    "payment": "confirmed",
+    "key": "original_key_r4"
+  }
+}

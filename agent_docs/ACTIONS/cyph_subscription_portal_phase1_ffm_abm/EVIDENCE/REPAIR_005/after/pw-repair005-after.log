@@ -1,0 +1,9 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.repair005.spec.ts:55:5 › R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key (6.4s)
+  ✓  2 [public] › e2e/public.repair005.spec.ts:79:5 › R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery (8.3s)
+  ✓  3 [public] › e2e/public.repair005.spec.ts:112:5 › R4-F02 paid branch: the same record can still be confirmed by Stripe (4.0s)
+  ✓  4 [public] › e2e/public.repair005.spec.ts:121:5 › REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (9.5s)
+
+  4 passed (29.2s)

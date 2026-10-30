@@ -1,0 +1,25 @@
+{
+  "zipSHA256": "5487998dbb98f4c8aa3b9e03db187b0586b08b3432cbedced8c1f01646bebe62",
+  "members": 79,
+  "indexed": 78,
+  "hashesVerified": true,
+  "sourceMechanism": "No source/ tree in package; cumulative patch reconstructed from Git base and all15product/test results byte-matched",
+  "reconstructedPaths": [
+    "e2e/public.owner-declaration.spec.ts",
+    "e2e/public.repair002.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/__tests__/portal-registration.test.ts",
+    "src/components/portal/PublicDemoControls.tsx",
+    "src/components/portal/activation/ActivationView.tsx",
+    "src/components/portal/activation/CheckoutIncompleteView.tsx",
+    "src/components/portal/handoff/CheckoutStandIn.tsx",
+    "src/components/portal/register/ReviewView.tsx",
+    "src/services/portal/index.ts",
+    "src/services/portal/registration.ts",
+    "src/services/portal/registrationService.ts",
+    "src/types/portal/state.ts",
+    "e2e/public.activation-scenarios.spec.ts",
+    "e2e/public.repair003.spec.ts"
+  ],
+  "diffCorrespondence": true
+}

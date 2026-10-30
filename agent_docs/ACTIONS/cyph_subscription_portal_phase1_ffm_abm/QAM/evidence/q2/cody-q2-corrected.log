@@ -1,0 +1,77 @@
+
+Running 12 tests using 1 worker
+
+(node:777425) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:777425) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 qa-tests/account.corrected.spec.ts:5:5 › Remaining light handoff_error (2ms)
+(node:777567) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:777567) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 qa-tests/account.corrected.spec.ts:10:5 › Remaining light add_draft_restored (3.0s)
+  ✓   3 qa-tests/account.corrected.spec.ts:15:5 › Remaining dark two_store_active (3.2s)
+  ✓   4 qa-tests/account.corrected.spec.ts:20:5 › Remaining dark one_store_active (3.1s)
+  ✓   5 qa-tests/account.corrected.spec.ts:25:5 › Remaining dark past_due (3.1s)
+  ✓   6 qa-tests/account.corrected.spec.ts:30:5 › Remaining dark cancel_scheduled (3.0s)
+  ✓   7 qa-tests/account.corrected.spec.ts:35:5 › Remaining dark canceled (3.1s)
+  ✓   8 qa-tests/account.corrected.spec.ts:40:5 › Remaining dark no_pharmacies (3.1s)
+  ✓   9 qa-tests/account.corrected.spec.ts:45:5 › Remaining dark handoff_error (3.4s)
+  ✓  10 qa-tests/account.corrected.spec.ts:50:5 › Remaining dark add_draft_restored (3.0s)
+  ✘  11 qa-tests/account.corrected.spec.ts:55:5 › Remaining dark load_error (1.0m)
+(node:778714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:778714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 qa-tests/account.corrected.spec.ts:60:5 › T09/T29 account clock invalidates current quote and refresh renews consent (5.5s)
+
+
+  1) qa-tests/account.corrected.spec.ts:5:5 › Remaining light handoff_error ────────────────────────
+
+    Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Expected pattern: [32m/\/dashboard$/[39m
+    Received string:  [31m"http://localhost:3108/login"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "to.have.url" with timeout 5000ms[22m
+    [2m    9 × unexpected value "http://localhost:3108/login"[22m
+
+
+       at auth-fixture.ts:10
+
+       8 |  await p.goto('http://localhost:3108/login');await p.getByLabel('Work email').fill(creds.QA_PORTAL_ADMIN_EMAIL);await p.getByLabel('Password').fill(creds.QA_PORTAL_ADMIN_PASSWORD);
+       9 |  fs.appendFileSync('/tmp/cody-q2-auth-count.txt','sign-in attempt\n');
+    > 10 |  await p.getByRole('button',{name:'Sign in',exact:true}).click();await expect(p).toHaveURL(/\/dashboard$/);await expect(p.getByRole('heading',{name:'Your subscription'})).toBeVisible();
+         |                                                                                  ^
+      11 |  const state=await c.storageState();await c.close();await use(state);
+      12 |  },{scope:'worker'}],
+      13 |  storageState:async({memoryAuth},use)=>{await use(memoryAuth);},
+        at Object.exports.test._test.test.extend.memoryAuth.scope (/tmp/cody-q2-94251be/qa-tests/auth-fixture.ts:10:82)
+
+  2) qa-tests/account.corrected.spec.ts:55:5 › Remaining dark load_error ───────────────────────────
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+    [2m  - waiting for getByTestId('load-retry')[22m
+
+
+      56 |  await seed(page,id);await setTheme(page,theme);await page.setViewportSize({width:375,height:900});await expect(page.locator('h1')).toBeVisible();const state=await page.evaluate(()=>{const k=Object.keys(sessionStorage).find(k=>k.includes(':account:'));return k?JSON.parse(sessionStorage.getItem(k)!).state.s.scenario:null});expect(state).toBe(id);
+      57 |  const geometry=await measure(page,new URL(page.url()).pathname,375,theme);const pills=await page.locator('main span.self-start').evaluateAll(els=>els.map(el=>({width:el.getBoundingClientRect().width,parent:el.parentElement!.getBoundingClientRect().width,align:getComputedStyle(el).alignSelf})));for(const pill of pills){expect(pill.align).toBe('flex-start');expect(pill.width).toBeLessThan(pill.parent)}record({id,theme,geometry,pills,contrast:await contrast(page)});assertGate(geometry);
+    > 58 |  if(id==='load_error'){await page.getByTestId('load-retry').click();await expect(page.getByTestId('monthly-total')).toBeVisible();}
+         |                                                             ^
+      59 | });
+      60 | test('T09/T29 account clock invalidates current quote and refresh renews consent',async({page})=>{
+      61 |  await seed(page,'add_draft_restored');await page.getByLabel('NCPDP number').fill('0000042');await page.getByLabel('NPI').fill('0000000042');await page.getByLabel('Store phone').fill('(555) 010-0101');await page.getByLabel('Pharmacy software').selectOption('Pioneer');await page.getByTestId('review-price').click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await page.locator('#pc').check();await controls(page);await page.getByRole('button',{name:'Advance 31 minutes'}).click();await expect(page.getByText('This quote expired',{exact:true})).toBeVisible();await expect(page.getByTestId('confirm-add')).toBeDisabled();record({id:'account-clock',expiredVisible:true});await page.getByRole('button',{name:'Refresh quote',exact:true}).click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await expect(page.locator('#pc')).not.toBeChecked();
+        at /tmp/cody-q2-94251be/qa-tests/account.corrected.spec.ts:58:61
+
+    Error Context: ../cody-q2-corrected-output/account.corrected-Remaining-dark-load-error/error-context.md
+
+  2 failed
+    qa-tests/account.corrected.spec.ts:5:5 › Remaining light handoff_error ─────────────────────────
+    qa-tests/account.corrected.spec.ts:55:5 › Remaining dark load_error ────────────────────────────
+  10 passed (1.8m)

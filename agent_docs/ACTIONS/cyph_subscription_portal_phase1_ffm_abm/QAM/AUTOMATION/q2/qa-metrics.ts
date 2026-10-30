@@ -1,0 +1,6 @@
+export async function contrast(page:any){return page.evaluate(()=>{
+const rgb=(s:string)=>{const a=s.match(/[\d.]+/g)?.map(Number)||[0,0,0];return [a[0],a[1],a[2],a.length>3?a[3]:1]};
+const blend=(f:number[],b:number[])=>[0,1,2].map(i=>f[i]*f[3]+b[i]*(1-f[3]));
+const lum=(a:number[])=>a.map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)}).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
+const rows:any[]=[];for(const el of Array.from(document.querySelectorAll<HTMLElement>('main *,[role=alert] *'))){if(el.children.length||!el.textContent?.trim()||!el.getBoundingClientRect().width)continue;let st=getComputedStyle(el);if(st.visibility==='hidden'||st.display==='none')continue;let ancestors:HTMLElement[]=[];for(let a:HTMLElement|null=el;a;a=a.parentElement)ancestors.unshift(a);let bg=[255,255,255];for(const a of ancestors)bg=blend(rgb(getComputedStyle(a).backgroundColor),bg);const fg=blend(rgb(st.color),bg);const ratio=(Math.max(lum(fg),lum(bg))+.05)/(Math.min(lum(fg),lum(bg))+.05);const large=parseFloat(st.fontSize)>=24||(parseFloat(st.fontSize)>=18.66&&parseInt(st.fontWeight)>=700);rows.push({tag:el.tagName,class:el.className,ratio:Math.round(ratio*100)/100,required:large?3:4.5,disabled:!!el.closest(':disabled'),font:st.fontSize});}return rows;
+});}

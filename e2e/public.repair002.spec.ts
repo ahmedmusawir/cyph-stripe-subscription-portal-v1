@@ -93,7 +93,9 @@ test("CR-F01 A: unchecking the declaration closes the open checkout; direct revi
   }
   // Activation and the incomplete page don't offer a back door either.
   await page.goto("/demo/activation");
-  await expect(page.getByText("There's no payment to track yet")).toBeVisible();
+  // REPAIR_006: the closed checkout's phase is read first, so Activation shows its terminal no-charge notice.
+  await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged");
+  await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
   await page.goto("/demo/checkout-incomplete");
   await expect(page.getByTestId("incomplete-abandoned")).toContainText("The owner declaration was withdrawn");
   await page.getByTestId("incomplete-continue").click();
@@ -131,7 +133,7 @@ test("CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and u
   await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
   await expect(page.getByTestId("checkout-closed")).toBeVisible();
   const migrated = await snap(page);
-  expect(migrated).toMatchObject({ version: 2, accepted: false, quoteCleared: true, checkout: "abandoned", closedReason: "owner_declaration", payment: null });
+  expect(migrated).toMatchObject({ version: 3, accepted: false, quoteCleared: true, checkout: "abandoned", closedReason: "owner_declaration", payment: null });
   await recoverAndPay(page, opened.key);
 });
 
@@ -390,6 +392,48 @@ for (const s of HOLD_SURFACES) {
         await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur()); // focus probe leaves focus on the skip link
         await page.screenshot({ path: `test-results/repair002-${s.name.replace(/\s+/g, "-")}_${theme}_${width}.png`, fullPage: true });
       }
+    }
+  });
+}
+
+// ── Manual-review addendum: C14 introduction matches the payment state ───────
+const C14_INTRO: { scenario: string; intro: string; locked: boolean }[] = [
+  { scenario: "checkout_unknown", intro: "Your details are saved. We're checking your payment status. Please don't pay again yet.", locked: true },
+  { scenario: "checkout_abandoned", intro: "Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.", locked: false },
+  { scenario: "checkout_declined", intro: "Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.", locked: false },
+];
+for (const c of C14_INTRO) {
+  test(`C14 intro [${c.scenario}]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark`, async ({ page }) => {
+    test.setTimeout(90_000);
+    await load(page, c.scenario);
+    for (const theme of THEMES) {
+      for (const width of [375, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto("/demo/checkout-incomplete");
+        await setTheme(page, theme);
+        await page.reload();
+        await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
+        const main = page.locator("main");
+        await expect(main).toContainText(c.intro);
+        if (c.locked) {
+          await expect(main).not.toContainText("Payment wasn't completed");
+          await expect(main).toContainText("We're checking whether a payment went through");
+        }
+        await expect(page.getByTestId("incomplete-continue")).toBeEnabled({ enabled: !c.locked });
+        const r = await measure(page, `/demo/checkout-incomplete [${c.scenario}]`, width, theme);
+        record("gate-m-c14-intro.jsonl", r);
+        assertGate(r);
+        const fails = textFailures(await textContrast(page));
+        recordContrast("contrast-c14-intro.jsonl", { screen: `/demo/checkout-incomplete [${c.scenario}]`, width, theme, fails });
+        expect.soft(fails, `${c.scenario} ${theme} ${width}: text below threshold`).toEqual([]);
+        await page.screenshot({ path: `test-results/c14-intro-${c.scenario}_${theme}_${width}.png`, fullPage: true });
+      }
+    }
+    if (c.locked) {
+      // Recovery still resolves explicitly: "nothing charged" → resumable.
+      await page.getByTestId("unknown-not-charged").click();
+      await expect(page.getByTestId("incomplete-abandoned")).toBeVisible();
+      await expect(page.locator("main")).toContainText("Payment wasn't completed");
     }
   });
 }

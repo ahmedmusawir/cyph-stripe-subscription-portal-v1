@@ -1,0 +1,39 @@
+{
+  "base": "d6fe67839961fcbbf801b0bb04d3a2522e7b1f36",
+  "packages": [
+    {
+      "addendum": "001",
+      "zip": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip",
+      "downloads": "/home/moose/Downloads/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_001_REVIEW.zip",
+      "members": 34,
+      "indexed": 33,
+      "sha256": "f852ff94664b0e0a664582c213a8334d8b779758e3f8f2c8fbd88a4b1c0019e7",
+      "integrity": "PASS",
+      "indexHashes": "PASS",
+      "downloadsIdentical": true
+    },
+    {
+      "addendum": "002",
+      "zip": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip",
+      "downloads": "/home/moose/Downloads/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_ADDENDUM_002_REVIEW.zip",
+      "members": 53,
+      "indexed": 52,
+      "sha256": "ce6683df74a466fd5b8ce2c8ccf57bc59824fdb4f99d3a70ddca9d1e2ceec195",
+      "integrity": "PASS",
+      "indexHashes": "PASS",
+      "downloadsIdentical": true
+    }
+  ],
+  "productAndTestPaths": [
+    "e2e/public.activation-scenarios.spec.ts",
+    "e2e/public.repair002.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/components/portal/PublicDemoControls.tsx",
+    "src/components/portal/activation/CheckoutIncompleteView.tsx"
+  ],
+  "cumulativePatchReconstruction": "PASS",
+  "workingBytesMatchSequentialPackageSources": true,
+  "productChanges": "Only C14 unknown-payment intro and removal of public Next activation check dropdown; associated component/browser tests. No engine changes.",
+  "unusedExports": "Unchanged; no src/services/portal edits.",
+  "testsRunThisPreparation": 0
+}

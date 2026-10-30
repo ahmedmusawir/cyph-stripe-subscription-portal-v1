@@ -1,0 +1,5 @@
+# REPAIR_002 cleanup
+
+Owned server PID990581 port3112 stopped after checking /proc CWD=/tmp/cody-r2-snapshot. Ports3000 PID970525 and3457 PID40320 remained listening. All helper contexts closed; anonymous zoom profile and raw browser error-output directories removed. Public-only scratch .env.local removed. Two real sign-ins, no GLOBAL logout. Credential file untouched; no credential/auth-state copies in scratch/export. No traces/videos. Synthetic failure JSON/screenshots and masked account evidence retained; raw automatic contexts excluded.
+
+Frozen candidate source, physical dependencies and generated build remain in /tmp for review; no active server. Snapshot input163 hashes rechecked without mismatch. No Git mutation/product repair/dependency change/business write/account-role change. Existing repo/QAM work preserved. Export privacy controls/index/hash verification in privacy-validation.json and external receipt. Images separately reviewed; byte scans do not OCR. Later commit binding must compare all manifest bytes and added inputs using read-only helper before any Lead certification decision.

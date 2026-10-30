@@ -1,0 +1,11 @@
+
+Running 2 tests using 1 worker
+
+(node:1293653) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1293653) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 qa-transition-browser/admin-corrected.spec.ts:7:44 › covered admin and C07 preview stay coherent when email outcome sent (1.9s)
+  ✓  2 qa-transition-browser/admin-corrected.spec.ts:7:44 › covered admin and C07 preview stay coherent when email outcome failed (1.4s)
+
+  2 passed (4.8s)

@@ -1,0 +1,12 @@
+
+Running 3 tests using 1 worker
+
+(node:1379346) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1379346) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 qa-ui-controls/unavailable.spec.ts:2:51 › paid none without scope neither invents amount nor setup/email at mobile/desktop and reload (2.2s)
+  ✓  2 qa-ui-controls/unavailable.spec.ts:2:51 › paid pending without scope neither invents amount nor setup/email at mobile/desktop and reload (2.1s)
+  ✓  3 qa-ui-controls/unavailable.spec.ts:2:51 › paid failed without scope neither invents amount nor setup/email at mobile/desktop and reload (2.1s)
+
+  3 passed (7.5s)

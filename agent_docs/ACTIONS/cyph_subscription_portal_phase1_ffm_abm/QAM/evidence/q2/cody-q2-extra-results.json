@@ -1,0 +1,377 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-q2-94251be/qa-extra.config.ts",
+    "rootDir": "/tmp/cody-q2-94251be/qa-tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-q2-extra-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-q2-94251be/qa-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/(public|account)\\.extra\\.spec\\.ts/"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-q2-extra-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "account.extra.spec.ts",
+      "file": "account.extra.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "T04/T15/T21 all account scenarios, final pills and rendered contrast both themes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 240045,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 240000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 240000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 240000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts",
+                        "column": 61,
+                        "line": 10
+                      },
+                      "message": "Error: locator.click: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for getByTestId('load-retry')\u001b[22m\n\n\n   8 |  await seed(page,id);await setTheme(page,theme);await page.setViewportSize({width:375,height:900});await expect(page.locator('h1')).toBeVisible();const state=await page.evaluate(()=>{const k=Object.keys(sessionStorage).find(k=>k.includes(':account:'));return k?JSON.parse(sessionStorage.getItem(k)!).state.s.scenario:null});expect(state).toBe(id);\n   9 |  const geometry=await measure(page,new URL(page.url()).pathname,375,theme);const pills=await page.locator('main span.self-start').evaluateAll(els=>els.map(el=>({width:el.getBoundingClientRect().width,parent:el.parentElement!.getBoundingClientRect().width,align:getComputedStyle(el).alignSelf})));for(const pill of pills){expect(pill.align).toBe('flex-start');expect(pill.width).toBeLessThan(pill.parent)}record({id,theme,geometry,pills,contrast:await contrast(page)});assertGate(geometry);\n> 10 |  if(id==='load_error'){await page.getByTestId('load-retry').click();await expect(page.getByTestId('monthly-total')).toBeVisible();}\n     |                                                             ^\n  11 |  }\n  12 | });\n  13 | test('T09/T29 account clock invalidates current quote and refresh renews consent',async({page})=>{\n    at /tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts:10:61"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:54:02.501Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-q2-extra-output/account.extra-T04-T15-T21--6932f-ndered-contrast-both-themes/error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbb7cef6c30ee4cd0199-e27d2065b769e9fca089",
+          "file": "account.extra.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "T09/T29 account clock invalidates current quote and refresh renews consent",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8067,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('charged-today')\nExpected: \u001b[32m\"$24.50\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('charged-today')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('charged-today')\nExpected: \u001b[32m\"$24.50\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('charged-today')\u001b[22m\n\n    at /tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts:14:135",
+                    "location": {
+                      "file": "/tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts",
+                      "column": 135,
+                      "line": 14
+                    },
+                    "snippet": "  12 | });\n  13 | test('T09/T29 account clock invalidates current quote and refresh renews consent',async({page})=>{\n> 14 |  await seed(page,'add_draft_restored');await page.getByTestId('review-price').click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await page.locator('#pc').check();await controls(page);await page.getByRole('button',{name:'Advance 31 minutes'}).click();await expect(page.getByText('This quote expired',{exact:true})).toBeVisible();await expect(page.getByTestId('confirm-add')).toBeDisabled();record({id:'account-clock',expiredVisible:true});await page.getByRole('button',{name:'Refresh quote',exact:true}).click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await expect(page.locator('#pc')).not.toBeChecked();\n     |                                                                                                                                       ^\n  15 | });\n  16 | test('T23 account keyboard tab navigation and billing handoff',async({page})=>{\n  17 |  await seed(page,'two_store_active');await page.locator('summary',{hasText:'Demo controls'}).click();await page.getByTestId('add-store').focus();await page.keyboard.press('Enter');await expect(page.getByLabel('Pharmacy name')).toBeVisible();await page.getByTestId('review-price').focus();await page.keyboard.press('Enter');await expect(page.getByTestId('error-summary')).toBeFocused();await page.keyboard.press('Tab');const focused=await page.evaluate(()=>({tag:document.activeElement?.tagName,outline:getComputedStyle(document.activeElement!).outlineStyle}));record({id:'keyboard-error-summary',focused});await page.goto('/dashboard');await page.getByTestId('manage-billing').focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/mode=portal/);await page.getByTestId('portal-no-change').focus();await page.keyboard.press('Enter');await expect(page.getByText('Nothing changed on this account')).toBeVisible();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts",
+                        "column": 135,
+                        "line": 14
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('charged-today')\nExpected: \u001b[32m\"$24.50\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('charged-today')\u001b[22m\n\n\n  12 | });\n  13 | test('T09/T29 account clock invalidates current quote and refresh renews consent',async({page})=>{\n> 14 |  await seed(page,'add_draft_restored');await page.getByTestId('review-price').click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await page.locator('#pc').check();await controls(page);await page.getByRole('button',{name:'Advance 31 minutes'}).click();await expect(page.getByText('This quote expired',{exact:true})).toBeVisible();await expect(page.getByTestId('confirm-add')).toBeDisabled();record({id:'account-clock',expiredVisible:true});await page.getByRole('button',{name:'Refresh quote',exact:true}).click();await expect(page.getByTestId('charged-today')).toHaveText('$24.50');await expect(page.locator('#pc')).not.toBeChecked();\n     |                                                                                                                                       ^\n  15 | });\n  16 | test('T23 account keyboard tab navigation and billing handoff',async({page})=>{\n  17 |  await seed(page,'two_store_active');await page.locator('summary',{hasText:'Demo controls'}).click();await page.getByTestId('add-store').focus();await page.keyboard.press('Enter');await expect(page.getByLabel('Pharmacy name')).toBeVisible();await page.getByTestId('review-price').focus();await page.keyboard.press('Enter');await expect(page.getByTestId('error-summary')).toBeFocused();await page.keyboard.press('Tab');const focused=await page.evaluate(()=>({tag:document.activeElement?.tagName,outline:getComputedStyle(document.activeElement!).outlineStyle}));record({id:'keyboard-error-summary',focused});await page.goto('/dashboard');await page.getByTestId('manage-billing').focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/mode=portal/);await page.getByTestId('portal-no-change').focus();await page.keyboard.press('Enter');await expect(page.getByText('Nothing changed on this account')).toBeVisible();\n    at /tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts:14:135"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:58:06.958Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-q2-extra-output/account.extra-T09-T29-acco-b012a--and-refresh-renews-consent/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-q2-94251be/qa-tests/account.extra.spec.ts",
+                    "column": 135,
+                    "line": 14
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbb7cef6c30ee4cd0199-85abf5b63964c760590c",
+          "file": "account.extra.spec.ts",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "T23 account keyboard tab navigation and billing handoff",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11194,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:58:19.390Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbb7cef6c30ee4cd0199-6d956de50ef868a60865",
+          "file": "account.extra.spec.ts",
+          "line": 16,
+          "column": 5
+        },
+        {
+          "title": "T19 local card and resume handoff outcomes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9224,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:58:36.197Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbb7cef6c30ee4cd0199-973c072b02a212337703",
+          "file": "account.extra.spec.ts",
+          "line": 19,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.extra.spec.ts",
+      "file": "public.extra.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "T04/T29 all public scenarios both themes and state-specific surfaces",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 29249,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:58:46.190Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2fd4af9fde170ee0368-7c35cc4ec03657f23c61",
+          "file": "public.extra.spec.ts",
+          "line": 8,
+          "column": 5
+        },
+        {
+          "title": "T09/T29 public clock expires quote immediately and refresh clears consent",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1728,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:59:15.680Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2fd4af9fde170ee0368-80427e8d6ddb403991f8",
+          "file": "public.extra.spec.ts",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "T23 focused and hovered rendered contrast plus error states",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1508,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T07:59:17.417Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2fd4af9fde170ee0368-eaa5dcb8fa33a6a14223",
+          "file": "public.extra.spec.ts",
+          "line": 20,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T07:54:01.687Z",
+    "duration": 317353.21,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

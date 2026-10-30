@@ -1,0 +1,7 @@
+
+Test Suites: 2 passed, 2 total
+Tests:       1 skipped, 44 passed, 45 total
+Snapshots:   0 total
+Time:        1.143 s
+Ran all test suites with tests matching "^(?!.*nonpayment outcomes remain available).*".
+Test results written to: ../cody-r4-original-independent.json

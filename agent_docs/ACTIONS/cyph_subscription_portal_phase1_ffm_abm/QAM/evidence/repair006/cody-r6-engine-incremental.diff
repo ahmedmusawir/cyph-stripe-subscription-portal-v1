@@ -1,0 +1,44 @@
+--- /tmp/cody-r5-snapshot/src/services/portal/registration.ts	2026-10-30 07:50:54.056869500 +0600
++++ src/services/portal/registration.ts	2026-10-30 09:35:28.365353307 +0600
+@@ -784,9 +784,27 @@
+ // Activation, access email, access link
+ // ---------------------------------------------------------------------------
+ 
++/**
++ * The activation record as a reader may present it (REPAIR_006): only where it agrees
++ * with the payment phase (R-014). A paid checkout whose activation is absent or
++ * conflicting is reported as paid with setup/email status unavailable, never as
++ * the stale flag; closed or open checkouts have nothing to track.
++ */
++export function consistentActivation(state: RegistrationState): ActivationView | null {
++  const a = state.activation;
++  const phase = paymentPhase(state);
++  const agrees =
++    (phase === 'processing' && a?.paymentState === 'pending') ||
++    (phase === 'failed' && a?.paymentState === 'failed') ||
++    (phase === 'paid' && a?.paymentState === 'confirmed');
++  return agrees ? a : null;
++}
++
+ export function readActivation(state: RegistrationState): Result<ActivationView> {
+-  return state.activation
+-    ? { ok: true, value: state.activation }
++  const a = consistentActivation(state);
++  if (a) return { ok: true, value: a };
++  return paymentPhase(state) === 'paid'
++    ? { ok: false, code: 'missing_context', message: "Payment is confirmed, but setup and email status aren't available." }
+     : { ok: false, code: 'missing_context', message: 'There is no payment to track yet.' };
+ }
+ 
+@@ -837,8 +855,9 @@
+ 
+ /** Simulated resend; nothing is sent. */
+ export function resendAccessEmail(state: RegistrationState, deps: ServiceDeps): Step<ActivationView> {
+-  const a = state.activation;
+-  if (!a || a.paymentState !== 'confirmed' || a.provisioningState !== 'ready')
++  // Only a paid checkout whose recorded setup finished may resend (REPAIR_006, R5-F02).
++  const a = consistentActivation(state);
++  if (paymentPhase(state) !== 'paid' || !a || a.provisioningState !== 'ready')
+     return fail(state, 'conflict', 'The access email can be resent once setup is finished.');
+   const next = { ...a, emailState: 'sent' as const };
+   return ok({ ...state, activation: next, emailResentAt: iso(deps.now()), draft: { ...state.draft, state: 'access_email_ready' } }, next);

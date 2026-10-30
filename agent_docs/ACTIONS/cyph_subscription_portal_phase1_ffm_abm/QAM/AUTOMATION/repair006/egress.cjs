@@ -1,0 +1,2 @@
+const dc=require('node:diagnostics_channel'),fs=require('node:fs');
+dc.channel('undici:request:create').subscribe(({request:r})=>{try{const u=new URL(r.origin);const p=r.path.split('?')[0];fs.appendFileSync('/tmp/cody-r6-egress.jsonl',JSON.stringify({time:new Date().toISOString(),method:r.method,hostCategory:u.hostname.endsWith('.supabase.co')?'supabase':u.hostname==='localhost'?'localhost':'OTHER',path:['/auth/v1/verify','/auth/v1/token','/auth/v1/user','/auth/v1/logout','/rest/v1/user_roles'].includes(p)?p:'OTHER'})+'\n');}catch{}});

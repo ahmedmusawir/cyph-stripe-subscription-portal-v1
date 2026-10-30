@@ -1,0 +1,797 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-r6-snapshot/qa.config.ts",
+    "rootDir": "/tmp/cody-r6-snapshot/qa-e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-r6-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "current-readers",
+        "name": "current-readers",
+        "testDir": "/tmp/cody-r6-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.repair006\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/tmp/cody-r6-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "phase-notices",
+        "name": "phase-notices",
+        "testDir": "/tmp/cody-r6-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.repair005\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/tmp/cody-r6-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "scope-admin",
+        "name": "scope-admin",
+        "testDir": "/tmp/cody-r6-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.repair004\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/tmp/cody-r6-pw-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "declaration-safeguard",
+        "name": "declaration-safeguard",
+        "testDir": "/tmp/cody-r6-snapshot/qa-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/public\\.repair002\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-r6-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "public.repair006.spec.ts",
+      "file": "public.repair006.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "R5-F01 paid with absent activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "current-readers",
+              "projectName": "current-readers",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5305,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:37:35.059Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "359482e1495bd758b4aa-7d8e40b981e09601159c",
+          "file": "public.repair006.spec.ts",
+          "line": 58,
+          "column": 7
+        },
+        {
+          "title": "R5-F01 paid with pending activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "current-readers",
+              "projectName": "current-readers",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5020,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:37:40.590Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "359482e1495bd758b4aa-7012a5f294d0d12cd525",
+          "file": "public.repair006.spec.ts",
+          "line": 58,
+          "column": 7
+        },
+        {
+          "title": "R5-F01 paid with failed activation: shown paid, no setup/email claim, no retry/refresh/resend, reload-stable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "current-readers",
+              "projectName": "current-readers",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4936,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:37:45.634Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "359482e1495bd758b4aa-5fccc22e95a79e9690bc",
+          "file": "public.repair006.spec.ts",
+          "line": 58,
+          "column": 7
+        },
+        {
+          "title": "R5-F01 actual unknown → nothing charged: terminal notice, then coherent recovery with a new key",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "current-readers",
+              "projectName": "current-readers",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7264,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:37:50.589Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "359482e1495bd758b4aa-7bef9c36bf4612a624e1",
+          "file": "public.repair006.spec.ts",
+          "line": 76,
+          "column": 5
+        },
+        {
+          "title": "R5-F02 preserved: valid paid resend, from the email-failed scenario and from a sent email",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "current-readers",
+              "projectName": "current-readers",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5442,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:37:57.863Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "359482e1495bd758b4aa-54cf32803ca7cf32c46b",
+          "file": "public.repair006.spec.ts",
+          "line": 104,
+          "column": 5
+        },
+        {
+          "title": "REPAIR_006 screen at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "current-readers",
+              "projectName": "current-readers",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5889,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:03.314Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "359482e1495bd758b4aa-a03dd4ba2cb5db0bb040",
+          "file": "public.repair006.spec.ts",
+          "line": 118,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.repair005.spec.ts",
+      "file": "public.repair005.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phase-notices",
+              "projectName": "phase-notices",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6892,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:09.977Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2a164bab5ba559b53db-51265cce965fd9cf6144",
+          "file": "public.repair005.spec.ts",
+          "line": 55,
+          "column": 5
+        },
+        {
+          "title": "R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phase-notices",
+              "projectName": "phase-notices",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8342,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:17.112Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2a164bab5ba559b53db-d6032f9fde3cd5bee922",
+          "file": "public.repair005.spec.ts",
+          "line": 79,
+          "column": 5
+        },
+        {
+          "title": "R4-F02 paid branch: the same record can still be confirmed by Stripe",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phase-notices",
+              "projectName": "phase-notices",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3940,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:25.474Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2a164bab5ba559b53db-d9bafa7c334e238747bb",
+          "file": "public.repair005.spec.ts",
+          "line": 112,
+          "column": 5
+        },
+        {
+          "title": "REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phase-notices",
+              "projectName": "phase-notices",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9873,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:29.429Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2a164bab5ba559b53db-05c3dcfbcb7b1882cb04",
+          "file": "public.repair005.spec.ts",
+          "line": 121,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.repair004.spec.ts",
+      "file": "public.repair004.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6099,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:40.048Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-c76e019376edefd23614",
+          "file": "public.repair004.spec.ts",
+          "line": 73,
+          "column": 5
+        },
+        {
+          "title": "R3-F01 known scope: an unedited legacy open checkout binds the quote it opened with and can be paid",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5321,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:46.380Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-f7522b35fa544cf3858b",
+          "file": "public.repair004.spec.ts",
+          "line": 92,
+          "column": 5
+        },
+        {
+          "title": "R3-F01 recovery: an edited legacy unknown payment stays unmatched; nothing charged → fresh quote → new key",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6970,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:51.719Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-7b27b948ff4dec059773",
+          "file": "public.repair004.spec.ts",
+          "line": 101,
+          "column": 5
+        },
+        {
+          "title": "R3-F02: completed activation and its previews name no admin nominated after payment",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4105,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:38:58.714Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-2754fb9e37f6f0db4796",
+          "file": "public.repair004.spec.ts",
+          "line": 159,
+          "column": 5
+        },
+        {
+          "title": "R3-F02 control: an admin the payment covered is still the one named and previewed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3736,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:39:02.842Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-fb6f21823b436704664b",
+          "file": "public.repair004.spec.ts",
+          "line": 174,
+          "column": 5
+        },
+        {
+          "title": "R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11300,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:39:06.594Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-605d4158875672944864",
+          "file": "public.repair004.spec.ts",
+          "line": 209,
+          "column": 5
+        },
+        {
+          "title": "REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "scope-admin",
+              "projectName": "scope-admin",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9946,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:39:17.908Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6cb01cf4219d220225ab-fd3b9d1deb346030a34c",
+          "file": "public.repair004.spec.ts",
+          "line": 241,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "public.repair002.spec.ts",
+      "file": "public.repair002.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "declaration-safeguard",
+              "projectName": "declaration-safeguard",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11754,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:39:28.659Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-4bdef16d440b312aeeef",
+          "file": "public.repair002.spec.ts",
+          "line": 79,
+          "column": 5
+        },
+        {
+          "title": "processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "declaration-safeguard",
+              "projectName": "declaration-safeguard",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5869,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T03:39:40.637Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31fd2642ab7c0ad86ff6-00a0964d1c99464fd227",
+          "file": "public.repair002.spec.ts",
+          "line": 160,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T03:37:34.052Z",
+    "duration": 132563.999,
+    "expected": 19,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

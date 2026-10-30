@@ -1,0 +1,14 @@
+
+Running 5 tests using 1 worker
+
+(node:1327168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1327168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 qa-transition-browser/admin-corrected.spec.ts:4:5 › nothing-charged legacy record cannot become paid from a stale activation refresh (1.2s)
+  ✓  2 qa-transition-browser/admin-corrected.spec.ts:5:5 › unknown legacy record cannot be discarded using failed activation retry (1.1s)
+  ✓  3 qa-transition-browser/admin-corrected.spec.ts:6:5 › unavailable completed history stays completed and hides edited names/prices in activation and C07 (3.5s)
+  ✓  4 qa-transition-browser/admin-corrected.spec.ts:7:44 › covered admin and C07 preview stay coherent when email outcome sent (1.4s)
+  ✓  5 qa-transition-browser/admin-corrected.spec.ts:7:44 › covered admin and C07 preview stay coherent when email outcome failed (1.4s)
+
+  5 passed (9.6s)

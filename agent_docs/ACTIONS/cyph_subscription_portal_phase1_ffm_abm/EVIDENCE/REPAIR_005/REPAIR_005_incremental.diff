@@ -1,0 +1,531 @@
+diff -ruN src/components/portal/activation/ActivationView.tsx src/components/portal/activation/ActivationView.tsx
+--- src/components/portal/activation/ActivationView.tsx	2026-10-29 19:16:49.280782356 +0600
++++ src/components/portal/activation/ActivationView.tsx	2026-10-30 07:22:36.914777019 +0600
+@@ -9,7 +9,7 @@
+ import { Alert, DemoNotice, Placeholder } from "../Alert";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+-import { checkoutHold, formatCents, formatTime, registration, useRegistration, type CheckoutScope } from "@/services/portal";
++import { checkoutHold, formatCents, formatTime, paymentPhase, registration, useRegistration, type CheckoutScope } from "@/services/portal";
+ 
+ type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
+ 
+@@ -88,6 +88,36 @@
+       </PageContainer>
+     );
+   }
++
++  // REPAIR_005: the checkout record governs what this page may offer. A stale activation
++  // flag never shows Refresh or "Try payment again" for a payment that is unknown or closed.
++  const phase = paymentPhase(state);
++  if (phase === "unknown") {
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <div data-testid="activation-unknown">
++          <Alert tone="warning" title="We're still checking whether a payment went through">
++            Until Stripe confirms the outcome, nothing can be retried or confirmed here. Please don&apos;t pay again.{" "}
++            <Link href="/demo/checkout-incomplete" className="portal-link">See checkout status</Link>
++          </Alert>
++        </div>
++      </PageContainer>
++    );
++  }
++  if (phase !== "processing" && phase !== "paid" && phase !== "failed") {
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <div data-testid="activation-not-charged">
++          <Alert tone="info" title="Nothing was charged for this payment">
++            This payment was closed without a charge, so there&apos;s no activation to track for it. Your details are saved.{" "}
++            <Link href="/demo/checkout-incomplete" className="portal-link">Continue my signup</Link>
++          </Alert>
++        </div>
++      </PageContainer>
++    );
++  }
+ 
+   const { draft } = state;
+   // R-013: the payment covers what its checkout was quoted for, not later edits.
+diff -ruN src/services/portal/index.ts src/services/portal/index.ts
+--- src/services/portal/index.ts	2026-10-29 19:15:21.219558360 +0600
++++ src/services/portal/index.ts	2026-10-30 07:22:16.971242208 +0600
+@@ -16,9 +16,10 @@
+   isPharmacyStep,
+   isQuoteExpired,
+   isSubmitted,
++  paymentPhase,
+   EMAIL_VARIANTS,
+ } from './registration';
+-export type { EmailVariant, CheckoutHold, CheckoutOutcome, RegistrationStep } from './registration';
++export type { EmailVariant, CheckoutHold, CheckoutOutcome, PaymentPhase, RegistrationStep } from './registration';
+ export type { CheckoutScope } from '@/types/portal/state';
+ export {
+   addStoreAvailability,
+diff -ruN src/services/portal/registration.ts src/services/portal/registration.ts
+--- src/services/portal/registration.ts	2026-10-29 19:15:04.218555674 +0600
++++ src/services/portal/registration.ts	2026-10-30 07:23:57.307396653 +0600
+@@ -253,6 +253,38 @@
+  */
+ const SUBMITTED_MESSAGE = 'Your payment was already submitted. Check its status instead of paying again.';
+ 
++/**
++ * REPAIR_005 (R4-F01/R4-F02): the checkout record governs; the activation flag
++ * counts only where it agrees with it. Old builds left the two in conflict
++ * (an abandoned checkout with a pending activation, an unknown checkout with a
++ * failed activation), and every reader resolves the conflict the same way:
++ * - paid:        the checkout is paid; its history is never reversed.
++ * - unknown:     Stripe's answer is still owed, whatever the activation says.
++ * - processing:  pending checkout and pending activation agree.
++ * - failed:      Stripe declined and activation recorded the failure.
++ * - open:        on the stand-in (pending), or declined there without a failure record.
++ * - not_charged: abandoned or expired; a stale activation flag means nothing.
++ */
++export type PaymentPhase = 'none' | 'open' | 'processing' | 'unknown' | 'paid' | 'failed' | 'not_charged';
++export function paymentPhase(state: RegistrationState): PaymentPhase {
++  const c = state.checkout;
++  const payment = state.activation?.paymentState;
++  if (!c) return 'none';
++  switch (c.status) {
++    case 'paid':
++      return 'paid';
++    case 'unknown':
++      return 'unknown';
++    case 'pending':
++      return payment === 'pending' ? 'processing' : 'open';
++    case 'declined':
++      return payment === 'failed' ? 'failed' : 'open';
++    default:
++      return 'not_charged';
++  }
++}
++const RESOLVED_MESSAGE = 'This payment was already resolved. Nothing more can be confirmed for it.';
++
+ const listPrice = (draft: RegistrationDraft) => initialRecurringCents(draft.requestedStoreCount) - initialDiscountCents(draft.code);
+ 
+ function scopeOf(draft: RegistrationDraft, dueNowCents: number): CheckoutScope {
+@@ -719,15 +751,19 @@
+     };
+     return ok(next, next.checkout!);
+   }
+-  const next = { ...state, checkout: { ...checkout, status: 'abandoned' as const }, draft: { ...state.draft, state: 'abandoned' as const } };
++  // Terminal: nothing was charged, so no activation is left behind to be refreshed (REPAIR_005).
++  const next = { ...state, checkout: { ...checkout, status: 'abandoned' as const }, activation: null, draft: { ...state.draft, state: 'abandoned' as const } };
+   return ok(next, next.checkout);
+ }
+ 
+ /** Abandoned/declined → back to review with values kept; a fresh quote and fresh consent are needed. */
+ export function resumeSignup(state: RegistrationState): Step<RegistrationDraft> {
++  // Only the checkout record says whether there is anything to resume (REPAIR_005): a
++  // retained failed flag on an unknown checkout is not a failure, and that payment
++  // must be resolved first. A genuine failure leaves the checkout declined.
+   const status = state.checkout?.status;
+-  if (status !== 'abandoned' && status !== 'declined' && state.activation?.paymentState !== 'failed')
+-    return fail(state, 'conflict', 'There is no unfinished checkout to resume.');
++  if (status !== 'abandoned' && status !== 'declined')
++    return fail(state, 'conflict', isSubmitted(state) ? SUBMITTED_MESSAGE : 'There is no unfinished checkout to resume.');
+   const next = touch(
+     { ...state, checkout: null, activation: null, spentCheckoutKeys: spend(state, state.checkout?.operationKey) },
+     { ...state.draft, resumeAvailable: false },
+@@ -764,6 +800,11 @@
+   if (!a) return fail(state, 'missing_context', 'There is no payment to track yet.');
+   let next: ActivationView = a;
+   let draftState = state.draft.state;
++  // Only a processing payment, or a paid one still being set up, has anything to refresh.
++  // A stale or conflicting activation flag never advances anything else (REPAIR_005).
++  const phase = paymentPhase(state);
++  if (!(phase === 'processing' || (phase === 'paid' && a.paymentState === 'confirmed')))
++    return fail(state, 'conflict', phase === 'unknown' ? SUBMITTED_MESSAGE : RESOLVED_MESSAGE);
+   if (a.paymentState === 'pending') {
+     const hold = state.activationPlan === 'payment_failed' ? null : checkoutHold(state.draft, state.checkout);
+     if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+diff -ruN src/__tests__/portal-checkout-hold.test.tsx src/__tests__/portal-checkout-hold.test.tsx
+--- src/__tests__/portal-checkout-hold.test.tsx	2026-10-29 19:11:46.140352414 +0600
++++ src/__tests__/portal-checkout-hold.test.tsx	2026-10-30 07:27:37.285472705 +0600
+@@ -423,3 +423,82 @@
+     expect(screen.queryByRole('button', { name: /Try payment again/ })).toBeNull();
+   });
+ });
++
++describe('legacy checkout/activation conflicts on screen (REPAIR_005, R4-F01/R4-F02)', () => {
++  async function processing() {
++    await openCheckout('demo_legacy_r5_key_01');
++    await act(async () => {
++      await registration.resolveCheckout('processing');
++    });
++  }
++  /** Store a state as an older build left it and rehydrate (storage v3, no migration involved). */
++  async function stored(mutate: (s: RegistrationState) => RegistrationState) {
++    const legacy = mutate(JSON.parse(JSON.stringify(s())));
++    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 3 }));
++    await act(async () => {
++      await registrationStore.persist.rehydrate();
++    });
++  }
++
++  it('R4-F01: a nothing-charged record with a stale pending activation offers no Refresh; the service refuses it', async () => {
++    await processing();
++    await stored((x) => ({ ...x, checkout: { ...x.checkout!, status: 'abandoned' } }));
++    expect(s().activation?.paymentState).toBe('pending');
++    const before = s();
++    render(<ActivationView />);
++    expect(screen.queryByTestId('activation-refresh')).toBeNull();
++    expect(screen.queryByTestId('activation-tracks')).toBeNull();
++    expect(screen.getByTestId('activation-not-charged').textContent).toMatch(/Nothing was charged/);
++    expect(screen.getByRole('link', { name: 'Continue my signup' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
++    await act(async () => {
++      expect((await registration.refreshActivation()).ok).toBe(false);
++    });
++    expect(s()).toBe(before);
++    expect(s().checkout?.status).toBe('abandoned');
++  });
++
++  it('R4-F02: an unknown record with a stale failed flag offers no "Try payment again"; resume is refused; C14 still resolves it', async () => {
++    await processing();
++    await stored((x) => ({ ...x, checkout: { ...x.checkout!, status: 'unknown' }, activation: { ...x.activation!, paymentState: 'failed', retryAvailable: true } }));
++    const before = s();
++    const view = render(<ActivationView />);
++    expect(screen.queryByRole('button', { name: 'Try payment again' })).toBeNull();
++    expect(screen.queryByTestId('activation-refresh')).toBeNull();
++    expect(screen.getByTestId('activation-unknown').textContent).toMatch(/still checking whether a payment went through/);
++    expect(screen.getByRole('link', { name: 'See checkout status' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
++    await act(async () => {
++      expect(registration.resumeSignup().ok).toBe(false);
++      expect(registration.restartSignup().ok).toBe(false);
++      expect((await registration.refreshActivation()).ok).toBe(false);
++    });
++    expect(s()).toBe(before);
++    view.unmount();
++    render(<CheckoutIncompleteView />);
++    expect((screen.getByTestId('incomplete-continue') as HTMLButtonElement).disabled).toBe(true);
++    expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(false);
++    await act(async () => {
++      expect((await registration.resolveUnknownPayment('not_charged')).ok).toBe(true);
++    });
++    expect(s().checkout?.status).toBe('abandoned');
++    expect(s().activation).toBeNull();
++    await act(async () => {
++      expect(registration.resumeSignup().ok).toBe(true);
++    });
++    expect(s().checkout).toBeNull();
++  });
++
++  it('genuine failure still shows "Try payment again"; processing still shows Refresh', async () => {
++    act(() => {
++      registrationHarness.selectScenario('activation_payment_failed');
++    });
++    let view = render(<ActivationView />);
++    expect(screen.getByRole('button', { name: 'Try payment again' })).toBeTruthy();
++    view.unmount();
++    act(() => {
++      registrationHarness.selectScenario('activation_waiting');
++    });
++    view = render(<ActivationView />);
++    expect((screen.getByTestId('activation-refresh') as HTMLButtonElement).disabled).toBe(false);
++    view.unmount();
++  });
++});
+diff -ruN src/__tests__/portal-registration.test.ts src/__tests__/portal-registration.test.ts
+--- src/__tests__/portal-registration.test.ts	2026-10-29 19:15:21.220834406 +0600
++++ src/__tests__/portal-registration.test.ts	2026-10-30 07:26:17.498140938 +0600
+@@ -1076,3 +1076,149 @@
+     expect(JSON.stringify([previews.owner, previews.store_admin, previews.expired_resend])).not.toMatch(/Edited after payment|Replacement Admin/);
+   });
+ });
++
++describe('checkout record governs the payment (REPAIR_005, R4-F01/R4-F02)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  const NEW = 'demo_key_matrix_0001';
++  function opened(): RegistrationState {
++    const s = reg.requestQuote(completeDraft(1), deps).state;
++    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++  }
++  const processing = () => reg.resolveCheckout(opened(), 'processing').state;
++  /** What the d6fe678 engine stored: it accepted "unknown" on a processing checkout and kept the activation. */
++  const legacyProcessingThenUnknown = (): RegistrationState => ({ ...processing(), checkout: { ...processing().checkout!, status: 'unknown' } });
++  const legacyFailedThenUnknown = (): RegistrationState => {
++    const failed = reg.refreshActivation(reg.setActivationPlan(processing(), 'payment_failed').state).state;
++    return { ...failed, checkout: { ...failed.checkout!, status: 'unknown' } };
++  };
++  const reload = (s: RegistrationState): RegistrationState => reg.bindLegacyScope(JSON.parse(JSON.stringify(s)));
++
++  it('R4-F01: nothing charged on a legacy unknown payment is terminal; a stale refresh is refused and changes nothing', () => {
++    const resolved = reg.resolveUnknownPayment(legacyProcessingThenUnknown(), 'not_charged').state;
++    expect(resolved.checkout?.status).toBe('abandoned');
++    expect(resolved.activation).toBeNull();
++    // Cody's stored state still carries the pending activation; it must behave the same.
++    const stale: RegistrationState = { ...resolved, activation: processing().activation };
++    for (const s of [stale, reload(stale)]) {
++      expect(reg.paymentPhase(s)).toBe('not_charged');
++      const step = reg.refreshActivation(s);
++      expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
++      expect(step.state).toBe(s);
++      expect(reg.resolveCheckout(s, 'paid').result.ok).toBe(false);
++      expect(reg.resolveUnknownPayment(s, 'paid').result.ok).toBe(false);
++    }
++    // Valid recovery: resume, fresh quote, new key.
++    let s = reg.resumeSignup(stale).state;
++    expect(s.activation).toBeNull();
++    s = reg.requestQuote(s, deps).state;
++    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).result.ok).toBe(false);
++    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: NEW }, deps).result.ok).toBe(true);
++  });
++
++  it('R4-F02: an unknown checkout with a retained failed flag is still submitted; resume, restart, outcomes and new checkouts are refused', () => {
++    for (const s of [legacyFailedThenUnknown(), reload(legacyFailedThenUnknown())]) {
++      expect(s.activation?.paymentState).toBe('failed');
++      expect(reg.paymentPhase(s)).toBe('unknown');
++      expect(reg.isSubmitted(s)).toBe(true);
++      for (const step of [reg.resumeSignup(s), reg.restartSignup(s), reg.refreshActivation(s), reg.resolveCheckout(s, 'back'), reg.startCheckout(reg.requestQuote(s, deps).state, { quoteId: 'x', consents: consented, operationKey: NEW }, deps)]) {
++        expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
++      }
++      expect(reg.resumeSignup(s).state).toBe(s);
++      expect(reg.restartSignup(s).state).toBe(s);
++      expect(reg.refreshActivation(s).state).toBe(s);
++    }
++    // Authoritative resolution first, then recovery.
++    const paid = reg.resolveUnknownPayment(legacyFailedThenUnknown(), 'paid').state;
++    expect(paid.checkout?.status).toBe('paid');
++    expect(paid.activation?.paymentState).toBe('confirmed');
++    let s = reg.resolveUnknownPayment(legacyFailedThenUnknown(), 'not_charged').state;
++    expect(s.activation).toBeNull();
++    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
++    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: NEW }, deps).result.ok).toBe(true);
++  });
++
++  it('genuine failure and genuine confirmation are unchanged', () => {
++    const failed = reg.refreshActivation(reg.setActivationPlan(processing(), 'payment_failed').state).state;
++    expect([failed.checkout?.status, failed.activation?.paymentState, reg.paymentPhase(failed)]).toEqual(['declined', 'failed', 'failed']);
++    expect(reg.resumeSignup(failed).result.ok).toBe(true);
++    const confirmed = reg.refreshActivation(processing()).state;
++    expect([confirmed.checkout?.status, confirmed.activation?.paymentState, reg.paymentPhase(confirmed)]).toEqual(['paid', 'confirmed', 'paid']);
++    expect(reg.refreshActivation(confirmed).state.activation?.provisioningState).toBe('ready');
++  });
++
++  // Bounded matrix: every checkout status × every activation flag × every stale or valid action.
++  // Allowed cells follow the phase; refused cells must leave the state object untouched.
++  it('transition matrix: allowed transitions follow the phase; refusals leave state unchanged', () => {
++    const base: Record<string, () => RegistrationState> = {
++      none: () => reg.requestQuote(completeDraft(1), deps).state,
++      open: opened,
++      declined: () => reg.resolveCheckout(opened(), 'declined').state,
++      processing,
++      unknown: () => reg.resolveCheckout(opened(), 'unknown').state,
++      paid: () => reg.resolveCheckout(opened(), 'paid').state,
++      abandoned: () => reg.resolveCheckout(opened(), 'back').state,
++      expired: () => ({ ...opened(), checkout: { ...opened().checkout!, status: 'expired' as const } }),
++    };
++    const confirmedView = reg.resolveCheckout(opened(), 'paid').state.activation!;
++    const flags: Record<string, RegistrationState['activation']> = {
++      none: null,
++      pending: { ...confirmedView, paymentState: 'pending', provisioningState: 'not_started' },
++      failed: { ...confirmedView, paymentState: 'failed', provisioningState: 'not_started', retryAvailable: true },
++      confirmed: confirmedView,
++    };
++    const quoted = (s: RegistrationState) => reg.requestQuote(s, deps).state;
++    // Each action returns the state it was given (after any preparatory step) and the step it took.
++    type Run = (s: RegistrationState) => { input: RegistrationState; step: reg.Step<unknown> };
++    const direct = (fn: (s: RegistrationState) => reg.Step<unknown>): Run => (s) => ({ input: s, step: fn(s) });
++    const actions: Record<string, Run> = {
++      refresh: direct((s) => reg.refreshActivation(s)),
++      resume: direct((s) => reg.resumeSignup(s)),
++      restart: direct((s) => reg.restartSignup(s)),
++      'outcome paid': direct((s) => reg.resolveCheckout(s, 'paid')),
++      'unknown → paid': direct((s) => reg.resolveUnknownPayment(s, 'paid')),
++      'unknown → nothing charged': direct((s) => reg.resolveUnknownPayment(s, 'not_charged')),
++      'new checkout (fresh quote, new key)': (s) => {
++        const q = quoted(s);
++        return { input: q, step: reg.startCheckout(q, { quoteId: q.quote?.id ?? 'none', consents: consented, operationKey: NEW }, deps) };
++      },
++    };
++    const allowed: Record<reg.PaymentPhase, string[]> = {
++      none: ['restart', 'new checkout (fresh quote, new key)'],
++      open: ['restart', 'outcome paid', 'new checkout (fresh quote, new key)'],
++      processing: ['refresh'],
++      unknown: ['unknown → paid', 'unknown → nothing charged'],
++      paid: ['refresh'],
++      failed: ['resume', 'restart', 'outcome paid', 'new checkout (fresh quote, new key)'],
++      not_charged: ['resume', 'restart', 'new checkout (fresh quote, new key)'],
++    };
++    const rows: Record<string, unknown>[] = [];
++    for (const [checkout, make] of Object.entries(base))
++      for (const [flag, activation] of Object.entries(flags)) {
++        const s: RegistrationState = { ...make(), activation };
++        const phase = reg.paymentPhase(s);
++        for (const [action, run] of Object.entries(actions)) {
++          const { input, step } = run(s);
++          let expected = allowed[phase].includes(action);
++          // "open" covers two records: still on the stand-in (pending), or declined there. A pending one
++          // can't be replaced or resumed while open; a declined one can be resumed and re-quoted (R-012).
++          if (s.checkout?.status === 'pending' && action === 'new checkout (fresh quote, new key)') expected = false;
++          if (action === 'resume') expected = s.checkout?.status === 'declined' || s.checkout?.status === 'abandoned';
++          // Refresh needs a record that agrees with the phase: processing, or paid with a confirmed activation.
++          if (action === 'refresh') expected = phase === 'processing' || (phase === 'paid' && flag === 'confirmed');
++          rows.push({ checkout, activation: flag, phase, action, ok: step.result.ok, after: step.result.ok ? reg.paymentPhase(step.state) : phase, unchanged: step.state === input });
++          expect([checkout, flag, action, step.result.ok]).toEqual([checkout, flag, action, expected]);
++          if (!step.result.ok) expect(step.state).toBe(input);
++        }
++      }
++    // Invariants across every cell.
++    for (const r of rows) {
++      if (r.phase === 'paid') expect(['paid']).toContain(r.after);
++      if (r.phase === 'not_charged' && r.ok) expect(r.after).not.toBe('paid');
++      if (r.phase === 'unknown' && r.action !== 'unknown → paid') expect(r.after).not.toBe('paid');
++    }
++    const fs = require('node:fs') as typeof import('node:fs');
++    fs.mkdirSync('test-results', { recursive: true });
++    fs.writeFileSync('test-results/transition-matrix.json', JSON.stringify({ states: Object.keys(base).length * Object.keys(flags).length, actions: Object.keys(actions), rows }, null, 1));
++    expect(rows).toHaveLength(Object.keys(base).length * Object.keys(flags).length * Object.keys(actions).length);
++  });
++});
+diff -ruN e2e/public.repair005.spec.ts e2e/public.repair005.spec.ts
+--- e2e/public.repair005.spec.ts	1970-01-01 06:00:00.000000000 +0600
++++ e2e/public.repair005.spec.ts	2026-10-30 07:27:37.287728333 +0600
+@@ -0,0 +1,147 @@
++import { expect, test, type Page } from "@playwright/test";
++import { recordContrast, textContrast, textFailures } from "./contrast";
++import { assertGate, measure, record, setTheme, THEMES } from "./gate-m";
++
++// REPAIR_005 anonymous regressions. No credentials are used here.
++// R4-F01: a nothing-charged legacy record can't become paid through a stale Refresh.
++// R4-F02: an unknown legacy record with a stale failed flag can't be discarded by "Try payment again".
++const KEY = "cyph-portal-demo:v1:public";
++type Json = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
++
++const snap = (page: Page) =>
++  page.evaluate((k) => {
++    const s = JSON.parse(sessionStorage.getItem(k)!).state.s;
++    return {
++      checkout: (s.checkout?.status ?? null) as string | null,
++      key: (s.checkout?.operationKey ?? null) as string | null,
++      payment: (s.activation?.paymentState ?? null) as string | null,
++    };
++  }, KEY);
++
++async function settle(page: Page, url: string) {
++  await page.goto(url);
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++}
++
++async function processing(page: Page) {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption("prefilled_one_store");
++  await page.getByRole("button", { name: "Load", exact: true }).click();
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await page.getByRole("button", { name: "Payment processing → activation (waiting)", exact: true }).click();
++  await page.waitForURL("**/demo/activation");
++  return (await snap(page)).key!;
++}
++
++/** Store the state as the d6fe678 engine left it, then open `url`. */
++async function asLegacy(page: Page, url: string, edit: (s: Json) => Json) {
++  const raw = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!), KEY);
++  raw.state.s = edit(raw.state.s);
++  await page.evaluate(({ k, v }) => sessionStorage.setItem(k, JSON.stringify(v)), { k: KEY, v: raw });
++  await settle(page, url);
++}
++// d6fe678 accepted "unknown" on a processing checkout and kept the pending activation; then the current
++// nothing-charged resolution closed the checkout but (before REPAIR_005) kept that activation.
++const notChargedStale = (s: Json) => ({ ...s, checkout: { ...s.checkout, status: "abandoned" }, draft: { ...s.draft, state: "abandoned" } });
++// d6fe678 accepted "unknown" after a payment failure and kept the failed activation.
++const unknownWithFailed = (s: Json) => ({ ...s, checkout: { ...s.checkout, status: "unknown" }, activation: { ...s.activation, paymentState: "failed", retryAvailable: true } });
++
++test("R4-F01: nothing-charged legacy record: no Refresh on activation, reload-stable, then valid recovery with a new key", async ({ page }) => {
++  const key = await processing(page);
++  await asLegacy(page, "/demo/activation", notChargedStale);
++  for (let i = 0; i < 2; i++) {
++    await expect(page.getByTestId("activation-not-charged")).toContainText("Nothing was charged");
++    await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
++    expect(await snap(page)).toEqual({ checkout: "abandoned", key, payment: "pending" });
++    await page.reload();
++  }
++  await page.getByRole("link", { name: "Continue my signup" }).click();
++  await page.waitForURL("**/demo/checkout-incomplete");
++  await expect(page.getByTestId("incomplete-abandoned")).toBeVisible();
++  await page.getByTestId("incomplete-continue").click();
++  await page.waitForURL("**/demo/register/review");
++  expect(await snap(page)).toEqual({ checkout: null, key: null, payment: null });
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const fresh = await snap(page);
++  expect(fresh.checkout).toBe("pending");
++  expect(fresh.key).not.toBe(key);
++});
++
++test("R4-F02: unknown legacy record with a failed flag: no retry, no resume, reload-stable; C14 resolves it first, then recovery", async ({ page }) => {
++  const key = await processing(page);
++  await asLegacy(page, "/demo/activation", unknownWithFailed);
++  for (let i = 0; i < 2; i++) {
++    await expect(page.getByTestId("activation-unknown")).toContainText("still checking whether a payment went through");
++    await expect(page.getByRole("button", { name: "Try payment again" })).toHaveCount(0);
++    await expect(page.getByTestId("activation-refresh")).toHaveCount(0);
++    expect(await snap(page)).toEqual({ checkout: "unknown", key, payment: "failed" });
++    await page.reload();
++  }
++  // Review and the stand-in treat it as submitted.
++  await settle(page, "/demo/register/review");
++  await page.waitForURL("**/demo/checkout-incomplete");
++  await settle(page, "/demo/stripe");
++  await page.waitForTimeout(1200);
++  await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
++  // Authoritative resolution first.
++  await settle(page, "/demo/checkout-incomplete");
++  await expect(page.getByTestId("incomplete-continue")).toBeDisabled();
++  await page.getByTestId("unknown-not-charged").click();
++  await expect(page.getByTestId("incomplete-abandoned")).toBeVisible();
++  expect(await snap(page)).toEqual({ checkout: "abandoned", key, payment: null });
++  await page.getByTestId("incomplete-continue").click();
++  await page.waitForURL("**/demo/register/review");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const fresh = await snap(page);
++  expect(fresh.checkout).toBe("pending");
++  expect(fresh.key).not.toBe(key);
++});
++
++test("R4-F02 paid branch: the same record can still be confirmed by Stripe", async ({ page }) => {
++  await processing(page);
++  await asLegacy(page, "/demo/checkout-incomplete", unknownWithFailed);
++  await page.getByTestId("unknown-paid").click();
++  await page.waitForURL("**/demo/activation");
++  await expect(page.getByTestId("activation-tracks")).toContainText("Confirmed by Stripe · $99.00");
++  expect(await snap(page)).toMatchObject({ checkout: "paid", payment: "confirmed" });
++});
++
++test("REPAIR_005 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots", async ({ page }) => {
++  test.setTimeout(180_000);
++  const screens: { name: string; ready: string; edit: (s: Json) => Json }[] = [
++    { name: "activation-not-charged", ready: "activation-not-charged", edit: notChargedStale },
++    { name: "activation-unknown", ready: "activation-unknown", edit: unknownWithFailed },
++  ];
++  for (const sc of screens) {
++    await page.setViewportSize({ width: 1440, height: 900 });
++    await processing(page);
++    await asLegacy(page, "/demo/activation", sc.edit);
++    for (const theme of THEMES)
++      for (const width of [375, 1440]) {
++        await page.setViewportSize({ width, height: 900 });
++        await settle(page, "/demo/activation");
++        await setTheme(page, theme);
++        await page.reload();
++        await expect(page.getByTestId(sc.ready)).toBeVisible({ timeout: 5000 });
++        const g = await measure(page, `/demo/activation [REPAIR_005 ${sc.name}]`, width, theme);
++        record("gate-m-repair005.jsonl", g);
++        assertGate(g);
++        const fails = textFailures(await textContrast(page));
++        recordContrast("contrast-repair005.jsonl", { screen: `/demo/activation [REPAIR_005 ${sc.name}]`, width, theme, fails });
++        expect.soft(fails, `${sc.name} ${theme} ${width}`).toEqual([]);
++        await page.screenshot({ path: `test-results/repair005-${sc.name}_${theme}_${width}.png`, fullPage: true });
++      }
++  }
++});

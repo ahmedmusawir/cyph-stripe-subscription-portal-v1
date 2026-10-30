@@ -1,0 +1,182 @@
+[
+  {
+    "route": "/demo/register/review",
+    "theme": "light",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/register/plan",
+    "theme": "light",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/register/owner",
+    "theme": "light",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/login",
+    "theme": "light",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/register/review",
+    "theme": "dark",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/register/plan",
+    "theme": "dark",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/register/owner",
+    "theme": "dark",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/login",
+    "theme": "dark",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/dashboard",
+    "theme": "light",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/stores/confirm",
+    "theme": "light",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/dashboard",
+    "theme": "dark",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  },
+  {
+    "route": "/demo/stores/confirm",
+    "theme": "dark",
+    "browserZoom": 2,
+    "baseline": {
+      "width": 1440,
+      "dpr": 1
+    },
+    "width": 720,
+    "dpr": 2,
+    "scroll": 720,
+    "headingVisible": true,
+    "actualZoomVerified": true,
+    "overflow": false
+  }
+]

@@ -685,3 +685,617 @@ describe('count-driven work is bounded (R-012, CR-F02)', () => {
     expect([1, 2, 3].map((n) => value<{ dueNowCents: number }>(reg.requestQuote(completeDraft(n), deps)).dueNowCents)).toEqual([9900, 14800, 19700]);
   });
 });
+
+describe('a submitted payment stays bound to what it was quoted for (R-013, R2-F01)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  type Mode = 'processing' | 'unknown';
+  function submitted(mode: Mode, n = 1): RegistrationState {
+    const s = reg.requestQuote(completeDraft(n), deps).state;
+    const opened = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+    return reg.resolveCheckout(opened, mode).state;
+  }
+  /** The step that would confirm the in-flight payment. */
+  const confirm = (mode: Mode, s: RegistrationState) => (mode === 'processing' ? reg.refreshActivation(s) : reg.resolveUnknownPayment(s, 'paid'));
+  const EDITS: Record<string, (s: RegistrationState) => RegistrationState> = {
+    'pharmacy name': (s) => reg.savePharmacy(s, 0, pharmacy(1, { name: 'Changed after submission' })).state,
+    'store count 1 → 2 with a second pharmacy': (s) => reg.savePharmacy(reg.setStoreCount(s, 2).state, 1, pharmacy(2)).state,
+    'discount code': (s) => reg.applyCode(s, pricing.DEMO_CODE, deps).state,
+  };
+
+  it('a new checkout records the pharmacies, count, code and price it was quoted for', () => {
+    const s = submitted('processing', 2);
+    expect(s.checkout?.scope).toEqual({
+      storeCount: 2,
+      pharmacies: [expect.objectContaining({ name: 'Example Test Pharmacy 1' }), expect.objectContaining({ name: 'Example Test Pharmacy 2' })],
+      dueNowCents: 14800,
+    });
+    expect(reg.checkoutHold(s.draft, s.checkout)).toBeNull();
+  });
+
+  for (const mode of ['processing', 'unknown'] as const)
+    for (const [edit, apply] of Object.entries(EDITS))
+      it(`${mode}: after a ${edit} edit the original payment can't confirm the edited signup`, () => {
+        const before = submitted(mode);
+        const edited = apply(before);
+        expect(reg.isDraftComplete(edited.draft)).toBe(true);
+        // The in-flight payment is held, not closed or charged again.
+        expect(edited.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+        expect(edited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+        expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+        const step = confirm(mode, edited);
+        expect(step.result).toMatchObject({ ok: false });
+        expect(step.state).toBe(edited);
+        // No second payment can start while this one is in flight.
+        const again = reg.requestQuote(edited, deps).state;
+        expect(reg.startCheckout(again, { quoteId: again.quote!.id, consents: consented, operationKey: 'demo_key_000099' }, deps).result).toMatchObject({ ok: false, code: 'conflict' });
+      });
+
+  for (const mode of ['processing', 'unknown'] as const)
+    it(`${mode}: "use the details I paid for" restores the submitted scope, then the payment confirms exactly that`, () => {
+      const before = submitted(mode);
+      const edited = EDITS['store count 1 → 2 with a second pharmacy'](before);
+      const restored = reg.restoreSubmittedScope(edited);
+      expect(restored.result.ok).toBe(true);
+      const s = restored.state;
+      expect(s.draft.requestedStoreCount).toBe(1);
+      expect(s.draft.pharmacies.map((p) => p.name)).toEqual(['Example Test Pharmacy 1']);
+      expect(s.draft.revision).toBeGreaterThan(edited.draft.revision);
+      expect(s.checkout).toEqual(before.checkout);
+      expect(reg.checkoutHold(s.draft, s.checkout)).toBeNull();
+      const paid = confirm(mode, s).state;
+      expect(paid.checkout).toMatchObject({ operationKey: KEY, status: 'paid', scope: { storeCount: 1, dueNowCents: 9900 } });
+      expect(paid.activation?.paymentState).toBe('confirmed');
+      expect(paid.draft.pharmacies.map((p) => p.name)).toEqual(['Example Test Pharmacy 1']);
+    });
+
+  it('typing the original values back in is the same scope; nothing to restore when nothing changed', () => {
+    const before = submitted('processing');
+    const changed = EDITS['pharmacy name'](before);
+    const back = reg.savePharmacy(changed, 0, pharmacy(1)).state;
+    expect(reg.checkoutHold(back.draft, back.checkout)).toBeNull();
+    expect(reg.refreshActivation(back).state.activation?.paymentState).toBe('confirmed');
+    expect(reg.restoreSubmittedScope(before).result).toMatchObject({ ok: false, code: 'conflict' });
+    // Not for open or paid checkouts either.
+    const paid = reg.refreshActivation(before).state;
+    expect(reg.restoreSubmittedScope(reg.setStoreCount(paid, 2).state).result.ok).toBe(false);
+  });
+
+  it('a withdrawn declaration is reported first; after re-acceptance the scope hold remains until restored', () => {
+    let s = EDITS['pharmacy name'](submitted('unknown'));
+    s = reg.keepOwner(s, { ...owner, ownerDeclarationAccepted: false }).state;
+    expect(reg.checkoutHold(s.draft, s.checkout)).toBe('owner_declaration');
+    s = reg.saveOwner(s, owner).state;
+    expect(reg.checkoutHold(s.draft, s.checkout)).toBe('scope_changed');
+    s = reg.restoreSubmittedScope(s).state;
+    expect(reg.resolveUnknownPayment(s, 'paid').state.checkout?.status).toBe('paid');
+  });
+
+  it('honest recovery for the edited details: "nothing charged" then a fresh quote for the new scope and a new key', () => {
+    const edited = EDITS['store count 1 → 2 with a second pharmacy'](submitted('unknown'));
+    let s = reg.resolveUnknownPayment(edited, 'not_charged').state;
+    expect(s.checkout).toMatchObject({ status: 'abandoned', operationKey: KEY });
+    s = reg.resumeSignup(s).state;
+    s = reg.requestQuote(s, deps).state;
+    expect(s.quote?.dueNowCents).toBe(14800);
+    const fresh = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: 'demo_key_000020' }, deps);
+    expect(fresh.result.ok).toBe(true);
+    expect(fresh.state.checkout?.scope).toMatchObject({ storeCount: 2, dueNowCents: 14800 });
+  });
+
+  it('a processing payment that fails still resolves while the details differ (no charge, nothing to bind)', () => {
+    const edited = EDITS['pharmacy name'](submitted('processing'));
+    const failed = reg.refreshActivation({ ...edited, activationPlan: 'payment_failed' }).state;
+    expect(failed.activation?.paymentState).toBe('failed');
+    expect(failed.checkout?.status).toBe('declined');
+  });
+
+  it('seeded submitted scenarios carry the scope of their seeded details', () => {
+    for (const id of ['activation_waiting', 'checkout_unknown'] as const) {
+      const s = reg.createRegistration(id);
+      expect(s.checkout?.scope).toMatchObject({ storeCount: 2, dueNowCents: 14800 });
+      expect(reg.checkoutHold(s.draft, s.checkout)).toBeNull();
+    }
+    expect(reg.refreshActivation(reg.createRegistration('activation_waiting')).state.activation?.paymentState).toBe('confirmed');
+  });
+
+  it('storage written before R-013: an unedited submitted checkout is bound to its draft; an edited one stays held', () => {
+    const strip = (s: RegistrationState): RegistrationState => {
+      const copy = JSON.parse(JSON.stringify(s));
+      delete copy.checkout.scope;
+      return copy;
+    };
+    const unedited = reg.bindLegacyScope(strip(submitted('processing')));
+    expect(unedited.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+    expect(reg.refreshActivation(unedited).state.activation?.paymentState).toBe('confirmed');
+    const edited = reg.bindLegacyScope(strip(EDITS['pharmacy name'](submitted('unknown'))));
+    expect(edited.checkout?.scope).toBeUndefined();
+    expect(reg.checkoutHold(edited.draft, edited.checkout)).toBe('scope_changed');
+    expect(reg.resolveUnknownPayment(edited, 'paid').result.ok).toBe(false);
+    expect(reg.restoreSubmittedScope(edited).result.ok).toBe(false);
+    expect(reg.resolveUnknownPayment(edited, 'not_charged').result.ok).toBe(true);
+    // A paid record binds on the same evidence (REPAIR_004); one edited after payment does not.
+    const paid = strip(reg.refreshActivation(submitted('processing')).state);
+    expect(reg.bindLegacyScope(paid).checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+    const paidEdited = strip(EDITS['pharmacy name'](reg.refreshActivation(submitted('processing')).state));
+    expect(reg.bindLegacyScope(paidEdited)).toEqual(paidEdited);
+  });
+});
+
+describe('legacy storage binds a checkout only from retained evidence (REPAIR_004, R3-F01)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  const unconsented = { termsAccepted: false, recurringChargeAccepted: false, priceChangeAccepted: false };
+  const strip = (s: RegistrationState): RegistrationState => {
+    const copy = JSON.parse(JSON.stringify(s));
+    if (copy.checkout) delete copy.checkout.scope;
+    return copy;
+  };
+  function opened(n = 1, code?: string): RegistrationState {
+    let s = completeDraft(n);
+    if (code) s = reg.applyCode(s, code, deps).state;
+    s = reg.requestQuote(s, deps).state;
+    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+  }
+  /** What the R-011 engine persisted after a count edit while a checkout was open: still pending; quote dropped; revision bumped. */
+  function r011Edited(s: RegistrationState): RegistrationState {
+    const copy = strip(s);
+    return {
+      ...copy,
+      quote: null,
+      draft: { ...copy.draft, requestedStoreCount: 2, pharmacies: [copy.draft.pharmacies[0], pharmacy(2)], revision: copy.draft.revision + 1, state: 'editing', consents: unconsented },
+    };
+  }
+
+  it('an R-011 open checkout edited without being closed gets no scope, cannot confirm and cannot be restored', () => {
+    const legacy = reg.bindLegacyScope(r011Edited(opened()));
+    expect(legacy.checkout).toMatchObject({ status: 'pending', operationKey: KEY });
+    expect(legacy.checkout?.scope).toBeUndefined();
+    expect(reg.checkoutHold(legacy.draft, legacy.checkout)).toBe('scope_changed');
+    for (const outcome of ['paid', 'processing'] as const) {
+      const step = reg.resolveCheckout(legacy, outcome);
+      expect(step.result.ok).toBe(false);
+      expect(step.state).toBe(legacy);
+    }
+    expect(reg.restoreSubmittedScope(legacy).result.ok).toBe(false);
+    // No second checkout opens alongside it.
+    const q = reg.requestQuote(legacy, deps).state;
+    expect(reg.startCheckout(q, { quoteId: q.quote!.id, consents: consented, operationKey: 'demo_key_other_01' }, deps).result).toMatchObject({ ok: false, code: 'conflict' });
+  });
+
+  it('a quote taken after the edit is not evidence for the open checkout', () => {
+    const requoted = reg.requestQuote(r011Edited(opened()), deps).state;
+    expect(requoted.quote?.proposedStoreCount).toBe(2);
+    expect(reg.bindLegacyScope(requoted).checkout?.scope).toBeUndefined();
+  });
+
+  it('an unedited legacy open checkout binds the price of the quote it opened with, discount included', () => {
+    const s = opened(2, pricing.DEMO_CODE);
+    const quoted = s.quote!.dueNowCents!;
+    const legacy = reg.bindLegacyScope(strip(s));
+    expect(legacy.checkout?.scope).toMatchObject({ storeCount: 2, code: pricing.DEMO_CODE, dueNowCents: quoted });
+    expect(quoted).toBeLessThan(14800);
+    expect(reg.resolveCheckout(legacy, 'paid').result.ok).toBe(true);
+  });
+
+  it('a legacy demo seed binds to its seeded scope only while it still matches the seed', () => {
+    const seed = reg.createRegistration('activation_waiting');
+    const legacy = reg.bindLegacyScope(strip(seed));
+    expect(legacy.checkout?.scope).toEqual(seed.checkout!.scope);
+    expect(reg.refreshActivation(legacy).state.activation?.paymentState).toBe('confirmed');
+    const renamed = reg.savePharmacy(seed, 0, { ...seed.draft.pharmacies[0], name: 'Renamed seed' }).state;
+    const edited = reg.bindLegacyScope(strip(renamed));
+    expect(edited.checkout?.scope).toBeUndefined();
+    expect(reg.refreshActivation(edited).result.ok).toBe(false);
+  });
+
+  it('storage v1: the quote proves the scope before migration drops it; the declaration is still not assumed', () => {
+    const v1 = strip(reg.resolveCheckout(opened(), 'processing').state);
+    delete (v1.draft.owner as Record<string, unknown>).ownerDeclarationAccepted;
+    const migrated = reg.migrateRegistration(v1);
+    expect(migrated.quote).toBeNull();
+    expect(migrated.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+    expect(migrated.draft.owner.ownerDeclarationAccepted).toBe(false);
+    expect(reg.refreshActivation(migrated).result.ok).toBe(false);
+  });
+});
+
+describe('completed activation reads what the payment covered (REPAIR_004, R3-F02)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  const replacement = { kind: 'other' as const, fullName: 'Replacement Admin', email: 'replacement@demo-pharmacy.example' };
+  function completed(admin?: PharmacyDraft['adminAssignment']): RegistrationState {
+    let s = completeDraft(1);
+    if (admin) s = reg.savePharmacy(s, 0, pharmacy(1, { adminAssignment: admin })).state;
+    s = reg.requestQuote(s, deps).state;
+    s = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+    s = reg.refreshActivation(reg.resolveCheckout(s, 'paid').state).state;
+    expect(s.activation).toMatchObject({ provisioningState: 'ready', emailState: 'sent' });
+    return s;
+  }
+  const nominateLater = (s: RegistrationState) => reg.savePharmacy(s, 0, pharmacy(1, { adminAssignment: replacement })).state;
+
+  it('an admin nominated after payment is not in the covered details or any preview; payment history is unchanged', () => {
+    const before = completed();
+    const s = nominateLater(before);
+    expect(s.checkout).toEqual(before.checkout);
+    expect(s.activation).toEqual(before.activation);
+    expect(reg.coveredDetails(s)!.pharmacies[0].adminAssignment).toEqual({ kind: 'owner' });
+    expect(JSON.stringify(reg.accessEmailPreviews(s))).not.toMatch(/replacement/i);
+  });
+
+  it('an admin the payment covered stays the invited admin after a later draft change', () => {
+    const sam = { kind: 'other' as const, fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' };
+    const s = nominateLater(completed(sam));
+    expect(reg.accessEmailPreviews(s).store_admin).toMatchObject({ recipientName: 'Sam Ortiz', pharmacyNames: ['Example Test Pharmacy 1'] });
+  });
+
+  it('a closed checkout does not pin the previews; they follow the draft again', () => {
+    let s = completeDraft(1);
+    s = reg.requestQuote(s, deps).state;
+    s = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+    s = reg.resumeSignup(reg.resolveCheckout(s, 'back').state).state;
+    s = nominateLater(s);
+    expect(reg.accessEmailPreviews(s).store_admin.recipientName).toBe('Replacement Admin');
+  });
+});
+
+describe('a closed checkout key is never reused (R-013, R2-F02)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  const OLD = 'demo_key_old_0001';
+  const NEW = 'demo_key_new_0001';
+  function opened(): RegistrationState {
+    const s = reg.requestQuote(completeDraft(1), deps).state;
+    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: OLD }, deps).state;
+  }
+  const start = (s: RegistrationState, key: string) => reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: key }, deps);
+
+  it("QA case: withdraw → re-accept → fresh quote and consent: the closed checkout's key is refused, a new key works", () => {
+    let s = reg.keepOwner(opened(), { ...owner, ownerDeclarationAccepted: false }).state;
+    s = reg.saveOwner(s, owner).state;
+    expect(s.checkout).toMatchObject({ operationKey: OLD, status: 'abandoned', closedReason: 'owner_declaration' });
+    s = reg.requestQuote(s, deps).state;
+    const replay = start(s, OLD);
+    expect(replay.result).toMatchObject({ ok: false, code: 'conflict' });
+    expect(replay.state).toBe(s);
+    const fresh = start(s, NEW);
+    expect(fresh.result.ok).toBe(true);
+    expect(fresh.state.checkout).toMatchObject({ operationKey: NEW, status: 'pending' });
+    // And the closed key stays spent after the new checkout replaced its record.
+    const later = reg.resumeSignup(reg.resolveCheckout(fresh.state, 'back').state).state;
+    const q = reg.requestQuote(later, deps).state;
+    for (const key of [OLD, NEW]) expect(start(q, key).result).toMatchObject({ ok: false, code: 'conflict' });
+    expect(start(q, 'demo_key_third_01').result.ok).toBe(true);
+  });
+
+  it.each([
+    ['Back from Stripe, then resume', (s: RegistrationState) => reg.resumeSignup(reg.resolveCheckout(s, 'back').state).state],
+    ['declined, then resume', (s: RegistrationState) => reg.resumeSignup(reg.resolveCheckout(s, 'declined').state).state],
+    ['unknown → nothing charged, then resume', (s: RegistrationState) => reg.resumeSignup(reg.resolveUnknownPayment(reg.resolveCheckout(s, 'unknown').state, 'not_charged').state).state],
+    ['details changed while open', (s: RegistrationState) => reg.savePharmacy(s, 0, pharmacy(1, { city: 'Shelbyville' })).state],
+  ])('%s: the old key is refused for the new checkout', (_label, close) => {
+    const s = reg.requestQuote(close(opened()), deps).state;
+    expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+    expect(start(s, NEW).result.ok).toBe(true);
+  });
+
+  it('starting a new signup after expiry keeps the spent keys', () => {
+    const expired = { ...opened(), checkout: { ...opened().checkout!, status: 'expired' as const } };
+    let s = reg.restartSignup(expired).state;
+    s = reg.requestQuote(reg.saveOwner(reg.savePharmacy(s, 0, pharmacy(1)).state, owner).state, deps).state;
+    expect(start(s, OLD).result).toMatchObject({ ok: false, code: 'conflict' });
+    expect(start(s, NEW).result.ok).toBe(true);
+  });
+
+  it('valid same-operation replay of an open checkout is unchanged (idempotent, no second checkout)', () => {
+    const s = opened();
+    const replay = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: OLD }, deps);
+    expect(replay.result.ok).toBe(true);
+    expect(replay.state).toBe(s);
+    // A different key while it is open is still a conflict, not a second checkout.
+    expect(start(s, NEW).result).toMatchObject({ ok: false, code: 'conflict' });
+  });
+});
+
+describe('a submitted payment cannot be discarded or retried (REPAIR_004 addendum 1, R4-N01)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  const OTHER = 'demo_key_other_0001';
+  type Mode = 'processing' | 'unknown';
+  function opened(): RegistrationState {
+    const s = reg.requestQuote(completeDraft(1), deps).state;
+    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+  }
+  const submitted = (mode: Mode) => reg.resolveCheckout(opened(), mode).state;
+  const reload = (s: RegistrationState): RegistrationState => reg.bindLegacyScope(JSON.parse(JSON.stringify(s)));
+  const start = (s: RegistrationState, key: string) => reg.startCheckout(s, { quoteId: s.quote?.id ?? 'none', consents: consented, operationKey: key }, deps);
+
+  for (const mode of ['processing', 'unknown'] as const)
+    it(`${mode}: no checkout outcome, resume, restart or new checkout applies, before or after a reload`, () => {
+      for (const s of [submitted(mode), reload(submitted(mode))]) {
+        for (const outcome of reg.CHECKOUT_OUTCOMES) {
+          const step = reg.resolveCheckout(s, outcome);
+          expect([outcome, step.result.ok]).toEqual([outcome, false]);
+          expect(step.state).toBe(s);
+        }
+        // Review's "Edit my details instead" was resolveCheckout('back') then resumeSignup.
+        expect(reg.resumeSignup(reg.resolveCheckout(s, 'back').state).result.ok).toBe(false);
+        expect(reg.restartSignup(s).result).toMatchObject({ ok: false, code: 'conflict' });
+        for (const key of [KEY, OTHER]) expect(start(reg.requestQuote(s, deps).state, key).result).toMatchObject({ ok: false, code: 'conflict' });
+        expect(s.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
+      }
+    });
+
+  it('an unsubmitted open checkout can still be closed from Review and paid again with a new key', () => {
+    let s = reg.resolveCheckout(opened(), 'back').state;
+    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
+    expect(start(s, KEY).result.ok).toBe(false);
+    expect(start(s, OTHER).result.ok).toBe(true);
+  });
+
+  it('a genuine payment failure still recovers through a fresh quote and a new key', () => {
+    let s = reg.setActivationPlan(submitted('processing'), 'payment_failed').state;
+    s = reg.refreshActivation(s).state;
+    expect(s.activation?.paymentState).toBe('failed');
+    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
+    expect(start(s, KEY).result.ok).toBe(false);
+    expect(start(s, OTHER).result.ok).toBe(true);
+  });
+
+  it('unknown → Stripe confirms nothing charged still recovers through a fresh quote and a new key', () => {
+    let s = reg.resolveUnknownPayment(submitted('unknown'), 'not_charged').state;
+    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
+    expect(start(s, OTHER).result.ok).toBe(true);
+  });
+
+  it('a completed payment cannot be restarted or reopened', () => {
+    const s = reg.refreshActivation(submitted('processing')).state;
+    expect(s.checkout?.status).toBe('paid');
+    expect(reg.restartSignup(s).result).toMatchObject({ ok: false, code: 'conflict' });
+    expect(reg.resolveCheckout(s, 'back').result.ok).toBe(false);
+    expect(start(reg.requestQuote(s, deps).state, OTHER).result.ok).toBe(false);
+  });
+});
+
+describe('a completed payment whose scope cannot be established (REPAIR_004 addendum 1)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  function completedThenEdited(): RegistrationState {
+    let s = reg.requestQuote(completeDraft(1), deps).state;
+    s = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+    s = reg.refreshActivation(reg.resolveCheckout(s, 'paid').state).state;
+    s = reg.savePharmacy(s, 0, pharmacy(1, { name: 'Edited after payment', adminAssignment: { kind: 'other', fullName: 'Replacement Admin', email: 'replacement@demo-pharmacy.example' } })).state;
+    const copy = JSON.parse(JSON.stringify(s));
+    delete copy.checkout.scope;
+    return reg.bindLegacyScope(copy);
+  }
+
+  it('keeps its completed status and history, and no covered details are invented from the edited draft', () => {
+    const s = completedThenEdited();
+    expect(s.checkout).toMatchObject({ status: 'paid', operationKey: KEY });
+    expect(s.checkout?.scope).toBeUndefined();
+    expect(s.activation).toMatchObject({ paymentState: 'confirmed', provisioningState: 'ready', emailState: 'sent' });
+    expect(reg.coveredDetails(s)).toBeNull();
+    const previews = reg.accessEmailPreviews(s);
+    expect(previews.owner.pharmacyNames).toEqual([]);
+    expect(JSON.stringify([previews.owner, previews.store_admin, previews.expired_resend])).not.toMatch(/Edited after payment|Replacement Admin/);
+  });
+});
+
+describe('checkout record governs the payment (REPAIR_005, R4-F01/R4-F02)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  const NEW = 'demo_key_matrix_0001';
+  function opened(): RegistrationState {
+    const s = reg.requestQuote(completeDraft(1), deps).state;
+    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+  }
+  const processing = () => reg.resolveCheckout(opened(), 'processing').state;
+  /** What the d6fe678 engine stored: it accepted "unknown" on a processing checkout and kept the activation. */
+  const legacyProcessingThenUnknown = (): RegistrationState => ({ ...processing(), checkout: { ...processing().checkout!, status: 'unknown' } });
+  const legacyFailedThenUnknown = (): RegistrationState => {
+    const failed = reg.refreshActivation(reg.setActivationPlan(processing(), 'payment_failed').state).state;
+    return { ...failed, checkout: { ...failed.checkout!, status: 'unknown' } };
+  };
+  const reload = (s: RegistrationState): RegistrationState => reg.bindLegacyScope(JSON.parse(JSON.stringify(s)));
+
+  it('R4-F01: nothing charged on a legacy unknown payment is terminal; a stale refresh is refused and changes nothing', () => {
+    const resolved = reg.resolveUnknownPayment(legacyProcessingThenUnknown(), 'not_charged').state;
+    expect(resolved.checkout?.status).toBe('abandoned');
+    expect(resolved.activation).toBeNull();
+    // Cody's stored state still carries the pending activation; it must behave the same.
+    const stale: RegistrationState = { ...resolved, activation: processing().activation };
+    for (const s of [stale, reload(stale)]) {
+      expect(reg.paymentPhase(s)).toBe('not_charged');
+      const step = reg.refreshActivation(s);
+      expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
+      expect(step.state).toBe(s);
+      expect(reg.resolveCheckout(s, 'paid').result.ok).toBe(false);
+      expect(reg.resolveUnknownPayment(s, 'paid').result.ok).toBe(false);
+    }
+    // Valid recovery: resume, fresh quote, new key.
+    let s = reg.resumeSignup(stale).state;
+    expect(s.activation).toBeNull();
+    s = reg.requestQuote(s, deps).state;
+    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).result.ok).toBe(false);
+    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: NEW }, deps).result.ok).toBe(true);
+  });
+
+  it('R4-F02: an unknown checkout with a retained failed flag is still submitted; resume, restart, outcomes and new checkouts are refused', () => {
+    for (const s of [legacyFailedThenUnknown(), reload(legacyFailedThenUnknown())]) {
+      expect(s.activation?.paymentState).toBe('failed');
+      expect(reg.paymentPhase(s)).toBe('unknown');
+      expect(reg.isSubmitted(s)).toBe(true);
+      for (const step of [reg.resumeSignup(s), reg.restartSignup(s), reg.refreshActivation(s), reg.resolveCheckout(s, 'back'), reg.startCheckout(reg.requestQuote(s, deps).state, { quoteId: 'x', consents: consented, operationKey: NEW }, deps)]) {
+        expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
+      }
+      expect(reg.resumeSignup(s).state).toBe(s);
+      expect(reg.restartSignup(s).state).toBe(s);
+      expect(reg.refreshActivation(s).state).toBe(s);
+    }
+    // Authoritative resolution first, then recovery.
+    const paid = reg.resolveUnknownPayment(legacyFailedThenUnknown(), 'paid').state;
+    expect(paid.checkout?.status).toBe('paid');
+    expect(paid.activation?.paymentState).toBe('confirmed');
+    let s = reg.resolveUnknownPayment(legacyFailedThenUnknown(), 'not_charged').state;
+    expect(s.activation).toBeNull();
+    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
+    expect(reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: NEW }, deps).result.ok).toBe(true);
+  });
+
+  it('genuine failure and genuine confirmation are unchanged', () => {
+    const failed = reg.refreshActivation(reg.setActivationPlan(processing(), 'payment_failed').state).state;
+    expect([failed.checkout?.status, failed.activation?.paymentState, reg.paymentPhase(failed)]).toEqual(['declined', 'failed', 'failed']);
+    expect(reg.resumeSignup(failed).result.ok).toBe(true);
+    const confirmed = reg.refreshActivation(processing()).state;
+    expect([confirmed.checkout?.status, confirmed.activation?.paymentState, reg.paymentPhase(confirmed)]).toEqual(['paid', 'confirmed', 'paid']);
+    expect(reg.refreshActivation(confirmed).state.activation?.provisioningState).toBe('ready');
+  });
+
+  // Bounded matrix: every checkout status × every activation flag × every stale or valid action.
+  // Allowed cells follow the phase; refused cells must leave the state object untouched.
+  it('transition matrix: allowed transitions follow the phase; refusals leave state unchanged', () => {
+    const base: Record<string, () => RegistrationState> = {
+      none: () => reg.requestQuote(completeDraft(1), deps).state,
+      open: opened,
+      declined: () => reg.resolveCheckout(opened(), 'declined').state,
+      processing,
+      unknown: () => reg.resolveCheckout(opened(), 'unknown').state,
+      paid: () => reg.resolveCheckout(opened(), 'paid').state,
+      abandoned: () => reg.resolveCheckout(opened(), 'back').state,
+      expired: () => ({ ...opened(), checkout: { ...opened().checkout!, status: 'expired' as const } }),
+    };
+    const confirmedView = reg.resolveCheckout(opened(), 'paid').state.activation!;
+    const flags: Record<string, RegistrationState['activation']> = {
+      none: null,
+      pending: { ...confirmedView, paymentState: 'pending', provisioningState: 'not_started' },
+      failed: { ...confirmedView, paymentState: 'failed', provisioningState: 'not_started', retryAvailable: true },
+      confirmed: confirmedView,
+    };
+    const quoted = (s: RegistrationState) => reg.requestQuote(s, deps).state;
+    // Each action returns the state it was given (after any preparatory step) and the step it took.
+    type Run = (s: RegistrationState) => { input: RegistrationState; step: reg.Step<unknown> };
+    const direct = (fn: (s: RegistrationState) => reg.Step<unknown>): Run => (s) => ({ input: s, step: fn(s) });
+    const actions: Record<string, Run> = {
+      refresh: direct((s) => reg.refreshActivation(s)),
+      resume: direct((s) => reg.resumeSignup(s)),
+      restart: direct((s) => reg.restartSignup(s)),
+      'outcome paid': direct((s) => reg.resolveCheckout(s, 'paid')),
+      'unknown → paid': direct((s) => reg.resolveUnknownPayment(s, 'paid')),
+      'unknown → nothing charged': direct((s) => reg.resolveUnknownPayment(s, 'not_charged')),
+      'new checkout (fresh quote, new key)': (s) => {
+        const q = quoted(s);
+        return { input: q, step: reg.startCheckout(q, { quoteId: q.quote?.id ?? 'none', consents: consented, operationKey: NEW }, deps) };
+      },
+    };
+    const allowed: Record<reg.PaymentPhase, string[]> = {
+      none: ['restart', 'new checkout (fresh quote, new key)'],
+      open: ['restart', 'outcome paid', 'new checkout (fresh quote, new key)'],
+      processing: ['refresh'],
+      unknown: ['unknown → paid', 'unknown → nothing charged'],
+      paid: ['refresh'],
+      failed: ['resume', 'restart', 'outcome paid', 'new checkout (fresh quote, new key)'],
+      not_charged: ['resume', 'restart', 'new checkout (fresh quote, new key)'],
+    };
+    const rows: Record<string, unknown>[] = [];
+    for (const [checkout, make] of Object.entries(base))
+      for (const [flag, activation] of Object.entries(flags)) {
+        const s: RegistrationState = { ...make(), activation };
+        const phase = reg.paymentPhase(s);
+        for (const [action, run] of Object.entries(actions)) {
+          const { input, step } = run(s);
+          let expected = allowed[phase].includes(action);
+          // "open" covers two records: still on the stand-in (pending), or declined there. A pending one
+          // can't be replaced or resumed while open; a declined one can be resumed and re-quoted (R-012).
+          if (s.checkout?.status === 'pending' && action === 'new checkout (fresh quote, new key)') expected = false;
+          if (action === 'resume') expected = s.checkout?.status === 'declined' || s.checkout?.status === 'abandoned';
+          // Refresh needs a record that agrees with the phase: processing, or paid with a confirmed activation.
+          if (action === 'refresh') expected = phase === 'processing' || (phase === 'paid' && flag === 'confirmed');
+          rows.push({ checkout, activation: flag, phase, action, ok: step.result.ok, after: step.result.ok ? reg.paymentPhase(step.state) : phase, unchanged: step.state === input });
+          expect([checkout, flag, action, step.result.ok]).toEqual([checkout, flag, action, expected]);
+          if (!step.result.ok) expect(step.state).toBe(input);
+        }
+      }
+    // Invariants across every cell.
+    for (const r of rows) {
+      if (r.phase === 'paid') expect(['paid']).toContain(r.after);
+      if (r.phase === 'not_charged' && r.ok) expect(r.after).not.toBe('paid');
+      if (r.phase === 'unknown' && r.action !== 'unknown → paid') expect(r.after).not.toBe('paid');
+    }
+    const fs = require('node:fs') as typeof import('node:fs');
+    fs.mkdirSync('test-results', { recursive: true });
+    fs.writeFileSync('test-results/transition-matrix.json', JSON.stringify({ states: Object.keys(base).length * Object.keys(flags).length, actions: Object.keys(actions), rows }, null, 1));
+    expect(rows).toHaveLength(Object.keys(base).length * Object.keys(flags).length * Object.keys(actions).length);
+  });
+});
+
+describe('payment-phase readers and resend (REPAIR_006, R5-F01/R5-F02)', () => {
+  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
+  function opened(): RegistrationState {
+    const s = reg.requestQuote(completeDraft(1), deps).state;
+    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
+  }
+  const ready = () => reg.refreshActivation(reg.resolveCheckout(opened(), 'paid').state).state;
+  const view = ready().activation!;
+  const FLAGS: Record<string, RegistrationState['activation']> = {
+    absent: null,
+    pending: { ...view, paymentState: 'pending', provisioningState: 'not_started', emailState: 'not_started' },
+    failed: { ...view, paymentState: 'failed', provisioningState: 'not_started', emailState: 'not_started' },
+    'confirmed, setup ready, email failed': { ...view, emailState: 'failed' },
+  };
+  const CHECKOUTS: Record<string, () => RegistrationState> = {
+    none: () => ({ ...reg.requestQuote(completeDraft(1), deps).state }),
+    open: opened,
+    declined: () => reg.resolveCheckout(opened(), 'declined').state,
+    unknown: () => reg.resolveCheckout(opened(), 'unknown').state,
+    abandoned: () => reg.resolveCheckout(opened(), 'back').state,
+    expired: () => ({ ...opened(), checkout: { ...opened().checkout!, status: 'expired' as const } }),
+  };
+
+  it('R5-F02: resend is refused without mutation unless the checkout is paid and its setup finished', () => {
+    const rows: unknown[] = [];
+    for (const [checkout, make] of Object.entries(CHECKOUTS))
+      for (const [flag, activation] of Object.entries(FLAGS)) {
+        const s = { ...make(), activation };
+        const step = reg.resendAccessEmail(s, deps);
+        rows.push({ checkout, flag, phase: reg.paymentPhase(s), ok: step.result.ok });
+        expect([checkout, flag, step.result]).toEqual([checkout, flag, expect.objectContaining({ ok: false, code: 'conflict' })]);
+        expect(step.state).toBe(s);
+      }
+    // Paid with a missing or conflicting activation: also refused, unchanged.
+    for (const flag of ['absent', 'pending', 'failed']) {
+      const s = { ...ready(), activation: FLAGS[flag] };
+      const step = reg.resendAccessEmail(s, deps);
+      expect([flag, step.result.ok]).toEqual([flag, false]);
+      expect(step.state).toBe(s);
+    }
+    // Paid but setup not finished: refused.
+    const settingUp = reg.resolveCheckout(opened(), 'paid').state;
+    expect(reg.resendAccessEmail(settingUp, deps).state).toBe(settingUp);
+    expect(rows).toHaveLength(Object.keys(CHECKOUTS).length * Object.keys(FLAGS).length);
+  });
+
+  it('R5-F02 preserved: a paid record whose setup finished can resend, from sent or failed email', () => {
+    for (const emailState of ['sent', 'failed'] as const) {
+      const s = { ...ready(), activation: { ...ready().activation!, emailState } };
+      const step = reg.resendAccessEmail(s, deps);
+      expect(step.result.ok).toBe(true);
+      expect(step.state.activation?.emailState).toBe('sent');
+      expect(step.state.emailResentAt).not.toBeNull();
+      expect(step.state.checkout).toEqual(s.checkout);
+    }
+  });
+
+  it('R5-F01: readers present the activation only where it agrees with the phase; paid stays paid', () => {
+    for (const flag of ['absent', 'pending', 'failed']) {
+      const s = { ...ready(), activation: FLAGS[flag] };
+      expect(reg.paymentPhase(s)).toBe('paid');
+      expect(reg.consistentActivation(s)).toBeNull();
+      expect(reg.readActivation(s)).toMatchObject({ ok: false, message: expect.stringMatching(/Payment is confirmed/) });
+      for (const step of [reg.refreshActivation(s), reg.resumeSignup(s), reg.restartSignup(s)]) {
+        expect(step.result.ok).toBe(false);
+        expect(step.state).toBe(s);
+      }
+    }
+    const done = ready();
+    expect(reg.consistentActivation(done)).toBe(done.activation);
+    expect(reg.readActivation(ready()).ok).toBe(true);
+    // The actual nothing-charged path leaves no activation and nothing to read.
+    const terminal = reg.resolveUnknownPayment(reg.resolveCheckout(opened(), 'unknown').state, 'not_charged').state;
+    expect([reg.paymentPhase(terminal), terminal.activation, reg.readActivation(terminal).ok]).toEqual(['not_charged', null, false]);
+  });
+});

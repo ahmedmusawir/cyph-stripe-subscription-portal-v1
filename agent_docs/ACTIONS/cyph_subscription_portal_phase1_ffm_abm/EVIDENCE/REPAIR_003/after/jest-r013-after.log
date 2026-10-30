@@ -1,0 +1,5 @@
+Test Suites: 1 passed, 1 total
+Tests:       62 skipped, 22 passed, 84 total
+Snapshots:   0 total
+Time:        0.479 s, estimated 1 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts with tests matching "R-013".

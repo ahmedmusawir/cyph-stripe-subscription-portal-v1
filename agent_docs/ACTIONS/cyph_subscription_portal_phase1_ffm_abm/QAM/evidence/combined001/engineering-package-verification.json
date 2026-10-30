@@ -1,0 +1,64 @@
+{
+  "members": 43,
+  "indexed": 42,
+  "hashMismatches": [],
+  "integrity": null,
+  "sourceMatchesCommitted": [
+    {
+      "path": "e2e/gate-m.public.spec.ts",
+      "match": true
+    },
+    {
+      "path": "e2e/public.journeys.spec.ts",
+      "match": true
+    },
+    {
+      "path": "e2e/public.owner-declaration.spec.ts",
+      "match": true
+    },
+    {
+      "path": "src/__tests__/portal-owner.test.tsx",
+      "match": true
+    },
+    {
+      "path": "src/__tests__/portal-registration.test.ts",
+      "match": true
+    },
+    {
+      "path": "src/components/portal/PharmacyFields.tsx",
+      "match": true
+    },
+    {
+      "path": "src/components/portal/register/OwnerView.tsx",
+      "match": true
+    },
+    {
+      "path": "src/components/portal/register/ReviewView.tsx",
+      "match": true
+    },
+    {
+      "path": "src/mocks/portal/fixtures.ts",
+      "match": true
+    },
+    {
+      "path": "src/services/portal/catalog.ts",
+      "match": true
+    },
+    {
+      "path": "src/services/portal/registration.ts",
+      "match": true
+    },
+    {
+      "path": "src/services/portal/registrationService.ts",
+      "match": true
+    },
+    {
+      "path": "src/services/portal/validation.ts",
+      "match": true
+    },
+    {
+      "path": "src/types/portal/contract.ts",
+      "match": true
+    }
+  ]
+}

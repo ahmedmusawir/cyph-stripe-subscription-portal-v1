@@ -1,0 +1,10 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 qa-readers/phase-display.spec.ts:3:63 › paid checkout remains visibly paid with activation flag none (1.5s)
+  ✓  2 qa-readers/phase-display.spec.ts:3:63 › paid checkout remains visibly paid with activation flag pending (1.3s)
+  ✓  3 qa-readers/phase-display.spec.ts:3:63 › paid checkout remains visibly paid with activation flag failed (1.3s)
+  ✓  4 qa-readers/phase-display.spec.ts:3:63 › paid checkout remains visibly paid with activation flag confirmed (1.3s)
+  ✓  5 qa-readers/phase-display.spec.ts:4:5 › resolved nothing-charged fixture renders the authoritative terminal notice after activation was cleared (1.1s)
+
+  5 passed (7.6s)

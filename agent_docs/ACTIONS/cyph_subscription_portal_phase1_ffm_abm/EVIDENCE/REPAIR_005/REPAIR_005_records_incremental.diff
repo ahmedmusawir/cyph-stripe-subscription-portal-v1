@@ -1,0 +1,190 @@
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md (before: REPAIR_004 ADDENDUM_001 package records/RULINGS.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/RULINGS.md
+@@ -199,3 +199,29 @@
+   - ACCEPTANCE_LEDGER; QAM engineering handoff §9
+   - `src/services/portal/registration.ts`, `index.ts`; `ReviewView`, `CheckoutStandIn`, `ActivationView`, `CheckoutIncompleteView`, `EmailReferenceView`, `EmailPreview`
+ - **R4-N01 status:** closed by engineering (self-check), pending independent retest.
++
++## R-014 — REPAIR_005: the checkout record governs the payment; stale activation flags never advance or discard it (JARVIS dispatch, R-010 route)
++- **ID / date / seat:** R-014 · 30 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Repair authorized by JARVIS after Cody's REPAIR_004 RETEST_001 (`FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_RETEST_001_REVIEW.zip`, SHA-256 `8f2dff8c423c46b2f8fb9ab816f1fe18fd4d8694a0869bc1bb85df9e7ce874b3`). No business decision is made here.
++- **Approving source:** JARVIS dispatch, 30 Oct 2026: "R4-F01: Legacy processing→unknown, then current nothing-charged resolution must not leave an activation path that can resurrect payment. A stale refresh must refuse without changing the terminal outcome." · "R4-F02: An unknown checkout with a retained activation.failed flag must not be discarded by resumeSignup or rendered Try payment again. Resolve the unknown payment authoritatively before allowing recovery. Do not infer payment failure solely from the conflicting old flag." · "Establish coherent precedence for checkout/payment states… Enforce these rules at the service boundary and reflect them in UI."
++- **Base:** `qa/ffm-abm-001-subscription-portal` @ `d6fe678` + uncommitted addenda 1/2, REPAIR_003, REPAIR_004 and its addendum 1 (all preserved).
++- **Precedence (`paymentPhase`, one engine read used by every writer and screen):** the checkout record governs; the activation flag counts only where it agrees with it.
++  | Checkout record | Activation flag | Phase | Meaning |
++  |---|---|---|---|
++  | `paid` | any | **paid** | history; never reversed, restarted or replayed |
++  | `unknown` | any (a stale `failed` included) | **unknown** | Stripe's answer is still owed; only "Stripe confirms payment" / "nothing charged" resolve it |
++  | `pending` | `pending` | **processing** | Refresh confirms, or fails under the demo failure plan |
++  | `pending` | other | **open** | still on the stand-in (R-012 rules) |
++  | `declined` | `failed` | **failed** | genuine failure: resume → fresh quote → new key |
++  | `declined` | other | **open** | declined on Stripe's page; retry there, or resume (R-012) |
++  | `abandoned`, `expired` | any (a stale `pending` included) | **not_charged** | terminal no-charge; can never become paid |
++  | none | — | **none** | |
++- **Service rules (refusals are `conflict` with state unchanged):**
++  - `refreshActivation` advances only a **processing** payment, or a **paid** one whose activation is `confirmed` and still being set up. Anything else is refused: "This payment was already resolved…" (or the submitted message for unknown).
++  - `resumeSignup` requires an `abandoned` or `declined` checkout. The former "or activation failed" clause is removed, so a stale failed flag on an unknown checkout never discards it.
++  - `resolveUnknownPayment('not_charged')` is terminal: it clears the activation, so no record is left behind to refresh.
++  - `resolveCheckout`, `startCheckout` and `restartSignup` keep their R-013 addendum 2 refusals for submitted and paid records; they already refused closed ones.
++  - Stored states are **not rewritten**: no storage-version bump, flags are retained as history, and the readers above enforce the precedence identically for old and new records.
++- **Screens:** C06 renders from the phase. **unknown** shows "We're still checking whether a payment went through" with a link to C14 and no Refresh or retry. **not_charged** shows "Nothing was charged for this payment" with "Continue my signup" (C14) and no Refresh. "Try payment again" appears only for **failed**. C04, C05 and C14 already follow the checkout record.
++- **Unchanged:** genuine processing confirmation and failure; unknown → paid / nothing charged; fresh quote, consent and new key after a closed checkout; scope binding, restore, spent keys, owner declaration, completed history, R-013 addenda 1–2.
++- **Affected ACs/files:** ACCEPTANCE_SPEC v1.6 → v1.7 (AC-10, AC-11, AC-13); DATA_CONTRACT v1.7 → v1.8; UI_SPEC C06; ACCEPTANCE_LEDGER; QAM engineering handoff §9; `registration.ts`, `index.ts`, `ActivationView.tsx`.
++- **Required regression:** Cody's transition probes; the bounded matrix (8 checkout records × 4 activation flags × 7 actions, every refusal leaving state untouched); reload and direct navigation; valid recovery after resolution; the R-012/R-013 suites and Gate M public.
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md (before: REPAIR_004 ADDENDUM_001 package records/ACCEPTANCE_SPEC.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_SPEC.md
+@@ -1,5 +1,5 @@
+ # Acceptance specification — FFM-ABM-001-SUBSCRIPTION-PORTAL
+-Version 1.6 · 29 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.6 adds R-013 addendum 2 (REPAIR_004 addendum 1) text to AC-10, AC-11 and AC-13; no criterion is removed or relaxed. v1.5 adds R-013 addendum 1 (REPAIR_004) text to AC-10, AC-12 and AC-13; no criterion is removed or relaxed. v1.4 adds R-013 (REPAIR_003) text to AC-10 and AC-13; no criterion is removed or relaxed. v1.3 adds R-012 (REPAIR_002) text to AC-05 and AC-06a; no criterion is removed or relaxed. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
++Version 1.7 · 30 October 2026 · Frozen requirement text after package release; amendments recorded in RULINGS. v1.7 adds R-014 (REPAIR_005) text to AC-10, AC-11 and AC-13; no criterion is removed or relaxed. v1.6 adds R-013 addendum 2 (REPAIR_004 addendum 1) text to AC-10, AC-11 and AC-13; no criterion is removed or relaxed. v1.5 adds R-013 addendum 1 (REPAIR_004) text to AC-10, AC-12 and AC-13; no criterion is removed or relaxed. v1.4 adds R-013 (REPAIR_003) text to AC-10 and AC-13; no criterion is removed or relaxed. v1.3 adds R-012 (REPAIR_002) text to AC-05 and AC-06a; no criterion is removed or relaxed. v1.2 replaces AC-06 owner-field text and adds AC-06a per R-011 (Coach decision, Director authorization). v1.1 replaced AC-01/02/03/07/25/26/29 access text per Director rulings R-008/R-009.
+ 
+ ## Basis and grading
+ APP_BRIEF v1.1, DATA_CONTRACT v1.1, IMPLEMENTATION_CONTRACT v1.0, received UI_SPEC v1.0 with R-004. Each AC is required for the declared FFM scope. No arbitrary screen/test count replaces behavior. All mock checks run in a locally served app or isolated service tests; real access checks use only the authorized existing shared-dev auth target. Deployment/live billing/SSO are excluded.
+@@ -79,14 +79,14 @@
+ **Evidence:** Rejected stale quote, cleared checks and no mutation.
+ 
+ ## AC-10 — Initial checkout boundary
+-**Requirement:** Checkout opens a local labelled Stripe stand-in with no editable card fields. Cancel/decline retain draft and inactive state. Browser return or forged success route alone neither authenticates nor confirms payment. (R-013) A checkout is bound to the scope it was quoted for (pharmacies, count, code, price): a submitted payment never confirms or provisions details edited after submission; the customer can restore the submitted details, and nothing is charged again. An operation key whose checkout was closed or replaced is refused at the service boundary; same-key replay of an open checkout stays idempotent. (R-013 addendum 1) A checkout stored before scopes were recorded is bound only from retained evidence (its own quote for the same draft revision, or an unchanged demo seed); otherwise it is held: no scope is invented, edited details never confirm, and the customer is told not to pay again. (R-013 addendum 2) A submitted payment (processing or unknown) is never closed, replayed, restarted or paid again from Review, the stand-in, back navigation, reload or a direct service call; it resolves only through Stripe's answer.
++**Requirement:** Checkout opens a local labelled Stripe stand-in with no editable card fields. Cancel/decline retain draft and inactive state. Browser return or forged success route alone neither authenticates nor confirms payment. (R-013) A checkout is bound to the scope it was quoted for (pharmacies, count, code, price): a submitted payment never confirms or provisions details edited after submission; the customer can restore the submitted details, and nothing is charged again. An operation key whose checkout was closed or replaced is refused at the service boundary; same-key replay of an open checkout stays idempotent. (R-013 addendum 1) A checkout stored before scopes were recorded is bound only from retained evidence (its own quote for the same draft revision, or an unchanged demo seed); otherwise it is held: no scope is invented, edited details never confirm, and the customer is told not to pay again. (R-013 addendum 2) A submitted payment (processing or unknown) is never closed, replayed, restarted or paid again from Review, the stand-in, back navigation, reload or a direct service call; it resolves only through Stripe's answer. (R-014) The checkout record governs: a stale activation flag never confirms a closed checkout, never discards an unknown one, and never reverses a paid one.
+ 
+ **Verification:** Browser happy/decline/back and route-tamper negatives.
+ 
+ **Evidence:** State transitions and zero billing-network requests.
+ 
+ ## AC-11 — Activation separation
+-**Requirement:** Waiting payment, confirmed/provisioning, ready, delayed, failed payment, failed email and resend states remain distinct. Paid/setup delay never asks to repay; email failure offers simulated resend. No automatic customer login. (R-013 addendum 2) Waiting payment never offers to resume checkout. A completed payment whose paid details can't be established keeps its completed state and says those details are unavailable, never showing later draft edits as what was paid for.
++**Requirement:** Waiting payment, confirmed/provisioning, ready, delayed, failed payment, failed email and resend states remain distinct. Paid/setup delay never asks to repay; email failure offers simulated resend. No automatic customer login. (R-013 addendum 2) Waiting payment never offers to resume checkout. A completed payment whose paid details can't be established keeps its completed state and says those details are unavailable, never showing later draft edits as what was paid for. (R-014) Refresh is offered only while a payment is processing or being set up; "Try payment again" only for a recorded failure on a declined checkout.
+ 
+ **Verification:** Mock transition tests and representative browser states.
+ 
+@@ -100,7 +100,7 @@
+ **Evidence:** Owner/admin previews, labelled local handoffs.
+ 
+ ## AC-13 — Abandoned and unknown checkout
+-**Requirement:** Abandoned/declined is resumable with values retained; expired state clearly requires restart. Unknown payment pauses payment retry and offers safe status handling without declaring no charge. (R-013) If details change while payment is unknown, "Stripe confirms payment" is held until the submitted details are restored; "nothing charged" stays available and leads to a fresh quote, fresh consent and a new operation key. (R-013 addendum 1) The same holds for a stored unknown payment that can't be matched to any recorded scope: "Stripe confirms payment" stays held and "nothing charged" stays available. (R-013 addendum 2) Genuine payment failure and confirmed nothing-charged remain the only ways back to a fresh quote while a payment is submitted.
++**Requirement:** Abandoned/declined is resumable with values retained; expired state clearly requires restart. Unknown payment pauses payment retry and offers safe status handling without declaring no charge. (R-013) If details change while payment is unknown, "Stripe confirms payment" is held until the submitted details are restored; "nothing charged" stays available and leads to a fresh quote, fresh consent and a new operation key. (R-013 addendum 1) The same holds for a stored unknown payment that can't be matched to any recorded scope: "Stripe confirms payment" stays held and "nothing charged" stays available. (R-013 addendum 2) Genuine payment failure and confirmed nothing-charged remain the only ways back to a fresh quote while a payment is submitted. (R-014) A nothing-charged resolution is terminal and leaves nothing to refresh; an unknown payment carrying an old failed flag is resolved on this page before any recovery.
+ 
+ **Verification:** Browser scenarios and command rejection.
+ 
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md (before: REPAIR_004 ADDENDUM_001 package records/ACCEPTANCE_LEDGER.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/ACCEPTANCE_LEDGER.md
+@@ -1,5 +1,5 @@
+ # Engineering acceptance ledger
+-Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.6 (R-008/R-009/R-011/R-012/R-013 + addenda 1–2). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
++Owner: Engineer. These are claims, not independent verdicts. Contract: ACCEPTANCE_SPEC v1.7 (R-008/R-009/R-011/R-012/R-013 + addenda 1–2/R-014). Evidence root: `EVIDENCE/E2_ENGINEERING_REPORT.md` (ER) and `EVIDENCE/E2/` logs; tests named by file.
+ 
+ | AC | Engineering claim | Evidence | Independent disposition |
+ |---|---|---|---|
+@@ -13,8 +13,8 @@
+ | AC-07 | MET — back/edit/reload keep drafts; edits invalidate quote+consent; separate public/account namespaces; reset/logout/identity change clear; no secrets stored | e2e reload + storage check; `portal-storage.test.ts` | See matrix |
+ | AC-08 | MET — 9900/14800/19700; DEMO10 −1000 due-now only; unavailable ≠ 0; add 2450 | literal-expectation tests in `portal-registration.test.ts`, `portal-account.test.ts`; e2e $197.00/$187.00/$24.50 | See matrix |
+ | AC-09 | MET — two consents initial, one add; expired (injected clock)/stale revision rejected without mutation; refresh clears consent; busy disables; consent disabled until a current quote | engine tests; e2e consent error | See matrix |
+-| AC-10 | MET — labelled stand-in, no inputs; back/close/decline keep draft inactive; forged success URL changes nothing. REPAIR_003 (R-013) self-check: checkout bound to its quoted scope; processing/unknown payment can't confirm edited details; restore confirms the original scope; closed keys refused, open-checkout replay unchanged. REPAIR_004 (R-013 addendum 1) self-check: legacy v2 checkouts bind only from retained evidence; the R-011 open-edited case is held unbound | e2e journeys + forged-URL test; `portal-registration.test.ts` "R-013" + "REPAIR_004" blocks; `portal-checkout-hold.test.tsx`; `e2e/public.repair003.spec.ts`, `e2e/public.repair004.spec.ts`; `EVIDENCE/REPAIR_003_ENGINEERING_REPORT.md`, `EVIDENCE/REPAIR_004_ENGINEERING_REPORT.md` | R3-F01 (Cody, REPAIR_003 RETEST_001) pending independent retest; R4-N01 (self-found) closed by REPAIR_004 addendum 1 (R-013 addendum 2: submitted payments refuse every checkout outcome, replay, restart and new checkout; `e2e/public.repair004-addendum.spec.ts`), pending independent retest |
+-| AC-11 | MET — three tracks, delayed never asks to repay, email failure → simulated resend, no login. REPAIR_004 addendum 1: waiting never offers to resume checkout; unprovable completed history shown as unavailable | engine activation tests; e2e activation; `portal-checkout-hold.test.tsx`; `e2e/public.repair004-addendum.spec.ts` | Pending independent retest of the addendum |
++| AC-10 | MET — labelled stand-in, no inputs; back/close/decline keep draft inactive; forged success URL changes nothing. REPAIR_003 (R-013) self-check: checkout bound to its quoted scope; processing/unknown payment can't confirm edited details; restore confirms the original scope; closed keys refused, open-checkout replay unchanged. REPAIR_004 (R-013 addendum 1) self-check: legacy v2 checkouts bind only from retained evidence; the R-011 open-edited case is held unbound | e2e journeys + forged-URL test; `portal-registration.test.ts` "R-013" + "REPAIR_004" blocks; `portal-checkout-hold.test.tsx`; `e2e/public.repair003.spec.ts`, `e2e/public.repair004.spec.ts`; `EVIDENCE/REPAIR_003_ENGINEERING_REPORT.md`, `EVIDENCE/REPAIR_004_ENGINEERING_REPORT.md` | R3-F01 (Cody, REPAIR_003 RETEST_001) pending independent retest; R4-N01 (self-found) closed by REPAIR_004 addendum 1 (R-013 addendum 2: submitted payments refuse every checkout outcome, replay, restart and new checkout; `e2e/public.repair004-addendum.spec.ts`), pending independent retest. REPAIR_005 (R-014): checkout record governs; stale flags never confirm, discard or reverse (`portal-registration.test.ts` "REPAIR_005" matrix; `e2e/public.repair005.spec.ts`) | R4-F01/R4-F02 (Cody, REPAIR_004 RETEST_001) pending independent retest |
++| AC-11 | MET — three tracks, delayed never asks to repay, email failure → simulated resend, no login. REPAIR_004 addendum 1: waiting never offers to resume checkout; unprovable completed history shown as unavailable. REPAIR_005 (R-014): Refresh/retry only in processing/failed phases | engine activation tests; e2e activation; `portal-checkout-hold.test.tsx`; `e2e/public.repair004-addendum.spec.ts`, `e2e/public.repair005.spec.ts` | R4-F01/R4-F02 pending independent retest |
+ | AC-12 | MET — nominated admin keeps owner access; separate previews from submitted draft; nothing sent. REPAIR_004 (R-013 addendum 1): after payment, invitation claim/preview/store list come from the paid scope | engine preview test; e2e email preview; `portal-registration.test.ts` "R3-F02" block; `portal-checkout-hold.test.tsx`; `e2e/public.repair004.spec.ts` | R3-F02 (Cody, REPAIR_003 RETEST_001) pending independent retest |
+ | AC-13 | MET — abandoned/declined resumable; expired restarts; unknown pauses payment. REPAIR_003 (R-013): unknown + edit holds "Stripe confirms payment"; nothing-charged → fresh quote/consent/new key | engine + e2e checkout tests; `e2e/public.repair003.spec.ts` | R2-F01 pending independent retest |
+ | AC-14 | MET — valid/expired/used/request/sent/error; neutral wording; no editable email; valid → labelled downstream boundary | engine link tests; e2e access link | See matrix |
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md (before: REPAIR_004 ADDENDUM_001 package records/STATE.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/STATE.md
+@@ -62,6 +62,12 @@
+ ## Final candidate preparation — Director dispatch,29 October2026
+ Both addenda verified against d6fe678; no further product work. Tony reports completed manual walkthrough and acceptance, including login/logout and activation-dropdown removal. Coach questions remain pending confirmations; exact questions/answers not supplied. JARVIS certification is not granted by this preparation. Next: Tony scoped commit of both addenda/engineering records, record full candidate SHA, then Lead disposition. Prior walkthrough-pending entries remain historical. Verification and exact unexecuted commit command: EVIDENCE/FINAL_CANDIDATE_PREPARATION_001.md/.json. Cody records preserved.
+ 
++## REPAIR_005 — 30 Oct 2026 (RULINGS R-014; JARVIS dispatch after Cody's REPAIR_004 RETEST_001)
++- **R4-F01/R4-F02:** one precedence read, `paymentPhase`: the checkout record governs, a stale activation flag never confirms a closed checkout, discards an unknown one or reverses a paid one. Refresh advances only processing/paid-setting-up; resume needs an abandoned/declined checkout; nothing-charged clears the activation. C06 renders from the phase. No storage bump; old flags retained.
++- **Checks:** build 0, tsc 0, Jest 240/240. Cody's service probes 46/46 (before 43/3); both R4 browser cases pass (before both failed). New Jest 7/7 (before 6 failed / 1 passed); new spec 4/4 (before 3 failed / 1 passed). Matrix 224 cells, 67 allowed, 157 refusals unchanged. Affected regression: see report.
++- **State:** uncommitted on `d6fe678` with everything since (preserved). 0 real sign-ins. Owned :3109 stopped; scratch deleted. Package: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_REVIEW.zip`.
++- **Next:** JARVIS reviews → Tony commits → Cody retests R4-F01/R4-F02 and the matrix independently.
++
+ ## REPAIR_004 ADDENDUM_001 — 29 Oct 2026 (RULINGS R-013 addendum 2; JARVIS dispatch closing R4-N01)
+ - **R4-N01 closed (engineering self-check):** a submitted payment (processing/unknown) refuses every checkout outcome, replay, restart and new checkout at the service, with state unchanged. Review shows "You've already submitted a payment" with no "Edit my details instead" and Continue disabled. The stand-in shows no outcomes. C06 waiting no longer offers "resume checkout" (a deviation from the approved render).
+ - **Unavailable history:** a completed record with no provable scope keeps its status; it shows no edited names or amount and has no payment action.
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md (before: REPAIR_004 ADDENDUM_001 package records/JOURNAL.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/JOURNAL.md
+@@ -70,3 +70,9 @@
+ - My first browser assertion for unknown expected the Review notice, but Review already redirects an unknown payment to C14 from an effect; the component test passed only because the router is mocked. I asserted the redirect instead and reran the corrected spec on a fresh baseline build. On the baseline, the unknown browser case passes; its exposure was service-only (`restartSignup`).
+ - The C06 waiting copy ("nothing was charged and you can resume checkout") came from the approved render. For our processing state it was a stale control pointing back to the checkout, so it was removed and recorded as a deviation.
+ - Baseline Activation for an edited legacy completed record showed "Confirmed by Stripe · $99.00". The $99.00 was recomputed from the edited draft (`initialRecurringCents`), not recorded, which is the dishonest part.
++
++### 30 Oct 2026 — REPAIR_005 (Claudy)
++- Both findings have one cause: `refreshActivation` and `resumeSignup` trusted `activation.paymentState` on its own. The d6fe678 engine could leave the two records disagreeing (unknown checkout + failed flag; abandoned checkout + pending flag, the latter via the current nothing-charged step, which never cleared the activation). Each reader picked whichever flag suited it.
++- Rather than patch two readers, `paymentPhase` fixes the precedence once and the readers and C06 use it. I did not rewrite stored flags: a migration that deletes a conflicting flag would itself be choosing an authority silently, and keeping the flags leaves the history inspectable.
++- The matrix caught two of my own test mistakes before anything in the product: a composed action compared the refusal to the wrong input, and I had expected resume to be refused after a decline, which R-012 allows. Both fixes are in the test, with comments.
++- `refreshActivation` used to return a silent no-op success on a failed flag. That is why Cody's unknown+failed case could call refresh "successfully"; it now refuses unless the record is processing or paid.
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md (before: REPAIR_004 ADDENDUM_001 package records/_project/DATA_CONTRACT.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/DATA_CONTRACT.md
+@@ -1,6 +1,6 @@
+ # DATA CONTRACT — Subscription Portal design and mock journeys
+ 
+-> Version: 1.7 · Date: 29 October 2026 (Asia/Dhaka) · v1.7 applies R-013 addendum 2 (REPAIR_004 addendum 1: submitted payments resolve only through Stripe's answer; unavailable history for unprovable completed records) · v1.6 applies R-013 addendum 1 (REPAIR_004: legacy checkouts bind only from retained evidence; completed activation and previews read the paid scope) · v1.5 applies R-013 (REPAIR_003: submitted payment bound to its quoted scope; single-use checkout keys) · v1.4 applies R-012 (REPAIR_002: pending checkout respects current prerequisites; bounded repeat-N work) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
++> Version: 1.8 · Date: 30 October 2026 (Asia/Dhaka) · v1.8 applies R-014 (REPAIR_005: checkout/payment precedence, `paymentPhase`; stale activation flags never advance or discard a checkout; nothing-charged clears the activation) · v1.7 applies R-013 addendum 2 (REPAIR_004 addendum 1: submitted payments resolve only through Stripe's answer; unavailable history for unprovable completed records) · v1.6 applies R-013 addendum 1 (REPAIR_004: legacy checkouts bind only from retained evidence; completed activation and previews read the paid scope) · v1.5 applies R-013 (REPAIR_003: submitted payment bound to its quoted scope; single-use checkout keys) · v1.4 applies R-012 (REPAIR_002: pending checkout respects current prerequisites; bounded repeat-N work) · v1.3 applies R-011 (owner declaration replaces the job title; Coach decision, Director authorization); v1.2 applied Director rulings R-008/R-009
+ > Status: FFM contract under RULINGS R-001/R-005 · Owner: Architect
+ > Purpose: screen fields, mock relationships, transitions and permissions. NOT production SQL or a migration contract.
+ 
+@@ -81,7 +81,7 @@
+ 
+ - Abandoned/back from Checkout: draft remains resumable, subscription inactive. The client return does not establish payment success.
+ - (R-012) An open (unpaid, unsubmitted) checkout is closed — `abandoned` with a `closedReason`, nothing charged, details kept — when the owner declaration is withdrawn, a pre-R-011 draft is restored, or the draft changes materially. Moving any unpaid checkout toward payment (same-key replay, paid/processing outcome, unknown→paid, waiting→confirmed) re-checks the current draft: declaration exactly `true` and draft complete. A submitted or unknown payment is held, not closed, until that holds. Paid/confirmed history is never reversed by later edits.
+-- (R-013) Each checkout records the scope it was quoted for (store count, pharmacy entries, code, due-now amount) and is bound to it: moving it toward payment also requires the current draft to match that scope. A submitted payment whose details changed is held, never charged again: the customer may restore the submitted details (then it confirms exactly that scope), or, when payment is unknown, resolve "nothing charged" and continue the edited details through a fresh quote, consent and checkout. A submitted payment (processing or unknown) accepts no checkout outcome, replay, restart or new checkout; it resolves only by confirmation, failure or confirmed nothing-charged (R-013 addendum 2). Activation shows the payment's scope, or says it is unavailable when none can be established; after payment, nominated-admin invitation claims and the C07 previews read the same covered details (R-013 addendum 1). A closed or replaced checkout's operation key is spent and refused for any new checkout; same-key replay of an open checkout is unchanged.
++- (R-013) Each checkout records the scope it was quoted for (store count, pharmacy entries, code, due-now amount) and is bound to it: moving it toward payment also requires the current draft to match that scope. A submitted payment whose details changed is held, never charged again: the customer may restore the submitted details (then it confirms exactly that scope), or, when payment is unknown, resolve "nothing charged" and continue the edited details through a fresh quote, consent and checkout. A submitted payment (processing or unknown) accepts no checkout outcome, replay, restart or new checkout; it resolves only by confirmation, failure or confirmed nothing-charged (R-013 addendum 2). Precedence (R-014): the checkout record governs; an activation flag counts only where it agrees with it (paid > unknown > processing/open > failed/declined > not charged). Refresh advances only processing or paid-being-set-up; resume needs an abandoned or declined checkout; nothing-charged clears the activation. Stored flags are retained, not rewritten. Activation shows the payment's scope, or says it is unavailable when none can be established; after payment, nominated-admin invitation claims and the C07 previews read the same covered details (R-013 addendum 1). A closed or replaced checkout's operation key is spent and refused for any new checkout; same-key replay of an open checkout is unchanged.
+ - Decline: display a Stripe-side failure reference and allow retry; no account activation.
+ - Processing/delayed: payment confirmation and provisioning are distinct; a paid-but-delayed account must not invite the user to pay again.
+ - Email-send failure: show resend/support without losing the confirmed payment state. The FFM simulates delivery and never sends mail.
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md (before: REPAIR_004 ADDENDUM_001 package records/_project/UI_SPEC.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/_project/UI_SPEC.md
+@@ -101,7 +101,7 @@
+   - C05 shows "You've already submitted this payment" with no outcome buttons.
+   - C06 waiting copy is "This usually takes a moment. Your payment has been submitted, so please don't pay again." This deviates from the approved render, which offered "resume checkout".
+   - C14 links a processing payment to activation.
+-  - A completed record with no provable scope shows "Confirmed by Stripe." and "Your pharmacies are set up…" without names or amount, plus the notice "We can't show what this payment covered" (support, `demo_act_01`). C07 previews name no pharmacies for it.
++  - A completed record with no provable scope shows "Confirmed by Stripe." and "Your pharmacies are set up…" without names or amount, plus the notice "We can't show what this payment covered" (support, `demo_act_01`). C07 previews name no pharmacies for it. **R-014 (REPAIR_005):** C06 renders from the payment phase. Unknown (any flag): "We're still checking whether a payment went through" → C14, no Refresh or retry. Not charged (abandoned/expired, any flag): "Nothing was charged for this payment" → C14 "Continue my signup", no Refresh. "Try payment again" only for a recorded failure on a declined checkout.
+ - **External (labelled "Preview · external surface", dashed frame):** `preview` (Checkout stand-in: order we send, greyed non-editable Stripe form blocks, demo-outcome buttons → activation / review / checkout-incomplete / declined), `declined` (Stripe keeps the user; our next surface is C14), `portal_preview` (Customer Portal stand-in reached from "Manage billing"; return refreshes C12).
+ - **Rule:** no editable card fields; access never granted from the browser return alone.
+ 
+--- agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md (before: REPAIR_004 ADDENDUM_001 package records/QAM/HANDOFFS/ENGINEERING_HANDOFF.md)
++++ agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/ENGINEERING_HANDOFF.md
+@@ -48,6 +48,13 @@
+   - Records: ACCEPTANCE_SPEC v1.5; DATA_CONTRACT v1.6. Base: `d6fe678` + addenda 1/2 + REPAIR_003 (all uncommitted, preserved). Report: `../../EVIDENCE/REPAIR_004_ENGINEERING_REPORT.md`.
+   - **Independent retest required:** R3-F01, R3-F02, R3-O03 and the regression. Cody's `migration-recovery.test.ts`, `original-boundaries.test.ts`, `qa-extra/*.spec.ts` and `cody-r3-focus.cjs` pass on the repaired code, changed only in output paths, the scratch `node_modules` require path and the port.
+   - **Self-found, not repaired, for JARVIS: R4-N01.** While a payment is processing, Review's "Edit my details instead" closes it (`resolveCheckout('back')` is accepted for any pending checkout), and a second checkout can follow.
++- **REPAIR_005 (R-014, 30 Oct 2026)** — JARVIS dispatch after Cody's REPAIR_004 RETEST_001 (R4-F01, R4-F02).
++  - One engine read `paymentPhase(state)`: the checkout record governs; the activation flag counts only where it agrees (paid > unknown > processing/open > failed > not charged).
++  - `refreshActivation` advances only processing, or paid + confirmed still setting up; `resumeSignup` needs an abandoned/declined checkout (the "activation failed" clause is gone); nothing-charged clears the activation. Refusals are `conflict`, state unchanged. No storage bump; old flags stay as history.
++  - C06 renders from the phase: unknown → C14 notice, no retry/refresh; not charged → "Nothing was charged… Continue my signup", no refresh.
++  - Bounded matrix: 8 checkout records × 4 activation flags × 7 actions = 224 cells, every refusal leaving state untouched (`EVIDENCE/REPAIR_005/TRANSITION_MATRIX.md`).
++  - Cody's probes pass on the repaired code (service 46/46; both R4 browser cases in both spec files). His `notcharged-stale` fixture now stores `activation: null`, because the current nothing-charged resolution clears it.
++  - Report: `../../EVIDENCE/REPAIR_005_ENGINEERING_REPORT.md`. **Independent retest required: R4-F01, R4-F02, the matrix, reload/direct navigation, valid recovery, and regression.**
+ - **REPAIR_004 ADDENDUM_001 (R-013 addendum 2, 29 Oct 2026)** — JARVIS dispatch to close R4-N01.
+   - A submitted payment (processing/unknown) refuses every `resolveCheckout` outcome, `startCheckout` (including replay) and `restartSignup` at the service, with state unchanged. `resumeSignup` already refused.
+   - Review shows "You've already submitted a payment" with no "Edit my details instead" and Continue disabled. The stand-in shows no outcomes. C06 waiting no longer offers "resume checkout" (a deviation from the approved render). C14 links a processing payment to activation.
+--- CHANGELOG.md (before: REPAIR_004 ADDENDUM_001 package records/CHANGELOG.md)
++++ CHANGELOG.md
+@@ -1,4 +1,11 @@
+ # CHANGELOG
++
++## 2026-10-30 01:34 UTC — [CC] Claude Code
++- **Updated:** `src/services/portal/{registration,index}.ts`, `src/components/portal/activation/ActivationView.tsx` (R-014: `paymentPhase` precedence; refresh/resume/nothing-charged rules; C06 rendered from the phase).
++- **Updated:** tests `src/__tests__/portal-registration.test.ts` (transition matrix), `src/__tests__/portal-checkout-hold.test.tsx`; **added** `e2e/public.repair005.spec.ts`.
++- **Updated:** `…/RULINGS.md` (R-014), `…/ACCEPTANCE_SPEC.md` v1.7, `…/_project/DATA_CONTRACT.md` v1.8, `…/_project/UI_SPEC.md`, `…/ACCEPTANCE_LEDGER.md`, `…/QAM/HANDOFFS/ENGINEERING_HANDOFF.md` §9, `…/STATE.md`, `…/JOURNAL.md`, `RECOVERY.md`, session file.
++- **Added:** `…/EVIDENCE/REPAIR_005_ENGINEERING_REPORT.md`, `…/EVIDENCE/REPAIR_005/`, `…/EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_REVIEW.zip`.
++- **Reason:** JARVIS-authorized REPAIR_005 after Cody's REPAIR_004 RETEST_001 (R4-F01, R4-F02).
+ 
+ ## 2026-10-29 13:34 UTC — [CC] Claude Code
+ - **Updated:**
+--- RECOVERY.md (before: REPAIR_004 ADDENDUM_001 package records/RECOVERY.md)
++++ RECOVERY.md
+@@ -1,4 +1,13 @@
+ # Recovery State — cyph-stripe-subscription-portal-v1
++
++Last action (2026-10-30 07:34): **REPAIR_005 (R-014)**, JARVIS dispatch after Cody's REPAIR_004 RETEST_001.
++  The checkout record governs the payment (`paymentPhase`): a stale activation flag never confirms a closed checkout, discards an unknown one or reverses a paid one.
++  Refresh advances only processing/paid-setting-up; resume needs an abandoned/declined checkout; nothing-charged clears the activation; C06 renders from the phase. Old flags retained, no storage bump.
++  Uncommitted on `d6fe678` with everything since. build 0 · tsc 0 · Jest 240/240 · Cody's service probes 46/46 (before 43/3) · his R4 browser cases pass (before failed)
++  · new Jest 7/7 · new spec 4/4 · matrix 224 cells (157 refusals, all unchanged) · affected regression: see report.
++  Report: module `EVIDENCE/REPAIR_005_ENGINEERING_REPORT.md` · ZIP: `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_REVIEW.zip` (+ `~/Downloads/`).
++Pending: JARVIS review → Tony commits → Cody retests R4-F01/R4-F02 and the matrix. No owned servers running.
++Next step: independent retest → JARVIS disposition. Engineering does not self-certify.
+ 
+ Last action (2026-10-29 19:34): **REPAIR_004 ADDENDUM_001 (R-013 addendum 2)**, JARVIS dispatch closing R4-N01.
+   A submitted payment can't be closed, replayed, restarted or paid again (enforced by the service; Review/stand-in/C06 no longer offer it). Unprovable completed history is shown as unavailable.

@@ -1,7 +1,32 @@
-# QAM RECON REPORT
-Owner: Cody / Q1
-Status: NOT EXECUTED
+# Q1 recon — attempt 001
+Date: 2026-10-28T06:47:41.558499+00:00
+Executor: Cody. Candidate and execution HEAD: 94251beab08dd26d7f56f4b8f2299a1e841892c5.
+Expected branch verified; initial tracked/untracked status empty. Foundation ancestry and full changed-path inventory in evidence/q1/identity.txt. Protected diff empty for enumerated existing paths. No Git mutations or product source repairs. Final tracked changes restricted to QAM.
 
-Actual identity and complete changed paths; source/contract observations; target/tool/browser readiness; auth/probe effects; independent contradictions and gaps; privacy/export instrument checks; safe resume points. Attach actual recon output, not only a summary.
+Director dispatch supplied candidate and QA branch, resolving stale NOT_READY and engineering pending-commit records. Active R-008/R-009 override historical all-gated/superadmin-only requirements. Owner-role and software-support proposals remain unapproved, excluded scope. Governing upstream Hub identity remains unavailable as declared in PROVENANCE.
 
-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
+## Observations and preflight
+Node v22.17.0 / npm 11.15.0; installed dependencies reused, no installation or lock change. Chrome via installed Playwright launched for bounded readiness. Credentials ignored and untracked, schema presence checked without values. Existing .env.local configuration used; HTTPS Supabase host shape verified in memory, no alternate project guessed. GAP: external corroboration of configured project identity and historical credential rotation remains Director-owned; configuration shape alone cannot establish either.
+Bounded probe: {"phase": "Q1 bounded readiness only", "time": "2026-10-28T06:45:29.551Z", "signInAttempts": 1, "globalLogouts": 0, "credentialSchema": true, "target": {"https": true, "supabaseHost": true, "configuredHostRecordedPrivately": true}, "publicEntry": "/demo/register/plan", "publicBodyVisible": true, "anonymousDashboard": {"status": 307, "location": "/login"}, "adminDashboard": false, "authResult": "BLOCKED: did not reach dashboard; no sensitive error captured"}
+A real-login success is readiness only, not acceptance. No persisted browser auth, screenshots, traces or global logout. Existing account sessions are intentionally not revoked. Login may create auth/audit activity. Browser context closed.
+
+## Build attempts and environment incident
+Declared scratch: /tmp/cody-q1-94251be-build, tracked product bytes copied from clean candidate, node_modules and .env.local symlinked; QA credential file excluded. No dependency or config repair.
+Attempt 1: command npm run build accidentally executed at repository root, completed successfully, replacing generated .next output potentially used by unowned PID 40320 on :3457. Attempted stop found process already finished. This violates requested build isolation. Product source/HEAD unchanged, but existing-server continuity is NOT proven. No server restart or output rollback attempted. Treat as QA environment incident, not product PASS. Director owns any operational restoration decision. Do not claim existing servers undisturbed.
+Attempt 2: npm run build at scratch path failed: Turbopack rejects node_modules symlink outside filesystem root. Preserved failure; environment/setup issue, not proven product defect.
+Attempt 3: npm run build -- --webpack at scratch path completed. Supported command flag, no product configuration change. Default isolated Turbopack build remains unverified; Q2 should use an isolated local dependency copy/installation if default-build equivalence is required.
+Owned scratch server port 3107 PID 750112 used for probe; stop only this PID at Q1 exit. Unowned 3001 PID 420447 and 3457 PID 40320 remained listening at observation. Listening alone is not a functional continuity verdict.
+
+## Evidence/provenance
+800 manifest comparisons: original delivered FILE_INDEX has 24 changed mutable records; installed E2 manifest has zero mismatches at initial QA comparison. Full per-path results retained. Frozen and installed identities distinguished. E2 reports/logs are engineering inputs only: 106 Jest / 59 Playwright claims not rerun here. No full Q2 tests executed. Final account Gate M, true zoom, contrast and clock-feedback behavior remain NOT RUN pending approved plan.
+Source recon: both demo clock buttons dispatch +1860000 ms; engines update offset and service dependencies read that offset. This does not prove immediate rendered feedback. Tony's inert-button report is preserved as unverified reported observation with targeted T09/T29 reproduction.
+Global logout is inherited per unchanged auth API diff and engineering report; Q2 schedules it last and explicitly discloses same-account session impact. No change to logout scope authorized here.
+
+## Gaps and handoff
+Lead review: plan/candidate/environment binding; build incident disposition; default isolated-build prerequisite; target/credential provenance gap; server-side egress instrumentation gap; true browser zoom instrument proof. No acceptance waivers implied. No second live identity required. Lint is not configured; audit advisories inherited per engineering input, not independently audited.
+Next: QA Lead approval of exact plan hash and candidate, then Director release. STOP before Q2. Approval/certification records remain unexecuted.
+
+Exit hygiene: owned server PID 750112 received TERM; in-memory browser closed; no auth-state file created. Credential source retained for Lead-governed cleanup. Downloads ZIP copy verified byte-identical. STOP-AUTH explicitly recorded in FINDINGS; live admin readiness remains blocked. Scratch build retained under /tmp for reproducibility, excluded from ZIP.
+
+## Q1 login correction — 28 October 2026, 07:41 UTC
+STOP-AUTH resolved. Initial dotenv parsing truncated an unquoted password at its comment marker; diagnostic attempt returned HTTP 400 invalid_credentials. Literal-value retry returned HTTP 200/admin. The first corrected helper checked visibility too early; adding an explicit heading wait confirmed the rendered dashboard. Director then quoted the credential in .env.qa.local. Normal dotenv parsing was rerun independently: HTTP 200, role admin, dashboard heading visible. Evidence: evidence/q1/probe-quoted-confirmed.json. No product repair; credential-file change made by Director. Five total Q1 login submissions across original and follow-up probes: two rejected, three successful. No global logout requests issued by these probes; diagnostic contexts blocked logout as a precaution. Contexts closed without persisted auth state. Existing failed observations retained as historical attempts, superseded by this successful readiness result. Q2 remains NOT RUN and awaits Lead approval plus Director release. Build isolation incident remains open; login success does not resolve it.

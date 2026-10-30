@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [public] › e2e/public.repro-addendum002.spec.ts:19:5 › matrix: scenario × next-activation-check option (37.6s)
+
+  1 passed (38.6s)

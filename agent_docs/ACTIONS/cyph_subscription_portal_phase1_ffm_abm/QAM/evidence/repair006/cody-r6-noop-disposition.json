@@ -1,0 +1,45 @@
+{
+  "disposition": "Lead accepted nonblocking no-op, not repaired; original strict refusal test preserved as failed",
+  "rows": [
+    {
+      "iteration": 0,
+      "ok": true,
+      "newIdentity": true,
+      "deepUnchanged": true,
+      "checkout": "paid",
+      "emailResentAt": "2026-10-30T06:00:00.000Z"
+    },
+    {
+      "iteration": 1,
+      "ok": true,
+      "newIdentity": true,
+      "deepUnchanged": true,
+      "checkout": "paid",
+      "emailResentAt": "2026-10-30T06:00:00.000Z"
+    },
+    {
+      "iteration": 2,
+      "ok": true,
+      "newIdentity": true,
+      "deepUnchanged": true,
+      "checkout": "paid",
+      "emailResentAt": "2026-10-30T06:00:00.000Z"
+    },
+    {
+      "iteration": 3,
+      "ok": true,
+      "newIdentity": true,
+      "deepUnchanged": true,
+      "checkout": "paid",
+      "emailResentAt": "2026-10-30T06:00:00.000Z"
+    },
+    {
+      "iteration": 4,
+      "ok": true,
+      "newIdentity": true,
+      "deepUnchanged": true,
+      "checkout": "paid",
+      "emailResentAt": "2026-10-30T06:00:00.000Z"
+    }
+  ]
+}

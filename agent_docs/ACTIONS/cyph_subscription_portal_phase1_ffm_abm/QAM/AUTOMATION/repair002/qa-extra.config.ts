@@ -1,0 +1,1 @@
+import {defineConfig} from '@playwright/test';export default defineConfig({testDir:'./qa-extra',workers:1,retries:0,timeout:45000,outputDir:'/tmp/cody-r2-extra-output',reporter:[['list'],['json',{outputFile:'/tmp/cody-r2-extra.json'}]],use:{baseURL:'http://localhost:3112',channel:'chrome',trace:'off',video:'off',screenshot:'off'}});

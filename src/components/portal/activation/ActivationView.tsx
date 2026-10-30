@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Alert, DemoNotice, Placeholder } from "../Alert";
 import { PageContainer, ViewSkeleton } from "../Loading";
 import { PageHeader } from "../PageHeader";
-import { checkoutHold, formatCents, formatTime, initialRecurringCents, registration, useRegistration } from "@/services/portal";
+import { checkoutHold, consistentActivation, formatCents, formatTime, paymentPhase, registration, useRegistration, type CheckoutScope } from "@/services/portal";
 
 type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
 
@@ -36,6 +36,37 @@ function Track({ label, state, text }: { label: string; state: TrackState; text:
   );
 }
 
+/**
+ * R-013: a submitted payment whose signup details were changed afterwards. It
+ * can only confirm what it was quoted for, so offer to go back to exactly that.
+ * Shared with C14 (payment unknown).
+ */
+export function ScopeHold({ paidFor, reference }: { paidFor: CheckoutScope | undefined; reference: string }) {
+  if (!paidFor) {
+    return (
+      <Alert tone="warning" title="We can't match this payment to your current details">
+        Please don&apos;t pay again. Contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">{reference}</span>.
+      </Alert>
+    );
+  }
+  const n = paidFor.storeCount;
+  const names = paidFor.pharmacies.map((p) => p.name).filter(Boolean).join(", ");
+  return (
+    <Alert
+      tone="warning"
+      title="Your details changed after you paid"
+      action={
+        <Button type="button" onClick={() => registration.restoreSubmittedScope()} data-testid="restore-scope">
+          Use the details I paid for
+        </Button>
+      }
+    >
+      This payment is for {n} {n === 1 ? "pharmacy" : "pharmacies"} ({names}), {formatCents(paidFor.dueNowCents)}. Changes made afterwards can&apos;t be added to it,
+      and you don&apos;t need to pay again. Use the details you paid for to continue; you can add pharmacies from your account once you&apos;re set up.
+    </Alert>
+  );
+}
+
 // C06 Activation: three independent tracks (payment · setup · email). No
 // automatic customer login; mock payment never creates a user (R-009).
 export function ActivationView() {
@@ -46,8 +77,55 @@ export function ActivationView() {
 
   if (!hydrated) return <PageContainer><ViewSkeleton /></PageContainer>;
 
-  const a = state.activation;
+  // REPAIR_005/006: the checkout record governs what this page may offer, before the
+  // activation record is read at all. A stale or missing activation flag never shows
+  // Refresh, "Try payment again" or "no payment" for a payment that is paid, unknown or closed.
+  const phase = paymentPhase(state);
+  const a = consistentActivation(state);
+  if (phase === "unknown") {
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <div data-testid="activation-unknown">
+          <Alert tone="warning" title="We're still checking whether a payment went through">
+            Until Stripe confirms the outcome, nothing can be retried or confirmed here. Please don&apos;t pay again.{" "}
+            <Link href="/demo/checkout-incomplete" className="portal-link">See checkout status</Link>
+          </Alert>
+        </div>
+      </PageContainer>
+    );
+  }
+  if (phase === "not_charged") {
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <div data-testid="activation-not-charged">
+          <Alert tone="info" title="Nothing was charged for this payment">
+            This payment was closed without a charge, so there&apos;s no activation to track for it. Your details are saved.{" "}
+            <Link href="/demo/checkout-incomplete" className="portal-link">Continue my signup</Link>
+          </Alert>
+        </div>
+      </PageContainer>
+    );
+  }
+  if (phase === "paid" && !a) {
+    // R5-F01: paid, but the activation record is missing or disagrees. Setup and email
+    // outcomes aren't known, so none is claimed and nothing can be retried or refreshed.
+    const scope = state.checkout?.scope;
+    return (
+      <PageContainer>
+        <DemoNotice />
+        <PageHeader eyebrow="Activation" title="Payment confirmed" />
+        <div className="mt-5" data-testid="activation-paid-status-unavailable">
+          <Alert tone="info" title="We can't show setup or access-email status here">
+            Stripe confirmed your payment{scope ? ` of ${formatCents(scope.dueNowCents)} (illustrative)` : ""}, so you don&apos;t need to pay again. Setup and access-email status aren&apos;t available on this page right now. If your access email hasn&apos;t arrived, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
+          </Alert>
+        </div>
+      </PageContainer>
+    );
+  }
   if (!a) {
+    // No checkout, or one still open on the stand-in: no payment has been submitted.
     return (
       <PageContainer>
         <DemoNotice />
@@ -58,11 +136,15 @@ export function ActivationView() {
     );
   }
 
-  const { draft, quote } = state;
-  const names = draft.pharmacies.slice(0, draft.requestedStoreCount).map((p) => p.name).filter(Boolean) as string[];
-  const nominated = draft.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+  const { draft } = state;
+  // R-013: the payment covers what its checkout was quoted for, not later edits.
+  // Without a recorded scope it can't be established, so no names or amount are shown (REPAIR_004 addendum 1).
+  const paidFor = state.checkout?.scope;
+  const names = paidFor ? (paidFor.pharmacies.map((p) => p.name).filter(Boolean) as string[]) : null;
+  // R3-F02: an invitation is claimed only for an admin the payment covered.
+  const nominated = paidFor?.pharmacies.find((p) => p.adminAssignment?.kind === "other");
   const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
-  const amount = `${formatCents(quote?.dueNowCents ?? initialRecurringCents(draft.requestedStoreCount))} (illustrative)`;
+  const amount = paidFor ? `${formatCents(paidFor.dueNowCents)} (illustrative)` : null;
   const emailTo = a.ownerEmailMasked;
 
   const pay: TrackState = a.paymentState === "confirmed" ? "done" : a.paymentState === "failed" ? "fail" : "busy";
@@ -84,7 +166,7 @@ export function ActivationView() {
 
   const canRefresh = a.paymentState === "pending" || (a.paymentState === "confirmed" && a.provisioningState !== "ready");
   // R-012: a payment still waiting for confirmation doesn't advance while prerequisites are unmet.
-  const hold = a.paymentState === "pending" ? checkoutHold(draft) : null;
+  const hold = a.paymentState === "pending" ? checkoutHold(draft, state.checkout) : null;
 
   async function refresh() {
     setBusy("refresh");
@@ -113,18 +195,22 @@ export function ActivationView() {
           <Track
             label="Payment"
             state={pay}
-            text={pay === "done" ? `Confirmed by Stripe · ${amount}` : pay === "fail" ? "Stripe reported the payment didn't complete." : "Waiting for Stripe's confirmation."}
+            text={pay === "done" ? (amount ? `Confirmed by Stripe · ${amount}` : "Confirmed by Stripe.") : pay === "fail" ? "Stripe reported the payment didn't complete." : "Waiting for Stripe's confirmation."}
           />
           <Track
             label="Pharmacy setup"
             state={setup}
             text={
               setup === "done"
-                ? `${names.join(" and ")} ${names.length === 1 ? "is" : "are"} set up in OwedBook.`
+                ? names
+                  ? `${names.join(" and ")} ${names.length === 1 ? "is" : "are"} set up in OwedBook.`
+                  : "Your pharmacies are set up in OwedBook."
                 : setup === "warn"
                   ? "Paid; setup is late. You don't need to pay again."
                   : setup === "busy"
-                    ? `Setting up ${names.join(" and ")}.`
+                    ? names
+                      ? `Setting up ${names.join(" and ")}.`
+                      : "Setting up your pharmacies."
                     : "Starts after payment is confirmed."
             }
           />
@@ -152,7 +238,11 @@ export function ActivationView() {
       </section>
 
       <div className="mt-5 space-y-5">
-        {hold ? (
+        {hold === "scope_changed" ? (
+          <div data-testid="activation-hold">
+            <ScopeHold paidFor={paidFor} reference="demo_act_01" />
+          </div>
+        ) : hold ? (
           <div data-testid="activation-hold">
             <Alert tone="warning" title={hold === "owner_declaration" ? "Confirm the owner declaration to continue" : "Finish your signup details to continue"}>
               Activation can&apos;t continue until {hold === "owner_declaration" ? "the pharmacy owner confirms the owner declaration" : "every signup step is complete"}.{" "}
@@ -161,10 +251,17 @@ export function ActivationView() {
           </div>
         ) : null}
         {a.paymentState === "pending" ? (
+          // R4-N01: the payment is already submitted, so there's no checkout to resume (deviates from the approved render).
           <Alert tone="info" title="Waiting for Stripe to confirm your payment">
-            This usually takes a moment. If you closed Stripe&apos;s page before finishing, nothing was charged and you can{" "}
-            <Link href="/demo/stripe" className="portal-link">resume checkout</Link>.
+            This usually takes a moment. Your payment has been submitted, so please don&apos;t pay again.
           </Alert>
+        ) : null}
+        {a.paymentState === "confirmed" && !paidFor ? (
+          <div data-testid="history-unavailable">
+            <Alert tone="info" title="We can't show what this payment covered">
+              Your signup details changed after this payment, and its own record of them wasn&apos;t kept, so we can&apos;t show which pharmacies or what amount it covered. Your payment and setup aren&apos;t affected, and you don&apos;t need to pay again. For the details, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
+            </Alert>
+          </div>
         ) : null}
         {a.provisioningState === "attention" ? (
           <Alert tone="warning" title="Your payment went through; setup is taking longer than usual">

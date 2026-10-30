@@ -1,0 +1,92 @@
+
+> cyph-stripe-subscription-portal-v1@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.4.3 (webpack)
+- Environments: .env.local
+✓ Running next.config.js took 25ms
+
+  Creating an optimized production build ...
+
+
+Retrying 1/3...
+
+
+Retrying 1/3...
+
+
+Retrying 1/3...
+✓ Compiled successfully in 14.6s
+  Running TypeScript ...
+  Finished TypeScript in 7.7s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/20) ...
+  Generating static pages using 3 workers (5/20) 
+  Generating static pages using 3 workers (10/20) 
+  Generating static pages using 3 workers (15/20) 
+✓ Generating static pages using 3 workers (20/20) in 520ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+⚠ 27 traced files were not included in the standalone output
+because their paths are outside of `outputFileTracingRoot`.
+First 100 skipped files:
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/compiled/jest-worker/processChild.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/compiled/jest-worker/threadChild.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/lib/start-server.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/next-server.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/next.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/require-hook.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/module.compiled.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/app-router-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/entrypoints.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/head-manager-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/hooks-client-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/image-config-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/router-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/app-page/vendored/contexts/server-inserted-html.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/module.compiled.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/app-router-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/entrypoints.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/head-manager-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/hooks-client-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/html-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/image-config-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/loadable-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/loadable.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/router-context.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/next/dist/server/route-modules/pages/vendored/contexts/server-inserted-html.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/styled-jsx/index.js
+  - ../../home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/node_modules/styled-jsx/style.js
+Set `outputFileTracingRoot` to a common parent directory
+to include these files.
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/auth/confirm
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /dashboard
+├ ○ /demo/access-link
+├ ○ /demo/activation
+├ ○ /demo/checkout-incomplete
+├ ƒ /demo/references/email
+├ ƒ /demo/references/owedbook
+├ ƒ /demo/register/owner
+├ ƒ /demo/register/pharmacies
+├ ƒ /demo/register/plan
+├ ○ /demo/register/review
+├ ƒ /demo/sign-in
+├ ƒ /demo/stores/add
+├ ƒ /demo/stores/confirm
+├ ƒ /demo/stores/result
+├ ƒ /demo/stripe
+├ ○ /icon.png
+└ ƒ /login
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,0 +1,7 @@
+{
+  "blackWhite": 21,
+  "whiteWhite": 1,
+  "lightRingAgainstWhite": 2.816664410343705,
+  "lightInputBorderAgainstFill": 1.3021545959731569,
+  "limitations": "Text scan alpha-composites ancestor backgrounds; gradients/images/opacity and nontext exemptions need human adjudication; focus colors recorded separately."
+}

@@ -1,0 +1,291 @@
+FAIL src/__tests__/portal-registration.test.ts
+  ● payment-phase readers and resend (REPAIR_006, R5-F01/R5-F02) › R5-F02: resend is refused without mutation unless the checkout is paid and its setup finished
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 9
+
+      Array [
+        "none",
+        "confirmed, setup ready, email failed",
+    -   ObjectContaining {
+    -     "code": "conflict",
+    -     "ok": false,
+    +   Object {
+    +     "ok": true,
+    +     "value": Object {
+    +       "emailState": "sent",
+    +       "ownerEmailMasked": "j•••@demo-pharmacy.example",
+    +       "paymentState": "confirmed",
+    +       "provisioningState": "ready",
+    +       "retryAvailable": true,
+    +     },
+        },
+      ]
+
+      1254 |         const step = reg.resendAccessEmail(s, deps);
+      1255 |         rows.push({ checkout, flag, phase: reg.paymentPhase(s), ok: step.result.ok });
+    > 1256 |         expect([checkout, flag, step.result]).toEqual([checkout, flag, expect.objectContaining({ ok: false, code: 'conflict' })]);
+           |                                               ^
+      1257 |         expect(step.state).toBe(s);
+      1258 |       }
+      1259 |     // Paid with a missing or conflicting activation: also refused, unchanged.
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1256:47)
+
+  ● payment-phase readers and resend (REPAIR_006, R5-F01/R5-F02) › R5-F01: readers present the activation only where it agrees with the phase; paid stays paid
+
+    TypeError: reg.consistentActivation is not a function
+
+      1285 |       const s = { ...ready(), activation: FLAGS[flag] };
+      1286 |       expect(reg.paymentPhase(s)).toBe('paid');
+    > 1287 |       expect(reg.consistentActivation(s)).toBeNull();
+           |                  ^
+      1288 |       expect(reg.readActivation(s)).toMatchObject({ ok: false, message: expect.stringMatching(/Payment is confirmed/) });
+      1289 |       for (const step of [reg.refreshActivation(s), reg.resumeSignup(s), reg.restartSignup(s)]) {
+      1290 |         expect(step.result.ok).toBe(false);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1287:18)
+
+FAIL src/__tests__/portal-checkout-hold.test.tsx (8.746 s)
+  ● Activation reads the payment phase first (REPAIR_006, R5-F01/R5-F02) › paid with absent activation: shown as paid, setup/email not claimed, no retry/refresh/resend
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "heading"
+
+    Here are the accessible roles:
+
+      note:
+
+      Name "":
+      [36m<div[39m
+        [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+        [33mrole[39m=[32m"note"[39m
+      [36m/>[39m
+
+      --------------------------------------------------
+      status:
+
+      Name "":
+      [36m<div[39m
+        [33mclass[39m=[32m"min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:[--ring:12_93%_68%] border-info bg-info/10"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m/>[39m
+
+      --------------------------------------------------
+      paragraph:
+
+      Name "":
+      [36m<p[39m
+        [33mclass[39m=[32m"font-semibold text-foreground"[39m
+      [36m/>[39m
+
+      --------------------------------------------------
+      link:
+
+      Name "Go to review":
+      [36m<a[39m
+        [33mclass[39m=[32m"portal-link"[39m
+        [33mhref[39m=[32m"/demo/register/review"[39m
+      [36m/>[39m
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:[--ring:12_93%_68%] border-info bg-info/10"[39m
+            [33mrole[39m=[32m"status"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex min-w-0 gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"min-w-0"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"font-semibold text-foreground"[39m
+                  [36m>[39m
+                    [0mThere's no payment to track yet[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"mt-0.5 text-sm text-muted-foreground"[39m
+                  [36m>[39m
+                    [0mActivation starts after checkout. [0m
+                    [36m<a[39m
+                      [33mclass[39m=[32m"portal-link"[39m
+                      [33mhref[39m=[32m"/demo/register/review"[39m
+                    [36m>[39m
+                      [0mGo to review[0m
+                    [36m</a>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      527 |       render(<ActivationView />);
+      528 |       const text = document.body.textContent ?? '';
+    > 529 |       expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Payment confirmed');
+          |                     ^
+      530 |       expect(screen.getByTestId('activation-paid-status-unavailable').textContent).toMatch(/Setup and access-email status aren't available/);
+      531 |       expect(text).toMatch(/\$99\.00/);
+      532 |       for (const claim of [/Payment didn't go through/, /Waiting for payment confirmation/, /There's no payment to track yet/, /set up in OwedBook/, /Sent to/]) expect(text).not.toMatch(claim);
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:529:21)
+
+  ● Activation reads the payment phase first (REPAIR_006, R5-F01/R5-F02) › paid with pending activation: shown as paid, setup/email not claimed, no retry/refresh/resend
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Payment confirmed"
+    Received: "Waiting for payment confirmation"
+
+      527 |       render(<ActivationView />);
+      528 |       const text = document.body.textContent ?? '';
+    > 529 |       expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Payment confirmed');
+          |                                                                     ^
+      530 |       expect(screen.getByTestId('activation-paid-status-unavailable').textContent).toMatch(/Setup and access-email status aren't available/);
+      531 |       expect(text).toMatch(/\$99\.00/);
+      532 |       for (const claim of [/Payment didn't go through/, /Waiting for payment confirmation/, /There's no payment to track yet/, /set up in OwedBook/, /Sent to/]) expect(text).not.toMatch(claim);
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:529:69)
+
+  ● Activation reads the payment phase first (REPAIR_006, R5-F01/R5-F02) › paid with failed activation: shown as paid, setup/email not claimed, no retry/refresh/resend
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Payment confirmed"
+    Received: "Payment didn't go through"
+
+      527 |       render(<ActivationView />);
+      528 |       const text = document.body.textContent ?? '';
+    > 529 |       expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Payment confirmed');
+          |                                                                     ^
+      530 |       expect(screen.getByTestId('activation-paid-status-unavailable').textContent).toMatch(/Setup and access-email status aren't available/);
+      531 |       expect(text).toMatch(/\$99\.00/);
+      532 |       for (const claim of [/Payment didn't go through/, /Waiting for payment confirmation/, /There's no payment to track yet/, /set up in OwedBook/, /Sent to/]) expect(text).not.toMatch(claim);
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:529:69)
+
+  ● Activation reads the payment phase first (REPAIR_006, R5-F01/R5-F02) › actual unknown → nothing charged path shows the terminal notice and C14 recovery
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="activation-not-charged"]
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mx-auto min-w-0 max-w-3xl px-5 py-6 md:py-8"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 border-l-[3px] border-info bg-info/10 px-3 py-2 text-xs"[39m
+            [33mrole[39m=[32m"note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"inline-flex items-center whitespace-nowrap border border-info bg-info/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-foreground"[39m
+            [36m>[39m
+              [0mDemo[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-semibold text-foreground"[39m
+            [36m>[39m
+              [0mIllustrative pricing.[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-muted-foreground"[39m
+            [36m>[39m
+              [0mAmounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:[--ring:12_93%_68%] border-info bg-info/10"[39m
+            [33mrole[39m=[32m"status"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex min-w-0 gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"min-w-0"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"font-semibold text-foreground"[39m
+                  [36m>[39m
+                    [0mThere's no payment to track yet[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"mt-0.5 text-sm text-muted-foreground"[39m
+                  [36m>[39m
+                    [0mActivation starts after checkout. [0m
+                    [36m<a[39m
+                      [33mclass[39m=[32m"portal-link"[39m
+                      [33mhref[39m=[32m"/demo/register/review"[39m
+                    [36m>[39m
+                      [0mGo to review[0m
+                    [36m</a>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      543 |     expect(s().activation).toBeNull();
+      544 |     render(<ActivationView />);
+    > 545 |     expect(screen.getByTestId('activation-not-charged').textContent).toMatch(/Nothing was charged for this payment/);
+          |                   ^
+      546 |     expect(screen.getByRole('link', { name: 'Continue my signup' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
+      547 |     expect(screen.queryByText("There's no payment to track yet")).toBeNull();
+      548 |   });
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:545:19)
+
+Test Suites: 2 failed, 2 total
+Tests:       6 failed, 129 skipped, 2 passed, 137 total
+Snapshots:   0 total
+Time:        9.768 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts|src/__tests__/portal-checkout-hold.test.tsx with tests matching "REPAIR_006".
+Test results written to: ../out/before/jest-r006-before.json

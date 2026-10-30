@@ -1,0 +1,10 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.owner-declaration.spec.ts:22:5 › no job-title dropdown; declaration is unchecked and required; missing it blocks progression (1.5s)
+  ✓  2 [public] › e2e/public.owner-declaration.spec.ts:41:5 › accepted declaration survives Back and reload; separate from terms/payment consent (2.1s)
+  ✓  3 [public] › e2e/public.owner-declaration.spec.ts:60:5 › a pre-amendment (v1) draft does not acquire acceptance (1.3s)
+  ✓  4 [public] › e2e/public.owner-declaration.spec.ts:85:5 › Me / Someone else copy keeps ownership and billing with the registering owner (1.7s)
+  ✓  5 [public] › e2e/public.owner-declaration.spec.ts:98:5 › keyboard + mobile + both themes: declaration usable at 375 and 1440 (2.9s)
+
+  5 passed (10.7s)

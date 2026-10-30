@@ -1,0 +1,746 @@
+[
+  {
+    "title": "the 'Next activation check' control is gone; scenario, clock and reset controls remain",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 737,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "activation_waiting: Load shows it as named, stays put, then \"Refresh status\" \u2192 Payment confirmed. Setting up your pharmacies\u2026",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4231,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "activation_provisioning: Load shows it as named, stays put, then \"Refresh status\" \u2192 You're in. Check your email.",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3747,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "activation_delayed: Load shows it as named, stays put, then \"Refresh status\" \u2192 You're in. Check your email.",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3786,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "activation_email_failed: Load shows it as named, stays put, then \"Resend access email\" \u2192 You're in. Check your email.",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3808,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "activation_payment_failed: Load shows it as named, stays put, then \"Try payment again\" \u2192 Review and pay",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3999,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "activation_ready: Load shows it as named, stays put, then \"Resend access email\" \u2192 You're in. Check your email.",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3892,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "keyboard only: open Demo controls, choose a scenario, Load, then Refresh status",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1274,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "mobile 375 + desktop 1440, light/dark: open demo strip and each activation state pass Gate M and contrast",
+    "file": "public.activation-scenarios.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7390,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "/ opens the public plan screen with a sign-in path to the real /login",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 696,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "anonymous 1-store registration end to end, never asked to log in, no external hosts",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6936,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4324,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "count reduction asks before discarding entered pharmacies",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4012,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "validation keeps input, focuses the summary, flags duplicates without naming the owner",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2745,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "abandoned checkout resumes with values; unknown payment pauses payment",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7798,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "forged success URL or direct visits change nothing",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 640,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "hostile text renders as text",
+    "file": "public.journeys.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1970,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "no job-title dropdown; declaration is unchecked and required; missing it blocks progression",
+    "file": "public.owner-declaration.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1346,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "accepted declaration survives Back and reload; separate from terms/payment consent",
+    "file": "public.owner-declaration.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2071,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "a pre-amendment (v1) draft does not acquire acceptance",
+    "file": "public.owner-declaration.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1257,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "Me / Someone else copy keeps ownership and billing with the registering owner",
+    "file": "public.owner-declaration.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1628,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "keyboard + mobile + both themes: declaration usable at 375 and 1440",
+    "file": "public.owner-declaration.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2618,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "CR-F01 A: unchecking the declaration closes the open checkout; direct revisit and reload offer no payment; recovery works",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 12115,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "CR-F01 A (Back): leaving the owner step unticked via Back also closes the checkout",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5345,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "CR-F01 B: a storage-v1 draft over a pending checkout migrates closed and unaccepted; recovery works",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 9197,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "a stored open checkout whose declaration is false is held on the stand-in, keyboard path to details",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5291,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "processing payment with the declaration withdrawn waits on activation (refresh disabled) until accepted again",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5970,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "unknown payment with the declaration withdrawn: confirm-paid unavailable, nothing-charged available",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1372,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-N01: changing the store count while checkout is open closes it",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5252,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "valid open checkout: review \u2194 stand-in round trips and reloads replay one checkout, then pay once",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6229,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-N02: pharmacy step 100 of 100 is reachable (no hidden two-digit step limit)",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1756,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "CR-F02: a restored billion-store draft renders, prices exactly and deep links fill in order",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1271,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "CR-F02: count reduction asks before discarding; restoring the count refills the missing step in order",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1994,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "21 pharmacies: full journey through review, checkout and activation at $1,079.00",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 20929,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R-012 surface: stand-in closed \u2014 Gate M 375/1440 and contrast, light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 12336,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R-012 surface: stand-in hold \u2014 Gate M 375/1440 and contrast, light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 12485,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R-012 surface: activation hold \u2014 Gate M 375/1440 and contrast, light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10344,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R-012 surface: unknown hold \u2014 Gate M 375/1440 and contrast, light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10006,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "C14 intro [checkout_unknown]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2632,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "C14 intro [checkout_abandoned]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 2088,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "C14 intro [checkout_declined]: state-appropriate wording; lock/recovery unchanged; 375/1440 light/dark",
+    "file": "public.repair002.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 1968,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-F01 processing: after a pharmacy name edit the payment can't confirm the edit; \"Use the details I paid for\" confirms the original",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8123,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-F01 processing: after a count 1 \u2192 2 with a second pharmacy edit the payment can't confirm the edit; \"Use the details I paid for\" confirms the original",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8634,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-F01 unknown: after a pharmacy name edit the payment can't confirm the edit; \"Use the details I paid for\" confirms the original",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6878,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-F01 unknown: after a count 1 \u2192 2 with a second pharmacy edit the payment can't confirm the edit; \"Use the details I paid for\" confirms the original",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7222,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-F01 valid recovery for the edited details: unknown \u2192 nothing charged \u2192 fresh quote for 2 \u2192 new checkout with a new key",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 8246,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R2-F02: closing a checkout from the review page and paying again on the same page uses a new key",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6493,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R-013 holds at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+    "file": "public.repair003.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 14348,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R4-N01 processing: Review, reload, direct navigation and Back never close the submitted payment or open another",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7924,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R4-N01 unknown: Review, reload, direct navigation and Back never close the submitted payment or open another",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 7380,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R4-N01 preserved: an unsubmitted open checkout can still be closed from Review and paid with a new key",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6407,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R4-N01 preserved: a genuine payment failure recovers through a fresh quote and a new checkout",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3207,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R4-N01 preserved: unknown \u2192 nothing charged recovers through a fresh quote and a new checkout",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6571,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4570,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+    "file": "public.repair004-addendum.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 16528,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6423,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R3-F01 known scope: an unedited legacy open checkout binds the quote it opened with and can be paid",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 5310,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R3-F01 recovery: an edited legacy unknown payment stays unmatched; nothing charged \u2192 fresh quote \u2192 new key",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 6908,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R3-F02: completed activation and its previews name no admin nominated after payment",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 3846,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R3-F02 control: an admin the payment covered is still the one named and previewed",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 4060,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 10492,
+        "retry": 0
+      }
+    ]
+  },
+  {
+    "title": "REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots",
+    "file": "public.repair004.spec.ts",
+    "status": "expected",
+    "attempts": [
+      {
+        "status": "passed",
+        "durationMs": 9875,
+        "retry": 0
+      }
+    ]
+  }
+]

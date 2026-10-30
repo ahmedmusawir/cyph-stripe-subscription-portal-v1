@@ -1,0 +1,19 @@
+{
+  "ownedPID": 1037975,
+  "port": 3113,
+  "signal": "SIGTERM",
+  "removed": [
+    "/tmp/cody-r3-zoom-profile",
+    "/tmp/cody-r3-pw-output",
+    "/tmp/cody-r3-extra-output",
+    "/tmp/cody-r3-snapshot/.env.local"
+  ],
+  "unrelatedPIDsAlive": {
+    "970525": true,
+    "40320": true
+  },
+  "signIns": 0,
+  "logouts": 0,
+  "credentialsRead": false,
+  "authStateWritten": false
+}

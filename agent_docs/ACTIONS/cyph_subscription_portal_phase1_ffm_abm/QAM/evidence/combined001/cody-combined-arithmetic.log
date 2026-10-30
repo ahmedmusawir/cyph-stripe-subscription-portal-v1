@@ -1,0 +1,6 @@
+Test Suites: 1 passed, 1 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        0.632 s
+Ran all test suites within paths "qa-independent/arithmetic.test.ts".
+Test results written to: ../cody-combined-arithmetic.json

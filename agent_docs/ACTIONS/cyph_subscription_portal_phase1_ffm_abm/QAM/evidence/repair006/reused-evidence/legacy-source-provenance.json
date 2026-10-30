@@ -1,0 +1,95 @@
+{
+  "r011Commit": "24cf075dc3c6252bc22712b067cbf9a8680f24fa",
+  "r012Commit": "d6fe67839961fcbbf801b0bb04d3a2522e7b1f36",
+  "mechanism": "Actual predecessor pure engines/dependencies copied from prior independently verified QA source; normal service transitions create fixtures. Public store wrapper version2/3 synthetic data only.",
+  "files": [
+    {
+      "path": "qa-predecessors/r012/validation.ts",
+      "sha256": "bccaf4e762a4bfe774465972e39fd5ba2efc22d5f36961a023b20adcee3e5a5c"
+    },
+    {
+      "path": "qa-predecessors/r012/index.ts",
+      "sha256": "91a2c4b439133ec254ca99bec47aab7735f9c163bce3040c54224456d76ff37a"
+    },
+    {
+      "path": "qa-predecessors/r012/stripeRoute.ts",
+      "sha256": "4c7ebf509e80850645a75a43ee489b20a77326dfa138c496d5da1ab79f47d5fd"
+    },
+    {
+      "path": "qa-predecessors/r012/latency.ts",
+      "sha256": "6fadc6bf27c5e1dea04410cde02e08f5bb2fd9acebb4dc81e63852b4cc1dc052"
+    },
+    {
+      "path": "qa-predecessors/r012/format.ts",
+      "sha256": "9c81ea2c233fa2c8648c4221cabd486faef23a142181968853efef263cf7524d"
+    },
+    {
+      "path": "qa-predecessors/r012/account.ts",
+      "sha256": "9767233f90a21d72470958d894de80925fe1b57e5fd148a3c716ace2337467d3"
+    },
+    {
+      "path": "qa-predecessors/r012/storage.ts",
+      "sha256": "f801025928d64c736fa1ce7152cd27950e24b11f4cdb96d9b7ec951675744a30"
+    },
+    {
+      "path": "qa-predecessors/r012/catalog.ts",
+      "sha256": "a9b50a9e5e2af6d58b9fb6b1c1038c4b327863870d7f85590ebdf5e8b3d58cbc"
+    },
+    {
+      "path": "qa-predecessors/r012/pricing.ts",
+      "sha256": "4b708e0dc2ff1183da2f7adefb093d37d09561f6694a4853c2f5108b1fbbb6f1"
+    },
+    {
+      "path": "qa-predecessors/r012/registration.ts",
+      "sha256": "6b1268d06fe19b2935325a1a2af4d6cd267b3cb89e3a6862d3599308ed5b8432"
+    },
+    {
+      "path": "qa-predecessors/r012/registrationService.ts",
+      "sha256": "509ffef3b3efb3b953c7520e34b93dbae06d098df1df4b1c3c2ed612b56e8557"
+    },
+    {
+      "path": "qa-predecessors/r011/validation.ts",
+      "sha256": "bccaf4e762a4bfe774465972e39fd5ba2efc22d5f36961a023b20adcee3e5a5c"
+    },
+    {
+      "path": "qa-predecessors/r011/index.ts",
+      "sha256": "dd9799c103bd09fc1902d8cf50d2982a8406da8e144f86284bb39ea9890603cc"
+    },
+    {
+      "path": "qa-predecessors/r011/stripeRoute.ts",
+      "sha256": "4c7ebf509e80850645a75a43ee489b20a77326dfa138c496d5da1ab79f47d5fd"
+    },
+    {
+      "path": "qa-predecessors/r011/latency.ts",
+      "sha256": "6fadc6bf27c5e1dea04410cde02e08f5bb2fd9acebb4dc81e63852b4cc1dc052"
+    },
+    {
+      "path": "qa-predecessors/r011/format.ts",
+      "sha256": "9c81ea2c233fa2c8648c4221cabd486faef23a142181968853efef263cf7524d"
+    },
+    {
+      "path": "qa-predecessors/r011/account.ts",
+      "sha256": "9767233f90a21d72470958d894de80925fe1b57e5fd148a3c716ace2337467d3"
+    },
+    {
+      "path": "qa-predecessors/r011/storage.ts",
+      "sha256": "f801025928d64c736fa1ce7152cd27950e24b11f4cdb96d9b7ec951675744a30"
+    },
+    {
+      "path": "qa-predecessors/r011/catalog.ts",
+      "sha256": "a9b50a9e5e2af6d58b9fb6b1c1038c4b327863870d7f85590ebdf5e8b3d58cbc"
+    },
+    {
+      "path": "qa-predecessors/r011/pricing.ts",
+      "sha256": "4b708e0dc2ff1183da2f7adefb093d37d09561f6694a4853c2f5108b1fbbb6f1"
+    },
+    {
+      "path": "qa-predecessors/r011/registration.ts",
+      "sha256": "4f19f94a3a897d2caeaabeb2722e60f984c9e51dbebf6fb963e928d5e7f21539"
+    },
+    {
+      "path": "qa-predecessors/r011/registrationService.ts",
+      "sha256": "509ffef3b3efb3b953c7520e34b93dbae06d098df1df4b1c3c2ed612b56e8557"
+    }
+  ]
+}

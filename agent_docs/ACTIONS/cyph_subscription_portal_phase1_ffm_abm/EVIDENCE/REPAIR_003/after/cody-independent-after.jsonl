@@ -1,0 +1,6 @@
+{"case":"closed-key-reuse","oldKeyAccepted":false,"newKeyAccepted":true}
+{"case":"submitted-scope","mode":"processing","edit":"count","originalQuotedCount":1,"originalCents":9900,"currentCount":2,"currentPharmacies":["Example Main Street Pharmacy","Added Pharmacy"],"quoteCleared":true,"resultOK":false,"payment":"pending","checkout":"pending","originalKeyRetained":true}
+{"case":"submitted-scope","mode":"processing","edit":"pharmacy","originalQuotedCount":1,"originalCents":9900,"currentCount":1,"currentPharmacies":["Changed Pharmacy"],"quoteCleared":true,"resultOK":false,"payment":"pending","checkout":"pending","originalKeyRetained":true}
+{"case":"submitted-scope","mode":"unknown","edit":"count","originalQuotedCount":1,"originalCents":9900,"currentCount":2,"currentPharmacies":["Example Main Street Pharmacy","Added Pharmacy"],"quoteCleared":true,"resultOK":false,"checkout":"unknown","originalKeyRetained":true}
+{"case":"submitted-scope","mode":"unknown","edit":"pharmacy","originalQuotedCount":1,"originalCents":9900,"currentCount":1,"currentPharmacies":["Changed Pharmacy"],"quoteCleared":true,"resultOK":false,"checkout":"unknown","originalKeyRetained":true}
+{"case":"allocation-repaired","requested":1000000000,"entries":1,"pushes":0,"farWrites":[false,false]}

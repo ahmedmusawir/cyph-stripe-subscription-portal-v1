@@ -1,0 +1,31 @@
+{
+  "phase": "Q1 bounded readiness only",
+  "time": "2026-10-28T07:39:01.202Z",
+  "signInAttempts": 1,
+  "globalLogouts": 0,
+  "credentialSchema": true,
+  "target": {
+    "https": true,
+    "supabaseHost": true,
+    "configuredHostRecordedPrivately": true
+  },
+  "responses": [
+    {
+      "status": 400
+    }
+  ],
+  "logoutBlocked": 0,
+  "publicEntry": "/demo/register/plan",
+  "publicBodyVisible": true,
+  "anonymousDashboard": {
+    "status": 307,
+    "location": "/login"
+  },
+  "loginRole": "absent-or-other",
+  "loginErrorCategory": "invalid_credentials",
+  "finalPath": "/login",
+  "credentialMismatchMessage": 1,
+  "accessDeniedMessage": 0,
+  "adminDashboard": false,
+  "authResult": "BLOCKED: did not reach dashboard; no sensitive error captured"
+}

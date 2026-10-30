@@ -1,0 +1,14 @@
+{
+  "cwd": "/tmp/cody-r6-snapshot",
+  "cleanBuild": 0,
+  "productTypecheck": 0,
+  "currentJest248": 0,
+  "focusedBrowser19": 0,
+  "originalReaders5": 0,
+  "missingScopeUI3": 0,
+  "independentConsistency85": 0,
+  "selectedOriginalProbes": 1,
+  "acceptedNoopMaterialEffects": 0,
+  "actualZoom8": 0,
+  "disposition": "Only selected strict repeat-refresh assertion fails; Lead accepted nonblocking no-op, not repaired. All required reader/resend checks pass."
+}

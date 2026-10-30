@@ -1,0 +1,26 @@
+
+Running 1 test using 1 worker
+
+(node:904001) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:904001) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 qa-extra/unchecked-pending.spec.ts:2:5 › unchecking owner after checkout creation cannot still confirm payment (6.0s)
+
+
+  1) qa-extra/unchecked-pending.spec.ts:2:5 › unchecking owner after checkout creation cannot still confirm payment 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: not [32m"confirmed"[39m
+
+      1 | import {test,expect} from '@playwright/test';import fs from 'node:fs';
+    > 2 | test('unchecking owner after checkout creation cannot still confirm payment',async({page})=>{await page.goto('/demo/register/plan');await page.locator('summary',{hasText:'Demo controls'}).click();await page.locator('#demo-reg-scenario').selectOption('prefilled_one_store');await page.getByRole('button',{name:'Load',exact:true}).click();await expect(page.getByTestId('due-today')).toHaveText('$99.00');await page.locator('#c1').check();await page.locator('#c2').check();await page.getByTestId('continue-payment').click();await expect(page.getByTestId('checkout-preview')).toBeVisible();await page.goto('/demo/register/owner');await page.locator('#owner-declaration').uncheck();await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.locator('#owner-declaration-err')).toBeVisible();await page.goto('/demo/stripe');await page.waitForTimeout(1200);const permitted=await page.getByTestId('outcome-paid').isVisible();if(permitted){await page.screenshot({path:'/tmp/cody-combined-unchecked-pending.png',fullPage:true});await page.getByTestId('outcome-paid').click();await page.waitForURL('**/demo/activation');}const state=await page.evaluate(()=>{const s=JSON.parse(sessionStorage.getItem('cyph-portal-demo:v1:public')!).state.s;return{accepted:s.draft.owner.ownerDeclarationAccepted,checkout:s.checkout?.status,payment:s.activation?.paymentState}});fs.writeFileSync('/tmp/cody-combined-unchecked-pending.json',JSON.stringify({paidControlAvailable:permitted,...state}));expect(state.payment).not.toBe('confirmed')});
+        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^
+      3 |
+        at /tmp/cody-combined-24cf075/qa-extra/unchecked-pending.spec.ts:2:1523
+
+    Error Context: ../cody-combined-extra-corrected-output/unchecked-pending-unchecki-ffd45-annot-still-confirm-payment/error-context.md
+
+  1 failed
+    qa-extra/unchecked-pending.spec.ts:2:5 › unchecking owner after checkout creation cannot still confirm payment 

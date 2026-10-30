@@ -1,0 +1,14 @@
+
+Running 9 tests using 1 worker
+
+  ✓  1 [public] › e2e/public.activation-scenarios.spec.ts:30:5 › the 'Next activation check' control is gone; scenario, clock and reset controls remain (622ms)
+  ✓  2 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_waiting: Load shows it as named, stays put, then "Refresh status" → Payment confirmed. Setting up your pharmacies… (4.2s)
+  ✓  3 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_provisioning: Load shows it as named, stays put, then "Refresh status" → You're in. Check your email. (3.8s)
+  ✓  4 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_delayed: Load shows it as named, stays put, then "Refresh status" → You're in. Check your email. (3.7s)
+  ✓  5 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_email_failed: Load shows it as named, stays put, then "Resend access email" → You're in. Check your email. (3.8s)
+  ✓  6 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_payment_failed: Load shows it as named, stays put, then "Try payment again" → Review and pay (3.9s)
+  ✓  7 [public] › e2e/public.activation-scenarios.spec.ts:114:7 › activation_ready: Load shows it as named, stays put, then "Resend access email" → You're in. Check your email. (3.8s)
+  ✓  8 [public] › e2e/public.activation-scenarios.spec.ts:136:5 › keyboard only: open Demo controls, choose a scenario, Load, then Refresh status (1.2s)
+  ✓  9 [public] › e2e/public.activation-scenarios.spec.ts:161:5 › mobile 375 + desktop 1440, light/dark: open demo strip and each activation state pass Gate M and contrast (6.9s)
+
+  9 passed (33.0s)

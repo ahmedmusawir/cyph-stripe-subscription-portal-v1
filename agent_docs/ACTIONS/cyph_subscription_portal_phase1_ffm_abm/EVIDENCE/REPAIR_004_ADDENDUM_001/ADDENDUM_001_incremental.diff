@@ -1,0 +1,699 @@
+diff -ruN src/components/portal/activation/ActivationView.tsx src/components/portal/activation/ActivationView.tsx
+--- src/components/portal/activation/ActivationView.tsx	2026-10-29 18:17:16.792369566 +0600
++++ src/components/portal/activation/ActivationView.tsx	2026-10-29 19:16:49.280782356 +0600
+@@ -9,7 +9,7 @@
+ import { Alert, DemoNotice, Placeholder } from "../Alert";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+-import { checkoutHold, formatCents, formatTime, initialRecurringCents, registration, useRegistration, type CheckoutScope } from "@/services/portal";
++import { checkoutHold, formatCents, formatTime, registration, useRegistration, type CheckoutScope } from "@/services/portal";
+ 
+ type TrackState = "done" | "busy" | "warn" | "fail" | "idle";
+ 
+@@ -89,14 +89,15 @@
+     );
+   }
+ 
+-  const { draft, quote } = state;
++  const { draft } = state;
+   // R-013: the payment covers what its checkout was quoted for, not later edits.
++  // Without a recorded scope it can't be established, so no names or amount are shown (REPAIR_004 addendum 1).
+   const paidFor = state.checkout?.scope;
+-  const names = (paidFor?.pharmacies ?? draft.pharmacies.slice(0, draft.requestedStoreCount)).map((p) => p.name).filter(Boolean) as string[];
++  const names = paidFor ? (paidFor.pharmacies.map((p) => p.name).filter(Boolean) as string[]) : null;
+   // R3-F02: an invitation is claimed only for an admin the payment covered.
+   const nominated = paidFor?.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+   const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
+-  const amount = `${formatCents(paidFor?.dueNowCents ?? quote?.dueNowCents ?? initialRecurringCents(draft.requestedStoreCount))} (illustrative)`;
++  const amount = paidFor ? `${formatCents(paidFor.dueNowCents)} (illustrative)` : null;
+   const emailTo = a.ownerEmailMasked;
+ 
+   const pay: TrackState = a.paymentState === "confirmed" ? "done" : a.paymentState === "failed" ? "fail" : "busy";
+@@ -147,18 +148,22 @@
+           <Track
+             label="Payment"
+             state={pay}
+-            text={pay === "done" ? `Confirmed by Stripe · ${amount}` : pay === "fail" ? "Stripe reported the payment didn't complete." : "Waiting for Stripe's confirmation."}
++            text={pay === "done" ? (amount ? `Confirmed by Stripe · ${amount}` : "Confirmed by Stripe.") : pay === "fail" ? "Stripe reported the payment didn't complete." : "Waiting for Stripe's confirmation."}
+           />
+           <Track
+             label="Pharmacy setup"
+             state={setup}
+             text={
+               setup === "done"
+-                ? `${names.join(" and ")} ${names.length === 1 ? "is" : "are"} set up in OwedBook.`
++                ? names
++                  ? `${names.join(" and ")} ${names.length === 1 ? "is" : "are"} set up in OwedBook.`
++                  : "Your pharmacies are set up in OwedBook."
+                 : setup === "warn"
+                   ? "Paid; setup is late. You don't need to pay again."
+                   : setup === "busy"
+-                    ? `Setting up ${names.join(" and ")}.`
++                    ? names
++                      ? `Setting up ${names.join(" and ")}.`
++                      : "Setting up your pharmacies."
+                     : "Starts after payment is confirmed."
+             }
+           />
+@@ -199,11 +204,18 @@
+           </div>
+         ) : null}
+         {a.paymentState === "pending" ? (
++          // R4-N01: the payment is already submitted, so there's no checkout to resume (deviates from the approved render).
+           <Alert tone="info" title="Waiting for Stripe to confirm your payment">
+-            This usually takes a moment. If you closed Stripe&apos;s page before finishing, nothing was charged and you can{" "}
+-            <Link href="/demo/stripe" className="portal-link">resume checkout</Link>.
++            This usually takes a moment. Your payment has been submitted, so please don&apos;t pay again.
+           </Alert>
+         ) : null}
++        {a.paymentState === "confirmed" && !paidFor ? (
++          <div data-testid="history-unavailable">
++            <Alert tone="info" title="We can't show what this payment covered">
++              Your signup details changed after this payment, and its own record of them wasn&apos;t kept, so we can&apos;t show which pharmacies or what amount it covered. Your payment and setup aren&apos;t affected, and you don&apos;t need to pay again. For the details, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
++            </Alert>
++          </div>
++        ) : null}
+         {a.provisioningState === "attention" ? (
+           <Alert tone="warning" title="Your payment went through; setup is taking longer than usual">
+             You don&apos;t need to pay again. We&apos;ll email your access link as soon as setup completes. If nothing arrives, contact <Placeholder>[SUPPORT EMAIL]</Placeholder> with reference <span className="font-medium text-foreground">demo_act_01</span>.
+diff -ruN src/components/portal/activation/CheckoutIncompleteView.tsx src/components/portal/activation/CheckoutIncompleteView.tsx
+--- src/components/portal/activation/CheckoutIncompleteView.tsx	2026-10-29 16:22:23.648160140 +0600
++++ src/components/portal/activation/CheckoutIncompleteView.tsx	2026-10-29 19:16:49.356516739 +0600
+@@ -10,7 +10,7 @@
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+ import { Pill } from "../Pill";
+-import { checkoutHold, formatCents, initialRecurringCents, registration, useRegistration } from "@/services/portal";
++import { checkoutHold, formatCents, initialRecurringCents, isSubmitted, registration, useRegistration } from "@/services/portal";
+ import { ScopeHold } from "./ActivationView";
+ 
+ // C14 Checkout not completed: resumable · payment_unknown · declined · expired.
+@@ -31,6 +31,9 @@
+         <Alert tone="info" title="There's no unfinished checkout">
+           {status === "paid" ? (
+             <Link href="/demo/activation" className="portal-link">See activation status</Link>
++          ) : status === "pending" && isSubmitted(state) ? (
++            // R4-N01: a submitted payment isn't an open checkout.
++            <Link href="/demo/activation" className="portal-link">See payment status</Link>
+           ) : status === "pending" ? (
+             <Link href="/demo/stripe" className="portal-link">Back to the open checkout</Link>
+           ) : (
+diff -ruN src/components/portal/handoff/CheckoutStandIn.tsx src/components/portal/handoff/CheckoutStandIn.tsx
+--- src/components/portal/handoff/CheckoutStandIn.tsx	2026-10-29 18:17:38.566705121 +0600
++++ src/components/portal/handoff/CheckoutStandIn.tsx	2026-10-29 19:15:43.440992265 +0600
+@@ -9,7 +9,7 @@
+ import { DemoOutcomes, ExternalHandoffPanel } from "../ExternalHandoffPanel";
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { Pill } from "../Pill";
+-import { checkoutHold, formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
++import { checkoutHold, formatCents, isSubmitted, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
+ import { ScopeHold } from "../activation/ActivationView";
+ 
+ // C05 initial-checkout boundary (PUBLIC). Our "leaving" page, then a labelled
+@@ -88,6 +88,20 @@
+         </div>
+       </PageContainer>
+     );
++  }
++  if (isSubmitted(state)) {
++    // R4-N01: payment was already submitted on Stripe; only Stripe's answer resolves it.
++    return (
++      <PageContainer>
++        <DemoNotice />
++        <div data-testid="checkout-submitted">
++          <Alert tone="info" title="You've already submitted this payment">
++            Stripe is confirming it, so there&apos;s nothing to do on this page. Please don&apos;t pay again.{" "}
++            <Link href="/demo/activation" className="portal-link">See payment status</Link>
++          </Alert>
++        </div>
++      </PageContainer>
++    );
+   }
+   if (hold) {
+     // R-012: an open checkout can't be paid while its prerequisites are unmet.
+diff -ruN src/components/portal/references/EmailPreview.tsx src/components/portal/references/EmailPreview.tsx
+--- src/components/portal/references/EmailPreview.tsx	2026-10-27 15:05:36.036452756 +0600
++++ src/components/portal/references/EmailPreview.tsx	2026-10-29 19:15:28.424533577 +0600
+@@ -7,7 +7,8 @@
+ export type EmailVariantKey = "owner" | "store_admin" | "checkout_unfinished" | "expired_resend";
+ 
+ function list(names: string[]): string {
+-  if (names.length <= 1) return names[0] ?? "your pharmacy";
++  if (names.length === 0) return "your pharmacies"; // read with "are"; nothing provable to name
++  if (names.length === 1) return names[0];
+   return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+ }
+ 
+diff -ruN src/components/portal/references/EmailReferenceView.tsx src/components/portal/references/EmailReferenceView.tsx
+--- src/components/portal/references/EmailReferenceView.tsx	2026-10-29 18:17:16.793588610 +0600
++++ src/components/portal/references/EmailReferenceView.tsx	2026-10-29 19:15:21.222222268 +0600
+@@ -28,12 +28,16 @@
+ 
+   const emails = accessEmailPreviews(state);
+   const draft = state.draft;
++  // Null: a payment whose details can't be established (REPAIR_004 addendum 1); claim none.
+   const covered = coveredDetails(state);
+-  const n = covered.storeCount;
++  const n = covered?.storeCount;
+   const owner = [draft.owner.firstName, draft.owner.lastName].filter(Boolean).join(" ") || "Jordan Ellis";
+-  const nominated = covered.pharmacies.find((p) => p.adminAssignment?.kind === "other");
++  const nominated = covered?.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+   const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
+-  const planLine = `Standard plan · ${n} ${n === 1 ? "pharmacy" : "pharmacies"} · ${formatCents(initialRecurringCents(n))} / month (illustrative)`;
++  const planLine =
++    n === undefined
++      ? "Standard plan · monthly"
++      : `Standard plan · ${n} ${n === 1 ? "pharmacy" : "pharmacies"} · ${formatCents(initialRecurringCents(n))} / month (illustrative)`;
+   const adminNote = admin ? `${admin.fullName} received a separate invitation to administer ${nominated?.name}.` : undefined;
+ 
+   return (
+diff -ruN src/components/portal/register/ReviewView.tsx src/components/portal/register/ReviewView.tsx
+--- src/components/portal/register/ReviewView.tsx	2026-10-29 16:22:32.999783408 +0600
++++ src/components/portal/register/ReviewView.tsx	2026-10-29 19:16:12.752894293 +0600
+@@ -19,6 +19,7 @@
+   firstIncomplete,
+   formatCents,
+   isQuoteExpired,
++  isSubmitted,
+   registration,
+   useRegistration,
+ } from "@/services/portal";
+@@ -101,6 +102,8 @@
+   const n = draft.requestedStoreCount;
+   const owner = draft.owner;
+   const ownerName = [owner.firstName, owner.lastName].filter(Boolean).join(" ");
++  // R4-N01: a payment already submitted on Stripe is not an open checkout; it can't be closed or paid again here.
++  const submitted = isSubmitted(state);
+ 
+   async function refresh() {
+     setQuoteError(false);
+@@ -161,7 +164,21 @@
+       </div>
+       <PageHeader eyebrow="Step 4 · Review & pay" title="Review and pay" lead="Check everything, then continue to Stripe's secure checkout. Nothing is charged on this page." />
+ 
+-      {checkout?.status === "pending" ? (
++      {submitted ? (
++        <div className="mt-5" data-testid="review-submitted">
++          <Alert
++            tone="info"
++            title="You've already submitted a payment"
++            action={
++              <Button asChild>
++                <Link href={checkout?.status === "unknown" ? "/demo/checkout-incomplete" : "/demo/activation"}>See payment status</Link>
++              </Button>
++            }
++          >
++            Stripe is confirming it, so this page can&apos;t start another payment or close this one. Please don&apos;t pay again.
++          </Alert>
++        </div>
++      ) : checkout?.status === "pending" ? (
+         <Alert
+           tone="info"
+           className="mt-5"
+@@ -381,7 +398,7 @@
+             </div>
+ 
+             <div className="space-y-2">
+-              <Button type="submit" className="w-full" disabled={!ready || leaving || checkout?.status === "pending"} aria-busy={leaving || undefined} data-testid="continue-payment">
++              <Button type="submit" className="w-full" disabled={!ready || leaving || checkout?.status === "pending" || submitted} aria-busy={leaving || undefined} data-testid="continue-payment">
+                 {leaving ? (
+                   <>
+                     <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+diff -ruN src/services/portal/index.ts src/services/portal/index.ts
+--- src/services/portal/index.ts	2026-10-29 18:29:22.657236466 +0600
++++ src/services/portal/index.ts	2026-10-29 19:15:21.219558360 +0600
+@@ -15,6 +15,7 @@
+   isEmailVariant,
+   isPharmacyStep,
+   isQuoteExpired,
++  isSubmitted,
+   EMAIL_VARIANTS,
+ } from './registration';
+ export type { EmailVariant, CheckoutHold, CheckoutOutcome, RegistrationStep } from './registration';
+diff -ruN src/services/portal/registration.ts src/services/portal/registration.ts
+--- src/services/portal/registration.ts	2026-10-29 18:17:16.790588462 +0600
++++ src/services/portal/registration.ts	2026-10-29 19:15:04.218555674 +0600
+@@ -241,11 +241,18 @@
+  * before Stripe answered. It is never closed by an edit; it stays bound to the
+  * scope it was quoted for.
+  */
+-function isSubmitted(state: RegistrationState): boolean {
++export function isSubmitted(state: RegistrationState): boolean {
+   const status = state.checkout?.status;
+   return status === 'unknown' || (status === 'pending' && state.activation?.paymentState === 'pending');
+ }
+ 
++/**
++ * R4-N01: a submitted payment resolves only through Stripe's answer (refresh,
++ * or the unknown-payment resolution); nothing on our side closes, replays or
++ * restarts it.
++ */
++const SUBMITTED_MESSAGE = 'Your payment was already submitted. Check its status instead of paying again.';
++
+ const listPrice = (draft: RegistrationDraft) => initialRecurringCents(draft.requestedStoreCount) - initialDiscountCents(draft.code);
+ 
+ function scopeOf(draft: RegistrationDraft, dueNowCents: number): CheckoutScope {
+@@ -614,6 +621,7 @@
+ ): Step<HandoffView> {
+   if (!isOperationKey(input.operationKey)) return fail(state, 'validation', 'Missing operation key.');
+   const existing = state.checkout;
++  if (isSubmitted(state)) return fail(state, 'conflict', SUBMITTED_MESSAGE);
+   if (existing && existing.operationKey === input.operationKey && existing.status === 'pending') {
+     const hold = checkoutHold(state.draft, existing);
+     if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+@@ -662,6 +670,7 @@
+   if (!(CHECKOUT_OUTCOMES as readonly unknown[]).includes(outcome)) return fail(state, 'validation', 'Unknown outcome.');
+   if (checkout.status !== 'pending' && checkout.status !== 'declined')
+     return fail(state, 'conflict', 'This checkout already has an outcome.');
++  if (isSubmitted(state)) return fail(state, 'conflict', SUBMITTED_MESSAGE);
+   const hold = outcome === 'paid' || outcome === 'processing' ? checkoutHold(state.draft, checkout) : null;
+   if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
+   const email = state.draft.owner.email ?? '';
+@@ -728,6 +737,9 @@
+ 
+ /** C14 expired → start a new signup (drafts discarded on purpose). */
+ export function restartSignup(state: RegistrationState): Step<RegistrationDraft> {
++  // A submitted or completed payment is never discarded with the draft (R4-N01).
++  if (isSubmitted(state)) return fail(state, 'conflict', SUBMITTED_MESSAGE);
++  if (state.checkout?.status === 'paid') return fail(state, 'conflict', 'This signup is already paid.');
+   const next = { ...createRegistration('fresh'), clockOffsetMs: state.clockOffsetMs, spentCheckoutKeys: spend(state, state.checkout?.operationKey) };
+   return ok(next, next.draft);
+ }
+@@ -800,13 +812,15 @@
+ 
+ /**
+  * What a live or completed payment covers: its checkout's recorded scope
+- * (R-013), never later draft edits (REPAIR_004, R3-F02). Without one, the draft.
++ * (R-013), never later draft edits (REPAIR_004, R3-F02). Null when a submitted
++ * or paid checkout has no provable scope, so nothing is claimed for it
++ * (REPAIR_004 addendum 1). Without a live checkout, the draft.
+  */
+-export function coveredDetails(state: RegistrationState): Pick<CheckoutScope, 'storeCount' | 'pharmacies'> {
++export function coveredDetails(state: RegistrationState): Pick<CheckoutScope, 'storeCount' | 'pharmacies'> | null {
+   const c = state.checkout;
+-  return c?.scope && c.status !== 'abandoned' && c.status !== 'expired'
+-    ? c.scope
+-    : { storeCount: state.draft.requestedStoreCount, pharmacies: state.draft.pharmacies };
++  if (c?.scope && c.status !== 'abandoned' && c.status !== 'expired') return c.scope;
++  if (c?.status === 'paid' || isSubmitted(state)) return null;
++  return { storeCount: state.draft.requestedStoreCount, pharmacies: state.draft.pharmacies };
+ }
+ 
+ /** Inert local previews built from what the signup covers. No token, no send. */
+@@ -814,7 +828,7 @@
+   const owner = state.draft.owner;
+   const ownerName = [owner.firstName, owner.lastName].filter(Boolean).join(' ') || 'Jordan Ellis';
+   const ownerEmail = isEmail(owner.email) ? owner.email! : OWNER_JORDAN.email;
+-  const pharmacies = coveredDetails(state).pharmacies.filter((p) => p?.name);
++  const pharmacies = (coveredDetails(state)?.pharmacies ?? []).filter((p) => p?.name);
+   const names = pharmacies.map((p) => p.name!) ;
+   const nominated = pharmacies.find((p) => p.adminAssignment?.kind === 'other');
+   const admin = nominated?.adminAssignment?.kind === 'other' ? nominated.adminAssignment : null;
+@@ -842,7 +856,8 @@
+       recipientKind: 'owner',
+       recipientName: ownerName,
+       recipientEmailMasked: maskEmail(ownerEmail),
+-      pharmacyNames: names,
++      // About the saved, unpaid draft, so it lists the draft.
++      pharmacyNames: state.draft.pharmacies.map((p) => p?.name).filter((n): n is string => Boolean(n)),
+       subject: 'Your Pharmacy Books signup is waiting',
+       linkState: 'valid',
+       expiryLabel: '[HOLD PERIOD TBD]',
+diff -ruN src/__tests__/portal-checkout-hold.test.tsx src/__tests__/portal-checkout-hold.test.tsx
+--- src/__tests__/portal-checkout-hold.test.tsx	2026-10-29 18:20:06.754005419 +0600
++++ src/__tests__/portal-checkout-hold.test.tsx	2026-10-29 19:11:46.140352414 +0600
+@@ -7,6 +7,7 @@
+ import { CheckoutStandIn } from '@/components/portal/handoff/CheckoutStandIn';
+ import { ActivationView } from '@/components/portal/activation/ActivationView';
+ import { CheckoutIncompleteView } from '@/components/portal/activation/CheckoutIncompleteView';
++import { ReviewView } from '@/components/portal/register/ReviewView';
+ import { PublicDemoControls } from '@/components/portal/PublicDemoControls';
+ import { registration, registrationHarness, PUBLIC_STORAGE_KEY } from '@/services/portal';
+ import { registrationStore } from '@/services/portal/registrationService';
+@@ -354,3 +355,71 @@
+     expect(main).not.toMatch(/replacement admin/i);
+   });
+ });
++
++describe('a submitted payment on screen (REPAIR_004 addendum 1, R4-N01)', () => {
++  async function submit(outcome: 'processing' | 'unknown') {
++    await openCheckout('demo_submitted_key_01');
++    await act(async () => {
++      await registration.resolveCheckout(outcome);
++    });
++  }
++
++  for (const outcome of ['processing', 'unknown'] as const)
++    it(`${outcome}: Review offers no way to close it or pay again, and the service refuses both`, async () => {
++      await submit(outcome);
++      const before = s();
++      render(<ReviewView />);
++      expect(screen.queryByRole('button', { name: 'Edit my details instead' })).toBeNull();
++      expect(screen.queryByText('Your checkout on Stripe is still open')).toBeNull();
++      const notice = screen.getByTestId('review-submitted');
++      expect(notice.textContent).toMatch(/already submitted a payment/);
++      expect(notice.textContent).toMatch(/don't pay again/);
++      expect(screen.getByRole('link', { name: 'See payment status' }).getAttribute('href')).toBe(outcome === 'processing' ? '/demo/activation' : '/demo/checkout-incomplete');
++      expect((screen.getByTestId('continue-payment') as HTMLButtonElement).disabled).toBe(true);
++      await act(async () => {
++        expect((await registration.resolveCheckout('back')).ok).toBe(false);
++        expect(registration.resumeSignup().ok).toBe(false);
++        expect(registration.restartSignup().ok).toBe(false);
++      });
++      expect(s()).toBe(before);
++    });
++
++  it('processing: the stand-in shows the submitted notice with no payment outcomes', async () => {
++    await submit('processing');
++    render(<CheckoutStandIn />);
++    const notice = screen.getByTestId('checkout-submitted');
++    expect(notice.textContent).toMatch(/already submitted/);
++    for (const id of ['outcome-paid', 'outcome-back', 'outcome-closed', 'outcome-unknown', 'outcome-declined']) expect(screen.queryByTestId(id)).toBeNull();
++  });
++
++  it('processing: Activation no longer offers "resume checkout"', async () => {
++    await submit('processing');
++    render(<ActivationView />);
++    expect(screen.queryByRole('link', { name: 'resume checkout' })).toBeNull();
++    expect(document.body.textContent).toMatch(/don't pay again/);
++  });
++
++  it('a completed record whose paid scope cannot be established shows unavailable history, not the edited draft', async () => {
++    await openCheckout('demo_legacy_done_01');
++    await act(async () => {
++      await registration.resolveCheckout('paid');
++      await registration.refreshActivation();
++      await registration.savePharmacy(0, { ...s().draft.pharmacies[0], name: 'Edited after payment' });
++    });
++    const legacy = JSON.parse(JSON.stringify(s()));
++    delete legacy.checkout.scope;
++    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 2 }));
++    await act(async () => {
++      await registrationStore.persist.rehydrate();
++    });
++    expect(s().checkout?.scope).toBeUndefined();
++    render(<ActivationView />);
++    const tracks = screen.getByTestId('activation-tracks').textContent ?? '';
++    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe("You're in. Check your email.");
++    expect(tracks).toMatch(/Confirmed by Stripe/);
++    expect(tracks).not.toMatch(/\$/);
++    expect(document.body.textContent).not.toMatch(/Edited after payment/);
++    expect(screen.getByTestId('history-unavailable').textContent).toMatch(/can't show which pharmacies or what amount/);
++    expect(screen.queryByRole('button', { name: /Try payment again/ })).toBeNull();
++  });
++});
+diff -ruN src/__tests__/portal-registration.test.ts src/__tests__/portal-registration.test.ts
+--- src/__tests__/portal-registration.test.ts	2026-10-29 18:19:40.847721062 +0600
++++ src/__tests__/portal-registration.test.ts	2026-10-29 19:15:21.220834406 +0600
+@@ -917,7 +917,7 @@
+     const s = nominateLater(before);
+     expect(s.checkout).toEqual(before.checkout);
+     expect(s.activation).toEqual(before.activation);
+-    expect(reg.coveredDetails(s).pharmacies[0].adminAssignment).toEqual({ kind: 'owner' });
++    expect(reg.coveredDetails(s)!.pharmacies[0].adminAssignment).toEqual({ kind: 'owner' });
+     expect(JSON.stringify(reg.accessEmailPreviews(s))).not.toMatch(/replacement/i);
+   });
+ 
+@@ -993,3 +993,86 @@
+     expect(start(s, NEW).result).toMatchObject({ ok: false, code: 'conflict' });
+   });
+ });
++
++describe('a submitted payment cannot be discarded or retried (REPAIR_004 addendum 1, R4-N01)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  const OTHER = 'demo_key_other_0001';
++  type Mode = 'processing' | 'unknown';
++  function opened(): RegistrationState {
++    const s = reg.requestQuote(completeDraft(1), deps).state;
++    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++  }
++  const submitted = (mode: Mode) => reg.resolveCheckout(opened(), mode).state;
++  const reload = (s: RegistrationState): RegistrationState => reg.bindLegacyScope(JSON.parse(JSON.stringify(s)));
++  const start = (s: RegistrationState, key: string) => reg.startCheckout(s, { quoteId: s.quote?.id ?? 'none', consents: consented, operationKey: key }, deps);
++
++  for (const mode of ['processing', 'unknown'] as const)
++    it(`${mode}: no checkout outcome, resume, restart or new checkout applies, before or after a reload`, () => {
++      for (const s of [submitted(mode), reload(submitted(mode))]) {
++        for (const outcome of reg.CHECKOUT_OUTCOMES) {
++          const step = reg.resolveCheckout(s, outcome);
++          expect([outcome, step.result.ok]).toEqual([outcome, false]);
++          expect(step.state).toBe(s);
++        }
++        // Review's "Edit my details instead" was resolveCheckout('back') then resumeSignup.
++        expect(reg.resumeSignup(reg.resolveCheckout(s, 'back').state).result.ok).toBe(false);
++        expect(reg.restartSignup(s).result).toMatchObject({ ok: false, code: 'conflict' });
++        for (const key of [KEY, OTHER]) expect(start(reg.requestQuote(s, deps).state, key).result).toMatchObject({ ok: false, code: 'conflict' });
++        expect(s.checkout).toMatchObject({ operationKey: KEY, status: mode === 'processing' ? 'pending' : 'unknown' });
++      }
++    });
++
++  it('an unsubmitted open checkout can still be closed from Review and paid again with a new key', () => {
++    let s = reg.resolveCheckout(opened(), 'back').state;
++    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
++    expect(start(s, KEY).result.ok).toBe(false);
++    expect(start(s, OTHER).result.ok).toBe(true);
++  });
++
++  it('a genuine payment failure still recovers through a fresh quote and a new key', () => {
++    let s = reg.setActivationPlan(submitted('processing'), 'payment_failed').state;
++    s = reg.refreshActivation(s).state;
++    expect(s.activation?.paymentState).toBe('failed');
++    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
++    expect(start(s, KEY).result.ok).toBe(false);
++    expect(start(s, OTHER).result.ok).toBe(true);
++  });
++
++  it('unknown → Stripe confirms nothing charged still recovers through a fresh quote and a new key', () => {
++    let s = reg.resolveUnknownPayment(submitted('unknown'), 'not_charged').state;
++    s = reg.requestQuote(reg.resumeSignup(s).state, deps).state;
++    expect(start(s, OTHER).result.ok).toBe(true);
++  });
++
++  it('a completed payment cannot be restarted or reopened', () => {
++    const s = reg.refreshActivation(submitted('processing')).state;
++    expect(s.checkout?.status).toBe('paid');
++    expect(reg.restartSignup(s).result).toMatchObject({ ok: false, code: 'conflict' });
++    expect(reg.resolveCheckout(s, 'back').result.ok).toBe(false);
++    expect(start(reg.requestQuote(s, deps).state, OTHER).result.ok).toBe(false);
++  });
++});
++
++describe('a completed payment whose scope cannot be established (REPAIR_004 addendum 1)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  function completedThenEdited(): RegistrationState {
++    let s = reg.requestQuote(completeDraft(1), deps).state;
++    s = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++    s = reg.refreshActivation(reg.resolveCheckout(s, 'paid').state).state;
++    s = reg.savePharmacy(s, 0, pharmacy(1, { name: 'Edited after payment', adminAssignment: { kind: 'other', fullName: 'Replacement Admin', email: 'replacement@demo-pharmacy.example' } })).state;
++    const copy = JSON.parse(JSON.stringify(s));
++    delete copy.checkout.scope;
++    return reg.bindLegacyScope(copy);
++  }
++
++  it('keeps its completed status and history, and no covered details are invented from the edited draft', () => {
++    const s = completedThenEdited();
++    expect(s.checkout).toMatchObject({ status: 'paid', operationKey: KEY });
++    expect(s.checkout?.scope).toBeUndefined();
++    expect(s.activation).toMatchObject({ paymentState: 'confirmed', provisioningState: 'ready', emailState: 'sent' });
++    expect(reg.coveredDetails(s)).toBeNull();
++    const previews = reg.accessEmailPreviews(s);
++    expect(previews.owner.pharmacyNames).toEqual([]);
++    expect(JSON.stringify([previews.owner, previews.store_admin, previews.expired_resend])).not.toMatch(/Edited after payment|Replacement Admin/);
++  });
++});
+diff -ruN e2e/public.repair004-addendum.spec.ts e2e/public.repair004-addendum.spec.ts
+--- e2e/public.repair004-addendum.spec.ts	1970-01-01 06:00:00.000000000 +0600
++++ e2e/public.repair004-addendum.spec.ts	2026-10-29 19:20:00.415556448 +0600
+@@ -0,0 +1,192 @@
++import { expect, test, type Page } from "@playwright/test";
++import { recordContrast, textContrast, textFailures } from "./contrast";
++import { assertGate, measure, record, setTheme, THEMES } from "./gate-m";
++
++// REPAIR_004 addendum 1 anonymous regressions. No credentials are used here.
++// R4-N01: a submitted (processing/unknown) payment can't be discarded or made
++//         retryable from Review, back navigation, reload or the stand-in.
++// Completed legacy record with no provable scope: honest unavailable history.
++const KEY = "cyph-portal-demo:v1:public";
++type Mode = "processing" | "unknown";
++
++const snap = (page: Page) =>
++  page.evaluate((k) => {
++    const s = JSON.parse(sessionStorage.getItem(k)!).state.s;
++    return {
++      checkout: (s.checkout?.status ?? null) as string | null,
++      key: (s.checkout?.operationKey ?? null) as string | null,
++      payment: (s.activation?.paymentState ?? null) as string | null,
++    };
++  }, KEY);
++
++async function settle(page: Page, url: string) {
++  await page.goto(url);
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++}
++
++async function load(page: Page, scenario: string) {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption(scenario);
++  await page.getByRole("button", { name: "Load", exact: true }).click();
++}
++
++async function openCheckout(page: Page) {
++  await load(page, "prefilled_one_store");
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++}
++
++async function submit(page: Page, mode: Mode) {
++  await openCheckout(page);
++  if (mode === "processing") await page.getByRole("button", { name: "Payment processing → activation (waiting)", exact: true }).click();
++  else await page.getByTestId("outcome-unknown").click();
++  await page.waitForURL(mode === "processing" ? "**/demo/activation" : "**/demo/checkout-incomplete");
++  return snap(page);
++}
++
++for (const mode of ["processing", "unknown"] as const)
++  test(`R4-N01 ${mode}: Review, reload, direct navigation and Back never close the submitted payment or open another`, async ({ page }) => {
++    const before = await submit(page, mode);
++    expect(before.checkout).toBe(mode === "processing" ? "pending" : "unknown");
++    for (let i = 0; i < 2; i++) {
++      await settle(page, "/demo/register/review");
++      if (mode === "unknown") {
++        // Review sends an unknown payment straight to C14 (existing), where payment stays locked.
++        await page.waitForURL("**/demo/checkout-incomplete");
++        await expect(page.getByTestId("incomplete-continue")).toBeDisabled();
++      } else {
++        await expect(page.getByTestId("review-submitted")).toContainText("already submitted a payment");
++        await expect(page.getByTestId("continue-payment")).toBeDisabled();
++      }
++      await expect(page.getByRole("button", { name: "Edit my details instead" })).toHaveCount(0);
++      await expect(page.getByText("Your checkout on Stripe is still open")).toHaveCount(0);
++      await page.reload();
++    }
++    await settle(page, "/demo/stripe");
++    await page.waitForTimeout(1200);
++    for (const id of ["outcome-paid", "outcome-back", "outcome-closed", "outcome-unknown", "outcome-declined"]) await expect(page.getByTestId(id)).toHaveCount(0);
++    if (mode === "processing") await expect(page.getByTestId("checkout-submitted")).toContainText("already submitted");
++    // Browser Back to the stand-in page that once showed the outcome buttons.
++    await settle(page, "/demo/register/review");
++    await page.goBack();
++    await page.waitForTimeout(1200);
++    await expect(page.getByTestId("outcome-back")).toHaveCount(0);
++    await settle(page, mode === "processing" ? "/demo/activation" : "/demo/checkout-incomplete");
++    if (mode === "processing") await expect(page.getByRole("link", { name: "resume checkout" })).toHaveCount(0);
++    expect(await snap(page)).toEqual(before);
++  });
++
++test("R4-N01 preserved: an unsubmitted open checkout can still be closed from Review and paid with a new key", async ({ page }) => {
++  await openCheckout(page);
++  const old = (await snap(page)).key;
++  await settle(page, "/demo/register/review");
++  await page.getByRole("button", { name: "Edit my details instead" }).click();
++  await expect.poll(async () => (await snap(page)).checkout).toBeNull();
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const reopened = await snap(page);
++  expect(reopened.checkout).toBe("pending");
++  expect(reopened.key).not.toBe(old);
++});
++
++test("R4-N01 preserved: a genuine payment failure recovers through a fresh quote and a new checkout", async ({ page }) => {
++  await load(page, "activation_payment_failed");
++  await settle(page, "/demo/activation");
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Payment didn't go through");
++  const old = (await snap(page)).key;
++  await page.getByRole("button", { name: "Try payment again" }).click();
++  await page.waitForURL("**/demo/register/review");
++  await expect(page.getByTestId("review-submitted")).toHaveCount(0);
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const fresh = await snap(page);
++  expect(fresh.checkout).toBe("pending");
++  expect(fresh.key).not.toBe(old);
++});
++
++test("R4-N01 preserved: unknown → nothing charged recovers through a fresh quote and a new checkout", async ({ page }) => {
++  const before = await submit(page, "unknown");
++  await page.getByTestId("unknown-not-charged").click();
++  await page.getByTestId("incomplete-continue").click();
++  await page.waitForURL("**/demo/register/review");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const fresh = await snap(page);
++  expect(fresh.checkout).toBe("pending");
++  expect(fresh.key).not.toBe(before.key);
++});
++
++/** Pay and finish activation, edit the draft afterwards, then store it as a pre-R-013 build would (no scope). */
++async function completedLegacy(page: Page) {
++  await openCheckout(page);
++  await page.getByTestId("outcome-paid").click();
++  await page.waitForURL("**/demo/activation");
++  await page.getByTestId("activation-refresh").click();
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("You're in. Check your email.");
++  const raw = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!), KEY);
++  const s = raw.state.s;
++  delete s.checkout.scope;
++  s.quote = null;
++  s.draft = { ...s.draft, requestedStoreCount: 2, revision: s.draft.revision + 1, pharmacies: [{ ...s.draft.pharmacies[0], name: "Edited after payment" }, { ...s.draft.pharmacies[0], id: "demo_reg_ph_2", name: "Added after payment" }] };
++  await page.evaluate(({ k, v }) => sessionStorage.setItem(k, JSON.stringify(v)), { k: KEY, v: { state: { s }, version: 2 } });
++  await settle(page, "/demo/activation");
++}
++
++test("completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt", async ({ page }) => {
++  await completedLegacy(page);
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("You're in. Check your email.");
++  const tracks = page.getByTestId("activation-tracks");
++  await expect(tracks).toContainText("Confirmed by Stripe");
++  await expect(tracks).not.toContainText("$");
++  await expect(page.getByTestId("history-unavailable")).toContainText("can't show which pharmacies or what amount");
++  const main = (await page.locator("main").innerText()).toLowerCase();
++  for (const word of ["edited after payment", "added after payment", "try payment again", "pay again now"]) expect(main).not.toContain(word);
++  const s = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!).state.s, KEY);
++  expect(s.checkout.status).toBe("paid");
++  expect(s.checkout.scope).toBeUndefined();
++  expect(s.activation).toMatchObject({ paymentState: "confirmed", provisioningState: "ready", emailState: "sent" });
++  await settle(page, "/demo/references/email?variant=owner");
++  const preview = (await page.locator("main").innerText()).toLowerCase();
++  expect(preview).not.toContain("edited after payment");
++  expect(preview).not.toContain("added after payment");
++});
++
++test("REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots", async ({ page }) => {
++  test.setTimeout(180_000);
++  const screens: { name: string; url: string; ready: string; prepare: () => Promise<unknown> }[] = [
++    { name: "review-submitted", url: "/demo/register/review", ready: "review-submitted", prepare: () => submit(page, "processing") },
++    { name: "stripe-submitted", url: "/demo/stripe", ready: "checkout-submitted", prepare: () => submit(page, "processing") },
++    { name: "activation-history-unavailable", url: "/demo/activation", ready: "history-unavailable", prepare: () => completedLegacy(page) },
++  ];
++  for (const sc of screens) {
++    await page.setViewportSize({ width: 1440, height: 900 });
++    await sc.prepare();
++    for (const theme of THEMES)
++      for (const width of [375, 1440]) {
++        await page.setViewportSize({ width, height: 900 });
++        await settle(page, sc.url);
++        await setTheme(page, theme);
++        await page.reload();
++        await expect(page.getByTestId(sc.ready)).toBeVisible({ timeout: 5000 });
++        const g = await measure(page, `${sc.url} [REPAIR_004 addendum ${sc.name}]`, width, theme);
++        record("gate-m-repair004-addendum.jsonl", g);
++        assertGate(g);
++        const fails = textFailures(await textContrast(page));
++        recordContrast("contrast-repair004-addendum.jsonl", { screen: `${sc.url} [REPAIR_004 addendum ${sc.name}]`, width, theme, fails });
++        expect.soft(fails, `${sc.name} ${theme} ${width}`).toEqual([]);
++        await page.screenshot({ path: `test-results/repair004a-${sc.name}_${theme}_${width}.png`, fullPage: true });
++      }
++  }
++});

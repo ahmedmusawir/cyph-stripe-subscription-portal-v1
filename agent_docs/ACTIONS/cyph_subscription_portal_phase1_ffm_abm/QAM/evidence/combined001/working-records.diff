@@ -1,0 +1,480 @@
+diff --git a/RECOVERY.md b/RECOVERY.md
+index 23eb75b..5dbe1e4 100644
+--- a/RECOVERY.md
++++ b/RECOVERY.md
+@@ -5,7 +5,7 @@ Last action (2026-10-29 10:26): **AMENDMENT_001 COMPLETE (engineering), RULINGS
+   Uncommitted on `qa/ffm-abm-001-subscription-portal` @ 0d43a4c (REPAIR_001 committed). build 0 · tsc 0 · jest 156/156 ·
+   Playwright 131/131 · Gate M 220/0. Report: module `EVIDENCE/AMENDMENT_001_ENGINEERING_REPORT.md` · ZIP:
+   `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip` (+ `~/Downloads/`) · Session: `session_2026-10-29.md`.
+-Pending: Tony commits. Owned server :3104 stopped (no owned servers running); scratch copy r002 retained until asked. REPAIR_001 scratch deleted.
++Pending: Tony commits. Owned server :3104 stopped (no owned servers running); all scratch app copies deleted (r002 on 29 Oct).
+ Next step: independent QA on the combined candidate (AC-06a + REPAIR_001 retest) → JARVIS adjudicates.
+ 
+ Previous (2026-10-28 16:24): **REPAIR_001 COMPLETE (engineering) for FFM-ABM-001-SUBSCRIPTION-PORTAL** under RULINGS R-010
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md
+index 4fefea1..6f420e5 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AC_EVIDENCE_MATRIX.md
+@@ -1,35 +1,35 @@
+-# Independent AC evidence matrix
+-Owner: Cody; final dispositions belong to QA Lead.
++# Q2 AC evidence matrix
++Candidate 94251beab08dd26d7f56f4b8f2299a1e841892c5; execution HEAD same. Executor observations, not Lead verdict. All T01–T29 addressed; partial/unverified subcases remain explicit. Filenames below under evidence/q2 (cody-q2- prefix where applicable).
+ 
+-| AC | Planned test IDs | Observed evidence | Executor result | Lead disposition |
+-|---|---|---|---|---|
+-| AC-01 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-02 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-03 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-04 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-05 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-06 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-07 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-08 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-09 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-10 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-11 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-12 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-13 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-14 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-15 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-16 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-17 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-18 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-19 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-20 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-21 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-22 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-23 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-24 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-25 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-26 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-27 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-28 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-29 | Q1 to author | None | NOT EXECUTED | PENDING |
+-| AC-30 | Q1 to author | None | NOT EXECUTED | PENDING |
++| Test/AC | Observation | Evidence / limitations |
++|---|---|---|
++| T01 / AC-01 | FAIL / adjudicate | Repeated mode downgrade; normal anonymous HTML/RSC guards and real admin pass; controlled role tests mocked. Evidence: browser.json; query-boundaries.json; jest.json |
++| T02 / AC-02 | PASS observed | Real login, stale-expiry refresh with two token exchanges, one final global logout and cleared namespaces. Evidence: final.json; egress.jsonl |
++| T03 / AC-03 | PASS observed | Real staff/synthetic persona separation; UI denial and service payload denials. Evidence: browser.json; jest.json |
++| T04 / AC-04 | PARTIAL / FAIL | All 18 public + 9 account registry states exercised; load-error retry view fails; not all 87 design variants individually asserted. Evidence: extra*.jsonl; executed-browser-coverage.json |
++| T05 / AC-05 | PASS bounded | Normal 1/2/3-store registration, count reduction cancel/confirm and service invalid counts; >20 cap needs interpretation. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T06 / AC-06 | PASS observed | Leading zero, required/conditional, duplicates, summary focus via browser and service tests. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T07 / AC-07 | PASS observed | Reload/back/reset, two public tabs, namespace/identity clearing (identity switching mocked), final logout. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T08 / AC-08 | PASS observed | Literal arithmetic oracles 9900/14800/19700; DEMO10 8900/13800/18700; add 2450; invalid/unavailable covered. Evidence: independent-jest.json; browser.json |
++| T09 / AC-09 | PASS observed | Expired/stale quote and consent; independent exact millisecond boundaries and both clock buttons. Evidence: independent-jest.json; extra*.jsonl |
++| T10 / AC-10 | PASS observed | Anonymous checkout/forged success negatives/no card fields or live billing traffic. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T11 / AC-11 | PASS observed | Activation scenarios plus delayed recovery and email resend; service tracks asserted. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T12 / AC-12 | PASS observed | Submitted owner/admin previews in browser and service tests; synthetic local-only. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T13 / AC-13 | PASS observed | Abandoned/declined/unknown, not-charged and paid resolution; expired state seeded. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T14 / AC-14 | PASS observed | Valid/used/expired seeds; error→retry→neutral sent and no editable destination. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T15 / AC-15 | FAIL / partial | Counts/list/changed summary pass; load-error UI retry scenario fails. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T16 / AC-16 | PASS bounded | Add entry/draft retention/duplicates/change-card local return covered; every possible handoff reload permutation not asserted. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T17 / AC-17 | PASS observed | 1→2/2→3; browser double-click/failure/unknown; service same-key replay and sequential increments. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T18 / AC-18 | PASS observed | Browser attention/held invitation; service recovery same operation/store identity. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T19 / AC-19 | PASS bounded | Manage/cancel/resume/card/error/no-change and returns; full canceled portal outcome service/scenario coverage, not each browser action permutation. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T20 / AC-20 | PASS source/copy scope | Mock notices, provisional policy/brand inspected; Coach proposals not graded as approved scope. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T21 / AC-21 | ADJUDICATE | Final pills measured; visual parity differences and contrast findings; representative screenshots compared. Evidence: screenshots/; extra-account.jsonl; FINDINGS Q2-O04 |
++| T22 / AC-22 | PASS measured matrix | 220 baseline geometry rows across both themes/six widths plus supplementary states; inline-link exemption inherited and disclosed. Evidence: gate-m-public.jsonl; gate-m-account.jsonl |
++| T23 / AC-23 | FAIL / partial | Actual zoom 10 route/theme checks and full public keyboard flow pass; light text contrast fails; account keyboard/error/billing checked, not full account Tab-only data-entry workflow. Evidence: zoom-workflows-corrected.json; keyboard-corrected.json; contrast-shortfalls.json |
++| T24 / AC-24 | PASS observed | Import/boundary tests, SDK-free types, namespaces; candidate source review. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T25 / AC-25 | PASS within instrument limits | Source/import/protected diff + browser hosts + actual server undici metadata; not complete OS-level egress proof. Evidence: egress.jsonl; protected-diff.txt; jest.json |
++| T26 / AC-26 | PARTIAL | Removed routes/GET login 405/protected diff/logout/refresh tested; auth-confirm malformed-link runtime not independently exercised. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T27 / AC-27 | PASS observed | Clean default build/typecheck; 106 existing +9 independent Jest; 57 baseline browser; supplementary failures retained. Evidence: build.log; tsc.log; runner-summary.json; jest.json |
++| T28 / AC-28 | PASS package checks | Identity, helpers, logs, masked screenshots, value scan/controls/index/archive verification; no self-certification. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T29 / AC-29 | FAIL / partial | Registry/reset/hostile strings and quote clock work; load-error scenario unreliable; no-clock-state feedback observation. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
++| T30 / AC-30 | PENDING | Director ride and Architect closeout after Lead assessment. Evidence: executed-browser-coverage.json; jest.json; extra-results.json |
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md
+index e88352d..145f50c 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/FINDINGS.md
+@@ -1,7 +1,30 @@
+-# FINDINGS
+-Owner: Cody reports / QA Lead adjudicates
+-Status: NO CAMPAIGN RUN
++# Q2 findings — Executor observations; Lead adjudication required
++Candidate 94251beab08dd26d7f56f4b8f2299a1e841892c5. No product repairs. Prior Q1 findings/history remain in immutable Q1 packages and QAM_RECON_REPORT.
+ 
+-Finding ID, AC, candidate, severity proposal, reproduction, expected/actual, evidence, affected paths and risk; exact attributed Lead disposition; Architect repair instruction if needed; Engineer self-check/candidate; independent retest and reuse scope. No findings is not PASS before testing.
++## Q2-F01 — Light-theme rendered contrast below required threshold (AC-23, AC-21)
++Observed normal small text ratios 3.95:1 on tinted demo notice and 4.44:1 on several page surfaces, below 4.5:1. Independent DOM scan composites actual computed text/background colors across ancestors; black/white controls 21 and 1. Reproduced across public and account light-theme states. Evidence: contrast-shortfalls.json, extra*.jsonl, contrast-controls.json, masked account screenshots. Dark theme measured separately. Focus ring coral against white is below 3:1; light input boundary also below 3:1. These nontext cases require Lead applicability review; do not treat all borders as required meaningful boundaries. No blanket accessibility claim. Suggested classification: acceptance failure; Lead sets severity.
+ 
+-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
++## Q2-F02 — Account load-error scenario does not retain retry view (AC-04/15/29)
++Real admin → dashboard → Demo controls → Account load error (next load) → Load. Scenario stored as load_error, but after navigation settles dashboard displays ordinary subscription/pills; load-retry is absent. Hard retry click timed out in light and dark runs. Engine error/retry unit test passes; UI scenario does not provide reliable error/retry demonstration. Preserve both failures; no product repair. Root cause unproven (possible scenario navigation/remount consumes one-shot error). Evidence: extra-results/corrected-results JSON and logs; account scenario rows.
++
++## Q2-F03 — Repeated account mode parameters downgrade shared route to public checkout (AC-01)
++Anonymous GET /demo/stripe?mode=checkout&mode=portal, reverse order, and mode=card&mode=card return 200 rather than required login redirect. Positive controls single portal/card return 307 /login; checkout alone returns 200. No account payload markers observed in these downgraded bodies, so this is NOT evidence of account-data disclosure. Source compares string directly; arrays fall through to checkout. Contract says query parameters can add but never remove the auth requirement. Lead adjudicate contract failure and severity. Evidence: query-boundaries.json; shared route source at candidate. Repeated-parameter RSC variants not independently probed (limit).
++
++## Q2-O04 — Visual parity differences need Lead/design disposition (AC-21)
++Compared actual masked mobile light dashboard with approved account-billing__active_mist__mobile.png. Tokens/brand/panels broadly align and final count pill uses compact self-start as intended. Actual pharmacy cards put fields in stacked rows within an enclosing panel, whereas approved mobile design uses a two-column card arrangement without that surrounding pharmacy panel. Actual count is a bordered pill on the left versus plain right-side count in design; refresh line is absent in initial actual view. Demo strip and longer mock notice are known authorized differences. No claim of pixel parity; screenshots and reference provided for adjudication.
++
++## Q2-O05 — Clock feedback report narrowed (AC-09/29)
++Both public review and account confirmation: Advance 31 minutes updates offset, visibly expires active quote and disables payment; refresh clears consent. Public measured delta exactly 1860000 ms. Tony's broad inert report is not reproduced with active quotes. Controls have no explicit offset/result feedback when no active quote exists (source observation); this remains a usability observation, not a failed financial transition.
++
++## Q2-G06 — Coverage/instrument limits
++Live admin exercised; superadmin/member/role-less evidence remains controlled/mocked, as approved. No real-device Safari/full AT claim. Broad registry/state and layout coverage does not establish every one of 87 design-reference variants as an individually asserted browser state. Some busy/animation/transient variants and nontext contrast applicability remain unverified; detailed matrix marks limits, not blanket PASS. Read-only auth-confirm malformed-link runtime path not separately exercised; protected auth code diff unchanged. MAX_STORES=20 in pricing is a source-observed cap against broad repeat-N language; 1/2/3 covered, cap policy needs Lead interpretation (not a newly approved policy).
++
++## Execution/instrument corrections (not product fixes)
++- Setup auto-review blocked full .env.local symlink. Used physical dependencies and allowlisted public auth configuration only; no secret API keys or QA passwords in app/build environment.
++- Restored add-store fixture intentionally lacks identifiers/phone/software. Initial supplementary clock/zoom helpers assumed complete draft; added required synthetic inputs and reran affected checks; originals retained.
++- Initial supplemental scenario batch stopped at missing load-retry; remaining states separated with hard assertions intact. Proposal to use soft assertion rejected by automatic review and NOT used.
++- One worker login exceeded helper's 5-second expectation. No credential rejection established; later sessions and final login succeeded. Failure retained; outstanding light handoff assertion completed during final session with explicit 20-second dashboard readiness.
++- Keyboard helper initially used exact labels excluding required-field markers and unbounded evaluation loop; stopped owned helper, added explicit readiness timeout, corrected locator; final full Tab-only flow passed.
++- Recovery helper corrected duplicate text locator, incorrect link-sent test ID, and unconditional details toggle. Behavioral assertions unchanged; failed attempts retained.
++- Actual zoom first attempted chrome://settings in incognito (unsupported); anonymous persistent settings profile worked. Auth remained nonpersistent. Initial focus-color measurement raced hydration; corrected wait plus effective-theme check; both records retained.
++- Query probe initially used Response.status() instead of property; corrected helper before observations.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md
+index 87e32f6..97f6f0a 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_APPROVAL.md
+@@ -1,7 +1,17 @@
+-# QAM APPROVAL
+-Owner: QA Lead decision / Director release
+-Status: NO APPROVAL / NO RELEASE
++# Q2 approval and release — 28 October 2026
++QA Lead JARVIS: APPROVED WITH EXACT EXECUTION AMENDMENTS. Director Tony issuing current chat dispatch releases Q2.
++Product candidate: 94251beab08dd26d7f56f4b8f2299a1e841892c5
++Branch: qa/ffm-abm-001-subscription-portal
++Approved unchanged QAM_TEST_PLAN.md SHA-256: 42ebdbc6ac88ddf6733416aaa0374be1cc852400a6f1679ca631891ef7ddc24d
++Assignment: reviewed plan plus current dispatch. Supersedes HOLD/additional Q1 assignment in CYPH_Q1_LEAD_DECISION_001_2026-10-28.md; preserve history. No additional Q1 approval/package.
+ 
+-Preserve exact Lead decision and attribution/date/source; full product SHA; finalized plan SHA-256; contract/rulings identity; target/environment; scope/limits; exact amendments and diff if delegated; release conditions. Record Director release separately. Do not approve the hash of an unamended plan then execute an amended one.
+-
+-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
++## Binding execution amendments
++1. Verify candidate, branch/current changes; distinguish approved product SHA from docs-only execution HEAD. Product/config/test drift must be reported rather than tested under old identity.
++2. Opening same-run setup: owned isolated clean build/server, existing lock/dependencies physically inside scratch root, explicit CWD checks. Never build live repo/disturb unrelated servers; preserve earlier incident/failed attempts.
++3. Execute T01–T29/regression continuously, detailed matrix; all mapped journeys/states, both themes, responsive boundaries/final pills, access/quote/consent/idempotency/recovery. Member/superadmin controlled-role evidence labelled mocked.
++4. Source/import/diff and appropriate browser/server runtime evidence for mock-only business boundary. Existing shared-dev auth/read-only role lookup permitted; no live Stripe/email/provisioning/business writes. Disclose instrument limits.
++5. Keyboard/focus/rendered contrast/actual browser 200% zoom. Never substitute half-width or device scale. Group exact human assistance needs near end, pending until evidence; complete safe independent checks.
++6. Authorized admin credentials helper-only, no credentials/tokens/auth state in app/build environment/logs/screenshots/exports. Avoid unsafe inherited storage hooks/extra logout. Tony informed GLOBAL logout can end other sessions; perform once, last.
++7. Correct disposable QA helpers with failure/correction evidence. No product repair, weakened assertions or retry merely for green; record failures and continue unaffected checks.
++Continuous run; no routine milestones/plan pauses. Stop affected work only for genuine identity/target/auth/privacy/authority/instrument blocker. AC-30 pending Director ride/Architect closeout after Lead assessment, not an export blocker. One complete results ZIP and identical Downloads copy, then STOP for Lead adjudication/certification. No Git/account/role/deploy mutation or self-certification.
++Login resolution Director-reported; verify independently in Q2.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md
+index d99ccc7..8377536 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_CLEANUP_REPORT.md
+@@ -1,7 +1,2 @@
+-# QAM CLEANUP REPORT
+-Owner: Cody executes authorized cleanup / Lead accepts
+-Status: NOT EXECUTED
+-
+-Exact authorized paths/PIDs, ownership and retention decision; pre-clean evidence and secret-value scan while source exists; safe findings counts; delete only authorized temporary credentials/auth state; verify absence; final pattern scan of retained files and expanded export; unchanged product/test/config identity; final mock+real-gate configuration; Lead acceptance. No credential values/hashes. Director rotation separately attributed.
+-
+-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
++# Q2 owned-process hygiene (not final Lead cleanup certification)
++Owned server PID770622 port3108 stopped after one final logout. Existing 3001/3457 listeners untouched in Q2. All browser contexts closed; anonymous zoom profile and automatic error-context directories removed. No .auth state written by QA fixtures. Credential file retained for Lead-authorized final cleanup. Only QAM working-tree changes; approved plan unchanged. Scratch candidate/dependencies retained in /tmp, excluded from export. Historical Q1 build incident remains unresolved operational history. Final Lead retention/certification not performed.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md
+index 3307617..d543c2a 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_EXECUTION_REPORT.md
+@@ -1,7 +1,32 @@
+-# QAM EXECUTION REPORT
+-Owner: Cody / Q2
+-Status: NOT EXECUTED
++# Q2 execution report — attempt 001
++Executor Cody; 28 October 2026 UTC. Product candidate and execution HEAD 94251beab08dd26d7f56f4b8f2299a1e841892c5; branch qa/ffm-abm-001-subscription-portal. Approved plan hash 42ebdbc6ac88ddf6733416aaa0374be1cc852400a6f1679ca631891ef7ddc24d, unchanged. JARVIS approval/Tony release recorded in QAM_APPROVAL; historical HOLD superseded and preserved verbatim.
+ 
+-Start/end/timezone; candidate, execution HEAD, plan/approval identity; target/tool versions; ordered command/observed results and evidence; actual sign-in count; failures and helper corrections; unaffected tests continued; untested/blocked work; final source/config diff and configuration; next Lead decision.
++## Result for QA Lead
++Q2 returned with observed failures and explicit coverage limits; NOT certified. Review FINDINGS and AC_EVIDENCE_MATRIX. Contrast and load-error UI fail; repeated-mode behavior needs contract/severity adjudication. AC-30 pending Director/Architect, not an execution blocker.
+ 
+-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
++## Commands, identities and attempts
++CWD for all build/tsc/Jest/Playwright: /tmp/cody-q2-94251be (explicit shell CWD assertion before build). Product copied from clean approved candidate; 192 tracked product/config/test files byte-identical, no Git mutations. node_modules physically copied (not symlink); existing lock retained. Node v22.17.0/npm 11.15.0. App uses only allowlisted existing public auth config, not secret API keys or QA credentials. Existing configured shared-dev auth target retained, no guessed project.
++- npm run build: default Turbopack clean build, exit 0. Initial setup command rejected before execution; full env linkage never installed in Q2. Earlier Q1 in-repo build incident remains recorded, not erased by this successful isolation.
++- npx tsc --noEmit: exit 0 against fresh generated types.
++- npx jest --runInBand --json --outputFile=/tmp/cody-q2-jest.json: 9 suites,106 tests pass, exit 0.
++- npx jest --config=qa-jest.config.cjs --runInBand: 9 independent price/boundary checks pass, exit 0.
++- npx playwright test --config=qa.config.ts: 57 tests pass, exit 0. Public, account and six-width/two-theme Gate M independently rerun; inherited admin-setup/logout projects excluded. Helpers keep auth only in memory, no retries, no traces/video.
++- qa-extra.config.ts: 5 pass/2 fail; qa-corrected.config.ts: 10 pass/2 fail. Not additive unique-case success counts: corrected fixtures and previously unreached scenarios documented.
++- qa-recovery.config.ts: 2 pass/2 fail (helper selectors). qa-recovery-corrected: 1 pass/1 helper failure. qa-recovery-final, only T11: 1 pass. Preserve all attempts; never collapse history into an all-green count.
++- Standalone zoom/keyboard/query/final helpers: evidence and source retained; corrected instrument attempts explicitly distinguished.
++Full exact test names/statuses/durations: executed-browser-coverage.json; commands/config/helper sources in AUTOMATION/q2. Privacy-safe logs record actual failures; raw automatic error-context files excluded and removed.
++
++## Access and side effects
++Real admin login independently successful in Q2. Total helper sign-in submissions: 10. One setup expectation timed out at 5 seconds; no invalid-password conclusion. Final HTTP 200, admin dashboard observed. Controlled superadmin/member/role-less tests are MOCKED, no live second identity or role mutation.
++Final session test retained original tokens in memory and changed only cookie expiry metadata to stale; existing proxy issued two /auth/v1/token requests and dashboard remained accessible. This establishes refresh traffic, unlike a simple reload; no token/credential values retained.
++Exactly one global logout, last authenticated/browser workflow: HTTP 200, two mock namespaces before / zero after, protected dashboard returns login. Tony informed by release; other sessions may be revoked as authorized. No live billing/email/provisioning/business data mutation.
++Actual QA server PID 770622 on :3108 preloaded undici diagnostics subscriber. Captures method/category/allowlisted path only, no headers, bodies, query strings, identities or tokens. Runtime: auth token/user/logout and GET user_roles; loopback control observed. Browser hosts restricted to localhost:3108 in tracked journeys. Limits: undici events are not OS-wide socket proof; no attribution of every build-time font request, custom non-undici egress would require other instrumentation. Source/import and unchanged protected-path checks supplement this limit.
++
++## UI/accessibility/clock
++Actual Chrome settingsPrivate defaultZoom=2, independently read back; unchanged 1440 window →720 CSS px and DPR1→2. Ten final checks: plan/review/login/dashboard/confirm × light/dark, no overflow, actions visible/scrollable. Auth confined to separate nonpersistent context; persistent settings profile anonymous and deleted. Half-width baseline checks explicitly labelled reflow only, not zoom.
++Full public registration→activation Tab/typing/native-select/Space/Enter flow passed with zero mouse actions. Account keyboard activation, error-summary/focus and billing-return checks pass; full account data entry exclusively by Tab remains unverified. Sheet Escape/focus return tested across responsive matrix. Rendered text measurement alpha-composites actual ancestors with 21:1 and1:1 controls; light failures listed individually. Nontext focus/border colors captured; applicability needs Lead judgment. No broad WCAG/AT/Safari certificate.
++Clock active-quote checks both work and renew consent; no explicit clock-status display when no quote (source observation). Final pill measured compact/self-start and visually reviewed. Design parity differences disclosed.
++
++## Coverage limits and cleanup
++Every T01–T29 has actual execution/source evidence and explicit gaps in AC matrix, not an automatic PASS. All registry IDs reached; this is not proof of every transient variant among 87 design reference states. The results package is complete as an execution record, not a claim all acceptance requirements passed. No unapproved Coach owner-role/software support changes tested as requirements.
++Owned server stopped after final logout; browser contexts closed; anonymous zoom profile and automatic error-context folders removed. Existing :3001 PID420447/:3457 PID40320 left running; Q2 did not rebuild their output. No Q2 claim repairs Q1 continuity uncertainty. Scratch build retained /tmp/cody-q2-94251be with only public config; excluded from ZIP. Credential file retained for Lead-owned final cleanup. Product source/config/tests untouched, HEAD/plan hash unchanged. Final retention/certification belongs to Lead.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md
+index 0e70659..2914b05 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_RECON_REPORT.md
+@@ -1,7 +1,32 @@
+-# QAM RECON REPORT
+-Owner: Cody / Q1
+-Status: NOT EXECUTED
++# Q1 recon — attempt 001
++Date: 2026-10-28T06:47:41.558499+00:00
++Executor: Cody. Candidate and execution HEAD: 94251beab08dd26d7f56f4b8f2299a1e841892c5.
++Expected branch verified; initial tracked/untracked status empty. Foundation ancestry and full changed-path inventory in evidence/q1/identity.txt. Protected diff empty for enumerated existing paths. No Git mutations or product source repairs. Final tracked changes restricted to QAM.
+ 
+-Actual identity and complete changed paths; source/contract observations; target/tool/browser readiness; auth/probe effects; independent contradictions and gaps; privacy/export instrument checks; safe resume points. Attach actual recon output, not only a summary.
++Director dispatch supplied candidate and QA branch, resolving stale NOT_READY and engineering pending-commit records. Active R-008/R-009 override historical all-gated/superadmin-only requirements. Owner-role and software-support proposals remain unapproved, excluded scope. Governing upstream Hub identity remains unavailable as declared in PROVENANCE.
+ 
+-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
++## Observations and preflight
++Node v22.17.0 / npm 11.15.0; installed dependencies reused, no installation or lock change. Chrome via installed Playwright launched for bounded readiness. Credentials ignored and untracked, schema presence checked without values. Existing .env.local configuration used; HTTPS Supabase host shape verified in memory, no alternate project guessed. GAP: external corroboration of configured project identity and historical credential rotation remains Director-owned; configuration shape alone cannot establish either.
++Bounded probe: {"phase": "Q1 bounded readiness only", "time": "2026-10-28T06:45:29.551Z", "signInAttempts": 1, "globalLogouts": 0, "credentialSchema": true, "target": {"https": true, "supabaseHost": true, "configuredHostRecordedPrivately": true}, "publicEntry": "/demo/register/plan", "publicBodyVisible": true, "anonymousDashboard": {"status": 307, "location": "/login"}, "adminDashboard": false, "authResult": "BLOCKED: did not reach dashboard; no sensitive error captured"}
++A real-login success is readiness only, not acceptance. No persisted browser auth, screenshots, traces or global logout. Existing account sessions are intentionally not revoked. Login may create auth/audit activity. Browser context closed.
++
++## Build attempts and environment incident
++Declared scratch: /tmp/cody-q1-94251be-build, tracked product bytes copied from clean candidate, node_modules and .env.local symlinked; QA credential file excluded. No dependency or config repair.
++Attempt 1: command npm run build accidentally executed at repository root, completed successfully, replacing generated .next output potentially used by unowned PID 40320 on :3457. Attempted stop found process already finished. This violates requested build isolation. Product source/HEAD unchanged, but existing-server continuity is NOT proven. No server restart or output rollback attempted. Treat as QA environment incident, not product PASS. Director owns any operational restoration decision. Do not claim existing servers undisturbed.
++Attempt 2: npm run build at scratch path failed: Turbopack rejects node_modules symlink outside filesystem root. Preserved failure; environment/setup issue, not proven product defect.
++Attempt 3: npm run build -- --webpack at scratch path completed. Supported command flag, no product configuration change. Default isolated Turbopack build remains unverified; Q2 should use an isolated local dependency copy/installation if default-build equivalence is required.
++Owned scratch server port 3107 PID 750112 used for probe; stop only this PID at Q1 exit. Unowned 3001 PID 420447 and 3457 PID 40320 remained listening at observation. Listening alone is not a functional continuity verdict.
++
++## Evidence/provenance
++800 manifest comparisons: original delivered FILE_INDEX has 24 changed mutable records; installed E2 manifest has zero mismatches at initial QA comparison. Full per-path results retained. Frozen and installed identities distinguished. E2 reports/logs are engineering inputs only: 106 Jest / 59 Playwright claims not rerun here. No full Q2 tests executed. Final account Gate M, true zoom, contrast and clock-feedback behavior remain NOT RUN pending approved plan.
++Source recon: both demo clock buttons dispatch +1860000 ms; engines update offset and service dependencies read that offset. This does not prove immediate rendered feedback. Tony's inert-button report is preserved as unverified reported observation with targeted T09/T29 reproduction.
++Global logout is inherited per unchanged auth API diff and engineering report; Q2 schedules it last and explicitly discloses same-account session impact. No change to logout scope authorized here.
++
++## Gaps and handoff
++Lead review: plan/candidate/environment binding; build incident disposition; default isolated-build prerequisite; target/credential provenance gap; server-side egress instrumentation gap; true browser zoom instrument proof. No acceptance waivers implied. No second live identity required. Lint is not configured; audit advisories inherited per engineering input, not independently audited.
++Next: QA Lead approval of exact plan hash and candidate, then Director release. STOP before Q2. Approval/certification records remain unexecuted.
++
++Exit hygiene: owned server PID 750112 received TERM; in-memory browser closed; no auth-state file created. Credential source retained for Lead-governed cleanup. Downloads ZIP copy verified byte-identical. STOP-AUTH explicitly recorded in FINDINGS; live admin readiness remains blocked. Scratch build retained under /tmp for reproducibility, excluded from ZIP.
++
++## Q1 login correction — 28 October 2026, 07:41 UTC
++STOP-AUTH resolved. Initial dotenv parsing truncated an unquoted password at its comment marker; diagnostic attempt returned HTTP 400 invalid_credentials. Literal-value retry returned HTTP 200/admin. The first corrected helper checked visibility too early; adding an explicit heading wait confirmed the rendered dashboard. Director then quoted the credential in .env.qa.local. Normal dotenv parsing was rerun independently: HTTP 200, role admin, dashboard heading visible. Evidence: evidence/q1/probe-quoted-confirmed.json. No product repair; credential-file change made by Director. Five total Q1 login submissions across original and follow-up probes: two rejected, three successful. No global logout requests issued by these probes; diagnostic contexts blocked logout as a precaution. Contexts closed without persisted auth state. Existing failed observations retained as historical attempts, superseded by this successful readiness result. Q2 remains NOT RUN and awaits Lead approval plus Director release. Build isolation incident remains open; login success does not resolve it.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md
+index a7ee497..28e4af6 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_STATE.md
+@@ -1,15 +1,20 @@
+ # QAM state
+-As of 27 October 2026 · Asia/Dhaka
+-Module: FFM-ABM-001-SUBSCRIPTION-PORTAL
+-Phase: NOT_READY_FOR_Q1 — engineering handoff COMPLETE; waiting for the Director's candidate commit and QA branch.
+-Attempt: none.
+-Product candidate: pending Director commit of the E2 working tree (baseline HEAD `b1fbdda`).
+-Execution HEAD / full baseline / branch: Q1 resolves actual identities.
+-Expected branch: qa/ffm-abm-001-subscription-portal
+-Contract: ../ACCEPTANCE_SPEC.md v1.1 plus subject contracts and ../RULINGS.md (R-001…R-009).
+-Plan / plan SHA / Lead approval / Director Q2 release: NONE.
+-Writer: none. Engineering filled QAM_MANIFEST and HANDOFFS/ENGINEERING_HANDOFF only.
+-Latest package/receipt/stop: Engineering E2 review ZIP (../EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_E2_REVIEW_001.zip).
+-Next action: Tony commits candidate + creates QA branch → Cody Q1.
+-Certification and cleanup: NOT EXECUTED.
+-Update this concise index at every transfer. Authority is in attributed decisions, not this status label.
++Phase: Q2_RETURNED — AWAITING_LEAD_ADJUDICATION. Attempt001.
++Product candidate/execution HEAD: 94251beab08dd26d7f56f4b8f2299a1e841892c5
++Branch: qa/ffm-abm-001-subscription-portal
++Approved plan SHA-256: 42ebdbc6ac88ddf6733416aaa0374be1cc852400a6f1679ca631891ef7ddc24d (reviewed bytes unchanged).
++Approval/release: JARVIS/Tony 28 October 2026, QAM_APPROVAL.md.
++Historical CYPH_Q1_LEAD_DECISION_001_2026-10-28.md HOLD/additional Q1 assignment SUPERSEDED; copy preserved in HANDOFFS.
++Results: QAM_EXECUTION_REPORT, AC_EVIDENCE_MATRIX, FINDINGS. No certification.
++Canonical package: HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_Q2_REVIEW_001.zip
++Owned Q2 server/browser state closed; single final global logout completed. AC-30 pending Director ride/Architect closeout.
++Next owner: QA Lead adjudicates failures, coverage limits, final retention and certification. Executor stopped; no product repairs/Git mutations/deploy.
++
++## Combined retest identity stop — 2026-10-29T04:59:47.540733+00:00
++Status: STOP-IDENTITY; combined retest NOT STARTED.
++Dispatch: JARVIS-approved combined repair/owner-amendment retest, released by Tony, 29 October 2026.
++Observed branch: qa/ffm-abm-001-subscription-portal (correct).
++Observed HEAD: 0d43a4c343909467487b327e654e0650b21c9336 (REPAIR_001).
++Observed parent: 94251beab08dd26d7f56f4b8f2299a1e841892c5 (original failed candidate).
++The dispatch explicitly requires stopping if HEAD remains REPAIR_001. Amendment product/test/contract changes are staged, not committed; additional unstaged records also exist. No combined candidate or finalized plan binding recorded, no build/test/auth/logout executed, no Git mutations. Existing staged/unstaged/untracked records preserved.
++Resolution owner: Tony commits intended AMENDMENT_001. Resume by verifying new full HEAD, direct parent equals REPAIR_001, complete committed diffs and clean candidate product/config/test bytes; then bind exact delegated plan amendments and execute authorized continuous retest. No new Q1 required. Director walkthrough/certification/Architect closeout remain pending.
+diff --git a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md
+index 37286d1..0fef324 100644
+--- a/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md
++++ b/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/QAM_TEST_PLAN.md
+@@ -1,7 +1,169 @@
+-# QAM TEST PLAN
+-Owner: Cody drafts / QA Lead approves
+-Status: NOT AUTHORED
++# Q1 risk-based test plan — v1
++Status: DRAFT; NOT EXECUTED; QA Lead approval and Director Q2 release required.
++Candidate: 94251beab08dd26d7f56f4b8f2299a1e841892c5
++Branch: qa/ffm-abm-001-subscription-portal
++Executor: Cody. Contract: ACCEPTANCE_SPEC v1.1, APP_BRIEF/DATA_CONTRACT v1.2, IMPLEMENTATION_CONTRACT v1.1, R-001–R-009.
+ 
+-Test ID; mapped AC; risk/priority; preconditions/persona/scenario; independently derived expected result; method/commands; viewport/theme; evidence; negative controls; dependencies; permitted effects; regression; stop rules; cleanup/export. Every AC covered or explicitly ruled; Director ride is named human judgment. Include plan version/hash binding via separate approval file.
++## Execution rules and evidence
++Order: identity/privacy/environment → T01–03/T24–28 access and effects → T08–10/T17–18 financial integrity → remaining journeys → T21–23 UI/accessibility → T30 human judgment. All cases below remain NOT RUN for Q2. Preflight observations do not discharge acceptance cases.
++Use a QA-owned isolated candidate build on a free loopback port (proposed 3107); never replace the output of existing servers on 3001/3457. Fresh in-memory Chrome contexts, no storageState, traces, video or credential screenshots. Read credentials only inside local helper, never app/build environment; one existing admin pair only. No live member/superadmin credential required: those rules are mocked evidence. Recheck resolved shared-dev target and credential provenance/rotation before live use. Only authorized auth session activity and synthetic per-tab mutations permitted.
++Each result records ID, AC, UTC timestamp, full candidate and execution HEAD, command/CWD/tool versions, inputs/preconditions, expected/actual assertions, attempt/exit, sanitized evidence path and limitations. Screenshots mask real identity before capture. No raw request bodies/headers/cookies retained. Every negative has a positive control; preserve failed attempts and helper corrections.
++Q2 stops for candidate/branch drift, unresolved contract, wrong target, missing auth, unsafe evidence, untrusted instrument or unauthorized side effects. Record exact affected tests/owner/resume point; continue unrelated safe checks. Product repairs require writer handoff. Lead adjudicates severity and verdict. No Git mutation/deployment.
+ 
+-This is an authored future-state record, not execution evidence. Replace the preparation text when its owning seat performs the work; preserve actual failed attempts and attributed decisions.
++## Matrix and reductions
++Chromium installed Chrome: public anonymous and real admin; synthetic billing owner/store admin/member only inside protected account surface. Both Mist/light and Slate/dark. Every route/state listed in E2 inventory and UI_SPEC receives reachable-state assertion; enumerate registry 18 public + 9 account + 3 personas + 4 add outcomes + 4 activation outcomes. UI state coverage is not replaced by selectors: normal end-to-end paths also required.
++375/768/1440 for each distinct route/layout in both themes; 767/1023/1024 for breakpoint-sensitive drawer/table/review/confirm. All states receive functional checks; equivalent layout outcomes may share geometry proof only when identical component/layout and content length are documented. Longest/error/loading/denied/attention states get separate geometry checks. No reduction for final dashboard pills. Real-device Safari and assistive-technology certification excluded; keyboard/semantics/contrast and true 200% zoom remain required.
++Synthetic fixtures: Jordan/Sam and .example recipients, invalid-checksum identifiers 0000000/0000000000 plus unique variants, duplicate 0000099, existing.owner@demo-pharmacy.example; never real customer data. Direct service tests use deterministic clocks and stable keys; expected arithmetic is specified here independently of implementation.
++
++## T01 — AC-01 — Public entry and account-management access
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++In a fresh anonymous context visit / then complete registration; directly request every protected route with HTML and RSC headers. Repeat with forged role cookies, query, metadata and storage. Assert public navigation never requires login and denied bodies contain no account names, amounts or controls. Run mocked-role checks at predicate/session/layout/page/login layers for admin, superadmin, member and absent role; label these mocked.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T02 — AC-02 — Real auth preserved
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Use the single authorized admin through real /login, assert dashboard heading and role label, reload and exercise session refresh. Count sign-ins. Run logout only last in Q2 with Director aware of global-session effect; assert both mock namespaces clear and protected routes deny. Never infer auth from mock payment.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T03 — AC-03 — Protected demo personas
++Priority: P0. Preconditions: isolated synthetic baseline; real admin session for account UI; mocked roles for denial variants.
++With real staff session switch synthetic billing_owner/store_admin/member. Inspect UI and direct service results: both nonowners receive no financial/card/invoice payload and all mutations deny; forged capability input remains denied.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T04 — AC-04 — Route and state coverage
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Enumerate every C01–C17 state in UI_SPEC and all scenario registry values, map route/entry/action/result. Follow every internal link and deep-link missing drafts/operation IDs; assert safe explanatory recovery. Retired /demo/sign-in redirects to real login.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T05 — AC-05 — Plan/count and repeat-N
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Complete normal registration with counts 1,2,3. Reject 0/negative/fractional values. Fill three pharmacies then reduce count: cancel preserves all; confirm removes only surplus; payment cannot start with fewer than N records.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T06 — AC-06 — Owner/pharmacy validation
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Submit empty/malformed owner and pharmacy forms, then valid synthetic records. Verify leading-zero 7-digit NCPDP and 10-digit NPI strings, conditional Other software and other-admin requirements, retained values and error-summary field focus. Job title cannot grant permission.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T07 — AC-07 — Draft/edit continuity
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Back/edit/reload each completed step; inspect only synthetic storage field names and sanitized before/after values. Material edit invalidates quote. Separate tabs and public/account namespaces remain isolated. Reset each namespace independently and exercise identity-change clearing with mocked identity, not a second live user.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T08 — AC-08 — Quote and price coherence
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Independently compute 9900+4900*(N-1) for N=1,2,3: 9900/14800/19700; DEMO10 due-now 8900/13800/18700 with unchanged recurring. Invalid code has no discount; missing quote is unavailable, never zero. Add due-now is 2450 for 1→2 and 2→3.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T09 — AC-09 — Quote freshness and consent
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Fetch quote; omit each consent in turn; reject confirmation without mutation. Change code/count/details or refresh quote: old ID/revision and prior consent must fail. Inject just-before/exact/after expiry; then use real demo clock button on review and add-confirm. Busy controls prevent duplicates.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T10 — AC-10 — Initial checkout boundary
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Walk local checkout paid/declined/back/closed/unknown outcomes. Assert no editable card inputs or Stripe requests; cancel/decline preserve draft and inactivity. Forge success URL and navigate activation directly: neither payment nor session is created.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T11 — AC-11 — Activation separation
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Walk waiting payment→confirmed→provisioning→ready and delayed/payment-failed/email-failed branches; record independent financial/setup/email tracks. Paid delay must not offer repayment; simulated resend changes only delivery track.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T12 — AC-12 — Owner versus admin email
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Compare owner-as-admin with other-admin registration. Preview synthetic recipients and submitted pharmacy names; owner retains access and nominated admin has separate invitation. Assert no outbound mail request.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T13 — AC-13 — Abandoned and unknown checkout
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Abandon/decline then resume and compare values. Expired checkout requires restart. Unknown outcome prevents new payment attempt and avoids claiming no charge; resolve status safely.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T14 — AC-14 — Access links
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Exercise valid/expired/used/request/sent/error access-link states. Request feedback stays generic; no editable unauthenticated destination or live token; valid action reaches labelled local setup reference only.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T15 — AC-15 — Account summary
++Priority: P1. Preconditions: isolated synthetic baseline; real admin session for account UI; mocked roles for denial variants.
++Check active/loading/error/retry/empty/past-due/cancel-scheduled/canceled dashboard with seed and changed account. Assert list/count/recurring consistency and invitation-pending distinct from unpaid. Recheck final Pill self-start alignment on actual candidate.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T16 — AC-16 — Add-store entry and recovery
++Priority: P1. Preconditions: isolated synthetic baseline; real admin session for account UI; mocked roles for denial variants.
++Enter add-store via dashboard and OwedBook. Back/reload/change-card return/failure preserve draft/admin choice. Own and elsewhere duplicate identifiers block without revealing another owner.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T17 — AC-17 — Add-store payment/idempotency
++Priority: P0. Preconditions: isolated synthetic baseline; real admin session for account UI; mocked roles for denial variants.
++For both 1→2 and 2→3 submit twice rapidly, replay same operation key, reload pending and retry unknown. Pending/failed leave counts unchanged; success increments once and recurring increases exactly 4900. Definitive failure permits deliberate new-key retry; unknown does not.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T18 — AC-18 — Paid but provisioning delayed
++Priority: P0. Preconditions: isolated synthetic baseline; real admin session for account UI; mocked roles for denial variants.
++Choose attention outcome: retain one financial/coverage increment, pending setup and held invitation. Recover same operation/store and verify no additional 2450 payment or extra pharmacy.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T19 — AC-19 — Hosted billing/cancel return
++Priority: P1. Preconditions: isolated synthetic baseline; real admin session for account UI; mocked roles for denial variants.
++Walk manage/cancel/resume/card/invoice local handoffs. Close without change, refresh, apply explicit outcome and simulate launch error. Assert no invented card/cancellation change; whole-account cancel and unresolved policy timing remain clear.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T20 — AC-20 — Policy/brand honesty
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Inspect rendered policy, pricing, brand and support copy against contracts. Owner-role changes and pharmacy-software support restrictions discussed with Coach are pending proposals, excluded from grading as approved implementation. No commercial/SSO/ownership-verification claim.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T21 — AC-21 — Visual parity and themes
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Compare implemented screenshots and computed styles with approved design at both themes. Check Saira, central tokens, panels, table/cards, hover/focus link readability and theme persistence. Explicitly compare final dashboard Pill at mobile and desktop.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T22 — AC-22 — Mobile Gate M
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Measure scrollWidth/clientWidth and visible interaction targets >=44px at 375/767/768/1023/1024/1440 in both themes. Test drawer open, Escape, focus return; verify table and summary breakpoints. Include final account screens after pill change.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T23 — AC-23 — Keyboard and readable states
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Keyboard-only register→checkout and dashboard→add→billing, invalid summary navigation, modal/drawer focus and Escape. Use actual browser 200% UI zoom (Ctrl++ or browser setting, verify displayed 200% and CSS viewport change), never CSS transform/deviceScaleFactor/half-width substitute. At zoom verify content/actions on review/dashboard/confirm/login. Measure computed foreground/background contrast normal/hover/focus/error/disabled/status on both themes; normal text >=4.5:1, large text >=3:1 and meaningful UI/focus >=3:1; record exceptions for Lead, no blanket WCAG claim.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T24 — AC-24 — Mock service architecture
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Inventory imports and service boundaries: SDK-free types, no component fixture/business-client imports, pure service enforcement and no server-global state. Test independent tabs and denied capability payloads directly.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T25 — AC-25 — No live side effects
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Review complete diff and browser destinations plus server egress where instrumented. Allow only localhost and configured shared-dev auth. No business/Stripe/email/provisioning/schema/role writes or external application changes. Stop unexpected egress; browser-only capture cannot prove server absence.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T26 — AC-26 — Foundation regression
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Compare protected foundation files and lockfile; probe removed MC routes 404, GET auth/login 405 and real POST/logout/confirm baseline behavior. Verify disabled deployment scripts. Record inherited lint/audit limitations without upgrade.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T27 — AC-27 — Build and meaningful tests
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Build clean isolated tracked-file copy, no .next/cache, fixed lock; run generated-type-compatible tsc and relevant Jest suites there. Run actual-browser Q2 journeys after approval. Preserve failed build attempts; no in-place build while existing servers use repo output.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T28 — AC-28 — Handoff and privacy
++Priority: P0. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Validate evidence scanner with synthetic credential/JWT/cookie leak controls and clean fixture. Record full candidate/execution identities, sanitized timings and actual attempts. Verify explicit ZIP membership/hashes and exclusion of env/auth/build/dependencies; no app imports of QAM/design.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T29 — AC-29 — Review controls and reset
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++Exercise all enumerated scenario controls, each persona/outcome, reset and hostile script/HTML/URL strings. Confirm inert text, no arbitrary scenario execution, no account data in public controls. For Advance 31 minutes compare offset +1860000, visible feedback and quote invalidation immediately, after action and reload; distinguish engine effect from missing UI feedback.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## T30 — AC-30 — Director ride and closeout
++Priority: P1. Preconditions: isolated synthetic baseline; anonymous public context or explicitly protected account context as applicable.
++After Lead verdict request Director ride of registration, add success/failure, owner/nonowner billing; capture actual findings/acceptance. Architect owns closeout; Lead owns retention/cleanup. No executor approval or invented ride result.
++Evidence: sanitized assertions, state/count/amount snapshots where relevant, browser measurements/screenshots for visible behavior; command exit and fixture details for service checks. Reset owned synthetic state after this case; retain failure evidence.
++
++## Cleanup and approval boundary
++At Q2 end close owned contexts, stop only recorded owned server PID, remove disposable auth state (none intended), restore intended mock mode and verify product/protected diff. Preserve credential file until Lead-authorized final cleanup and value scan. Scan selected contents and expanded ZIP, index each member with path/source/purpose/size/SHA-256, verify archive and Downloads copy. QA Lead must approve exact plan hash, candidate, target, exclusions and unresolved recon gaps; Director must separately release Q2.
+diff --git a/agent_docs/SESSIONS/session_2026-10-29.md b/agent_docs/SESSIONS/session_2026-10-29.md
+index 4c16a02..26fde8e 100644
+--- a/agent_docs/SESSIONS/session_2026-10-29.md
++++ b/agent_docs/SESSIONS/session_2026-10-29.md
+@@ -25,3 +25,4 @@
+ **ZIP receipt:** `EVIDENCE/FFM-ABM-001-SUBSCRIPTION-PORTAL_AMENDMENT_001_REVIEW.zip` — 43 members, 525,860 bytes, SHA-256 `d98fe4ce9378f234b813246135bb10f8f799c1afcea731bc80b80754affb4088`; byte-identical copy in `~/Downloads/`. Privacy scan 0 hits (controls 4/0).
+ **Response:** `agent_docs/RESPONSES/response_2026-10-29_102600_amendment-001-ffm-abm-001.md`
+ - Director: "plz kill the server and stand by" → stopped owned :3104 (PID 863693, cwd verified); PID 40320 untouched. Standing by.
++- Director: "delete the r002 scratch copy" → deleted scratchpad r002 (703 MB; no process used it). No scratch app copies remain.

@@ -1,6 +1,9 @@
 # FFM-ABM-001-SUBSCRIPTION-PORTAL
 Version 1.0 · 27 October 2026 · Asia/Dhaka · Architect: JARVIS/Astra · Director: Tony
 
+## Current status (30 Oct 2026)
+**Gate Q: PASS for the exact tested snapshot (JARVIS / QA Lead)**, R5-O03 retained as nonblocking. Documentation closeout complete; commit binding PENDING; push/integration Director-owned; deployment/Gate D NOT DONE. Start at `STATE.md` (current block) and `QAM/REVIEW_START_HERE.md`.
+
 ## The outcome
 A working frontend demonstration of registration, account billing and adding pharmacies, using approved design v1.0 and mock business services. Registration is public (no login); account management requires a real admin or superadmin login using the inherited auth (RULINGS R-008/R-009). No live payments, provisioning, email, SSO or deployment.
 

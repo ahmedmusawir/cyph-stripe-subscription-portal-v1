@@ -1,0 +1,24 @@
+Continue
+First name
+Continue
+First name
+Last name
+Work email
+Mobile phone
+Your role
+Continue
+Pharmacy name
+Street address
+City
+State
+ZIP
+NCPDP number
+NPI
+Store phone
+Pharmacy software
+Continue to review
+c1
+c2
+continue-payment
+outcome-paid
+activation-refresh

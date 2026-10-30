@@ -105,3 +105,136 @@ Future amendment record: ID; date/seat; approving source; original observation; 
 - **Unchanged:** database, RLS/RBAC, stored roles, live auth, Stripe, email, provisioning, vendors, dependencies; the real admin/superadmin gate (R-008/R-009); exact R-011 declaration, unchecked default, strict boolean validation, review summary, Me / Someone else; quote/consent rules; REPAIR_001 behaviour.
 - **Affected ACs/files:** AC-05 and AC-06a wording extended (ACCEPTANCE_SPEC v1.2→v1.3; nothing removed); DATA_CONTRACT v1.3→v1.4 (§6 initial purchase, §10 binding); UI_SPEC C05/C06/C14 hold/closed states; internal `src/types/portal/state.ts` (`closedReason`; not the frozen view contract, so `portal-contract.ts` is unchanged); ACCEPTANCE_LEDGER; QAM engineering handoff §9.
 - **Required regression:** both CR-F01 reproductions (current UI; legacy draft) refused at service and UI, with valid recovery after explicit acceptance; reload/direct navigation; same-key replay; processing/unknown holds; completed history preserved; bounded CR-F02 instrumentation; 1/2/3/21 stores; count reduction/restoration; invalid counts; REPAIR_001 and AMENDMENT_001 regressions.
+- **R-012 addendum 1 (29 Oct 2026, manual review; Director finding, QA Lead instruction):** on C14, the `payment_unknown` introduction said "Payment wasn't completed" while its warning says payment is still being checked. For the unknown state **only**, the introduction is now "Your details are saved. We're checking your payment status. Please don't pay again yet." The payment lock (Continue/Review disabled, "don't pay again") and explicit demo recovery are unchanged; resumable/declined keep "Your details for N pharmacies are saved. Payment wasn't completed, so your account isn't active yet." This deviates from the received design copy (`_design/…/checkout-incomplete.html` used the resumable sentence for every state), which is preserved as history. Per the QA Lead, a focused rendered check of unknown and confirmed-unpaid states is sufficient; no separate full retest campaign. Base `d6fe678` (Director commit of REPAIR_002).
+- **R-012 addendum 2 (29 Oct 2026; QA Lead authorization):** simplify the public activation demo controls.
+  - **Finding (observed demo usability, not an engine failure):** the Director tried every "Next activation check" option, saw no visible change, and saw the selection return to "ready". Reproduced on `d6fe678` + ADDENDUM_001 (24 scenario × option combinations):
+    - The option only applied to the *next* Refresh status, so selecting it changed nothing on screen.
+    - Three states (email failed, payment failed, ready) have no Refresh status, so the option had no effect there.
+    - Loading any scenario resets it to `ready`.
+    - Every Refresh outcome matched the engine rules, so no engine failure was reproduced.
+  - **Change:**
+    - "Next activation check" is removed from the public demo bar.
+    - **Registration scenario → Load is the single way to choose a named activation state.** The six states are waiting for payment, provisioning, delayed setup, email failure, payment failure and ready. Each loads on `/demo/activation` as named and is not advanced or reset before the reviewer acts.
+    - Customer actions (Refresh status, Resend access email, Try payment again) stay on the page, separate from the demo controls, and progress each state as before.
+  - **Unchanged:** the activation engine, including the `activationPlan` field, which stays at its seeded `ready`. Also unchanged: payment, owner-declaration and R-012 safeguards; pending/unknown honesty and duplicate-payment prevention; completed history; ADDENDUM_001 wording and evidence.
+  - **Base:** `d6fe678` + uncommitted ADDENDUM_001. Per the QA Lead, focused verification only.
+
+## R-013 — REPAIR_003: a submitted payment stays bound to its quoted scope; closed checkout keys are single-use (JARVIS dispatch, R-010 route)
+- **ID / date / seat:** R-013 · 29 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Repair authorized by JARVIS under the existing R-010 repair route after Cody's REPAIR_002 RETEST_001 (`FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_002_RETEST_001_REVIEW.zip`, SHA-256 `a38718e2d5ff19f954a293994b24575da37e2931777b9df33fc285dd1936bd80`). No business decision is made here.
+- **Approving source:** JARVIS dispatch, 29 Oct 2026: "R2-F01: processing/unknown payments must remain bound to their submitted pharmacy scope and price. Later draft edits must not become paid/provisioned under that original payment. Preserve honest recovery, completed history and duplicate-payment protection. Do not resolve this by charging again for in-flight money." … "R2-F02: enforce fresh operation keys after closed-checkout recovery at the service boundary. Preserve valid same-operation replay."
+- **Base:** `qa/ffm-abm-001-subscription-portal` @ `d6fe67839961fcbbf801b0bb04d3a2522e7b1f36` + uncommitted R-012 addenda 1 and 2 (preserved).
+- **Repair semantics (frontend / mock service only):**
+  1. **Recorded scope.** When a checkout opens, its record keeps the scope it was quoted and agreed for: store count, the pharmacy entries, discount code and due-now amount (internal `CheckoutRecord.scope`). It is never changed afterwards. Seeded scenario checkouts carry the scope of their seeded details.
+  2. **Binding.** `checkoutHold` gains `scope_changed`: an unpaid checkout (open, processing or unknown) can move toward payment only while the draft still matches its recorded scope. Values are compared, not key order or revision numbers, so typing the original values back in matches again. It applies at the same service points as R-012 (replay, paid/processing outcome, unknown → paid, waiting → confirmed); a refusal leaves state unchanged. Order: owner declaration, then scope, then completeness. Open checkouts are still closed by any material edit (R-012), so in practice the new hold is what a *submitted* payment shows.
+  3. **Honest recovery, no second charge.** A submitted payment whose details changed is held, not closed and not charged again. The customer chooses:
+     - **"Use the details I paid for"** (`restoreSubmittedScope`): the draft goes back to the recorded scope (later edits are dropped on purpose), and that payment can then confirm exactly what it was quoted for. Available only for a submitted payment whose details differ.
+     - For unknown, **"Stripe confirms nothing charged"** stays available; then the edited details resume through a fresh quote, fresh consent and a new checkout with a new key. A processing payment can still resolve as failed (no charge).
+     - "Don't pay again" holds throughout: a second checkout cannot start while one is processing or unknown (unchanged duplicate-payment protection).
+  4. **Display.** Activation shows the amount and pharmacies of the recorded scope (the payment), not of a later draft.
+  5. **Single-use keys (R2-F02).** A checkout's operation key is spent once that checkout is closed or replaced: closed for changed details or withdrawn declaration, back, declined, unknown → nothing charged, resumed, or restarted after expiry. `startCheckout` refuses a spent key with `conflict` ("That checkout was closed. Start a new checkout to pay.") and leaves state unchanged. Spent keys are kept on the public registration state (internal `spentCheckoutKeys`) and survive resume and restart-after-expiry. Loading a demo scenario starts a new synthetic state. Valid same-operation replay of an open checkout is unchanged (idempotent, same handoff, no second checkout); a different key while one is open is still a conflict. The review page now renews its key whenever no checkout is open, so a recovery on the same page uses a new key.
+  6. **Persisted state.** Public storage version 2 → 3. A stored checkout without a recorded scope is bound to its draft only when the draft is provably unchanged: the checkout is open, or it is submitted and its draft is still `checkout_pending`, a state any edit leaves. An edited submitted record stays unbound and is held; there is no scope to restore, so the page says it can't match the payment and points to support ("don't pay again"). Unknown → nothing charged stays available. Closed and paid records are untouched.
+- **Unchanged:** completed payment history, which later edits never close, reverse or rewrite; R-011/R-012 owner-declaration rules and holds; R-012 open-checkout closing; quote/consent rules; CR-F02 bounded work; addenda 1 and 2; database, RLS/RBAC, live auth, Stripe, email, provisioning, vendors, dependencies.
+- **Affected ACs/files:** AC-10 and AC-13 wording extended (ACCEPTANCE_SPEC v1.3→v1.4; nothing removed); DATA_CONTRACT v1.4→v1.5 (§6 initial purchase, §10 storage version); UI_SPEC C05/C06/C14 scope-hold states; internal `src/types/portal/state.ts` (`CheckoutScope`, `scope`, `spentCheckoutKeys`; not the frozen view contract, so `portal-contract.ts` is unchanged); ACCEPTANCE_LEDGER; QAM engineering handoff §9.
+- **Required regression:** processing and unknown × pharmacy / count / code edits refused at the service and the UI; original-scope confirmation after restore; nothing-charged recovery with a fresh quote and a new key; spent-key refusal after every closing path plus valid replay; storage-v2 binding; the R-012 suite, the six activation scenarios, the 21-store journey and Gate M public.
+
+### R-013 addendum 1 — REPAIR_004: legacy binding from retained evidence; completed display from the paid scope; dark alert focus ring (JARVIS dispatch, R-010 route)
+- **ID / date / seat:** R-013 addendum 1 · 29 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Repair authorized by JARVIS after Cody's REPAIR_003 RETEST_001 (`FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_RETEST_001_REVIEW.zip`, SHA-256 `ef9097bdf7f6c8dbfa481025133295cce63cbe9005ab53e9a21ea46c95f3d436`). No business decision is made here.
+- **Approving source:** JARVIS dispatch, 29 Oct 2026: "R3-F01: reproduce Cody's actual R-011-generated legacy-v2 case. Do not assume an open legacy checkout proves the draft is unchanged. Bind scope/price only from reliable retained evidence. Otherwise hold the record without inventing scope, confirming edited details or encouraging another payment." · "R3-F02: completed activation must derive pharmacy/admin invitation claims and previews from the submitted scope and recorded activation outcome, not later draft edits." · "R3-O03: inspect the actual focus indicator and adjacent surfaces. Document applicability; make a small local contrast adjustment if needed."
+- **Supersedes R-013 point 6 (binding rule only):**
+  - **Evidence rule.** A stored checkout without a recorded scope is bound only from what the record still proves:
+    - (a) the quote the checkout was opened with is still held: same quote id, same draft revision and same store count. That quote's due-now amount is the price; nothing is recomputed. Every R-011 and R-012 edit drops the quote and bumps the revision, so an edit always removes this evidence.
+    - (b) the record still equals its deterministic demo seed: the seed's checkout key and a value match with the seed's scope.
+  - **No open-checkout shortcut.** Being open is not evidence. The R-011 engine kept an open checkout through edits.
+  - **Status-independent.** The rule applies to paid records as well, so an unedited completed record keeps showing what it paid for.
+  - **Storage v1.** The v1 → v2 migration binds before it drops the quote. The owner declaration is still not assumed.
+  - **Unproven records** stay unbound and held at every R-012 gate:
+    - no scope is invented, the edited details never confirm, and there is no restore;
+    - no second checkout opens while one is pending or unknown;
+    - wherever the record shows (the stand-in for an open checkout, C06 for processing, C14 for unknown), the page says "We can't match this payment to your current details. Please don't pay again." with a support reference;
+    - unknown → nothing charged stays available.
+- **Completed display (R3-F02):**
+  - One engine read, `coveredDetails(state)`, returns what a live or completed payment covers: the recorded scope, or the draft when no live or paid checkout carries one.
+  - Activation names a nominated store admin, both in "a separate store invitation went to …" and in the "Preview …'s invitation" button, only when that admin is in the paid scope. Both still appear only once the recorded email outcome is `sent`.
+  - The C07 previews (owner, store admin, checkout unfinished, new link) and their plan line read the same covered details.
+  - Payment history (checkout and activation records) is unchanged by later edits.
+- **Focus ring (R3-O03):**
+  - Applicability: WCAG 1.4.11 needs 3:1 between a focus indicator and its adjacent colours.
+  - Measured on the dark C14 hold: the Tailwind ring (2px `--ring` outside a 2px page-colour offset) gave 4.37:1 against its inner offset but 2.99:1 against the warning tint outside it. The tint is 10% warning over a card, and the same low outer ratio applies to success-on-card (2.97).
+  - Change: a dark-only `--ring` of `12 93% 68%` is scoped to the Alert component. Calculated outer ratio ≥3.31 on all four tones over card and page; inner ≥4.85.
+  - Unchanged: the light theme, the global token and keyboard behaviour.
+- **Unchanged:** all other R-013 semantics (recorded scope, scope hold, restore, nothing-charged recovery, single-use keys, storage version 3); R-011/R-012; completed history; database, auth, Stripe, email, provisioning, vendors, dependencies.
+- **Affected ACs/files:** AC-10/AC-11/AC-12/AC-13 evidence (ACCEPTANCE_SPEC v1.4 → v1.5, wording extended); DATA_CONTRACT v1.5 → v1.6 (storage note); UI_SPEC C05/C06/C07; ACCEPTANCE_LEDGER; QAM engineering handoff §9.
+- **Self-found, not repaired (outside this authorization), R4-N01:** while a payment is processing, Review still shows "Your checkout on Stripe is still open" with "Edit my details instead". That action closes the processing checkout through `resolveCheckout('back')`, which the service accepts for any `pending` checkout. A fresh quote and a second checkout can then follow. Reproduced at the service and in the browser; no fix was made. JARVIS decides.
+
+### R-013 addendum 2 — REPAIR_004 ADDENDUM_001: a submitted payment can't be discarded or retried; unavailable history for an unprovable completed record (JARVIS dispatch, R-010 route)
+- **ID / date / seat:** R-013 addendum 2 · 29 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Authorized by JARVIS to close the self-found R4-N01 (R-013 addendum 1) before the next independent retest. No business decision is made here.
+- **Approving source:** JARVIS dispatch, 29 Oct 2026: "A submitted processing/unknown payment cannot be discarded or made retryable through Review's 'Edit my details instead', back navigation, direct service calls, reload or stale checkout controls. Distinguish an unsubmitted open checkout from submitted payment. Enforce legal transitions in the service, not just by hiding controls. Preserve genuine payment-failure and confirmed-nothing-charged recovery." · "when paid scope/price cannot be established, do not describe the current edited draft as the pharmacies or amount that were paid for. Show honest unavailable-history wording; preserve completed status and history without encouraging another payment."
+- **Legal transitions (service):**
+  - **Submitted payment** (`isSubmitted`, unchanged definition): a checkout that is processing (`pending` with payment `pending`) or `unknown`. It resolves only through Stripe's answer:
+    - processing → Refresh: confirmed, or failed under the demo failure plan;
+    - unknown → "Stripe confirms payment" / "Stripe confirms nothing charged".
+  - **Refused with `conflict` and state unchanged:** "Your payment was already submitted. Check its status instead of paying again."
+    - every `resolveCheckout` outcome (paid, processing, back, declined, unknown);
+    - `startCheckout`, same-key replay included;
+    - `restartSignup`. It also refuses a paid signup.
+  - `resumeSignup` already refused these states; unchanged.
+  - **Open checkout** (unsubmitted, `pending` with no submitted payment, or `declined`): unchanged. It can still be closed, edited, re-quoted and paid with a new key.
+  - **Preserved:** genuine failure (failed → "Try payment again" → fresh quote → new key); unknown → nothing charged → fresh quote → new key; R-013 scope binding, restore and spent keys; the demo harness (Load scenario / reset), which starts a new synthetic state and is not a customer path.
+- **Screens:**
+  - **C04 Review**, for a submitted payment, shows "You've already submitted a payment" with **See payment status**; there is no "Edit my details instead", and Continue is disabled. An unknown payment is still redirected to C14 first, as before.
+  - **C05 stand-in** shows "You've already submitted this payment" with no outcome buttons. A scope-changed submitted payment keeps its R-013 hold.
+  - **C06 waiting** reads "This usually takes a moment. Your payment has been submitted, so please don't pay again." The approved render's "nothing was charged and you can resume checkout" link is removed: a deviation from the received design, made because that link sent a submitted payment back to checkout.
+  - **C14** links a submitted processing payment to activation, not to "the open checkout".
+- **Unavailable history:**
+  - **Trigger:** a completed (`paid`) record with no provable scope, or a submitted one in the same position (R-013 addendum 1 evidence rule).
+  - **Status kept:** it keeps its completed status and records.
+  - **C06 wording:**
+    - Payment: "Confirmed by Stripe." (no amount)
+    - Setup: "Your pharmacies are set up in OwedBook." / "Setting up your pharmacies."
+    - Notice: "We can't show what this payment covered… we can't show which pharmacies or what amount it covered… you don't need to pay again", with support and reference `demo_act_01`.
+    - There is no payment action.
+  - **C07:** `coveredDetails` returns null for such a record. The owner and new-link previews name no pharmacies ("your pharmacies") and the plan line omits count and price. The checkout-unfinished preview describes the saved draft by design.
+- **Affected ACs/files:**
+  - ACCEPTANCE_SPEC v1.5 → v1.6 (AC-10, AC-11, AC-13 wording extended); DATA_CONTRACT v1.6 → v1.7; UI_SPEC C04/C05/C06/C07/C14
+  - ACCEPTANCE_LEDGER; QAM engineering handoff §9
+  - `src/services/portal/registration.ts`, `index.ts`; `ReviewView`, `CheckoutStandIn`, `ActivationView`, `CheckoutIncompleteView`, `EmailReferenceView`, `EmailPreview`
+- **R4-N01 status:** closed by engineering (self-check), pending independent retest.
+
+## R-014 — REPAIR_005: the checkout record governs the payment; stale activation flags never advance or discard it (JARVIS dispatch, R-010 route)
+- **ID / date / seat:** R-014 · 30 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Repair authorized by JARVIS after Cody's REPAIR_004 RETEST_001 (`FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_004_RETEST_001_REVIEW.zip`, SHA-256 `8f2dff8c423c46b2f8fb9ab816f1fe18fd4d8694a0869bc1bb85df9e7ce874b3`). No business decision is made here.
+- **Approving source:** JARVIS dispatch, 30 Oct 2026: "R4-F01: Legacy processing→unknown, then current nothing-charged resolution must not leave an activation path that can resurrect payment. A stale refresh must refuse without changing the terminal outcome." · "R4-F02: An unknown checkout with a retained activation.failed flag must not be discarded by resumeSignup or rendered Try payment again. Resolve the unknown payment authoritatively before allowing recovery. Do not infer payment failure solely from the conflicting old flag." · "Establish coherent precedence for checkout/payment states… Enforce these rules at the service boundary and reflect them in UI."
+- **Base:** `qa/ffm-abm-001-subscription-portal` @ `d6fe678` + uncommitted addenda 1/2, REPAIR_003, REPAIR_004 and its addendum 1 (all preserved).
+- **Precedence (`paymentPhase`, one engine read used by every writer and screen):** the checkout record governs; the activation flag counts only where it agrees with it.
+  | Checkout record | Activation flag | Phase | Meaning |
+  |---|---|---|---|
+  | `paid` | any | **paid** | history; never reversed, restarted or replayed |
+  | `unknown` | any (a stale `failed` included) | **unknown** | Stripe's answer is still owed; only "Stripe confirms payment" / "nothing charged" resolve it |
+  | `pending` | `pending` | **processing** | Refresh confirms, or fails under the demo failure plan |
+  | `pending` | other | **open** | still on the stand-in (R-012 rules) |
+  | `declined` | `failed` | **failed** | genuine failure: resume → fresh quote → new key |
+  | `declined` | other | **open** | declined on Stripe's page; retry there, or resume (R-012) |
+  | `abandoned`, `expired` | any (a stale `pending` included) | **not_charged** | terminal no-charge; can never become paid |
+  | none | — | **none** | |
+- **Service rules (refusals are `conflict` with state unchanged):**
+  - `refreshActivation` advances only a **processing** payment, or a **paid** one whose activation is `confirmed` and still being set up. Anything else is refused: "This payment was already resolved…" (or the submitted message for unknown).
+  - `resumeSignup` requires an `abandoned` or `declined` checkout. The former "or activation failed" clause is removed, so a stale failed flag on an unknown checkout never discards it.
+  - `resolveUnknownPayment('not_charged')` is terminal: it clears the activation, so no record is left behind to refresh.
+  - `resolveCheckout`, `startCheckout` and `restartSignup` keep their R-013 addendum 2 refusals for submitted and paid records; they already refused closed ones.
+  - Stored states are **not rewritten**: no storage-version bump, flags are retained as history, and the readers above enforce the precedence identically for old and new records.
+- **Screens:** C06 renders from the phase. **unknown** shows "We're still checking whether a payment went through" with a link to C14 and no Refresh or retry. **not_charged** shows "Nothing was charged for this payment" with "Continue my signup" (C14) and no Refresh. "Try payment again" appears only for **failed**. C04, C05 and C14 already follow the checkout record.
+- **Unchanged:** genuine processing confirmation and failure; unknown → paid / nothing charged; fresh quote, consent and new key after a closed checkout; scope binding, restore, spent keys, owner declaration, completed history, R-013 addenda 1–2.
+- **Affected ACs/files:** ACCEPTANCE_SPEC v1.6 → v1.7 (AC-10, AC-11, AC-13); DATA_CONTRACT v1.7 → v1.8; UI_SPEC C06; ACCEPTANCE_LEDGER; QAM engineering handoff §9; `registration.ts`, `index.ts`, `ActivationView.tsx`.
+- **Required regression:** Cody's transition probes; the bounded matrix (8 checkout records × 4 activation flags × 7 actions, every refusal leaving state untouched); reload and direct navigation; valid recovery after resolution; the R-012/R-013 suites and Gate M public.
+
+### R-014 addendum 1 — REPAIR_006: every payment reader and the resend writer apply the phase first (JARVIS dispatch, R-010 route)
+- **ID / date / seat:** R-014 addendum 1 · 30 October 2026 (Asia/Dhaka) · recorded by Claudy (Engineer). Authorized by JARVIS after Cody's REPAIR_005 RETEST_001 (`FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_005_RETEST_001_REVIEW.zip`, SHA-256 `1d3154c4e51f021773941a45eb170f67a13f5da5fd7cdfa977543036763893dd`). No business decision is made here.
+- **Approving source:** JARVIS dispatch, 30 Oct 2026: "R5-F01: Evaluate authoritative payment phase before activation-null/raw-flag rendering. Paid checkout must never appear unpaid, failed or retryable because activation data is absent or conflicting. Do not invent setup/email completion when those outcomes are unknown. The actual nothing-charged path must show its terminal notice and coherent signup recovery." · "R5-F02: Guard resendAccessEmail using authoritative paid status plus the required recorded setup/email prerequisites. Reject missing, unknown and closed nonpaid checkout states without mutation." · "R5-O03: Lead disposition: nonblocking idempotent no-op… No repair required solely to turn this assertion green."
+- **Rule:** an activation record is presented only where it agrees with the payment phase (`consistentActivation`): processing ↔ `pending`, failed ↔ `failed`, paid ↔ `confirmed`. Anything else is not presented and not acted on.
+- **Readers:**
+  - **C06** evaluates the phase before anything else. unknown → R-014 notice; not charged (including the actual unknown → nothing-charged path, whose activation is cleared) → "Nothing was charged for this payment" + "Continue my signup"; **paid with a missing or conflicting activation → "Payment confirmed" + "We can't show setup or access-email status here"**, with the paid amount when the scope is recorded, support and `demo_act_01`; no setup, email, Refresh, retry or resend claim; none or open → "There's no payment to track yet".
+  - **`readActivation`** (contract read) returns the activation only when it agrees; a paid record with a missing or conflicting one answers "Payment is confirmed, but setup and email status aren't available."
+- **Writer:** `resendAccessEmail` requires the paid phase **and** an agreeing activation whose setup is `ready`. Every other state (none, open, declined, unknown, abandoned, expired, or paid with a missing/pending/failed activation or setup not finished) is refused with `conflict` and the state unchanged. Valid paid resend, from email sent or failed, is unchanged.
+- **R5-O03 (recorded, not repaired):** repeating Refresh on a paid record whose setup already finished returns `ok` with a new but deep-equal state object (no financial, history, email or timestamp change). Per the Lead's disposition this is a nonblocking idempotent no-op; Cody's identity assertion still fails and is reported as such.
+- **Consequence for existing tests:** a checkout closed before payment (withdrawn declaration) is `abandoned`, so C06 now shows the terminal no-charge notice where it said "There's no payment to track yet". My R-012 assertion in `public.repair002.spec.ts` was updated to that notice and to "no Refresh"; its purpose (no back door to payment) is unchanged.
+- **Inspected and unchanged:** see `EVIDENCE/REPAIR_006/INSPECTED_PATHS.md`.
+- **Affected ACs/files:** ACCEPTANCE_SPEC v1.7 → v1.8 (AC-11); DATA_CONTRACT v1.8 → v1.9; UI_SPEC C06; ACCEPTANCE_LEDGER; ENGINEERING_HANDOFF §9; `registration.ts`, `index.ts`, `ActivationView.tsx`.

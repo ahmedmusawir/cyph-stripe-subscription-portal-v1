@@ -1,0 +1,369 @@
+{
+  "config": {
+    "configFile": "/tmp/cody-r4-snapshot/qa-transition-browser.config.ts",
+    "rootDir": "/tmp/cody-r4-snapshot/qa-transition-browser",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/cody-r4-transition-browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/cody-r4-snapshot/qa-transition-browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/cody-r4-transition-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "legacy-transitions.spec.ts",
+      "file": "legacy-transitions.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "nothing-charged legacy record cannot become paid from a stale activation refresh",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1656,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mabandone\u001b[27md\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mpai\u001b[27md\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mabandone\u001b[27md\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mpai\u001b[27md\"\u001b[39m\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:4:678",
+                    "location": {
+                      "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                      "column": 678,
+                      "line": 4
+                    },
+                    "snippet": "  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({k,v}:any)=>sessionStorage.setItem(k,JSON.stringify(v)),{k:key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n  3 | const snap=(p:any)=>p.evaluate((k:string)=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout?.status??null,payment:s.activation?.paymentState??null,key:s.checkout?.operationKey??null}},key);\n> 4 | test('nothing-charged legacy record cannot become paid from a stale activation refresh',async({page})=>{await inject(page,'/tmp/cody-r4-notcharged-stale-fixture.json');const before=await snap(page);const button=page.getByTestId('activation-refresh');const offered=await button.isVisible()&&await button.isEnabled();if(offered){await button.click();await expect.poll(()=>snap(page)).toMatchObject({payment:'confirmed'})}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-stale-refresh-browser.json',JSON.stringify({before,refreshOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-stale-refresh-browser.png',fullPage:true});expect(after.checkout).toBe('abandoned');expect(after.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^\n  5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n  7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                        "column": 678,
+                        "line": 4
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mabandone\u001b[27md\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mpai\u001b[27md\"\u001b[39m\n\n  2 | async function inject(p:any,file:string){await p.goto('/demo/register/plan');const v=JSON.parse(fs.readFileSync(file,'utf8'));await p.evaluate(({k,v}:any)=>sessionStorage.setItem(k,JSON.stringify(v)),{k:key,v});await p.goto('/demo/activation');await p.waitForLoadState('networkidle')}\n  3 | const snap=(p:any)=>p.evaluate((k:string)=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout?.status??null,payment:s.activation?.paymentState??null,key:s.checkout?.operationKey??null}},key);\n> 4 | test('nothing-charged legacy record cannot become paid from a stale activation refresh',async({page})=>{await inject(page,'/tmp/cody-r4-notcharged-stale-fixture.json');const before=await snap(page);const button=page.getByTestId('activation-refresh');const offered=await button.isVisible()&&await button.isEnabled();if(offered){await button.click();await expect.poll(()=>snap(page)).toMatchObject({payment:'confirmed'})}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-stale-refresh-browser.json',JSON.stringify({before,refreshOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-stale-refresh-browser.png',fullPage:true});expect(after.checkout).toBe('abandoned');expect(after.payment).not.toBe('confirmed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^\n  5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n  7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:4:678"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T00:50:58.194Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-r4-transition-browser-output/legacy-transitions-nothing-32ff5--a-stale-activation-refresh/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                    "column": 678,
+                    "line": 4
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "68a596abc2dfa4731dcc-8d6a208cbd08b4cbca43",
+          "file": "legacy-transitions.spec.ts",
+          "line": 4,
+          "column": 5
+        },
+        {
+          "title": "unknown legacy record cannot be discarded using failed activation retry",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1839,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"unknown\"\u001b[39m\nReceived: \u001b[31mnull\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"unknown\"\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:5:705",
+                    "location": {
+                      "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                      "column": 705,
+                      "line": 5
+                    },
+                    "snippet": "  3 | const snap=(p:any)=>p.evaluate((k:string)=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout?.status??null,payment:s.activation?.paymentState??null,key:s.checkout?.operationKey??null}},key);\n  4 | test('nothing-charged legacy record cannot become paid from a stale activation refresh',async({page})=>{await inject(page,'/tmp/cody-r4-notcharged-stale-fixture.json');const before=await snap(page);const button=page.getByTestId('activation-refresh');const offered=await button.isVisible()&&await button.isEnabled();if(offered){await button.click();await expect.poll(()=>snap(page)).toMatchObject({payment:'confirmed'})}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-stale-refresh-browser.json',JSON.stringify({before,refreshOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-stale-refresh-browser.png',fullPage:true});expect(after.checkout).toBe('abandoned');expect(after.payment).not.toBe('confirmed')});\n> 5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n  7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n  8 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                        "column": 705,
+                        "line": 5
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"unknown\"\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n\n  3 | const snap=(p:any)=>p.evaluate((k:string)=>{const s=JSON.parse(sessionStorage.getItem(k)!).state.s;return{checkout:s.checkout?.status??null,payment:s.activation?.paymentState??null,key:s.checkout?.operationKey??null}},key);\n  4 | test('nothing-charged legacy record cannot become paid from a stale activation refresh',async({page})=>{await inject(page,'/tmp/cody-r4-notcharged-stale-fixture.json');const before=await snap(page);const button=page.getByTestId('activation-refresh');const offered=await button.isVisible()&&await button.isEnabled();if(offered){await button.click();await expect.poll(()=>snap(page)).toMatchObject({payment:'confirmed'})}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-stale-refresh-browser.json',JSON.stringify({before,refreshOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-stale-refresh-browser.png',fullPage:true});expect(after.checkout).toBe('abandoned');expect(after.payment).not.toBe('confirmed')});\n> 5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n  7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n  8 |\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:5:705"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T00:51:00.794Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-r4-transition-browser-output/legacy-transitions-unknown-07359-ing-failed-activation-retry/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                    "column": 705,
+                    "line": 5
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "68a596abc2dfa4731dcc-e993fd19487c54ea01ee",
+          "file": "legacy-transitions.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "unavailable completed history stays completed and hides edited names/prices in activation and C07",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3379,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T00:51:03.699Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "68a596abc2dfa4731dcc-952c3239f1e3e049daa9",
+          "file": "legacy-transitions.spec.ts",
+          "line": 6,
+          "column": 5
+        },
+        {
+          "title": "covered admin and C07 preview stay coherent when email outcome sent",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6282,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main')\nExpected substring: \u001b[32m\"\u001b[7mOriginal Admi\u001b[27mn\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mDemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activatio\u001b[27mn\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main')\u001b[22m\n\u001b[2m    9 × locator resolved to <main id=\"main\" tabindex=\"-1\" class=\"w-full flex-1 focus:outline-none\">…</main>\u001b[22m\n\u001b[2m      - unexpected value \"DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activation\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main')\nExpected substring: \u001b[32m\"\u001b[7mOriginal Admi\u001b[27mn\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mDemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activatio\u001b[27mn\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main')\u001b[22m\n\u001b[2m    9 × locator resolved to <main id=\"main\" tabindex=\"-1\" class=\"w-full flex-1 focus:outline-none\">…</main>\u001b[22m\n\u001b[2m      - unexpected value \"DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activation\"\u001b[22m\n\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:7:898",
+                    "location": {
+                      "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                      "column": 898,
+                      "line": 7
+                    },
+                    "snippet": "  5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n> 7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^\n  8 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                        "column": 898,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main')\nExpected substring: \u001b[32m\"\u001b[7mOriginal Admi\u001b[27mn\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mDemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activatio\u001b[27mn\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main')\u001b[22m\n\u001b[2m    9 × locator resolved to <main id=\"main\" tabindex=\"-1\" class=\"w-full flex-1 focus:outline-none\">…</main>\u001b[22m\n\u001b[2m      - unexpected value \"DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activation\"\u001b[22m\n\n\n  5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n> 7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^\n  8 |\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:7:898"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T00:51:07.297Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-r4-transition-browser-output/legacy-transitions-covered-f7b96-ent-when-email-outcome-sent/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                    "column": 898,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "68a596abc2dfa4731dcc-7e1041cbab886c259640",
+          "file": "legacy-transitions.spec.ts",
+          "line": 7,
+          "column": 44
+        },
+        {
+          "title": "covered admin and C07 preview stay coherent when email outcome failed",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6316,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main')\nExpected substring: \u001b[32m\"\u001b[7mOriginal Admi\u001b[27mn\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mDemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activatio\u001b[27mn\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main')\u001b[22m\n\u001b[2m    9 × locator resolved to <main id=\"main\" tabindex=\"-1\" class=\"w-full flex-1 focus:outline-none\">…</main>\u001b[22m\n\u001b[2m      - unexpected value \"DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activation\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main')\nExpected substring: \u001b[32m\"\u001b[7mOriginal Admi\u001b[27mn\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mDemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activatio\u001b[27mn\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main')\u001b[22m\n\u001b[2m    9 × locator resolved to <main id=\"main\" tabindex=\"-1\" class=\"w-full flex-1 focus:outline-none\">…</main>\u001b[22m\n\u001b[2m      - unexpected value \"DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activation\"\u001b[22m\n\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:7:898",
+                    "location": {
+                      "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                      "column": 898,
+                      "line": 7
+                    },
+                    "snippet": "  5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n> 7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^\n  8 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                        "column": 898,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main')\nExpected substring: \u001b[32m\"\u001b[7mOriginal Admi\u001b[27mn\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mDemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activatio\u001b[27mn\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main')\u001b[22m\n\u001b[2m    9 × locator resolved to <main id=\"main\" tabindex=\"-1\" class=\"w-full flex-1 focus:outline-none\">…</main>\u001b[22m\n\u001b[2m      - unexpected value \"DemoIllustrative pricing.Amounts are engineering fixtures; final prices are pending Coach/Frank. Nothing here charges a card, sends email or creates an account.ReferenceEmail previewsWhat the owner and a nominated store admin receive. Built from this signup's details; nothing is sent.Owner accessStore admin invitationCheckout unfinishedNew link after expiryReference · email previewRendered preview only. Nothing is sent; links are illustrative.FromPharmacy Books <[SENDING ADDRESS TBD]>Too•••@demo-pharmacy.exampleSubjectYou've been invited to manage Example Main Street Pharmacy in OwedBookPharmacy BooksOriginal, you've been invited to manage Example Main Street PharmacyJordan Ellis set you up as the store admin for Example Main Street Pharmacy in OwedBook. Accept the invitation to set up your sign-in and start inviting your team.Accept invitationThis link works once and expires in [LINK LIFETIME TBD]. Didn't expect this? You can ignore it; nothing happens unless you accept.What a store admin doesManages Example Main Street Pharmacy and its team in OwedBook. Billing stays with the account owner, Jordan Ellis — store admins who are not the billing owner cannot manage billing.You received this because of Pharmacy Books account activity for this address. Questions? Write to [SUPPORT EMAIL].[COMPANY MAILING ADDRESS TBD] · Pharmacy Books · a Cyber Pharma productBack to activation\"\u001b[22m\n\n\n  5 | test('unknown legacy record cannot be discarded using failed activation retry',async({page})=>{await inject(page,'/tmp/cody-r4-unknown-failed-fixture.json');const before=await snap(page);const retry=page.getByRole('button',{name:'Try payment again',exact:true});const offered=await retry.isVisible();if(offered){await retry.click();await page.waitForURL('**/demo/register/review');await expect(page.getByTestId('due-today')).toHaveText('$99.00')}const after=await snap(page);fs.writeFileSync('/tmp/cody-r4-unknown-resume-browser.json',JSON.stringify({before,retryOffered:offered,after},null,2));await page.screenshot({path:'/tmp/cody-r4-unknown-resume-browser.png',fullPage:true});expect(after.checkout).toBe('unknown');expect(after.payment).toBe('failed')});\n  6 | test('unavailable completed history stays completed and hides edited names/prices in activation and C07',async({page})=>{await inject(page,'/tmp/cody-r4-unavailable-fixture.json');const before=await snap(page);await expect(page.getByTestId('history-unavailable')).toBeVisible();for(const route of ['/demo/activation','/demo/references/email?variant=owner','/demo/references/email?variant=expired_resend']){await page.goto(route);await page.waitForLoadState('networkidle');const text=await page.locator('main').innerText();expect(text).not.toContain('Edited never paid pharmacy');expect(text).not.toContain('$99.00');expect(text).not.toContain('1 pharmacy');expect(await snap(page)).toEqual(before)}await page.screenshot({path:'/tmp/cody-r4-unavailable-history.png',fullPage:true})});\n> 7 | for(const outcome of ['sent','failed'])test(`covered admin and C07 preview stay coherent when email outcome ${outcome}`,async({page})=>{await inject(page,outcome==='sent'?'/tmp/cody-r4-covered-admin-fixture.json':'/tmp/cody-r4-covered-admin-emailfailed-fixture.json');const text=await page.locator('main').innerText();expect(text).not.toContain('Replacement Admin');expect(text).not.toContain('Edited never paid pharmacy');if(outcome==='sent'){expect(text).toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toBeVisible()}else{expect(text).not.toContain('a separate store invitation went to Original Admin');await expect(page.getByRole('link',{name:/Preview Original Admin.*invitation/i})).toHaveCount(0)}await page.goto('/demo/references/email?variant=store_admin');await expect(page.locator('main')).toContainText('Original Admin');await expect(page.locator('main')).not.toContainText('Replacement Admin');await expect(page.locator('main')).not.toContainText('Edited never paid pharmacy')});\n    |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^\n  8 |\n    at /tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts:7:898"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-30T00:51:14.364Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/cody-r4-transition-browser-output/legacy-transitions-covered-d733c-t-when-email-outcome-failed/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/cody-r4-snapshot/qa-transition-browser/legacy-transitions.spec.ts",
+                    "column": 898,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "68a596abc2dfa4731dcc-1d5bfea2e4f6334dc282",
+          "file": "legacy-transitions.spec.ts",
+          "line": 7,
+          "column": 44
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-30T00:50:57.427Z",
+    "duration": 23522.897,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

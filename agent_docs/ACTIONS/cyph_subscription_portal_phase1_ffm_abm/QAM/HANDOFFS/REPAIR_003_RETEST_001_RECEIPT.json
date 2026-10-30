@@ -1,0 +1,13 @@
+{
+  "base_sha": "d6fe67839961fcbbf801b0bb04d3a2522e7b1f36",
+  "snapshot_manifest_sha256": "61a39c96c5162cc36e027d852affeca76fcc82617c631121c3c0870af63bf502",
+  "candidate": "snapshot:61a39c96c5162cc36e027d852affeca76fcc82617c631121c3c0870af63bf502",
+  "plan_sha256": "4432895ed0dfc8dcf2b90a9e43b0d1b5de2245d87035b27f83a8586488279597",
+  "canonical": "/home/moose/NEXTJS/CYBER_PHARMA/cyph-stripe-subscription-portal-v1/agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_RETEST_001_REVIEW.zip",
+  "downloads": "/home/moose/Downloads/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_003_RETEST_001_REVIEW.zip",
+  "file_count": 164,
+  "zip_sha256": "ef9097bdf7f6c8dbfa481025133295cce63cbe9005ab53e9a21ea46c95f3d436",
+  "integrityAndIndexVerified": true,
+  "selectedAndExpandedArchivePrivacyScan": "PASS",
+  "downloadsIdentical": true
+}

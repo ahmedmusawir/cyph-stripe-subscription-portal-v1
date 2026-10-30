@@ -1,0 +1,655 @@
+diff -ruN src/components/portal/activation/ActivationView.tsx src/components/portal/activation/ActivationView.tsx
+--- src/components/portal/activation/ActivationView.tsx	2026-10-29 16:22:23.647326325 +0600
++++ src/components/portal/activation/ActivationView.tsx	2026-10-29 18:17:16.792369566 +0600
+@@ -93,7 +93,8 @@
+   // R-013: the payment covers what its checkout was quoted for, not later edits.
+   const paidFor = state.checkout?.scope;
+   const names = (paidFor?.pharmacies ?? draft.pharmacies.slice(0, draft.requestedStoreCount)).map((p) => p.name).filter(Boolean) as string[];
+-  const nominated = draft.pharmacies.find((p) => p.adminAssignment?.kind === "other");
++  // R3-F02: an invitation is claimed only for an admin the payment covered.
++  const nominated = paidFor?.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+   const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
+   const amount = `${formatCents(paidFor?.dueNowCents ?? quote?.dueNowCents ?? initialRecurringCents(draft.requestedStoreCount))} (illustrative)`;
+   const emailTo = a.ownerEmailMasked;
+diff -ruN src/components/portal/Alert.tsx src/components/portal/Alert.tsx
+--- src/components/portal/Alert.tsx	2026-10-27 14:54:22.825732209 +0600
++++ src/components/portal/Alert.tsx	2026-10-29 18:18:00.356743715 +0600
+@@ -34,13 +34,15 @@
+   tabIndex?: number;
+   icon?: React.ReactNode;
+ }) {
++  // R3-O03: on a dark tint over a card the shared ring measured 2.99:1 against the
++  // tint; a lighter dark-only ring inside alerts clears 3:1 on every tone.
+   return (
+     <div
+       id={id}
+       tabIndex={tabIndex}
+       role={role ?? (tone === "destructive" ? "alert" : "status")}
+       aria-live={live ? "polite" : undefined}
+-      className={cn("min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", TONE[tone], className)}
++      className={cn("min-w-0 border-l-[3px] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:[--ring:12_93%_68%]", TONE[tone], className)}
+     >
+       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+         <div className="flex min-w-0 gap-3">
+diff -ruN src/components/portal/handoff/CheckoutStandIn.tsx src/components/portal/handoff/CheckoutStandIn.tsx
+--- src/components/portal/handoff/CheckoutStandIn.tsx	2026-10-29 16:22:23.648390191 +0600
++++ src/components/portal/handoff/CheckoutStandIn.tsx	2026-10-29 18:17:38.566705121 +0600
+@@ -10,6 +10,7 @@
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { Pill } from "../Pill";
+ import { checkoutHold, formatCents, registration, useRegistration, type CheckoutOutcome } from "@/services/portal";
++import { ScopeHold } from "../activation/ActivationView";
+ 
+ // C05 initial-checkout boundary (PUBLIC). Our "leaving" page, then a labelled
+ // stand-in for Stripe Checkout with NO editable card fields. Only the explicit
+@@ -71,14 +72,19 @@
+   const hold = checkoutHold(draft, checkout);
+   if (hold === "scope_changed") {
+     // R-013: a submitted payment whose details changed afterwards; activation offers the way back.
++    // A pre-R-013 checkout with no proof of what it was for can't be matched at all (REPAIR_004).
+     return (
+       <PageContainer>
+         <DemoNotice />
+         <div data-testid="checkout-hold">
+-          <Alert tone="warning" title="Your details changed after you paid">
+-            This payment can only go ahead for the details you submitted. Don&apos;t pay again.{" "}
+-            <Link href="/demo/activation" className="portal-link">See activation status</Link>
+-          </Alert>
++          {checkout.scope ? (
++            <Alert tone="warning" title="Your details changed after you paid">
++              This payment can only go ahead for the details you submitted. Don&apos;t pay again.{" "}
++              <Link href="/demo/activation" className="portal-link">See activation status</Link>
++            </Alert>
++          ) : (
++            <ScopeHold paidFor={undefined} reference="demo_ck_01" />
++          )}
+         </div>
+       </PageContainer>
+     );
+diff -ruN src/components/portal/references/EmailReferenceView.tsx src/components/portal/references/EmailReferenceView.tsx
+--- src/components/portal/references/EmailReferenceView.tsx	2026-10-27 15:05:36.038452861 +0600
++++ src/components/portal/references/EmailReferenceView.tsx	2026-10-29 18:17:16.793588610 +0600
+@@ -6,7 +6,7 @@
+ import { PageContainer, ViewSkeleton } from "../Loading";
+ import { PageHeader } from "../PageHeader";
+ import { EmailPreview } from "./EmailPreview";
+-import { accessEmailPreviews, EMAIL_VARIANTS, formatCents, initialRecurringCents, useRegistration, type EmailVariant } from "@/services/portal";
++import { accessEmailPreviews, coveredDetails, EMAIL_VARIANTS, formatCents, initialRecurringCents, useRegistration, type EmailVariant } from "@/services/portal";
+ 
+ const TAB: Record<EmailVariant, string> = {
+   owner: "Owner access",
+@@ -28,9 +28,10 @@
+ 
+   const emails = accessEmailPreviews(state);
+   const draft = state.draft;
+-  const n = draft.requestedStoreCount;
++  const covered = coveredDetails(state);
++  const n = covered.storeCount;
+   const owner = [draft.owner.firstName, draft.owner.lastName].filter(Boolean).join(" ") || "Jordan Ellis";
+-  const nominated = draft.pharmacies.find((p) => p.adminAssignment?.kind === "other");
++  const nominated = covered.pharmacies.find((p) => p.adminAssignment?.kind === "other");
+   const admin = nominated?.adminAssignment?.kind === "other" ? nominated.adminAssignment : null;
+   const planLine = `Standard plan · ${n} ${n === 1 ? "pharmacy" : "pharmacies"} · ${formatCents(initialRecurringCents(n))} / month (illustrative)`;
+   const adminNote = admin ? `${admin.fullName} received a separate invitation to administer ${nominated?.name}.` : undefined;
+diff -ruN src/services/portal/index.ts src/services/portal/index.ts
+--- src/services/portal/index.ts	2026-10-29 16:22:23.647911472 +0600
++++ src/services/portal/index.ts	2026-10-29 18:29:22.657236466 +0600
+@@ -9,6 +9,7 @@
+ export {
+   accessEmailPreviews,
+   checkoutHold,
++  coveredDetails,
+   estimateAvailable,
+   firstIncomplete,
+   isEmailVariant,
+diff -ruN src/services/portal/registration.ts src/services/portal/registration.ts
+--- src/services/portal/registration.ts	2026-10-29 16:21:38.928037515 +0600
++++ src/services/portal/registration.ts	2026-10-29 18:17:16.790588462 +0600
+@@ -336,7 +336,8 @@
+ export function migrateRegistration(persisted: unknown): RegistrationState {
+   const old = persisted as Partial<RegistrationState> | null;
+   if (!old || typeof old !== 'object' || !old.draft || typeof old.draft !== 'object') return createRegistration('fresh');
+-  const migrated = { ...old, quote: null } as RegistrationState;
++  // Bind a checkout while its quote can still prove what it was for (R-013).
++  const migrated = { ...bindLegacyScope(old as RegistrationState), quote: null } as RegistrationState;
+   // Storage v1 never recorded the declaration, so none is carried over, and an
+   // open checkout from then was never covered by one (R-012).
+   return withOwner(migrated, { ...ownerFields(old.draft.owner), ownerDeclarationAccepted: false });
+@@ -485,17 +486,27 @@
+ }
+ 
+ /**
+- * Persisted state written before R-013 has checkouts with no scope. An open
+- * checkout, or a submitted one whose draft hasn't changed since (an edit
+- * always moves draft.state off 'checkout_pending'), is bound to its draft. An
+- * edited submitted one is left unbound, so it stays held.
++ * Persisted state written before R-013 has checkouts with no scope. Bind one
++ * only where the record still proves what it was quoted for (REPAIR_004):
++ * - the quote it was opened with is still held for the same draft revision.
++ *   Every edit drops the quote and bumps the revision, in R-011 and R-012 alike.
++ * - or the record still matches its deterministic demo seed.
++ * Being open proves nothing: R-011 kept an open checkout through edits. An
++ * unproven checkout stays unbound, so it is held and never confirms.
+  */
+ export function bindLegacyScope(state: RegistrationState): RegistrationState {
+   const checkout = state?.checkout;
+   if (!checkout || checkout.scope || !state.draft) return state;
+-  if (!isOpenCheckout(state) && !(isSubmitted(state) && state.draft.state === 'checkout_pending')) return state;
+-  const due = (state.quote?.id === checkout.quoteId ? state.quote.dueNowCents : undefined) ?? listPrice(state.draft);
+-  return { ...state, checkout: { ...checkout, scope: scopeOf(state.draft, due) } };
++  const { draft, quote } = state;
++  const due =
++    quote?.id === checkout.quoteId && quote.draftRevision === draft.revision && quote.proposedStoreCount === draft.requestedStoreCount ? quote.dueNowCents : undefined;
++  const seeded = isRegistrationScenario(state.scenario) ? createRegistration(state.scenario).checkout : null;
++  const scope = typeof due === 'number'
++    ? scopeOf(draft, due)
++    : seeded?.scope && seeded.operationKey === checkout.operationKey && inScope(draft, seeded.scope)
++      ? seeded.scope
++      : null;
++  return scope ? { ...state, checkout: { ...checkout, scope } } : state;
+ }
+ 
+ // ---------------------------------------------------------------------------
+@@ -787,12 +798,23 @@
+   return typeof v === 'string' && (EMAIL_VARIANTS as readonly string[]).includes(v);
+ }
+ 
+-/** Inert local previews built from the registration draft. No token, no send. */
++/**
++ * What a live or completed payment covers: its checkout's recorded scope
++ * (R-013), never later draft edits (REPAIR_004, R3-F02). Without one, the draft.
++ */
++export function coveredDetails(state: RegistrationState): Pick<CheckoutScope, 'storeCount' | 'pharmacies'> {
++  const c = state.checkout;
++  return c?.scope && c.status !== 'abandoned' && c.status !== 'expired'
++    ? c.scope
++    : { storeCount: state.draft.requestedStoreCount, pharmacies: state.draft.pharmacies };
++}
++
++/** Inert local previews built from what the signup covers. No token, no send. */
+ export function accessEmailPreviews(state: RegistrationState): Record<EmailVariant, AccessEmailView> {
+   const owner = state.draft.owner;
+   const ownerName = [owner.firstName, owner.lastName].filter(Boolean).join(' ') || 'Jordan Ellis';
+   const ownerEmail = isEmail(owner.email) ? owner.email! : OWNER_JORDAN.email;
+-  const pharmacies = state.draft.pharmacies.filter((p) => p?.name);
++  const pharmacies = coveredDetails(state).pharmacies.filter((p) => p?.name);
+   const names = pharmacies.map((p) => p.name!) ;
+   const nominated = pharmacies.find((p) => p.adminAssignment?.kind === 'other');
+   const admin = nominated?.adminAssignment?.kind === 'other' ? nominated.adminAssignment : null;
+diff -ruN src/__tests__/portal-checkout-hold.test.tsx src/__tests__/portal-checkout-hold.test.tsx
+--- src/__tests__/portal-checkout-hold.test.tsx	2026-10-29 16:23:12.024691009 +0600
++++ src/__tests__/portal-checkout-hold.test.tsx	2026-10-29 18:20:06.754005419 +0600
+@@ -287,3 +287,70 @@
+     expect(JSON.parse(sessionStorage.getItem(PUBLIC_STORAGE_KEY)!).version).toBe(3);
+   });
+ });
++
++describe('REPAIR_004 on screen (R3-F01, R3-F02)', () => {
++  it('R3-F01: an R-011 open checkout edited before the upgrade rehydrates unbound; the stand-in holds it with no payment outcome', async () => {
++    await openCheckout('demo_legacy_key_01');
++    const legacy = JSON.parse(JSON.stringify(s()));
++    delete legacy.checkout.scope;
++    const extra = { ...legacy.draft.pharmacies[0], id: 'demo_reg_ph_2', name: 'Legacy extra', ncpdp: '0000045', npi: '0000000045' };
++    legacy.quote = null;
++    legacy.draft = { ...legacy.draft, requestedStoreCount: 2, pharmacies: [legacy.draft.pharmacies[0], extra], revision: legacy.draft.revision + 1, state: 'editing' };
++    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 2 }));
++    await act(async () => {
++      await registrationStore.persist.rehydrate();
++    });
++    expect(s().checkout).toMatchObject({ status: 'pending', operationKey: 'demo_legacy_key_01' });
++    expect(s().checkout?.scope).toBeUndefined();
++    render(<CheckoutStandIn />);
++    const hold = screen.getByTestId('checkout-hold');
++    expect(hold.textContent).toMatch(/can't match this payment to your current details/);
++    expect(hold.textContent).not.toMatch(/after you paid/);
++    expect(screen.queryByTestId('outcome-paid')).toBeNull();
++    await act(async () => {
++      expect((await registration.resolveCheckout('paid')).ok).toBe(false);
++    });
++    expect(s().checkout?.status).toBe('pending');
++  });
++
++  async function completeWith(admin?: { kind: 'other'; fullName: string; email: string }) {
++    act(() => {
++      registrationHarness.selectScenario('prefilled_one_store');
++    });
++    if (admin)
++      await act(async () => {
++        await registration.savePharmacy(0, { ...s().draft.pharmacies[0], adminAssignment: admin });
++      });
++    await act(async () => {
++      await registration.requestQuote();
++    });
++    await act(async () => {
++      await registration.startCheckout({ draftId: s().draft.id, quoteId: s().quote!.id, consents, operationKey: 'demo_done_key_01' });
++      await registration.resolveCheckout('paid');
++      await registration.refreshActivation();
++    });
++    expect(s().activation).toMatchObject({ provisioningState: 'ready', emailState: 'sent' });
++    await act(async () => {
++      await registration.savePharmacy(0, { ...s().draft.pharmacies[0], adminAssignment: { kind: 'other', fullName: 'Replacement Admin', email: 'replacement@demo-pharmacy.example' } });
++    });
++  }
++
++  it('R3-F02: completed activation claims no invitation and offers no preview for an admin nominated after payment', async () => {
++    await completeWith();
++    render(<ActivationView />);
++    const main = document.body.textContent ?? '';
++    expect(main).toMatch(/Sent to j•••@demo-pharmacy\.example\./);
++    expect(main).not.toMatch(/replacement admin/i);
++    expect(main).not.toMatch(/invitation/i);
++    expect(screen.getByTestId('activation-tracks').textContent).toMatch(/Example Main Street Pharmacy is set up/);
++  });
++
++  it('R3-F02: an admin the payment covered is still the one named after a later draft change', async () => {
++    await completeWith({ kind: 'other', fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' });
++    render(<ActivationView />);
++    const main = document.body.textContent ?? '';
++    expect(main).toMatch(/a separate store invitation went to Sam Ortiz/);
++    expect(screen.getByRole('link', { name: "Preview Sam Ortiz's invitation" })).toBeTruthy();
++    expect(main).not.toMatch(/replacement admin/i);
++  });
++});
+diff -ruN src/__tests__/portal-registration.test.ts src/__tests__/portal-registration.test.ts
+--- src/__tests__/portal-registration.test.ts	2026-10-29 16:19:06.894718782 +0600
++++ src/__tests__/portal-registration.test.ts	2026-10-29 18:19:40.847721062 +0600
+@@ -813,9 +813,127 @@
+     expect(reg.resolveUnknownPayment(edited, 'paid').result.ok).toBe(false);
+     expect(reg.restoreSubmittedScope(edited).result.ok).toBe(false);
+     expect(reg.resolveUnknownPayment(edited, 'not_charged').result.ok).toBe(true);
+-    // Closed or paid records are left as they are.
++    // A paid record binds on the same evidence (REPAIR_004); one edited after payment does not.
+     const paid = strip(reg.refreshActivation(submitted('processing')).state);
+-    expect(reg.bindLegacyScope(paid)).toEqual(paid);
++    expect(reg.bindLegacyScope(paid).checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
++    const paidEdited = strip(EDITS['pharmacy name'](reg.refreshActivation(submitted('processing')).state));
++    expect(reg.bindLegacyScope(paidEdited)).toEqual(paidEdited);
++  });
++});
++
++describe('legacy storage binds a checkout only from retained evidence (REPAIR_004, R3-F01)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  const unconsented = { termsAccepted: false, recurringChargeAccepted: false, priceChangeAccepted: false };
++  const strip = (s: RegistrationState): RegistrationState => {
++    const copy = JSON.parse(JSON.stringify(s));
++    if (copy.checkout) delete copy.checkout.scope;
++    return copy;
++  };
++  function opened(n = 1, code?: string): RegistrationState {
++    let s = completeDraft(n);
++    if (code) s = reg.applyCode(s, code, deps).state;
++    s = reg.requestQuote(s, deps).state;
++    return reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++  }
++  /** What the R-011 engine persisted after a count edit while a checkout was open: still pending; quote dropped; revision bumped. */
++  function r011Edited(s: RegistrationState): RegistrationState {
++    const copy = strip(s);
++    return {
++      ...copy,
++      quote: null,
++      draft: { ...copy.draft, requestedStoreCount: 2, pharmacies: [copy.draft.pharmacies[0], pharmacy(2)], revision: copy.draft.revision + 1, state: 'editing', consents: unconsented },
++    };
++  }
++
++  it('an R-011 open checkout edited without being closed gets no scope, cannot confirm and cannot be restored', () => {
++    const legacy = reg.bindLegacyScope(r011Edited(opened()));
++    expect(legacy.checkout).toMatchObject({ status: 'pending', operationKey: KEY });
++    expect(legacy.checkout?.scope).toBeUndefined();
++    expect(reg.checkoutHold(legacy.draft, legacy.checkout)).toBe('scope_changed');
++    for (const outcome of ['paid', 'processing'] as const) {
++      const step = reg.resolveCheckout(legacy, outcome);
++      expect(step.result.ok).toBe(false);
++      expect(step.state).toBe(legacy);
++    }
++    expect(reg.restoreSubmittedScope(legacy).result.ok).toBe(false);
++    // No second checkout opens alongside it.
++    const q = reg.requestQuote(legacy, deps).state;
++    expect(reg.startCheckout(q, { quoteId: q.quote!.id, consents: consented, operationKey: 'demo_key_other_01' }, deps).result).toMatchObject({ ok: false, code: 'conflict' });
++  });
++
++  it('a quote taken after the edit is not evidence for the open checkout', () => {
++    const requoted = reg.requestQuote(r011Edited(opened()), deps).state;
++    expect(requoted.quote?.proposedStoreCount).toBe(2);
++    expect(reg.bindLegacyScope(requoted).checkout?.scope).toBeUndefined();
++  });
++
++  it('an unedited legacy open checkout binds the price of the quote it opened with, discount included', () => {
++    const s = opened(2, pricing.DEMO_CODE);
++    const quoted = s.quote!.dueNowCents!;
++    const legacy = reg.bindLegacyScope(strip(s));
++    expect(legacy.checkout?.scope).toMatchObject({ storeCount: 2, code: pricing.DEMO_CODE, dueNowCents: quoted });
++    expect(quoted).toBeLessThan(14800);
++    expect(reg.resolveCheckout(legacy, 'paid').result.ok).toBe(true);
++  });
++
++  it('a legacy demo seed binds to its seeded scope only while it still matches the seed', () => {
++    const seed = reg.createRegistration('activation_waiting');
++    const legacy = reg.bindLegacyScope(strip(seed));
++    expect(legacy.checkout?.scope).toEqual(seed.checkout!.scope);
++    expect(reg.refreshActivation(legacy).state.activation?.paymentState).toBe('confirmed');
++    const renamed = reg.savePharmacy(seed, 0, { ...seed.draft.pharmacies[0], name: 'Renamed seed' }).state;
++    const edited = reg.bindLegacyScope(strip(renamed));
++    expect(edited.checkout?.scope).toBeUndefined();
++    expect(reg.refreshActivation(edited).result.ok).toBe(false);
++  });
++
++  it('storage v1: the quote proves the scope before migration drops it; the declaration is still not assumed', () => {
++    const v1 = strip(reg.resolveCheckout(opened(), 'processing').state);
++    delete (v1.draft.owner as Record<string, unknown>).ownerDeclarationAccepted;
++    const migrated = reg.migrateRegistration(v1);
++    expect(migrated.quote).toBeNull();
++    expect(migrated.checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
++    expect(migrated.draft.owner.ownerDeclarationAccepted).toBe(false);
++    expect(reg.refreshActivation(migrated).result.ok).toBe(false);
++  });
++});
++
++describe('completed activation reads what the payment covered (REPAIR_004, R3-F02)', () => {
++  const consented = { termsAccepted: true, recurringChargeAccepted: true, priceChangeAccepted: false };
++  const replacement = { kind: 'other' as const, fullName: 'Replacement Admin', email: 'replacement@demo-pharmacy.example' };
++  function completed(admin?: PharmacyDraft['adminAssignment']): RegistrationState {
++    let s = completeDraft(1);
++    if (admin) s = reg.savePharmacy(s, 0, pharmacy(1, { adminAssignment: admin })).state;
++    s = reg.requestQuote(s, deps).state;
++    s = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++    s = reg.refreshActivation(reg.resolveCheckout(s, 'paid').state).state;
++    expect(s.activation).toMatchObject({ provisioningState: 'ready', emailState: 'sent' });
++    return s;
++  }
++  const nominateLater = (s: RegistrationState) => reg.savePharmacy(s, 0, pharmacy(1, { adminAssignment: replacement })).state;
++
++  it('an admin nominated after payment is not in the covered details or any preview; payment history is unchanged', () => {
++    const before = completed();
++    const s = nominateLater(before);
++    expect(s.checkout).toEqual(before.checkout);
++    expect(s.activation).toEqual(before.activation);
++    expect(reg.coveredDetails(s).pharmacies[0].adminAssignment).toEqual({ kind: 'owner' });
++    expect(JSON.stringify(reg.accessEmailPreviews(s))).not.toMatch(/replacement/i);
++  });
++
++  it('an admin the payment covered stays the invited admin after a later draft change', () => {
++    const sam = { kind: 'other' as const, fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' };
++    const s = nominateLater(completed(sam));
++    expect(reg.accessEmailPreviews(s).store_admin).toMatchObject({ recipientName: 'Sam Ortiz', pharmacyNames: ['Example Test Pharmacy 1'] });
++  });
++
++  it('a closed checkout does not pin the previews; they follow the draft again', () => {
++    let s = completeDraft(1);
++    s = reg.requestQuote(s, deps).state;
++    s = reg.startCheckout(s, { quoteId: s.quote!.id, consents: consented, operationKey: KEY }, deps).state;
++    s = reg.resumeSignup(reg.resolveCheckout(s, 'back').state).state;
++    s = nominateLater(s);
++    expect(reg.accessEmailPreviews(s).store_admin.recipientName).toBe('Replacement Admin');
+   });
+ });
+ 
+diff -ruN e2e/public.repair004.spec.ts e2e/public.repair004.spec.ts
+--- e2e/public.repair004.spec.ts	1970-01-01 06:00:00.000000000 +0600
++++ e2e/public.repair004.spec.ts	2026-10-29 18:35:34.009155112 +0600
+@@ -0,0 +1,266 @@
++import { expect, test, type Page } from "@playwright/test";
++import { recordContrast, textContrast, textFailures } from "./contrast";
++import { assertGate, measure, record, setTheme, THEMES } from "./gate-m";
++
++// REPAIR_004 anonymous regressions. No credentials are used here.
++// R3-F01: a storage-v2 checkout binds a scope only from retained evidence; an R-011
++//         open checkout edited before the upgrade is held, never confirmed.
++// R3-F02: completed activation names only what the payment covered.
++// R3-O03: the dark focus ring inside an alert clears 3:1 against both neighbours.
++const KEY = "cyph-portal-demo:v1:public";
++const ORIGINAL = "Example Main Street Pharmacy";
++type Json = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
++
++const snap = (page: Page) =>
++  page.evaluate((k) => {
++    const raw = JSON.parse(sessionStorage.getItem(k)!);
++    const s = raw.state.s;
++    return {
++      version: raw.version as number,
++      count: s.draft.requestedStoreCount as number,
++      checkout: (s.checkout?.status ?? null) as string | null,
++      key: (s.checkout?.operationKey ?? null) as string | null,
++      scope: (s.checkout?.scope ?? null) as { storeCount: number; dueNowCents: number } | null,
++      payment: (s.activation?.paymentState ?? null) as string | null,
++    };
++  }, KEY);
++
++async function settle(page: Page, url: string) {
++  await page.goto(url);
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++}
++
++async function load(page: Page, scenario: string) {
++  await page.goto("/demo/register/plan");
++  await page.evaluate(() => sessionStorage.clear());
++  await page.goto("/demo/register/plan");
++  await page.locator("summary", { hasText: "Demo controls" }).click();
++  await page.locator("#demo-reg-scenario").selectOption(scenario);
++  await page.getByRole("button", { name: "Load", exact: true }).click();
++}
++
++async function openCheckout(page: Page) {
++  await load(page, "prefilled_one_store");
++  await expect(page.getByTestId("due-today")).toHaveText("$99.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++}
++
++/** Rewrite the saved state as an older build would have left it, then reload on `url`. */
++async function asLegacy(page: Page, url: string, edit: (s: Json) => Json) {
++  const raw = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!), KEY);
++  delete raw.state.s.checkout.scope;
++  await page.evaluate(({ k, v }) => sessionStorage.setItem(k, JSON.stringify(v)), { k: KEY, v: { state: { s: edit(raw.state.s) }, version: 2 } });
++  await settle(page, url);
++}
++
++/** What the R-011 engine stored after a count edit while a checkout was open. */
++const r011Edited = (s: Json) => ({
++  ...s,
++  quote: null,
++  draft: {
++    ...s.draft,
++    requestedStoreCount: 2,
++    pharmacies: [s.draft.pharmacies[0], { ...s.draft.pharmacies[0], id: "demo_reg_ph_2", name: "Legacy extra", ncpdp: "0000045", npi: "0000000045" }],
++    revision: s.draft.revision + 1,
++    state: "editing",
++    consents: { termsAccepted: false, recurringChargeAccepted: false, priceChangeAccepted: false },
++  },
++});
++
++test("R3-F01: an R-011 open checkout edited before the upgrade is held with no scope and no payment, across reloads", async ({ page }) => {
++  await openCheckout(page);
++  const key = (await snap(page)).key;
++  await asLegacy(page, "/demo/stripe", r011Edited);
++  for (let i = 0; i < 2; i++) {
++    const hold = page.getByTestId("checkout-hold");
++    await expect(hold).toContainText("We can't match this payment to your current details");
++    await expect(hold).toContainText("Please don't pay again");
++    await expect(hold).not.toContainText("after you paid");
++    await expect(page.getByTestId("outcome-paid")).toHaveCount(0);
++    await expect(page.getByTestId("restore-scope")).toHaveCount(0);
++    await page.waitForTimeout(1200);
++    await page.reload();
++  }
++  expect(await snap(page)).toMatchObject({ version: 3, count: 2, checkout: "pending", key, scope: null, payment: null });
++  await settle(page, "/demo/activation");
++  await expect(page.getByText("There's no payment to track yet")).toBeVisible();
++});
++
++test("R3-F01 known scope: an unedited legacy open checkout binds the quote it opened with and can be paid", async ({ page }) => {
++  await openCheckout(page);
++  await asLegacy(page, "/demo/stripe", (s) => s);
++  expect(await snap(page)).toMatchObject({ version: 3, checkout: "pending", scope: { storeCount: 1, dueNowCents: 9900 } });
++  await page.getByTestId("outcome-paid").click();
++  await page.waitForURL("**/demo/activation");
++  await expect(page.getByTestId("activation-tracks")).toContainText("Confirmed by Stripe · $99.00");
++});
++
++test("R3-F01 recovery: an edited legacy unknown payment stays unmatched; nothing charged → fresh quote → new key", async ({ page }) => {
++  await openCheckout(page);
++  const key = (await snap(page)).key;
++  await page.getByTestId("outcome-unknown").click();
++  await page.waitForURL("**/demo/checkout-incomplete");
++  await asLegacy(page, "/demo/checkout-incomplete", r011Edited);
++  await expect(page.getByTestId("unknown-hold")).toContainText("We can't match this payment to your current details");
++  await expect(page.getByTestId("restore-scope")).toHaveCount(0);
++  await expect(page.getByTestId("unknown-paid")).toBeDisabled();
++  await page.getByTestId("unknown-not-charged").click();
++  await page.getByTestId("incomplete-continue").click();
++  await page.waitForURL("**/demo/register/review");
++  await expect(page.getByTestId("due-today")).toHaveText("$148.00");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await expect(page.getByTestId("checkout-preview")).toBeVisible();
++  const fresh = await snap(page);
++  expect(fresh).toMatchObject({ checkout: "pending", scope: { storeCount: 2, dueNowCents: 14800 } });
++  expect(fresh.key).not.toBe(key);
++});
++
++const REPLACEMENT = { kind: "other", fullName: "Replacement Admin", email: "replacement@demo-pharmacy.example" };
++const SAM = { kind: "other", fullName: "Sam Ortiz", email: "sam@demo-pharmacy.example" };
++
++/** Pay for one pharmacy (optionally with a nominated admin), finish activation, then change the draft admin. */
++async function completeThenNominate(page: Page, admin?: Json) {
++  await load(page, "prefilled_one_store");
++  if (admin)
++    await page.evaluate(
++      ({ k, admin }) => {
++        const raw = JSON.parse(sessionStorage.getItem(k)!);
++        raw.state.s.draft.pharmacies[0].adminAssignment = admin;
++        sessionStorage.setItem(k, JSON.stringify(raw));
++      },
++      { k: KEY, admin },
++    );
++  await settle(page, "/demo/register/review");
++  await page.locator("#c1").check();
++  await page.locator("#c2").check();
++  await page.getByTestId("continue-payment").click();
++  await page.getByTestId("outcome-paid").click();
++  await page.waitForURL("**/demo/activation");
++  await page.getByTestId("activation-refresh").click();
++  await expect(page.getByRole("heading", { level: 1 })).toHaveText("You're in. Check your email.");
++  await page.evaluate(
++    ({ k, admin }) => {
++      const raw = JSON.parse(sessionStorage.getItem(k)!);
++      raw.state.s.draft.pharmacies[0].adminAssignment = admin;
++      sessionStorage.setItem(k, JSON.stringify(raw));
++    },
++    { k: KEY, admin: REPLACEMENT },
++  );
++  await settle(page, "/demo/activation");
++}
++
++const text = async (page: Page) => (await page.locator("main").innerText()).toLowerCase();
++
++test("R3-F02: completed activation and its previews name no admin nominated after payment", async ({ page }) => {
++  await completeThenNominate(page);
++  const main = await text(page);
++  expect(main).toContain("sent to j•••@demo-pharmacy.example.");
++  expect(main).not.toContain("replacement admin");
++  expect(main).not.toContain("invitation");
++  for (const variant of ["owner", "store_admin"]) {
++    await settle(page, `/demo/references/email?variant=${variant}`);
++    expect(await text(page)).not.toContain("replacement admin");
++  }
++  const s = await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!).state.s, KEY);
++  expect(s.checkout.scope.pharmacies[0].adminAssignment).toEqual({ kind: "owner" });
++  expect(s.activation).toMatchObject({ paymentState: "confirmed", provisioningState: "ready", emailState: "sent" });
++});
++
++test("R3-F02 control: an admin the payment covered is still the one named and previewed", async ({ page }) => {
++  await completeThenNominate(page, SAM);
++  const main = await text(page);
++  expect(main).toContain("a separate store invitation went to sam ortiz");
++  expect(main).not.toContain("replacement admin");
++  await page.getByRole("link", { name: "Preview Sam Ortiz's invitation" }).click();
++  await page.waitForURL("**/demo/references/email?variant=store_admin");
++  await expect(page.getByTestId("view-skeleton")).toHaveCount(0);
++  const preview = await text(page);
++  expect(preview).toContain("sam, you've been invited to manage example main street pharmacy");
++  expect(preview).toContain("s•••@demo-pharmacy.example");
++  expect(preview).not.toContain("replacement admin");
++});
++
++/** Ring colour vs the surface outside it and vs its inner offset, unrounded. */
++const ringRatios = (page: Page) =>
++  page.evaluate(() => {
++    const el = document.activeElement as HTMLElement;
++    const rgb = (s: string) => {
++      const a = s.match(/[\d.]+/g)?.map(Number) || [0, 0, 0];
++      return [a[0], a[1], a[2], a.length > 3 ? a[3] : 1];
++    };
++    const blend = (f: number[], b: number[]) => [0, 1, 2].map((k) => f[k] * f[3] + b[k] * (1 - f[3]));
++    const lum = (a: number[]) =>
++      a.slice(0, 3).map((v) => ((v /= 255) <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))).reduce((s, v, k) => s + v * [0.2126, 0.7152, 0.0722][k], 0);
++    const ratio = (a: number[], b: number[]) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
++    const chain: HTMLElement[] = [];
++    for (let a = el.parentElement; a; a = a.parentElement) chain.unshift(a);
++    let outer = [255, 255, 255];
++    for (const a of chain) outer = blend(rgb(getComputedStyle(a).backgroundColor), outer);
++    const colours = (getComputedStyle(el).boxShadow.match(/rgba?\([^)]*\)/g) || []).map(rgb).filter((c) => c[3] > 0);
++    const [offset, ring] = [colours[0], colours[colours.length - 1]];
++    return { shadow: getComputedStyle(el).boxShadow, outer: ratio(blend(ring, outer), outer), inner: ratio(ring, offset) };
++  });
++
++test("R3-O03: the restore button's keyboard ring clears 3:1 against both neighbours in both themes; Enter still restores", async ({ page }) => {
++  for (const theme of THEMES) {
++    await openCheckout(page);
++    await page.getByTestId("outcome-unknown").click();
++    await page.waitForURL("**/demo/checkout-incomplete");
++    await settle(page, "/demo/register/pharmacies");
++    await page.locator("#ph-name").fill("Changed after submission");
++    await page.getByRole("button", { name: "Continue to review", exact: true }).click();
++    await page.waitForURL("**/demo/register/review");
++    await settle(page, "/demo/checkout-incomplete");
++    await setTheme(page, theme);
++    await page.reload();
++    await expect(page.getByTestId("restore-scope")).toBeVisible();
++    await page.locator("body").click({ position: { x: 1, y: 1 } });
++    let reached = false;
++    for (let i = 0; i < 60 && !reached; i++) {
++      await page.keyboard.press("Tab");
++      reached = await page.getByTestId("restore-scope").evaluate((el) => el === document.activeElement);
++    }
++    expect(reached).toBe(true);
++    await page.waitForTimeout(350);
++    const r = await ringRatios(page);
++    recordContrast("focus-repair004.jsonl", { screen: "/demo/checkout-incomplete [restore-scope]", theme, ...r });
++    expect(r.outer, `${theme} outer`).toBeGreaterThanOrEqual(3);
++    expect(r.inner, `${theme} inner`).toBeGreaterThanOrEqual(3);
++    await page.screenshot({ path: `test-results/repair004-focus-restore_${theme}.png` });
++    await page.keyboard.press("Enter");
++    await expect(page.getByTestId("restore-scope")).toHaveCount(0);
++    expect(await page.evaluate((k) => JSON.parse(sessionStorage.getItem(k)!).state.s.draft.pharmacies[0].name, KEY)).toBe(ORIGINAL);
++  }
++});
++
++test("REPAIR_004 screens at 375 and 1440, light and dark: Gate M, contrast, screenshots", async ({ page }) => {
++  test.setTimeout(180_000);
++  const screens: { name: string; url: string; prepare: () => Promise<void>; ready: string }[] = [
++    { name: "stripe-unmatched", url: "/demo/stripe", ready: "checkout-hold", prepare: async () => { await openCheckout(page); await asLegacy(page, "/demo/stripe", r011Edited); } },
++    { name: "activation-completed", url: "/demo/activation", ready: "activation-tracks", prepare: () => completeThenNominate(page) },
++  ];
++  for (const sc of screens) {
++    await page.setViewportSize({ width: 1440, height: 900 });
++    await sc.prepare();
++    for (const theme of THEMES)
++      for (const width of [375, 1440]) {
++        await page.setViewportSize({ width, height: 900 });
++        await settle(page, sc.url);
++        await setTheme(page, theme);
++        await page.reload();
++        await expect(page.getByTestId(sc.ready)).toBeVisible({ timeout: 5000 });
++        const g = await measure(page, `${sc.url} [REPAIR_004 ${sc.name}]`, width, theme);
++        record("gate-m-repair004.jsonl", g);
++        assertGate(g);
++        const fails = textFailures(await textContrast(page));
++        recordContrast("contrast-repair004.jsonl", { screen: `${sc.url} [REPAIR_004 ${sc.name}]`, width, theme, fails });
++        expect.soft(fails, `${sc.name} ${theme} ${width}`).toEqual([]);
++        await page.screenshot({ path: `test-results/repair004-${sc.name}_${theme}_${width}.png`, fullPage: true });
++      }
++  }
++});

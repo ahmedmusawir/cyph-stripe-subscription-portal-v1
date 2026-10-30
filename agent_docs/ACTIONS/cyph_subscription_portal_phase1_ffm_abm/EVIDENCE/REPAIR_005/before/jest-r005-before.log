@@ -1,0 +1,98 @@
+FAIL src/__tests__/portal-registration.test.ts
+  ● checkout record governs the payment (REPAIR_005, R4-F01/R4-F02) › R4-F01: nothing charged on a legacy unknown payment is terminal; a stale refresh is refused and changes nothing
+
+    expect(received).toBeNull()
+
+    Received: {"emailState": "not_started", "ownerEmailMasked": "j•••@demo-pharmacy.example", "paymentState": "pending", "provisioningState": "not_started", "retryAvailable": false}
+
+      1097 |     const resolved = reg.resolveUnknownPayment(legacyProcessingThenUnknown(), 'not_charged').state;
+      1098 |     expect(resolved.checkout?.status).toBe('abandoned');
+    > 1099 |     expect(resolved.activation).toBeNull();
+           |                                 ^
+      1100 |     // Cody's stored state still carries the pending activation; it must behave the same.
+      1101 |     const stale: RegistrationState = { ...resolved, activation: processing().activation };
+      1102 |     for (const s of [stale, reload(stale)]) {
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1099:33)
+
+  ● checkout record governs the payment (REPAIR_005, R4-F01/R4-F02) › R4-F02: an unknown checkout with a retained failed flag is still submitted; resume, restart, outcomes and new checkouts are refused
+
+    TypeError: reg.paymentPhase is not a function
+
+      1119 |     for (const s of [legacyFailedThenUnknown(), reload(legacyFailedThenUnknown())]) {
+      1120 |       expect(s.activation?.paymentState).toBe('failed');
+    > 1121 |       expect(reg.paymentPhase(s)).toBe('unknown');
+           |                  ^
+      1122 |       expect(reg.isSubmitted(s)).toBe(true);
+      1123 |       for (const step of [reg.resumeSignup(s), reg.restartSignup(s), reg.refreshActivation(s), reg.resolveCheckout(s, 'back'), reg.startCheckout(reg.requestQuote(s, deps).state, { quoteId: 'x', consents: consented, operationKey: NEW }, deps)]) {
+      1124 |         expect(step.result).toMatchObject({ ok: false, code: 'conflict' });
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1121:18)
+
+  ● checkout record governs the payment (REPAIR_005, R4-F01/R4-F02) › genuine failure and genuine confirmation are unchanged
+
+    TypeError: reg.paymentPhase is not a function
+
+      1140 |   it('genuine failure and genuine confirmation are unchanged', () => {
+      1141 |     const failed = reg.refreshActivation(reg.setActivationPlan(processing(), 'payment_failed').state).state;
+    > 1142 |     expect([failed.checkout?.status, failed.activation?.paymentState, reg.paymentPhase(failed)]).toEqual(['declined', 'failed', 'failed']);
+           |                                                                           ^
+      1143 |     expect(reg.resumeSignup(failed).result.ok).toBe(true);
+      1144 |     const confirmed = reg.refreshActivation(processing()).state;
+      1145 |     expect([confirmed.checkout?.status, confirmed.activation?.paymentState, reg.paymentPhase(confirmed)]).toEqual(['paid', 'confirmed', 'paid']);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1142:75)
+
+  ● checkout record governs the payment (REPAIR_005, R4-F01/R4-F02) › transition matrix: allowed transitions follow the phase; refusals leave state unchanged
+
+    TypeError: reg.paymentPhase is not a function
+
+      1196 |       for (const [flag, activation] of Object.entries(flags)) {
+      1197 |         const s: RegistrationState = { ...make(), activation };
+    > 1198 |         const phase = reg.paymentPhase(s);
+           |                           ^
+      1199 |         for (const [action, run] of Object.entries(actions)) {
+      1200 |           const { input, step } = run(s);
+      1201 |           let expected = allowed[phase].includes(action);
+
+      at Object.<anonymous> (src/__tests__/portal-registration.test.ts:1198:27)
+
+FAIL src/__tests__/portal-checkout-hold.test.tsx
+  ● legacy checkout/activation conflicts on screen (REPAIR_005, R4-F01/R4-F02) › R4-F01: a nothing-charged record with a stale pending activation offers no Refresh; the service refuses it
+
+    expect(received).toBeNull()
+
+    Received: <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-4 py-2" data-testid="activation-refresh" type="button">Refresh status</button>
+
+      447 |     const before = s();
+      448 |     render(<ActivationView />);
+    > 449 |     expect(screen.queryByTestId('activation-refresh')).toBeNull();
+          |                                                        ^
+      450 |     expect(screen.queryByTestId('activation-tracks')).toBeNull();
+      451 |     expect(screen.getByTestId('activation-not-charged').textContent).toMatch(/Nothing was charged/);
+      452 |     expect(screen.getByRole('link', { name: 'Continue my signup' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:449:56)
+
+  ● legacy checkout/activation conflicts on screen (REPAIR_005, R4-F01/R4-F02) › R4-F02: an unknown record with a stale failed flag offers no "Try payment again"; resume is refused; C14 still resolves it
+
+    expect(received).toBeNull()
+
+    Received: <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold uppercase tracking-wide ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-foreground/25 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-4 py-2" type="button">Try payment again</button>
+
+      463 |     const before = s();
+      464 |     const view = render(<ActivationView />);
+    > 465 |     expect(screen.queryByRole('button', { name: 'Try payment again' })).toBeNull();
+          |                                                                         ^
+      466 |     expect(screen.queryByTestId('activation-refresh')).toBeNull();
+      467 |     expect(screen.getByTestId('activation-unknown').textContent).toMatch(/still checking whether a payment went through/);
+      468 |     expect(screen.getByRole('link', { name: 'See checkout status' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
+
+      at Object.<anonymous> (src/__tests__/portal-checkout-hold.test.tsx:465:73)
+
+Test Suites: 2 failed, 2 total
+Tests:       6 failed, 122 skipped, 1 passed, 129 total
+Snapshots:   0 total
+Time:        4.354 s
+Ran all test suites matching src/__tests__/portal-registration.test.ts|src/__tests__/portal-checkout-hold.test.tsx with tests matching "REPAIR_005".
+Test results written to: ../out/before/jest-r005-before.json

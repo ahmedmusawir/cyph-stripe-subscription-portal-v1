@@ -1,0 +1,72 @@
+[
+  {
+    surface: 'closed',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'standin-hold',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'activation-hold',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'unknown-hold',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'closed',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'standin-hold',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'activation-hold',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'unknown-hold',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'dashboard-actions',
+    theme: 'light',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  },
+  {
+    surface: 'dashboard-actions',
+    theme: 'dark',
+    zoom: true,
+    shortfalls: 0,
+    error: undefined
+  }
+]

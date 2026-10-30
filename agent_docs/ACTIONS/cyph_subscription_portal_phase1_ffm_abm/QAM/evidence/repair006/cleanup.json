@@ -1,0 +1,20 @@
+{
+  "ownedPID": 1374212,
+  "port": 3116,
+  "signal": "SIGTERM",
+  "removed": [
+    "/tmp/cody-r6-zoom-profile",
+    "/tmp/cody-r6-pw-output",
+    "/tmp/cody-r6-original-readers-output",
+    "/tmp/cody-r6-ui-controls-output",
+    "/tmp/cody-r6-snapshot/.env.local"
+  ],
+  "unrelatedPIDsAlive": {
+    "970525": true,
+    "40320": true
+  },
+  "signIns": 0,
+  "logouts": 0,
+  "credentialsUsedForAuth": false,
+  "authStateWritten": false
+}

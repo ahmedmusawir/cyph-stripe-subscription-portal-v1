@@ -1,0 +1,10 @@
+  console.log
+    {"backOk":true,"statusAfterBack":"abandoned","activationAfterBack":"pending","secondCheckoutOk":true}
+
+      at Object.<anonymous> (eng-probe/submitted-back.test.ts:13:11)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        0.672 s, estimated 1 s
+Ran all test suites.

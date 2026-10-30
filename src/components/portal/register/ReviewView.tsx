@@ -19,6 +19,7 @@ import {
   firstIncomplete,
   formatCents,
   isQuoteExpired,
+  isSubmitted,
   registration,
   useRegistration,
 } from "@/services/portal";
@@ -43,6 +44,11 @@ export function ReviewView() {
   const requested = useRef<number | null>(null);
 
   const { draft, quote, checkout } = state;
+
+  // R-013: a checkout key is single-use. Once no checkout is open, the next attempt gets a new key.
+  useEffect(() => {
+    if (checkout?.status !== "pending") opKey.renew();
+  }, [checkout?.status, checkout?.operationKey, opKey.renew]);
 
   // Route guard and checkout state.
   useEffect(() => {
@@ -96,6 +102,8 @@ export function ReviewView() {
   const n = draft.requestedStoreCount;
   const owner = draft.owner;
   const ownerName = [owner.firstName, owner.lastName].filter(Boolean).join(" ");
+  // R4-N01: a payment already submitted on Stripe is not an open checkout; it can't be closed or paid again here.
+  const submitted = isSubmitted(state);
 
   async function refresh() {
     setQuoteError(false);
@@ -156,7 +164,21 @@ export function ReviewView() {
       </div>
       <PageHeader eyebrow="Step 4 · Review & pay" title="Review and pay" lead="Check everything, then continue to Stripe's secure checkout. Nothing is charged on this page." />
 
-      {checkout?.status === "pending" ? (
+      {submitted ? (
+        <div className="mt-5" data-testid="review-submitted">
+          <Alert
+            tone="info"
+            title="You've already submitted a payment"
+            action={
+              <Button asChild>
+                <Link href={checkout?.status === "unknown" ? "/demo/checkout-incomplete" : "/demo/activation"}>See payment status</Link>
+              </Button>
+            }
+          >
+            Stripe is confirming it, so this page can&apos;t start another payment or close this one. Please don&apos;t pay again.
+          </Alert>
+        </div>
+      ) : checkout?.status === "pending" ? (
         <Alert
           tone="info"
           className="mt-5"
@@ -376,7 +398,7 @@ export function ReviewView() {
             </div>
 
             <div className="space-y-2">
-              <Button type="submit" className="w-full" disabled={!ready || leaving || checkout?.status === "pending"} aria-busy={leaving || undefined} data-testid="continue-payment">
+              <Button type="submit" className="w-full" disabled={!ready || leaving || checkout?.status === "pending" || submitted} aria-busy={leaving || undefined} data-testid="continue-payment">
                 {leaving ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

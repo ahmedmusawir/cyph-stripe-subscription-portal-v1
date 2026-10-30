@@ -1,0 +1,21 @@
+{
+  "ownedPID": 1287183,
+  "port": 3114,
+  "signal": "SIGTERM",
+  "removed": [
+    "/tmp/cody-r4-zoom-profile",
+    "/tmp/cody-r4-pw-output",
+    "/tmp/cody-r4-extra-output",
+    "/tmp/cody-r4-transition-browser-output",
+    "/tmp/cody-r4-admin-corrected-output",
+    "/tmp/cody-r4-snapshot/.env.local"
+  ],
+  "unrelatedPIDsAlive": {
+    "970525": true,
+    "40320": true
+  },
+  "signIns": 0,
+  "logouts": 0,
+  "credentialsUsedForAuth": false,
+  "authStateWritten": false
+}

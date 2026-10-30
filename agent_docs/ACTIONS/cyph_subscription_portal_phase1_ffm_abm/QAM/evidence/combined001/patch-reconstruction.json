@@ -1,0 +1,16 @@
+[
+  {
+    "patch": "REPAIR",
+    "patchExit": 0,
+    "paths": 27,
+    "mismatches": [],
+    "log": "patching file e2e/account.journeys.spec.ts\npatching file e2e/admin.setup.ts\npatching file e2e/logout.final.spec.ts\npatching file e2e/public.journeys.spec.ts\npatching file playwright.config.ts\npatching file src/__tests__/portal-account.test.ts\npatching file src/__tests__/portal-registration.test.ts\npatching file 'src/app/(handoff)/demo/stripe/page.tsx'\npatching file src/app/globals.scss\npatching file src/components/portal/AccountStrip.tsx\npatching file src/components/portal/DataTable.tsx\npatching file src/components/portal/PublicDemoControls.tsx\npatching file src/components/portal/account/DashboardView.tsx\npatching file src/components/portal/register/PlanView.tsx\npatching file src/services/portal/account.ts\npatching file src/services/portal/accountService.tsx\npatching file src/services/portal/index.ts\npatching file src/services/portal/pricing.ts\npatching file src/services/portal/registration.ts\npatching file e2e/account.repair.spec.ts\npatching file e2e/auth.ts\npatching file e2e/contrast.ts\npatching file e2e/public.repair.spec.ts\npatching file e2e/public.zoom.spec.ts\npatching file src/__tests__/portal-dashboard.test.tsx\npatching file src/__tests__/portal-stripe-route.test.tsx\npatching file src/services/portal/stripeRoute.ts\n"
+  },
+  {
+    "patch": "AMENDMENT",
+    "patchExit": 0,
+    "paths": 18,
+    "mismatches": [],
+    "log": "patching file e2e/gate-m.public.spec.ts\npatching file e2e/public.journeys.spec.ts\npatching file src/__tests__/portal-registration.test.ts\npatching file src/components/portal/PharmacyFields.tsx\npatching file src/components/portal/account/AddStoreView.tsx\npatching file src/components/portal/account/DashboardView.tsx\npatching file src/components/portal/register/OwnerView.tsx\npatching file src/components/portal/register/PharmacyStepView.tsx\npatching file src/components/portal/register/ReviewView.tsx\npatching file src/mocks/portal/fixtures.ts\npatching file src/services/portal/catalog.ts\npatching file src/services/portal/index.ts\npatching file src/services/portal/registration.ts\npatching file src/services/portal/registrationService.ts\npatching file src/services/portal/validation.ts\npatching file src/types/portal/contract.ts\npatching file e2e/public.owner-declaration.spec.ts\npatching file src/__tests__/portal-owner.test.tsx\n"
+  }
+]

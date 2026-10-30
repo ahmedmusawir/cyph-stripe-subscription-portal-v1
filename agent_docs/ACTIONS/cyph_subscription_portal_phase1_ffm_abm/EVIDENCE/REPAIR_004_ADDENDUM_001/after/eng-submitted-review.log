@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 eng-e2e/submitted-review.spec.ts:6:5 › observation: does Review offer to close a processing payment, and can it then be paid again? (3.9s)
+
+  1 passed (4.9s)

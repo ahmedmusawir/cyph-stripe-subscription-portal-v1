@@ -1,0 +1,20 @@
+[
+  {
+    "theme": "light",
+    "color": "rgb(230, 233, 239)",
+    "background": "rgb(47, 53, 65)",
+    "border": "rgb(85, 93, 109)",
+    "ring": "rgb(249, 112, 78)",
+    "shadow": "rgb(59, 66, 78) 0px 0px 0px 2px, rgb(249, 112, 78) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "solid"
+  },
+  {
+    "theme": "dark",
+    "color": "rgb(230, 233, 239)",
+    "background": "rgb(47, 53, 65)",
+    "border": "rgb(85, 93, 109)",
+    "ring": "rgb(249, 112, 78)",
+    "shadow": "rgb(59, 66, 78) 0px 0px 0px 2px, rgb(249, 112, 78) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "solid"
+  }
+]

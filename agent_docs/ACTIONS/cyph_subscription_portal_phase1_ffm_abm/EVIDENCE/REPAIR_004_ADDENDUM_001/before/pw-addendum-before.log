@@ -1,0 +1,94 @@
+
+Running 7 tests using 1 worker
+
+  ✘  1 [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 processing: Review, reload, direct navigation and Back never close the submitted payment or open another (9.2s)
+  ✓  2 [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 unknown: Review, reload, direct navigation and Back never close the submitted payment or open another (7.6s)
+  ✓  3 [public] › e2e/public.repair004-addendum.spec.ts:85:5 › R4-N01 preserved: an unsubmitted open checkout can still be closed from Review and paid with a new key (6.4s)
+  ✓  4 [public] › e2e/public.repair004-addendum.spec.ts:100:5 › R4-N01 preserved: a genuine payment failure recovers through a fresh quote and a new checkout (3.2s)
+  ✓  5 [public] › e2e/public.repair004-addendum.spec.ts:117:5 › R4-N01 preserved: unknown → nothing charged recovers through a fresh quote and a new checkout (6.7s)
+  ✘  6 [public] › e2e/public.repair004-addendum.spec.ts:147:5 › completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt (9.4s)
+  ✘  7 [public] › e2e/public.repair004-addendum.spec.ts:166:5 › REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots (8.8s)
+
+
+  1) [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 processing: Review, reload, direct navigation and Back never close the submitted payment or open another 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('review-submitted')
+    Expected substring: [32m"already submitted a payment"[39m
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('review-submitted')[22m
+
+
+      62 |         await expect(page.getByTestId("incomplete-continue")).toBeDisabled();
+      63 |       } else {
+    > 64 |         await expect(page.getByTestId("review-submitted")).toContainText("already submitted a payment");
+         |                                                            ^
+      65 |         await expect(page.getByTestId("continue-payment")).toBeDisabled();
+      66 |       }
+      67 |       await expect(page.getByRole("button", { name: "Edit my details instead" })).toHaveCount(0);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r008/app/e2e/public.repair004-addendum.spec.ts:64:60
+
+    Error Context: test-results/public.repair004-addendum--9d62d-ted-payment-or-open-another-public/error-context.md
+
+  2) [public] › e2e/public.repair004-addendum.spec.ts:147:5 › completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('activation-tracks')
+    Expected substring: not [32m"$"[39m
+    Received string: [31m"Activation progressPayment — DoneConfirmed by Stripe · [7m$[27m148.00 (illustrative)Pharmacy setup — DoneEdited after payment and Added after payment are set up in OwedBook.Access email — DoneSent to j•••@demo-pharmacy.example."[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "not toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('activation-tracks')[22m
+    [2m    9 × locator resolved to <section aria-live="polite" aria-labelledby="tr-h" data-testid="activation-tracks" class="mt-6 border border-border bg-card p-4 sm:p-5">…</section>[22m
+    [2m      - unexpected value "Activation progressPayment — DoneConfirmed by Stripe · $148.00 (illustrative)Pharmacy setup — DoneEdited after payment and Added after payment are set up in OwedBook.Access email — DoneSent to j•••@demo-pharmacy.example."[22m
+
+
+      150 |   const tracks = page.getByTestId("activation-tracks");
+      151 |   await expect(tracks).toContainText("Confirmed by Stripe");
+    > 152 |   await expect(tracks).not.toContainText("$");
+          |                            ^
+      153 |   await expect(page.getByTestId("history-unavailable")).toContainText("can't show which pharmacies or what amount");
+      154 |   const main = (await page.locator("main").innerText()).toLowerCase();
+      155 |   for (const word of ["edited after payment", "added after payment", "try payment again", "pay again now"]) expect(main).not.toContain(word);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r008/app/e2e/public.repair004-addendum.spec.ts:152:28
+
+    Error Context: test-results/public.repair004-addendum--32f9a-or-amount-no-payment-prompt-public/error-context.md
+
+  3) [public] › e2e/public.repair004-addendum.spec.ts:166:5 › REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('review-submitted')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('review-submitted')[22m
+
+
+      180 |         await setTheme(page, theme);
+      181 |         await page.reload();
+    > 182 |         await expect(page.getByTestId(sc.ready)).toBeVisible({ timeout: 5000 });
+          |                                                  ^
+      183 |         const g = await measure(page, `${sc.url} [REPAIR_004 addendum ${sc.name}]`, width, theme);
+      184 |         record("gate-m-repair004-addendum.jsonl", g);
+      185 |         assertGate(g);
+        at /tmp/claude-1000/-home-moose-NEXTJS-CYBER-PHARMA-cyph-stripe-subscription-portal-v1/c664800a-2142-4b48-af44-b0974b0dbb98/scratchpad/r008/app/e2e/public.repair004-addendum.spec.ts:182:50
+
+    Error Context: test-results/public.repair004-addendum--84283-Gate-M-contrast-screenshots-public/error-context.md
+
+  3 failed
+    [public] › e2e/public.repair004-addendum.spec.ts:54:7 › R4-N01 processing: Review, reload, direct navigation and Back never close the submitted payment or open another 
+    [public] › e2e/public.repair004-addendum.spec.ts:147:5 › completed legacy record without a provable scope: completed status kept, unavailable history, no edited names or amount, no payment prompt 
+    [public] › e2e/public.repair004-addendum.spec.ts:166:5 › REPAIR_004 addendum screens at 375 and 1440, light and dark: Gate M, contrast, screenshots 
+  4 passed (54.5s)

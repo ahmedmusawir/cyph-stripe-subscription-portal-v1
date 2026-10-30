@@ -18,6 +18,7 @@ import type {
 import type {
   CheckoutClosedReason,
   CheckoutRecord,
+  CheckoutScope,
   RegistrationScenarioId,
   RegistrationState,
   ServiceDeps,
@@ -111,6 +112,12 @@ function activation(partial: Partial<ActivationView>, ownerEmail: string): Activ
 
 /** Deterministic scenario seeds (enumerated; anything else is rejected). */
 export function createRegistration(scenario: RegistrationScenarioId = 'fresh'): RegistrationState {
+  const s = seed(scenario);
+  // A seeded checkout was quoted for the seeded details (R-013).
+  return s.checkout ? { ...s, checkout: { ...s.checkout, scope: scopeOf(s.draft, listPrice(s.draft)) } } : s;
+}
+
+function seed(scenario: RegistrationScenarioId): RegistrationState {
   if (scenario === 'fresh') return base('fresh', draftFor([], {}));
   const two = draftFor([{ ...PHARMACY_MAIN }, { ...PHARMACY_RIVERSIDE }], { ...OWNER_JORDAN });
   const email = OWNER_JORDAN.email;
@@ -229,6 +236,88 @@ function touch(
   };
 }
 
+/**
+ * R-013: a payment already submitted to Stripe — processing, or returned
+ * before Stripe answered. It is never closed by an edit; it stays bound to the
+ * scope it was quoted for.
+ */
+export function isSubmitted(state: RegistrationState): boolean {
+  const status = state.checkout?.status;
+  return status === 'unknown' || (status === 'pending' && state.activation?.paymentState === 'pending');
+}
+
+/**
+ * R4-N01: a submitted payment resolves only through Stripe's answer (refresh,
+ * or the unknown-payment resolution); nothing on our side closes, replays or
+ * restarts it.
+ */
+const SUBMITTED_MESSAGE = 'Your payment was already submitted. Check its status instead of paying again.';
+
+/**
+ * REPAIR_005 (R4-F01/R4-F02): the checkout record governs; the activation flag
+ * counts only where it agrees with it. Old builds left the two in conflict
+ * (an abandoned checkout with a pending activation, an unknown checkout with a
+ * failed activation), and every reader resolves the conflict the same way:
+ * - paid:        the checkout is paid; its history is never reversed.
+ * - unknown:     Stripe's answer is still owed, whatever the activation says.
+ * - processing:  pending checkout and pending activation agree.
+ * - failed:      Stripe declined and activation recorded the failure.
+ * - open:        on the stand-in (pending), or declined there without a failure record.
+ * - not_charged: abandoned or expired; a stale activation flag means nothing.
+ */
+export type PaymentPhase = 'none' | 'open' | 'processing' | 'unknown' | 'paid' | 'failed' | 'not_charged';
+export function paymentPhase(state: RegistrationState): PaymentPhase {
+  const c = state.checkout;
+  const payment = state.activation?.paymentState;
+  if (!c) return 'none';
+  switch (c.status) {
+    case 'paid':
+      return 'paid';
+    case 'unknown':
+      return 'unknown';
+    case 'pending':
+      return payment === 'pending' ? 'processing' : 'open';
+    case 'declined':
+      return payment === 'failed' ? 'failed' : 'open';
+    default:
+      return 'not_charged';
+  }
+}
+const RESOLVED_MESSAGE = 'This payment was already resolved. Nothing more can be confirmed for it.';
+
+const listPrice = (draft: RegistrationDraft) => initialRecurringCents(draft.requestedStoreCount) - initialDiscountCents(draft.code);
+
+function scopeOf(draft: RegistrationDraft, dueNowCents: number): CheckoutScope {
+  const pharmacies = JSON.parse(JSON.stringify(draft.pharmacies.slice(0, draft.requestedStoreCount))) as Partial<PharmacyDraft>[];
+  return { storeCount: draft.requestedStoreCount, pharmacies, ...(draft.code ? { code: draft.code } : {}), dueNowCents };
+}
+
+/** Key order and absent fields don't matter; values do. */
+function canonical(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(canonical);
+  if (v && typeof v === 'object')
+    return Object.fromEntries(
+      Object.keys(v)
+        .filter((k) => (v as Record<string, unknown>)[k] !== undefined)
+        .sort()
+        .map((k) => [k, canonical((v as Record<string, unknown>)[k])]),
+    );
+  return v;
+}
+
+/** The draft still describes exactly what the checkout was quoted for. */
+function inScope(draft: RegistrationDraft, scope: CheckoutScope): boolean {
+  const key = (count: number, code: string | undefined, pharmacies: Partial<PharmacyDraft>[]) =>
+    JSON.stringify(canonical({ count, code: code || null, pharmacies: pharmacies.slice(0, count) }));
+  return key(draft.requestedStoreCount, draft.code, draft.pharmacies) === key(scope.storeCount, scope.code, scope.pharmacies);
+}
+
+/** Remember a closed or replaced checkout's key so it can't open another checkout. */
+function spend(state: RegistrationState, key: string | undefined): string[] | undefined {
+  const spent = state.spentCheckoutKeys ?? [];
+  return key && !spent.includes(key) ? [...spent, key] : state.spentCheckoutKeys;
+}
+
 function hasContent(p: Partial<PharmacyDraft> | undefined): boolean {
   if (!p) return false;
   return Object.entries(p).some(([k, v]) => k !== 'id' && k !== 'adminAssignment' && typeof v === 'string' && v.trim() !== '');
@@ -286,7 +375,8 @@ function ownerFields(owner: Partial<OwnerDraft> | undefined): Partial<OwnerDraft
 export function migrateRegistration(persisted: unknown): RegistrationState {
   const old = persisted as Partial<RegistrationState> | null;
   if (!old || typeof old !== 'object' || !old.draft || typeof old.draft !== 'object') return createRegistration('fresh');
-  const migrated = { ...old, quote: null } as RegistrationState;
+  // Bind a checkout while its quote can still prove what it was for (R-013).
+  const migrated = { ...bindLegacyScope(old as RegistrationState), quote: null } as RegistrationState;
   // Storage v1 never recorded the declaration, so none is carried over, and an
   // open checkout from then was never covered by one (R-012).
   return withOwner(migrated, { ...ownerFields(old.draft.owner), ownerDeclarationAccepted: false });
@@ -390,23 +480,73 @@ export function isDraftComplete(draft: RegistrationDraft): boolean {
   return firstIncomplete(draft).step === 'review' && draft.pharmacies.length === draft.requestedStoreCount;
 }
 
-export type CheckoutHold = 'owner_declaration' | 'details_incomplete';
+export type CheckoutHold = 'owner_declaration' | 'scope_changed' | 'details_incomplete';
 
 /**
  * R-012: what currently stops an unpaid checkout from moving toward payment
  * (null = nothing). Checked on every such move — replay, outcome, unknown
  * resolution, activation refresh — against the draft as it is NOW, so a
  * stored or replayed checkout can't outlive its prerequisites.
+ * R-013: and the draft must still be what the checkout was quoted for. A
+ * record with no scope (persisted before R-013 and edited since) can't be
+ * matched, so it is held too.
  */
-export function checkoutHold(draft: RegistrationDraft): CheckoutHold | null {
+export function checkoutHold(draft: RegistrationDraft, checkout: CheckoutRecord | null = null): CheckoutHold | null {
   if (draft.owner?.ownerDeclarationAccepted !== true) return 'owner_declaration';
+  const live = checkout?.status === 'pending' || checkout?.status === 'declined' || checkout?.status === 'unknown';
+  if (live && !(checkout.scope && inScope(draft, checkout.scope))) return 'scope_changed';
   return isDraftComplete(draft) ? null : 'details_incomplete';
 }
 
 const HOLD_MESSAGE: Record<CheckoutHold, string> = {
   owner_declaration: 'Confirm that you are the pharmacy owner before paying.',
+  scope_changed: 'This payment is for the details you submitted. Use those details to continue.',
   details_incomplete: 'Some signup details are missing. Finish them before paying.',
 };
+
+/**
+ * R-013 "Use the details I paid for": put the draft back to the scope a
+ * submitted payment was quoted for, so that payment can confirm. Later edits
+ * are dropped on purpose; nothing is charged again.
+ */
+export function restoreSubmittedScope(state: RegistrationState): Step<RegistrationDraft> {
+  const scope = state.checkout?.scope;
+  if (!isSubmitted(state) || !scope || inScope(state.draft, scope))
+    return fail(state, 'conflict', 'There are no changed details to undo for this payment.');
+  const draft: RegistrationDraft = {
+    ...state.draft,
+    requestedStoreCount: scope.storeCount,
+    pharmacies: JSON.parse(JSON.stringify(scope.pharmacies)),
+    code: scope.code,
+    revision: state.draft.revision + 1,
+    state: 'checkout_pending',
+  };
+  return ok({ ...state, draft, quote: null, codeFeedback: scope.code ? 'applied' : 'none' }, draft);
+}
+
+/**
+ * Persisted state written before R-013 has checkouts with no scope. Bind one
+ * only where the record still proves what it was quoted for (REPAIR_004):
+ * - the quote it was opened with is still held for the same draft revision.
+ *   Every edit drops the quote and bumps the revision, in R-011 and R-012 alike.
+ * - or the record still matches its deterministic demo seed.
+ * Being open proves nothing: R-011 kept an open checkout through edits. An
+ * unproven checkout stays unbound, so it is held and never confirms.
+ */
+export function bindLegacyScope(state: RegistrationState): RegistrationState {
+  const checkout = state?.checkout;
+  if (!checkout || checkout.scope || !state.draft) return state;
+  const { draft, quote } = state;
+  const due =
+    quote?.id === checkout.quoteId && quote.draftRevision === draft.revision && quote.proposedStoreCount === draft.requestedStoreCount ? quote.dueNowCents : undefined;
+  const seeded = isRegistrationScenario(state.scenario) ? createRegistration(state.scenario).checkout : null;
+  const scope = typeof due === 'number'
+    ? scopeOf(draft, due)
+    : seeded?.scope && seeded.operationKey === checkout.operationKey && inScope(draft, seeded.scope)
+      ? seeded.scope
+      : null;
+  return scope ? { ...state, checkout: { ...checkout, scope } } : state;
+}
 
 // ---------------------------------------------------------------------------
 // Quotes, code, consent
@@ -513,14 +653,19 @@ export function startCheckout(
 ): Step<HandoffView> {
   if (!isOperationKey(input.operationKey)) return fail(state, 'validation', 'Missing operation key.');
   const existing = state.checkout;
+  if (isSubmitted(state)) return fail(state, 'conflict', SUBMITTED_MESSAGE);
   if (existing && existing.operationKey === input.operationKey && existing.status === 'pending') {
-    const hold = checkoutHold(state.draft);
+    const hold = checkoutHold(state.draft, existing);
     if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
     return ok(state, checkoutHandoff(existing.operationKey)); // replay: same handoff, no second checkout
   }
   if (existing && (existing.status === 'pending' || existing.status === 'unknown'))
     return fail(state, 'conflict', "A checkout is already in progress. Check its status instead of paying again.");
   if (existing?.status === 'paid') return fail(state, 'conflict', 'This signup is already paid.');
+  // R-013: a key belongs to one checkout. Once that checkout is closed, the key
+  // is spent; a new checkout needs a new key.
+  if (existing?.operationKey === input.operationKey || state.spentCheckoutKeys?.includes(input.operationKey))
+    return fail(state, 'conflict', 'That checkout was closed. Start a new checkout to pay.');
   if (!isDraftComplete(state.draft)) return fail(state, 'missing_context', 'Some signup details are missing.');
   const quote = state.quote;
   if (!quote || quote.status !== 'ready' || quote.id !== input.quoteId)
@@ -540,7 +685,8 @@ export function startCheckout(
       state: 'checkout_pending',
       resumeAvailable: true,
     },
-    checkout: { operationKey: input.operationKey, quoteId: quote.id, status: 'pending' },
+    checkout: { operationKey: input.operationKey, quoteId: quote.id, status: 'pending', scope: scopeOf(state.draft, quote.dueNowCents ?? listPrice(state.draft)) },
+    spentCheckoutKeys: spend(state, existing?.operationKey),
     activation: null,
   };
   return ok(next, checkoutHandoff(input.operationKey));
@@ -556,7 +702,8 @@ export function resolveCheckout(state: RegistrationState, outcome: unknown): Ste
   if (!(CHECKOUT_OUTCOMES as readonly unknown[]).includes(outcome)) return fail(state, 'validation', 'Unknown outcome.');
   if (checkout.status !== 'pending' && checkout.status !== 'declined')
     return fail(state, 'conflict', 'This checkout already has an outcome.');
-  const hold = outcome === 'paid' || outcome === 'processing' ? checkoutHold(state.draft) : null;
+  if (isSubmitted(state)) return fail(state, 'conflict', SUBMITTED_MESSAGE);
+  const hold = outcome === 'paid' || outcome === 'processing' ? checkoutHold(state.draft, checkout) : null;
   if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
   const email = state.draft.owner.email ?? '';
   let next: RegistrationState;
@@ -594,7 +741,7 @@ export function resolveUnknownPayment(state: RegistrationState, outcome: 'paid' 
   const checkout = state.checkout;
   if (checkout?.status !== 'unknown') return fail(state, 'conflict', 'Payment status is not pending.');
   if (outcome === 'paid') {
-    const hold = checkoutHold(state.draft);
+    const hold = checkoutHold(state.draft, checkout);
     if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
     const next: RegistrationState = {
       ...state,
@@ -604,22 +751,32 @@ export function resolveUnknownPayment(state: RegistrationState, outcome: 'paid' 
     };
     return ok(next, next.checkout!);
   }
-  const next = { ...state, checkout: { ...checkout, status: 'abandoned' as const }, draft: { ...state.draft, state: 'abandoned' as const } };
+  // Terminal: nothing was charged, so no activation is left behind to be refreshed (REPAIR_005).
+  const next = { ...state, checkout: { ...checkout, status: 'abandoned' as const }, activation: null, draft: { ...state.draft, state: 'abandoned' as const } };
   return ok(next, next.checkout);
 }
 
 /** Abandoned/declined → back to review with values kept; a fresh quote and fresh consent are needed. */
 export function resumeSignup(state: RegistrationState): Step<RegistrationDraft> {
+  // Only the checkout record says whether there is anything to resume (REPAIR_005): a
+  // retained failed flag on an unknown checkout is not a failure, and that payment
+  // must be resolved first. A genuine failure leaves the checkout declined.
   const status = state.checkout?.status;
-  if (status !== 'abandoned' && status !== 'declined' && state.activation?.paymentState !== 'failed')
-    return fail(state, 'conflict', 'There is no unfinished checkout to resume.');
-  const next = touch({ ...state, checkout: null, activation: null }, { ...state.draft, resumeAvailable: false });
+  if (status !== 'abandoned' && status !== 'declined')
+    return fail(state, 'conflict', isSubmitted(state) ? SUBMITTED_MESSAGE : 'There is no unfinished checkout to resume.');
+  const next = touch(
+    { ...state, checkout: null, activation: null, spentCheckoutKeys: spend(state, state.checkout?.operationKey) },
+    { ...state.draft, resumeAvailable: false },
+  );
   return ok(next, next.draft);
 }
 
 /** C14 expired → start a new signup (drafts discarded on purpose). */
 export function restartSignup(state: RegistrationState): Step<RegistrationDraft> {
-  const next = { ...createRegistration('fresh'), clockOffsetMs: state.clockOffsetMs };
+  // A submitted or completed payment is never discarded with the draft (R4-N01).
+  if (isSubmitted(state)) return fail(state, 'conflict', SUBMITTED_MESSAGE);
+  if (state.checkout?.status === 'paid') return fail(state, 'conflict', 'This signup is already paid.');
+  const next = { ...createRegistration('fresh'), clockOffsetMs: state.clockOffsetMs, spentCheckoutKeys: spend(state, state.checkout?.operationKey) };
   return ok(next, next.draft);
 }
 
@@ -627,9 +784,27 @@ export function restartSignup(state: RegistrationState): Step<RegistrationDraft>
 // Activation, access email, access link
 // ---------------------------------------------------------------------------
 
+/**
+ * The activation record as a reader may present it (REPAIR_006): only where it agrees
+ * with the payment phase (R-014). A paid checkout whose activation is absent or
+ * conflicting is reported as paid with setup/email status unavailable, never as
+ * the stale flag; closed or open checkouts have nothing to track.
+ */
+export function consistentActivation(state: RegistrationState): ActivationView | null {
+  const a = state.activation;
+  const phase = paymentPhase(state);
+  const agrees =
+    (phase === 'processing' && a?.paymentState === 'pending') ||
+    (phase === 'failed' && a?.paymentState === 'failed') ||
+    (phase === 'paid' && a?.paymentState === 'confirmed');
+  return agrees ? a : null;
+}
+
 export function readActivation(state: RegistrationState): Result<ActivationView> {
-  return state.activation
-    ? { ok: true, value: state.activation }
+  const a = consistentActivation(state);
+  if (a) return { ok: true, value: a };
+  return paymentPhase(state) === 'paid'
+    ? { ok: false, code: 'missing_context', message: "Payment is confirmed, but setup and email status aren't available." }
     : { ok: false, code: 'missing_context', message: 'There is no payment to track yet.' };
 }
 
@@ -643,8 +818,13 @@ export function refreshActivation(state: RegistrationState): Step<ActivationView
   if (!a) return fail(state, 'missing_context', 'There is no payment to track yet.');
   let next: ActivationView = a;
   let draftState = state.draft.state;
+  // Only a processing payment, or a paid one still being set up, has anything to refresh.
+  // A stale or conflicting activation flag never advances anything else (REPAIR_005).
+  const phase = paymentPhase(state);
+  if (!(phase === 'processing' || (phase === 'paid' && a.paymentState === 'confirmed')))
+    return fail(state, 'conflict', phase === 'unknown' ? SUBMITTED_MESSAGE : RESOLVED_MESSAGE);
   if (a.paymentState === 'pending') {
-    const hold = state.activationPlan === 'payment_failed' ? null : checkoutHold(state.draft);
+    const hold = state.activationPlan === 'payment_failed' ? null : checkoutHold(state.draft, state.checkout);
     if (hold) return fail(state, 'missing_context', HOLD_MESSAGE[hold]);
     if (state.activationPlan === 'payment_failed') {
       next = { ...a, paymentState: 'failed', retryAvailable: true };
@@ -675,8 +855,9 @@ export function refreshActivation(state: RegistrationState): Step<ActivationView
 
 /** Simulated resend; nothing is sent. */
 export function resendAccessEmail(state: RegistrationState, deps: ServiceDeps): Step<ActivationView> {
-  const a = state.activation;
-  if (!a || a.paymentState !== 'confirmed' || a.provisioningState !== 'ready')
+  // Only a paid checkout whose recorded setup finished may resend (REPAIR_006, R5-F02).
+  const a = consistentActivation(state);
+  if (paymentPhase(state) !== 'paid' || !a || a.provisioningState !== 'ready')
     return fail(state, 'conflict', 'The access email can be resent once setup is finished.');
   const next = { ...a, emailState: 'sent' as const };
   return ok({ ...state, activation: next, emailResentAt: iso(deps.now()), draft: { ...state.draft, state: 'access_email_ready' } }, next);
@@ -689,12 +870,25 @@ export function isEmailVariant(v: unknown): v is EmailVariant {
   return typeof v === 'string' && (EMAIL_VARIANTS as readonly string[]).includes(v);
 }
 
-/** Inert local previews built from the registration draft. No token, no send. */
+/**
+ * What a live or completed payment covers: its checkout's recorded scope
+ * (R-013), never later draft edits (REPAIR_004, R3-F02). Null when a submitted
+ * or paid checkout has no provable scope, so nothing is claimed for it
+ * (REPAIR_004 addendum 1). Without a live checkout, the draft.
+ */
+export function coveredDetails(state: RegistrationState): Pick<CheckoutScope, 'storeCount' | 'pharmacies'> | null {
+  const c = state.checkout;
+  if (c?.scope && c.status !== 'abandoned' && c.status !== 'expired') return c.scope;
+  if (c?.status === 'paid' || isSubmitted(state)) return null;
+  return { storeCount: state.draft.requestedStoreCount, pharmacies: state.draft.pharmacies };
+}
+
+/** Inert local previews built from what the signup covers. No token, no send. */
 export function accessEmailPreviews(state: RegistrationState): Record<EmailVariant, AccessEmailView> {
   const owner = state.draft.owner;
   const ownerName = [owner.firstName, owner.lastName].filter(Boolean).join(' ') || 'Jordan Ellis';
   const ownerEmail = isEmail(owner.email) ? owner.email! : OWNER_JORDAN.email;
-  const pharmacies = state.draft.pharmacies.filter((p) => p?.name);
+  const pharmacies = (coveredDetails(state)?.pharmacies ?? []).filter((p) => p?.name);
   const names = pharmacies.map((p) => p.name!) ;
   const nominated = pharmacies.find((p) => p.adminAssignment?.kind === 'other');
   const admin = nominated?.adminAssignment?.kind === 'other' ? nominated.adminAssignment : null;
@@ -722,7 +916,8 @@ export function accessEmailPreviews(state: RegistrationState): Record<EmailVaria
       recipientKind: 'owner',
       recipientName: ownerName,
       recipientEmailMasked: maskEmail(ownerEmail),
-      pharmacyNames: names,
+      // About the saved, unpaid draft, so it lists the draft.
+      pharmacyNames: state.draft.pharmacies.map((p) => p?.name).filter((n): n is string => Boolean(n)),
       subject: 'Your Pharmacy Books signup is waiting',
       linkState: 'valid',
       expiryLabel: '[HOLD PERIOD TBD]',

@@ -63,11 +63,24 @@ export type CheckoutStatus =
  */
 export type CheckoutClosedReason = 'details_changed' | 'owner_declaration';
 
+/**
+ * What a checkout was quoted and agreed for (R-013). Recorded when it opens and
+ * never changed, so a payment already submitted can only ever confirm this.
+ */
+export interface CheckoutScope {
+  storeCount: number;
+  pharmacies: Partial<PharmacyDraft>[];
+  code?: string;
+  dueNowCents: number;
+}
+
 export interface CheckoutRecord {
   operationKey: string;
   quoteId: string;
   status: CheckoutStatus;
   closedReason?: CheckoutClosedReason;
+  /** Absent only on records persisted before R-013. */
+  scope?: CheckoutScope;
 }
 
 /** What the next activation status check resolves to (demo outcome). */
@@ -84,6 +97,8 @@ export interface RegistrationState {
   quoteFailuresRemaining: number;
   codeFeedback: 'none' | 'applied' | 'invalid';
   checkout: CheckoutRecord | null;
+  /** Keys of checkouts that were closed or replaced; never accepted again (R-013). */
+  spentCheckoutKeys?: string[];
   activation: ActivationView | null;
   activationPlan: ActivationPlan;
   emailResentAt: string | null;

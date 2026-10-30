@@ -1,0 +1,20 @@
+{
+  "ringRGB": [
+    249,
+    112,
+    78
+  ],
+  "outerCompositedRGB": [
+    77.80000000000001,
+    77.3,
+    73.60000000000001
+  ],
+  "innerOffsetRGB": [
+    47,
+    53,
+    65
+  ],
+  "outerRatio": 2.9941945342929457,
+  "innerRatio": 4.369113153073954,
+  "disposition": "outer below3; inner passes3; Lead applicability review, not rounded PASS"
+}

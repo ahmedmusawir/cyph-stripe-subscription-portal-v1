@@ -1,0 +1,749 @@
+[
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining light handoff_error",
+    "project": "",
+    "status": "failed",
+    "durationMs": 2,
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed"
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining light add_draft_restored",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3045,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark two_store_active",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3171,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark one_store_active",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3133,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark past_due",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3065,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark cancel_scheduled",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3023,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark canceled",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3117,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark no_pharmacies",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3094,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark handoff_error",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3357,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark add_draft_restored",
+    "project": "",
+    "status": "passed",
+    "durationMs": 2963,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / Remaining dark load_error",
+    "project": "",
+    "status": "timedOut",
+    "durationMs": 60037,
+    "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+  },
+  {
+    "source": "cody-q2-corrected-results.json",
+    "file": "account.corrected.spec.ts",
+    "title": " / T09/T29 account clock invalidates current quote and refresh renews consent",
+    "project": "",
+    "status": "passed",
+    "durationMs": 5519,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-recovery-corrected-results.json",
+    "file": "public.recovery-corrected.spec.ts",
+    "title": " / T11 delayed paid setup recovers without repayment; email failure resends",
+    "project": "",
+    "status": "timedOut",
+    "durationMs": 30050,
+    "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+  },
+  {
+    "source": "cody-q2-recovery-corrected-results.json",
+    "file": "public.recovery-corrected.spec.ts",
+    "title": " / T14 access-link error, retry, neutral sent state",
+    "project": "",
+    "status": "passed",
+    "durationMs": 1888,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-recovery-final-results.json",
+    "file": "public.recovery-final.spec.ts",
+    "title": " / T11 delayed paid setup recovers without repayment; email failure resends",
+    "project": "",
+    "status": "passed",
+    "durationMs": 2729,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "account.extra.spec.ts",
+    "title": " / T04/T15/T21 all account scenarios, final pills and rendered contrast both themes",
+    "project": "",
+    "status": "timedOut",
+    "durationMs": 240045,
+    "error": "\u001b[31mTest timeout of 240000ms exceeded.\u001b[39m"
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "account.extra.spec.ts",
+    "title": " / T09/T29 account clock invalidates current quote and refresh renews consent",
+    "project": "",
+    "status": "failed",
+    "durationMs": 8067,
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed"
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "account.extra.spec.ts",
+    "title": " / T23 account keyboard tab navigation and billing handoff",
+    "project": "",
+    "status": "passed",
+    "durationMs": 11194,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "account.extra.spec.ts",
+    "title": " / T19 local card and resume handoff outcomes",
+    "project": "",
+    "status": "passed",
+    "durationMs": 9224,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "public.extra.spec.ts",
+    "title": " / T04/T29 all public scenarios both themes and state-specific surfaces",
+    "project": "",
+    "status": "passed",
+    "durationMs": 29249,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "public.extra.spec.ts",
+    "title": " / T09/T29 public clock expires quote immediately and refresh clears consent",
+    "project": "",
+    "status": "passed",
+    "durationMs": 1728,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-extra-results.json",
+    "file": "public.extra.spec.ts",
+    "title": " / T23 focused and hovered rendered contrast plus error states",
+    "project": "",
+    "status": "passed",
+    "durationMs": 1508,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-recovery-results.json",
+    "file": "public.recovery.spec.ts",
+    "title": " / T11 delayed paid setup recovers without repayment; email failure resends",
+    "project": "",
+    "status": "failed",
+    "durationMs": 1182,
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed"
+  },
+  {
+    "source": "cody-q2-recovery-results.json",
+    "file": "public.recovery.spec.ts",
+    "title": " / T14 access-link error, retry, neutral sent state",
+    "project": "",
+    "status": "failed",
+    "durationMs": 6533,
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed"
+  },
+  {
+    "source": "cody-q2-recovery-results.json",
+    "file": "public.recovery.spec.ts",
+    "title": " / T13 unknown resolves not-charged safely and declined resumes",
+    "project": "",
+    "status": "passed",
+    "durationMs": 3261,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-recovery-results.json",
+    "file": "public.recovery.spec.ts",
+    "title": " / T08 invalid code leaves correct price; public tabs are isolated",
+    "project": "",
+    "status": "passed",
+    "durationMs": 1526,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /dashboard \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 291,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/stores/add \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 130,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/stores/confirm \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 67,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/stores/result \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 58,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/references/owedbook \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 61,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/stripe?mode=portal \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 70,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/stripe?mode=portal&purpose=cancel \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 53,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / anonymous /demo/stripe?mode=card \u2192 /login with no account payload (HTML and RSC)",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 55,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/register/plan \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 61,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/register/owner \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 28,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/register/pharmacies \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 22,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/register/review \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 28,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/stripe \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 37,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/activation \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 24,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/checkout-incomplete \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 22,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/access-link \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 22,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /demo/references/email \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 23,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / public /login \u2192 200 without login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 27,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / forged role values in query, cookies and storage grant nothing",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 994,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / foundation regressions: GET login 405, removed routes 404, /demo/sign-in \u2192 /login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 123,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.boundaries.spec.ts",
+    "title": " / session expired banner via enum only",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 461,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / / opens the public plan screen with a sign-in path to the real /login",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 638,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / anonymous 1-store registration end to end, never asked to log in, no external hosts",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 6743,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / 3 stores: $197.00, DEMO10 changes due-now only, nominated admin carries through",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 4880,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / count reduction asks before discarding entered pharmacies",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 3700,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / validation keeps input, focuses the summary, flags duplicates without naming the owner",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 2867,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / abandoned checkout resumes with values; unknown payment pauses payment",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 8434,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / forged success URL or direct visits change nothing",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 572,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "public.journeys.spec.ts",
+    "title": " / hostile text renders as text",
+    "project": "public",
+    "status": "passed",
+    "durationMs": 2425,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/register/plan [prefilled_two_store]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10732,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/register/owner [prefilled_two_store]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10486,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/register/pharmacies?store=2 [prefilled_two_store]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10662,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/register/review [prefilled_three_store]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 11081,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/activation [activation_ready]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10741,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/activation [activation_delayed]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10340,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/checkout-incomplete [checkout_unknown]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10764,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/access-link [link_expired]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10632,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /demo/references/email?variant=store_admin [prefilled_two_store]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10677,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M /login [fresh]",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 10097,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Gate M checkout stand-in and review split at 1024",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 3122,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / keyboard: plan \u2192 owner form reachable and submittable without a mouse",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 1720,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "gate-m.public.spec.ts",
+    "title": " / Additional narrow-width reflow ONLY (not actual zoom)",
+    "project": "gate-public",
+    "status": "passed",
+    "durationMs": 3146,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / real admin reaches account management; synthetic account is labelled",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 8484,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / add store 2 \u2192 3: $197.00, three distinct stores, invitation pending",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 8783,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / 1 \u2192 2 then failure leaves the plan unchanged; unknown blocks a second attempt",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 12425,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / paid but setup needs attention: one increment, invitation held",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 8672,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / store admin and member personas get the owner-contact view, not billing data",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 7166,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Stripe portal return: refreshing \u2192 cancellation scheduled; handoff error retry",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 12852,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / reload keeps the account demo; reset restores baseline",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 8627,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M account /dashboard [two_store_active]",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 39690,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M account /dashboard [past_due]",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 34151,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M account /dashboard [no_pharmacies]",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 41758,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M account /demo/stores/add [add_draft_restored]",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 36887,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M account /demo/references/owedbook [two_store_active]",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 34538,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M account /demo/stripe?mode=portal&purpose=manage [two_store_active]",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 32673,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / Gate M confirm + table/card switch at 768",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 7059,
+    "error": ""
+  },
+  {
+    "source": "cody-q2-browser.json",
+    "file": "account.journeys.spec.ts",
+    "title": " / evidence screenshots (real identity masked)",
+    "project": "account",
+    "status": "passed",
+    "durationMs": 24018,
+    "error": ""
+  }
+]

@@ -1,0 +1,722 @@
+[
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "background",
+    "tone": "info",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.58035023198199,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(33, 115, 222, 0.1)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "background",
+    "tone": "warning",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.5984995562030786,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(157, 109, 6, 0.1)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "background",
+    "tone": "success",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.589587064770725,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(40, 134, 57, 0.1)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "background",
+    "tone": "destructive",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.441596422663722,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(170, 38, 34, 0.1)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "card",
+    "tone": "info",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 4.467402807459023,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(33, 115, 222, 0.1)"
+        },
+        {
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "card",
+    "tone": "warning",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 4.492274108684448,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(157, 109, 6, 0.1)"
+        },
+        {
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "card",
+    "tone": "success",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 4.479472572895439,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(40, 134, 57, 0.1)"
+        },
+        {
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "light",
+    "surface": "card",
+    "tone": "destructive",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 4.312311625128397,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": false
+      }
+    ],
+    "css": {
+      "shadow": "rgb(225, 229, 234) 0px 0px 0px 2px, rgb(202, 58, 22) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(170, 38, 34, 0.1)"
+        },
+        {
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgb(225, 229, 234)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "background",
+    "tone": "info",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 4.040545920631456,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(131, 177, 236, 0.1)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "background",
+    "tone": "warning",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.990427145684703,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(247, 179, 34, 0.1)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "background",
+    "tone": "success",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.949647352589562,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(74, 222, 128, 0.1)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "background",
+    "tone": "destructive",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 4.092103138864697,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(252, 141, 157, 0.1)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "card",
+    "tone": "info",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.373046506167659,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(131, 177, 236, 0.1)"
+        },
+        {
+          "background": "rgb(59, 66, 78)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "card",
+    "tone": "warning",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.3300771860968506,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(247, 179, 34, 0.1)"
+        },
+        {
+          "background": "rgb(59, 66, 78)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "card",
+    "tone": "success",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.296940617994122,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(74, 222, 128, 0.1)"
+        },
+        {
+          "background": "rgb(59, 66, 78)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "controlled production CSS; not a signed-in account observation",
+    "theme": "dark",
+    "surface": "card",
+    "tone": "destructive",
+    "raw": [
+      {
+        "kind": "focus",
+        "tag": "BUTTON",
+        "id": "qa-controlled-alert-button",
+        "class": "h-11 border bg-primary text-primary-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ratio": 3.416913303337706,
+        "required": 3,
+        "disabled": false,
+        "faded": false,
+        "effectiveDark": true
+      }
+    ],
+    "css": {
+      "shadow": "rgb(47, 53, 65) 0px 0px 0px 2px, rgb(249, 128, 98) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+      "ancestors": [
+        {
+          "background": "rgb(249, 112, 78)"
+        },
+        {
+          "background": "rgba(252, 141, 157, 0.1)"
+        },
+        {
+          "background": "rgb(59, 66, 78)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgb(47, 53, 65)"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    }
+  }
+]

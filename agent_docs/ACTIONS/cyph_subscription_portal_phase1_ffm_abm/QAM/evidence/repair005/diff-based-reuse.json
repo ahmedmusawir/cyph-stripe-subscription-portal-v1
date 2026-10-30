@@ -1,0 +1,13 @@
+{
+  "priorManifest": "390552c207907eb5b6ebf2dc7980d0a1bd7ee7707034f9082c554f76f08d2bb1",
+  "changedOrAddedInputs": [
+    "e2e/public.repair005.spec.ts",
+    "src/__tests__/portal-checkout-hold.test.tsx",
+    "src/__tests__/portal-registration.test.ts",
+    "src/components/portal/activation/ActivationView.tsx",
+    "src/services/portal/index.ts",
+    "src/services/portal/registration.ts"
+  ],
+  "removedInputs": [],
+  "scope": "Only registration payment-phase engine, public activation display, barrel/tests; account/auth/routes/styles/config/dependencies unchanged from prior tested snapshot"
+}

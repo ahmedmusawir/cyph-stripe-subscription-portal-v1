@@ -7,7 +7,8 @@ import { BRAND } from "../brand";
 export type EmailVariantKey = "owner" | "store_admin" | "checkout_unfinished" | "expired_resend";
 
 function list(names: string[]): string {
-  if (names.length <= 1) return names[0] ?? "your pharmacy";
+  if (names.length === 0) return "your pharmacies"; // read with "are"; nothing provable to name
+  if (names.length === 1) return names[0];
   return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 }
 

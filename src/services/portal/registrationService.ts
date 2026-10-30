@@ -40,9 +40,13 @@ export const registrationStore = createStore<RegistrationStore>()(
       name: PUBLIC_STORAGE_KEY,
       // v2 (R-011): owner declaration replaces the job title; v1 drafts are
       // migrated WITHOUT accepting the declaration.
-      version: 2,
-      migrate: (persisted, from) =>
-        from < 2 ? { s: engine.migrateRegistration((persisted as { s?: unknown } | null)?.s) } : (persisted as { s: RegistrationState }),
+      // v3 (R-013): checkouts record the scope they were quoted for; older
+      // records are bound only when their draft is provably unchanged.
+      version: 3,
+      migrate: (persisted, from) => {
+        const s = from < 2 ? engine.migrateRegistration((persisted as { s?: unknown } | null)?.s) : (persisted as { s: RegistrationState }).s;
+        return { s: engine.bindLegacyScope(s) };
+      },
       storage: createJSONStorage(() => sessionStorage),
       partialize: (store) => ({ s: store.s }),
       skipHydration: true,
@@ -118,6 +122,7 @@ export const registration = {
   resolveCheckout: (outcome: engine.CheckoutOutcome) => later((s) => engine.resolveCheckout(s, outcome)),
   resolveUnknownPayment: (outcome: 'paid' | 'not_charged') => later((s) => engine.resolveUnknownPayment(s, outcome)),
   resumeSignup: () => sync((s) => engine.resumeSignup(s)),
+  restoreSubmittedScope: () => sync((s) => engine.restoreSubmittedScope(s)),
   restartSignup: () => sync((s) => engine.restartSignup(s)),
   refreshActivation: (): Promise<Result<ActivationView>> => later((s) => engine.refreshActivation(s)),
   resendAccessEmail: () => later((s, d) => engine.resendAccessEmail(s, d)),

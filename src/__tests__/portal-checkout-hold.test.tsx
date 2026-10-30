@@ -7,6 +7,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { CheckoutStandIn } from '@/components/portal/handoff/CheckoutStandIn';
 import { ActivationView } from '@/components/portal/activation/ActivationView';
 import { CheckoutIncompleteView } from '@/components/portal/activation/CheckoutIncompleteView';
+import { ReviewView } from '@/components/portal/register/ReviewView';
+import { PublicDemoControls } from '@/components/portal/PublicDemoControls';
 import { registration, registrationHarness, PUBLIC_STORAGE_KEY } from '@/services/portal';
 import { registrationStore } from '@/services/portal/registrationService';
 import type { RegistrationState } from '@/types/portal/state';
@@ -127,7 +129,7 @@ describe('persisted storage and the whole-draft facade', () => {
     expect(s().draft.owner.ownerDeclarationAccepted).toBe(false);
     expect(s().checkout).toMatchObject({ status: 'abandoned', closedReason: 'owner_declaration' });
     expect(s().quote).toBeNull();
-    expect(JSON.parse(sessionStorage.getItem(PUBLIC_STORAGE_KEY)!).version).toBe(2);
+    expect(JSON.parse(sessionStorage.getItem(PUBLIC_STORAGE_KEY)!).version).toBe(3); // v3 since R-013 (checkout scope)
   });
 
   it('saveRegistrationDraft with a billion-store count stops at the first missing pharmacy without count-sized work', async () => {
@@ -155,5 +157,401 @@ describe('persisted storage and the whole-draft facade', () => {
     expect(s().draft.requestedStoreCount).toBe(1_000_000_000);
     expect(s().draft.pharmacies.length).toBe(2); // the one entered + the failed attempt at step 2
     expect(Date.now() - started).toBeLessThan(2000);
+  });
+});
+
+describe('C14 introduction matches the payment state (manual review, REPAIR_002 addendum)', () => {
+  const UNKNOWN_INTRO = "Your details are saved. We're checking your payment status. Please don't pay again yet.";
+  it('unknown payment: no "wasn\'t completed" claim; payment stays locked', () => {
+    act(() => {
+      registrationHarness.selectScenario('checkout_unknown');
+    });
+    render(<CheckoutIncompleteView />);
+    expect(screen.getByText(UNKNOWN_INTRO)).toBeTruthy();
+    expect(screen.queryByText(/Payment wasn't completed/)).toBeNull();
+    expect(screen.getByText(/We're checking whether a payment went through/)).toBeTruthy();
+    expect((screen.getByTestId('incomplete-continue') as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it.each(['checkout_abandoned', 'checkout_declined'] as const)('%s keeps the confirmed-unpaid introduction and recovery', (id) => {
+    act(() => {
+      registrationHarness.selectScenario(id);
+    });
+    render(<CheckoutIncompleteView />);
+    expect(screen.getByText("Your details for 2 pharmacies are saved. Payment wasn't completed, so your account isn't active yet.")).toBeTruthy();
+    expect(screen.queryByText(UNKNOWN_INTRO)).toBeNull();
+    expect((screen.getByTestId('incomplete-continue') as HTMLButtonElement).disabled).toBe(false);
+  });
+});
+
+describe('public demo controls (R-012 addendum 2)', () => {
+  it('has no "Next activation check"; Load alone selects a named activation state, with the default plan', () => {
+    render(<PublicDemoControls />);
+    expect(screen.queryByText('Next activation check')).toBeNull();
+    expect(document.getElementById('demo-activation-plan')).toBeNull();
+    for (const id of ['activation_waiting', 'activation_provisioning', 'activation_delayed', 'activation_email_failed', 'activation_payment_failed', 'activation_ready']) {
+      push.mockClear();
+      fireEvent.change(screen.getByLabelText('Registration scenario'), { target: { value: id } });
+      fireEvent.click(screen.getByRole('button', { name: 'Load' }));
+      expect(push).toHaveBeenCalledWith('/demo/activation');
+      expect(s().scenario).toBe(id);
+      expect(s().activationPlan).toBe('ready');
+    }
+  });
+});
+
+describe('a submitted payment stays bound to its scope on screen (R-013)', () => {
+  async function submit(outcome: 'processing' | 'unknown') {
+    await openCheckout('demo_scope_key_01');
+    await act(async () => {
+      await registration.resolveCheckout(outcome);
+    });
+  }
+  async function renamePharmacy() {
+    await act(async () => {
+      await registration.savePharmacy(0, { ...s().draft.pharmacies[0], name: 'Changed after submission' });
+    });
+  }
+
+  it('processing: after an edit, Refresh is unavailable and the hold names what was paid for; restoring lets it confirm', async () => {
+    await submit('processing');
+    await renamePharmacy();
+    const view = render(<ActivationView />);
+    const hold = screen.getByTestId('activation-hold');
+    expect(hold.textContent).toMatch(/Your details changed after you paid/);
+    expect(hold.textContent).toMatch(/This payment is for 1 pharmacy \(Example Main Street Pharmacy\), \$99\.00/);
+    expect((screen.getByTestId('activation-refresh') as HTMLButtonElement).disabled).toBe(true);
+    await act(async () => {
+      expect((await registration.refreshActivation()).ok).toBe(false);
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId('restore-scope'));
+    });
+    expect(s().draft.pharmacies[0].name).toBe('Example Main Street Pharmacy');
+    expect(screen.queryByTestId('activation-hold')).toBeNull();
+    fireEvent.click(screen.getByTestId('activation-refresh'));
+    await waitFor(() => expect(s().activation?.paymentState).toBe('confirmed'), { timeout: 3000 });
+    expect(screen.getByTestId('activation-tracks').textContent).toMatch(/Confirmed by Stripe · \$99\.00/);
+    expect(s().checkout).toMatchObject({ operationKey: 'demo_scope_key_01', status: 'paid' });
+    view.unmount();
+  });
+
+  it('unknown: after a count edit, "Stripe confirms payment" is unavailable, "nothing charged" stays; restoring re-enables it', async () => {
+    await submit('unknown');
+    act(() => {
+      registration.setStoreCount(2);
+    });
+    await act(async () => {
+      await registration.savePharmacy(1, { ...s().draft.pharmacies[0], id: undefined, name: 'Added Pharmacy', ncpdp: '0000088', npi: '0000000088' });
+    });
+    render(<CheckoutIncompleteView />);
+    expect(screen.getByTestId('unknown-hold').textContent).toMatch(/This payment is for 1 pharmacy \(Example Main Street Pharmacy\), \$99\.00/);
+    expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByTestId('unknown-not-charged') as HTMLButtonElement).disabled).toBe(false);
+    act(() => {
+      fireEvent.click(screen.getByTestId('restore-scope'));
+    });
+    expect(s().draft.requestedStoreCount).toBe(1);
+    expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(false);
+  });
+
+  it('the stand-in offers no payment outcome for a submitted payment whose details changed', async () => {
+    await submit('processing');
+    await renamePharmacy();
+    render(<CheckoutStandIn />);
+    expect(screen.getByTestId('checkout-hold').textContent).toMatch(/only go ahead for the details you submitted/);
+    expect(screen.queryByTestId('outcome-paid')).toBeNull();
+  });
+
+  it('storage v2 (before R-013): an unedited submitted checkout rehydrates bound; an edited one is held with no restore', async () => {
+    await submit('processing');
+    const unedited = JSON.parse(JSON.stringify(s()));
+    delete unedited.checkout.scope;
+    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: unedited }, version: 2 }));
+    await act(async () => {
+      await registrationStore.persist.rehydrate();
+    });
+    expect(s().checkout?.scope).toMatchObject({ storeCount: 1, dueNowCents: 9900 });
+    await submit('unknown');
+    await renamePharmacy();
+    const edited = JSON.parse(JSON.stringify(s()));
+    delete edited.checkout.scope;
+    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: edited }, version: 2 }));
+    await act(async () => {
+      await registrationStore.persist.rehydrate();
+    });
+    expect(s().checkout?.scope).toBeUndefined();
+    render(<CheckoutIncompleteView />);
+    expect(screen.getByTestId('unknown-hold').textContent).toMatch(/can't match this payment to your current details/);
+    expect(screen.queryByTestId('restore-scope')).toBeNull();
+    expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(true);
+    expect(JSON.parse(sessionStorage.getItem(PUBLIC_STORAGE_KEY)!).version).toBe(3);
+  });
+});
+
+describe('REPAIR_004 on screen (R3-F01, R3-F02)', () => {
+  it('R3-F01: an R-011 open checkout edited before the upgrade rehydrates unbound; the stand-in holds it with no payment outcome', async () => {
+    await openCheckout('demo_legacy_key_01');
+    const legacy = JSON.parse(JSON.stringify(s()));
+    delete legacy.checkout.scope;
+    const extra = { ...legacy.draft.pharmacies[0], id: 'demo_reg_ph_2', name: 'Legacy extra', ncpdp: '0000045', npi: '0000000045' };
+    legacy.quote = null;
+    legacy.draft = { ...legacy.draft, requestedStoreCount: 2, pharmacies: [legacy.draft.pharmacies[0], extra], revision: legacy.draft.revision + 1, state: 'editing' };
+    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 2 }));
+    await act(async () => {
+      await registrationStore.persist.rehydrate();
+    });
+    expect(s().checkout).toMatchObject({ status: 'pending', operationKey: 'demo_legacy_key_01' });
+    expect(s().checkout?.scope).toBeUndefined();
+    render(<CheckoutStandIn />);
+    const hold = screen.getByTestId('checkout-hold');
+    expect(hold.textContent).toMatch(/can't match this payment to your current details/);
+    expect(hold.textContent).not.toMatch(/after you paid/);
+    expect(screen.queryByTestId('outcome-paid')).toBeNull();
+    await act(async () => {
+      expect((await registration.resolveCheckout('paid')).ok).toBe(false);
+    });
+    expect(s().checkout?.status).toBe('pending');
+  });
+
+  async function completeWith(admin?: { kind: 'other'; fullName: string; email: string }) {
+    act(() => {
+      registrationHarness.selectScenario('prefilled_one_store');
+    });
+    if (admin)
+      await act(async () => {
+        await registration.savePharmacy(0, { ...s().draft.pharmacies[0], adminAssignment: admin });
+      });
+    await act(async () => {
+      await registration.requestQuote();
+    });
+    await act(async () => {
+      await registration.startCheckout({ draftId: s().draft.id, quoteId: s().quote!.id, consents, operationKey: 'demo_done_key_01' });
+      await registration.resolveCheckout('paid');
+      await registration.refreshActivation();
+    });
+    expect(s().activation).toMatchObject({ provisioningState: 'ready', emailState: 'sent' });
+    await act(async () => {
+      await registration.savePharmacy(0, { ...s().draft.pharmacies[0], adminAssignment: { kind: 'other', fullName: 'Replacement Admin', email: 'replacement@demo-pharmacy.example' } });
+    });
+  }
+
+  it('R3-F02: completed activation claims no invitation and offers no preview for an admin nominated after payment', async () => {
+    await completeWith();
+    render(<ActivationView />);
+    const main = document.body.textContent ?? '';
+    expect(main).toMatch(/Sent to j•••@demo-pharmacy\.example\./);
+    expect(main).not.toMatch(/replacement admin/i);
+    expect(main).not.toMatch(/invitation/i);
+    expect(screen.getByTestId('activation-tracks').textContent).toMatch(/Example Main Street Pharmacy is set up/);
+  });
+
+  it('R3-F02: an admin the payment covered is still the one named after a later draft change', async () => {
+    await completeWith({ kind: 'other', fullName: 'Sam Ortiz', email: 'sam@demo-pharmacy.example' });
+    render(<ActivationView />);
+    const main = document.body.textContent ?? '';
+    expect(main).toMatch(/a separate store invitation went to Sam Ortiz/);
+    expect(screen.getByRole('link', { name: "Preview Sam Ortiz's invitation" })).toBeTruthy();
+    expect(main).not.toMatch(/replacement admin/i);
+  });
+});
+
+describe('a submitted payment on screen (REPAIR_004 addendum 1, R4-N01)', () => {
+  async function submit(outcome: 'processing' | 'unknown') {
+    await openCheckout('demo_submitted_key_01');
+    await act(async () => {
+      await registration.resolveCheckout(outcome);
+    });
+  }
+
+  for (const outcome of ['processing', 'unknown'] as const)
+    it(`${outcome}: Review offers no way to close it or pay again, and the service refuses both`, async () => {
+      await submit(outcome);
+      const before = s();
+      render(<ReviewView />);
+      expect(screen.queryByRole('button', { name: 'Edit my details instead' })).toBeNull();
+      expect(screen.queryByText('Your checkout on Stripe is still open')).toBeNull();
+      const notice = screen.getByTestId('review-submitted');
+      expect(notice.textContent).toMatch(/already submitted a payment/);
+      expect(notice.textContent).toMatch(/don't pay again/);
+      expect(screen.getByRole('link', { name: 'See payment status' }).getAttribute('href')).toBe(outcome === 'processing' ? '/demo/activation' : '/demo/checkout-incomplete');
+      expect((screen.getByTestId('continue-payment') as HTMLButtonElement).disabled).toBe(true);
+      await act(async () => {
+        expect((await registration.resolveCheckout('back')).ok).toBe(false);
+        expect(registration.resumeSignup().ok).toBe(false);
+        expect(registration.restartSignup().ok).toBe(false);
+      });
+      expect(s()).toBe(before);
+    });
+
+  it('processing: the stand-in shows the submitted notice with no payment outcomes', async () => {
+    await submit('processing');
+    render(<CheckoutStandIn />);
+    const notice = screen.getByTestId('checkout-submitted');
+    expect(notice.textContent).toMatch(/already submitted/);
+    for (const id of ['outcome-paid', 'outcome-back', 'outcome-closed', 'outcome-unknown', 'outcome-declined']) expect(screen.queryByTestId(id)).toBeNull();
+  });
+
+  it('processing: Activation no longer offers "resume checkout"', async () => {
+    await submit('processing');
+    render(<ActivationView />);
+    expect(screen.queryByRole('link', { name: 'resume checkout' })).toBeNull();
+    expect(document.body.textContent).toMatch(/don't pay again/);
+  });
+
+  it('a completed record whose paid scope cannot be established shows unavailable history, not the edited draft', async () => {
+    await openCheckout('demo_legacy_done_01');
+    await act(async () => {
+      await registration.resolveCheckout('paid');
+      await registration.refreshActivation();
+      await registration.savePharmacy(0, { ...s().draft.pharmacies[0], name: 'Edited after payment' });
+    });
+    const legacy = JSON.parse(JSON.stringify(s()));
+    delete legacy.checkout.scope;
+    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 2 }));
+    await act(async () => {
+      await registrationStore.persist.rehydrate();
+    });
+    expect(s().checkout?.scope).toBeUndefined();
+    render(<ActivationView />);
+    const tracks = screen.getByTestId('activation-tracks').textContent ?? '';
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe("You're in. Check your email.");
+    expect(tracks).toMatch(/Confirmed by Stripe/);
+    expect(tracks).not.toMatch(/\$/);
+    expect(document.body.textContent).not.toMatch(/Edited after payment/);
+    expect(screen.getByTestId('history-unavailable').textContent).toMatch(/can't show which pharmacies or what amount/);
+    expect(screen.queryByRole('button', { name: /Try payment again/ })).toBeNull();
+  });
+});
+
+describe('legacy checkout/activation conflicts on screen (REPAIR_005, R4-F01/R4-F02)', () => {
+  async function processing() {
+    await openCheckout('demo_legacy_r5_key_01');
+    await act(async () => {
+      await registration.resolveCheckout('processing');
+    });
+  }
+  /** Store a state as an older build left it and rehydrate (storage v3, no migration involved). */
+  async function stored(mutate: (s: RegistrationState) => RegistrationState) {
+    const legacy = mutate(JSON.parse(JSON.stringify(s())));
+    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: legacy }, version: 3 }));
+    await act(async () => {
+      await registrationStore.persist.rehydrate();
+    });
+  }
+
+  it('R4-F01: a nothing-charged record with a stale pending activation offers no Refresh; the service refuses it', async () => {
+    await processing();
+    await stored((x) => ({ ...x, checkout: { ...x.checkout!, status: 'abandoned' } }));
+    expect(s().activation?.paymentState).toBe('pending');
+    const before = s();
+    render(<ActivationView />);
+    expect(screen.queryByTestId('activation-refresh')).toBeNull();
+    expect(screen.queryByTestId('activation-tracks')).toBeNull();
+    expect(screen.getByTestId('activation-not-charged').textContent).toMatch(/Nothing was charged/);
+    expect(screen.getByRole('link', { name: 'Continue my signup' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
+    await act(async () => {
+      expect((await registration.refreshActivation()).ok).toBe(false);
+    });
+    expect(s()).toBe(before);
+    expect(s().checkout?.status).toBe('abandoned');
+  });
+
+  it('R4-F02: an unknown record with a stale failed flag offers no "Try payment again"; resume is refused; C14 still resolves it', async () => {
+    await processing();
+    await stored((x) => ({ ...x, checkout: { ...x.checkout!, status: 'unknown' }, activation: { ...x.activation!, paymentState: 'failed', retryAvailable: true } }));
+    const before = s();
+    const view = render(<ActivationView />);
+    expect(screen.queryByRole('button', { name: 'Try payment again' })).toBeNull();
+    expect(screen.queryByTestId('activation-refresh')).toBeNull();
+    expect(screen.getByTestId('activation-unknown').textContent).toMatch(/still checking whether a payment went through/);
+    expect(screen.getByRole('link', { name: 'See checkout status' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
+    await act(async () => {
+      expect(registration.resumeSignup().ok).toBe(false);
+      expect(registration.restartSignup().ok).toBe(false);
+      expect((await registration.refreshActivation()).ok).toBe(false);
+    });
+    expect(s()).toBe(before);
+    view.unmount();
+    render(<CheckoutIncompleteView />);
+    expect((screen.getByTestId('incomplete-continue') as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByTestId('unknown-paid') as HTMLButtonElement).disabled).toBe(false);
+    await act(async () => {
+      expect((await registration.resolveUnknownPayment('not_charged')).ok).toBe(true);
+    });
+    expect(s().checkout?.status).toBe('abandoned');
+    expect(s().activation).toBeNull();
+    await act(async () => {
+      expect(registration.resumeSignup().ok).toBe(true);
+    });
+    expect(s().checkout).toBeNull();
+  });
+
+  it('genuine failure still shows "Try payment again"; processing still shows Refresh', async () => {
+    act(() => {
+      registrationHarness.selectScenario('activation_payment_failed');
+    });
+    let view = render(<ActivationView />);
+    expect(screen.getByRole('button', { name: 'Try payment again' })).toBeTruthy();
+    view.unmount();
+    act(() => {
+      registrationHarness.selectScenario('activation_waiting');
+    });
+    view = render(<ActivationView />);
+    expect((screen.getByTestId('activation-refresh') as HTMLButtonElement).disabled).toBe(false);
+    view.unmount();
+  });
+});
+
+describe('Activation reads the payment phase first (REPAIR_006, R5-F01/R5-F02)', () => {
+  async function completed() {
+    await openCheckout('demo_r6_key_0001');
+    await act(async () => {
+      await registration.resolveCheckout('paid');
+      await registration.refreshActivation();
+    });
+  }
+  async function withActivation(activation: RegistrationState['activation']) {
+    const stored = { ...JSON.parse(JSON.stringify(s())), activation };
+    sessionStorage.setItem(PUBLIC_STORAGE_KEY, JSON.stringify({ state: { s: stored }, version: 3 }));
+    await act(async () => {
+      await registrationStore.persist.rehydrate();
+    });
+  }
+
+  for (const flag of ['absent', 'pending', 'failed'] as const)
+    it(`paid with ${flag} activation: shown as paid, setup/email not claimed, no retry/refresh/resend`, async () => {
+      await completed();
+      const a = s().activation!;
+      await withActivation(flag === 'absent' ? null : { ...a, paymentState: flag, provisioningState: 'not_started', emailState: 'not_started' });
+      render(<ActivationView />);
+      const text = document.body.textContent ?? '';
+      expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Payment confirmed');
+      expect(screen.getByTestId('activation-paid-status-unavailable').textContent).toMatch(/Setup and access-email status aren't available/);
+      expect(text).toMatch(/\$99\.00/);
+      for (const claim of [/Payment didn't go through/, /Waiting for payment confirmation/, /There's no payment to track yet/, /set up in OwedBook/, /Sent to/]) expect(text).not.toMatch(claim);
+      for (const name of ['Try payment again', 'Refresh status', 'Resend access email']) expect(screen.queryByRole('button', { name })).toBeNull();
+      expect(s().checkout?.status).toBe('paid');
+    });
+
+  it('actual unknown → nothing charged path shows the terminal notice and C14 recovery', async () => {
+    await openCheckout('demo_r6_key_0002');
+    await act(async () => {
+      await registration.resolveCheckout('unknown');
+      await registration.resolveUnknownPayment('not_charged');
+    });
+    expect(s().activation).toBeNull();
+    render(<ActivationView />);
+    expect(screen.getByTestId('activation-not-charged').textContent).toMatch(/Nothing was charged for this payment/);
+    expect(screen.getByRole('link', { name: 'Continue my signup' }).getAttribute('href')).toBe('/demo/checkout-incomplete');
+    expect(screen.queryByText("There's no payment to track yet")).toBeNull();
+  });
+
+  it('valid paid resend still works from the page', async () => {
+    await completed();
+    render(<ActivationView />);
+    fireEvent.click(screen.getByTestId('resend'));
+    await waitFor(() => expect(s().emailResentAt).not.toBeNull(), { timeout: 3000 });
+    expect(s().activation?.emailState).toBe('sent');
   });
 });

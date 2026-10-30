@@ -1,0 +1,1 @@
+Second sequential reconstruction correctly used strip0, but main cumulative patch did not contain unchanged EmailPreview.tsx, needed as base by addendum. Other hunks applied in disposable root; no runtime execution. Corrected reconstruction to hydrate any required unchanged base files directly from Git, rebuilt disposable verification roots. No package/product mutation.

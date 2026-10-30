@@ -1,0 +1,27 @@
+{
+  "phase": "Q1 bounded readiness only",
+  "time": "2026-10-28T07:41:31.320Z",
+  "signInAttempts": 1,
+  "globalLogouts": 0,
+  "credentialSchema": true,
+  "target": {
+    "https": true,
+    "supabaseHost": true,
+    "configuredHostRecordedPrivately": true
+  },
+  "responses": [
+    {
+      "status": 200
+    }
+  ],
+  "logoutBlocked": 0,
+  "publicEntry": "/demo/register/plan",
+  "publicBodyVisible": true,
+  "anonymousDashboard": {
+    "status": 307,
+    "location": "/login"
+  },
+  "loginRole": "admin",
+  "loginErrorCategory": "none",
+  "adminDashboard": true
+}
