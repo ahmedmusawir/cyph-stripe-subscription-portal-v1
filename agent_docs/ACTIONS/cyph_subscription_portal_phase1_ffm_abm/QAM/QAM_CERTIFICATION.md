@@ -42,7 +42,7 @@ Clean build and product typecheck pass; 248 Jest tests pass; 27 browser cases pa
 |---|---|
 | Gate Q | **PASS** for the exact snapshot above (JARVIS) |
 | Architect documentation closeout | performed by Engineering under the decision; see `../EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md` |
-| Commit binding | **PENDING** — `HANDOFFS/COMMIT_BINDING_RECEIPT_001.md` |
+| Commit binding | **BOUND** — commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8`; helper match, 0 mismatches, 0 extra inputs (`HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`). Was PENDING until 30 Oct 2026 11:22 Asia/Dhaka. |
 | Push / merge / integration | Director-owned; not performed or authorized by the decision |
 | Deployment / Gate D | **NOT DONE**; Gate D follows actual deployment |
 

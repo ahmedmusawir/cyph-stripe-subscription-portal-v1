@@ -1,11 +1,11 @@
 # Engineering state
 
-## Current — 30 Oct 2026 (Asia/Dhaka): Gate Q PASS for the frozen snapshot; documentation closeout complete
+## Current — 30 Oct 2026 (Asia/Dhaka): Gate Q PASS for the frozen snapshot; documentation closeout complete; bound to f272617
 - **Gate Q:** **PASS** for the identified tested snapshot, with the retained nonblocking observation R5-O03 — **JARVIS / QA Lead** (`QAM/HANDOFFS/CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md`, SHA-256 `0caeaf36…5f1f`, installed unchanged; transcription `QAM/QAM_CERTIFICATION.md`).
 - **Accepted candidate:** branch `qa/ffm-abm-001-subscription-portal`, base HEAD `d6fe67839961fcbbf801b0bb04d3a2522e7b1f36` **plus** the uncommitted snapshot through REPAIR_006 (168-input manifest `f7181d3c7c537e27ebc43403c8727a39084aae723ba895cb89acf7622d56e9ab`; finalized plan `9017fa6d39d86091da0a7ef7efac791be33eea4af816d568f1a5f28f6df4d987`). The base HEAD alone is not the accepted candidate. Pre-commit working-tree comparison at closeout: 168/168 match, 0 additional inputs.
 - **Dispositions:** R5-F01, R5-F02 CLOSED; earlier required repairs accepted with provenance; R5-O03 ACCEPTED NONBLOCKING, NOT REPAIRED (strict assertion FAILED); C08 outside scope, inert, no live-auth certification.
 - **Tony manual acceptance:** recorded (Director-reported). **Documentation closeout:** complete (`EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md`).
-- **Commit binding:** PENDING — Tony commits the reviewed path list, then the helper runs against the full SHA (`QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`). **Push/merge/integration:** Director-owned. **Deployment / Gate D:** NOT DONE.
+- **Commit binding:** **BOUND** — Tony committed `f27261734fd0a3ac96253aa6c55e3b9e911125a8` (parent `d6fe678`); read-only verification 30 Oct 2026: helper match, 0 mismatches, 0 extra inputs, committed set equals the reviewed list (`QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`). **Push/merge/integration:** Director-owned. **Deployment / Gate D:** NOT DONE.
 - **Coach confirmations:** still pending (exact questions/answers not supplied); none invented.
 - **No product work is authorized.** New implementation changes return for impact adjudication.
 - Everything below (including the "E2_RETURNED" block immediately after this one and every "Next:" line in the repair blocks) is dated history, superseded by this entry.

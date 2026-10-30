@@ -1,18 +1,22 @@
 # Recovery State — cyph-stripe-subscription-portal-v1
 
-## ▶ Resume here (updated 2026-10-30, Asia/Dhaka)
-- **Status:** Gate Q **PASS** (JARVIS / QA Lead) for the frozen snapshot: base `d6fe678` + uncommitted repairs through REPAIR_006, manifest `f7181d3c…e9ab`. Documentation closeout **complete**. Commit binding **PENDING**. Deploy/Gate D **NOT DONE**.
-- **Waiting on:** Tony's commit of `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/EVIDENCE/CLOSEOUT_001_COMMIT_PATHS.txt` (commands: same folder, `DOCUMENTATION_CLOSEOUT_001.md` §7).
-- **My next action when he sends the FULL SHA (read-only):**
-  1. Run `python3 agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/QAM/AUTOMATION/repair006/verify-commit-inputs.py <SHA>`.
-  2. Review the committed path inventory for build inputs outside the helper's filter.
-  3. Fill in `QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`.
-  4. If anything mismatches, list the paths and stop for adjudication. No repair.
-- **Read first:** module `STATE.md` (current block), `QAM/REVIEW_START_HERE.md`, `agent_docs/SESSIONS/session_2026-10-30.md` (End of Session State).
-- **No product work is authorized.** New changes go back to JARVIS for impact adjudication.
-- **Never touch:** servers on :3000 and :3457; Cody's `/tmp/cody-r6-*`; `.env*.local`. No Git commands by me; Git is Director-only.
-- **Deferred (JARVIS, 30 Oct):** do NOT remove `registrationHarness.setActivationPlan` / `ACTIVATION_PLANS`; that optional cleanup is deferred and no product change is authorized. Tony handles Git with the Architect's commands. When the full SHA arrives: read-only comparison + receipt only; matching inputs need no new test campaign.
+## ▶ Resume here (updated 2026-10-30 11:23, Asia/Dhaka)
+- **Status:**
+  - Gate Q **PASS** (JARVIS / QA Lead) for the frozen snapshot (manifest `f7181d3c…e9ab`).
+  - **Bound** to commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8` (parent `d6fe678`): read-only check matched; receipt at module `QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`.
+  - Documentation closeout complete.
+  - Push/merge Director-owned. Deploy/Gate D **NOT DONE**.
+- **Waiting on:** Tony commits the receipt and pointer updates (documentation-only), then pushes `qa/ffm-abm-001-subscription-portal`. Commands are in the latest response file.
+- **If asked to verify the documentation commit:**
+  1. Run `git diff --name-only f272617 <DOC_SHA>`; every path must be under `agent_docs/` or be a root `*.md`.
+  2. Run the helper on `<DOC_SHA>` and expect `match: true`.
+  Read-only; no new test campaign.
+- **Preserved:** R5-O03 accepted nonblocking (strict assertion FAILED, not repaired); C08 out of scope; Tony's manual acceptance (Director-reported); Coach confirmations pending; the decision's limitations.
+- **Deferred (JARVIS, 30 Oct):** do NOT remove `setActivationPlan` / `ACTIVATION_PLANS`. No product change is authorized.
+- **Never touch:** servers on :3000 and :3457; Cody's `/tmp/cody-r6-*`; `.env*.local`. No Git by me.
 
+Last action (2026-10-30 11:23): **Commit binding recorded.** Tony's commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8` verified read-only: helper exit 0, match true, 0 mismatched/missing, 0 additional inputs; committed set = reviewed 1,441-path list; nothing outside the filter that can reach the build changed. The Gate Q PASS snapshot is bound to it. Pointers updated. No product change; no test campaign.
+Pending: Tony's documentation commit (receipt + pointers) and push. Deployment/Gate D NOT DONE.
 
 Last action (2026-10-30 10:59): **Documentation closeout** after **Gate Q PASS** (JARVIS / QA Lead) for the frozen snapshot: base `d6fe678` + uncommitted repairs through REPAIR_006, manifest `f7181d3c…e9ab`, plan `9017fa6d…4987`. R5-O03 retained as nonblocking (strict assertion FAILED, not repaired).
   Decision installed unchanged at module `QAM/HANDOFFS/CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md`; records reconciled; pre-commit comparison 168/168 match, 0 extra inputs. Report: module `EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md`.

@@ -89,3 +89,7 @@ Both addenda verified against d6fe678; no further product work. Tony reports com
 - Pre-commit check (the helper's own logic applied to the working tree): 168/168 manifest rows match; 0 additional inputs. Six tracked non-doc paths outside the helper's filename filter (`.env.example`, `_SKILLS/…`, `scripts/install-gcloud.sh`, `supabase/*.sql`) are unchanged from HEAD and not part of the Next build.
 - QAM records were updated by Engineering only because the decision directs Engineering to reconcile them; every addition is dated and attributed to JARVIS, and Cody's entries are untouched.
 - Content scan of all 1,430 pending files and 1,785 ZIP members: no secret patterns and no literal env values; the only pattern hits are `password` type/annotation lines in Cody's QA helpers that read credentials from the QA env file at test time.
+
+### 30 Oct 2026 — Commit binding (Claudy)
+- Tony's commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8` (parent `d6fe678`) reproduces the helper result independently: exit 0, match true, no mismatches or extra inputs. The committed path set is exactly the reviewed 1,441-path list.
+- Outside the helper's filter, every changed code-like file is under `agent_docs/`, which `tsconfig` excludes; Jest and Playwright are rooted elsewhere and `.dockerignore` drops it. That was worth checking: in REPAIR_004, QA probe `.ts` files placed inside the app root broke `next build`'s type check.

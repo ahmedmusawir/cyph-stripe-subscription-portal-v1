@@ -67,3 +67,6 @@ Base d6fe67839961fcbbf801b0bb04d3a2522e7b1f36; manifest f7181d3c7c537e27ebc43403
 - **Documentation closeout:** completed 30 Oct 2026 by Engineering under the decision (`../EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md`).
 - **Commit binding:** PENDING (`HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`). Push/merge/integration: Director-owned. Deployment/Gate D: NOT DONE.
 - **Retained:** inactive frozen copy `/tmp/cody-r6-snapshot` (and `/tmp/cody-r6-*` outputs), excluded from export; not deleted in closeout.
+
+## Current (30 Oct 2026, 11:23): commit binding recorded
+Gate Q PASS (JARVIS) for the accepted snapshot is now bound to commit `f27261734fd0a3ac96253aa6c55e3b9e911125a8` (`QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`, verified read-only 30 Oct 2026). The helper reported match: true, 0 mismatched/missing, 0 additional inputs. The committed path inventory equals the reviewed list, and nothing outside the build filter that can reach the build changed. No new test campaign. R5-O03 remains accepted nonblocking (strict assertion FAILED); C08 out of scope. Push/integration: Director-owned. Deployment/Gate D: NOT DONE. The "Commit binding: PENDING" line in the entry above is superseded.

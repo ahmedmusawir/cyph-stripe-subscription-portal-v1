@@ -1,10 +1,10 @@
 # Start here — FFM-ABM-001-SUBSCRIPTION-PORTAL (current: 30 Oct 2026)
 
-**Gate Q: PASS for the exact tested snapshot (JARVIS / QA Lead), with nonblocking R5-O03 retained.** Commit binding: PENDING. Push/integration: Director-owned. Deployment/Gate D: NOT DONE.
+**Gate Q: PASS for the exact tested snapshot (JARVIS / QA Lead), with nonblocking R5-O03 retained.** Commit binding: **BOUND** to `f27261734fd0a3ac96253aa6c55e3b9e911125a8`. Push/integration: Director-owned. Deployment/Gate D: NOT DONE.
 1. Decision (governs): `HANDOFFS/CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md`
 2. Certification transcription: `QAM_CERTIFICATION.md`
 3. Documentation closeout and Director commit instructions: `../EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md`
-4. Commit binding receipt (PENDING until Tony commits and the helper matches): `HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`
+4. Commit binding receipt (BOUND, 30 Oct 2026): `HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`
 5. Reviewed results: `HANDOFFS/FFM-ABM-001-SUBSCRIPTION-PORTAL_REPAIR_006_RETEST_001_REVIEW.zip`
 
 ---

@@ -2,6 +2,8 @@
 
 30 October 2026 (Asia/Dhaka) · performed by Claudy (Engineer) under JARVIS / QA Lead's Gate Q decision · no product change, no Git mutation.
 
+> **Status update (30 Oct 2026, 11:23):** commit binding is now **BOUND** to `f27261734fd0a3ac96253aa6c55e3b9e911125a8`; see `QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md`. The PENDING entries below are as of closeout.
+
 ## 1. Final status
 | Checkpoint | Status |
 |---|---|

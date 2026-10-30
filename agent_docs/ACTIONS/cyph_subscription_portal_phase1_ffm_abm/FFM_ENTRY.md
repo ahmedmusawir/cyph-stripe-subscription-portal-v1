@@ -10,7 +10,7 @@ Version 1.0 · 27 October 2026 · Asia/Dhaka
 6. `_extraction/README.md` and the current recon/cleanup; refresh only changed facts during E1.
 
 ## Dispatch
-- Current (30 Oct 2026): Gate Q PASS for the frozen snapshot (JARVIS); documentation closeout complete; commit binding pending. No engineering work is open; read `STATE.md` first. Product changes now require new authorization and impact adjudication.
+- Current (30 Oct 2026): Gate Q PASS for the frozen snapshot (JARVIS); documentation closeout complete; commit binding bound to `f272617`. No engineering work is open; read `STATE.md` first. Product changes now require new authorization and impact adjudication.
 - Initial state: E1, planning. Verify repo/branch/HEAD/dirty paths, foundation ancestry, actual package versions, existing primitives, auth gate, available tests and ignored credentials. Write one complete `EXECUTION_PLAN.md`, facts in `EVIDENCE/E1_RECON.md`, update STATE and return the plan. Stop for Architect review/Director approval before product changes.
 - E2: read the recorded plan approval, acquire the sole engineering writer slot, implement all accepted scope, verify, fix in-scope failures and finish the factual handoff without routine milestone stops.
 - Resumption: compare actual tree/HEAD to STATE. Resume the last unfinished action; do not restart approved planning, cleanup or completed QA.

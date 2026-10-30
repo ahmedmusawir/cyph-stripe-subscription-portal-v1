@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-10-30 05:23 UTC — [CC] Claude Code
+- **Updated:**
+  - `…/QAM/HANDOFFS/COMMIT_BINDING_RECEIPT_001.md` (BOUND to `f27261734fd0a3ac96253aa6c55e3b9e911125a8`: helper output, committed path inventory, identities)
+  - status pointers in `…/QAM/QAM_CERTIFICATION.md`, `QAM_STATE.md`, `REVIEW_START_HERE.md`, `HANDOFFS/ENGINEERING_HANDOFF.md`
+  - `…/STATE.md`, `…/ACCEPTANCE_LEDGER.md`, `…/README.md`, `…/FFM_ENTRY.md`, `…/EVIDENCE/DOCUMENTATION_CLOSEOUT_001.md` (status note), `…/JOURNAL.md`
+  - root: `agent_docs/PROJECT_POINTER.md`, `RECOVERY.md`, session file
+- **Reason:** read-only post-commit binding verification of Tony's closeout commit; no product change.
+
 ## 2026-10-30 04:59 UTC — [CC] Claude Code
 - **Added:**
   - `…/QAM/HANDOFFS/CYPH_SUBSCRIPTION_PORTAL_GATE_Q_DECISION_2026-10-30.md` (JARVIS Gate Q decision, installed unchanged)

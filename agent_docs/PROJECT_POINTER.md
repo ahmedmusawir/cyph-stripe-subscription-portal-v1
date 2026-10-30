@@ -4,7 +4,7 @@
 **Module root:** `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/` (Director correction: ACTIONS, not CURRENT_APP; module RULINGS R-007)
 **Installed:** 27 Oct 2026 during E1 by Claudy · foundation `1d15918dc20d80476d6a3cb017b10179f3ddf783`
 
-**Current status (30 Oct 2026):** Gate Q PASS for the exact tested snapshot (JARVIS / QA Lead); documentation closeout complete; commit binding PENDING; deployment/Gate D NOT DONE. See the module's `STATE.md` and `QAM/REVIEW_START_HERE.md`.
+**Current status (30 Oct 2026):** Gate Q PASS for the exact tested snapshot (JARVIS / QA Lead); documentation closeout complete; commit binding BOUND to `f272617`; deployment/Gate D NOT DONE. See the module's `STATE.md` and `QAM/REVIEW_START_HERE.md`.
 
 ## Routing
 - **Engineering (Claudy):** read `agent_docs/ACTIONS/cyph_subscription_portal_phase1_ffm_abm/CLAUDE.md`, then `FFM_ENTRY.md` in the same folder. Current state is in that folder's `STATE.md`.
