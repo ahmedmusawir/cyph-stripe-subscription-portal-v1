@@ -1,0 +1,58 @@
+# ==================================================================
+# STARK FACTORY — next-deploy-auto config
+# File name: stark-deploy.yaml   Location: project root (next to package.json)
+#
+# The agent guides you through this ONCE per app. The agent reads it, verifies it against your code
+# and your GCP project, shows you a summary, waits for your APPROVED, then runs.
+#
+# RULES
+#  - Secret NAMES only. Never put a secret VALUE in this file. It is committed to git.
+#  - Public values (NEXT_PUBLIC_*) go here verbatim — they ship to the browser anyway.
+#  - Anything marked REQUIRED with no value = the agent explains and asks, then saves confirmed changes. It never guesses.
+# ==================================================================
+
+version: 1
+
+app:
+  name: ""                      # REQUIRED. lowercase-hyphenated. Prefix for every resource name.
+  display_name: ""              # Human label used in script banners. Optional.
+
+gcp:
+  project_id: ""                # REQUIRED. Must already exist with billing, APIs, Artifact Registry (Path B).
+  region: "us-east1"            # Cloud Run + Cloud Build + Artifact Registry region.
+  expected_account: ""          # Optional. Your gcloud login email. Preflight fails if the active account differs.
+  service_name: ""              # Optional. Default: "{app.name}-prod"  (matches existing services in staging).
+
+urls:
+  custom_domain: ""             # e.g. "payment-portal.cyberizedev.com". Leave "" if none yet.
+                                #   Known  -> NEXT_PUBLIC_APP_URL is baked to https://{custom_domain}; one deploy. Two-Deploy waived.
+                                #   Unknown -> placeholder first deploy, then a second deploy with the run.app URL.
+  backend_url: ""               # Optional. If set, NEXT_PUBLIC_BACKEND_URL is baked with this value.
+
+access:
+  invoker: ""                   # REQUIRED. "public" or "private". No default on purpose.
+                                #   public  -> --allow-unauthenticated + allUsers gets roles/run.invoker
+                                #   private -> --no-allow-unauthenticated; nobody can call it until you grant invoker
+
+secrets:
+  mode: "helper"                # "helper": agent writes upload-secrets.sh, YOU run it; it reads env_file and uploads.
+                                # "manual": agent hands you one gcloud command per secret instead (v3.1 style).
+  env_file: ".env.local"        # Only the helper reads this, in YOUR terminal. The agent never opens it.
+  items: []
+  # One entry per secret the code reads. Example:
+  # - env: STRIPE_SECRET_KEY                    # exact name the code reads (process.env.X)
+  #   secret: ""                                # Secret Manager name. Default: "{app.name}-{env lowercased, _ -> -}"
+  #   scope: runtime                            # build | runtime | both  (build = read during `next build`)
+
+public_vars: []
+  # One entry per NEXT_PUBLIC_* var the code reads. VALUE REQUIRED.
+  # Do NOT list NEXT_PUBLIC_APP_URL or NEXT_PUBLIC_BACKEND_URL — they are derived from urls: above.
+  # - env: NEXT_PUBLIC_SUPABASE_URL
+  #   value: "https://xxxx.supabase.co"
+
+runtime:
+  memory: "1Gi"
+  max_instances: 1
+  min_instances: 0
+  dynamic_env_access: "auto"    # auto | true | false. If the code reads process.env[key] dynamically,
+                                # all public vars must also ride --set-env-vars. "auto" = agent greps and decides.

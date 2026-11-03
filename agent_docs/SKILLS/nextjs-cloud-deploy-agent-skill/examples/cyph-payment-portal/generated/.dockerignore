@@ -1,0 +1,16 @@
+.env*
+node_modules
+.next
+.git
+.gitignore
+Dockerfile
+.dockerignore
+cloudbuild.yaml
+deploy.sh
+init-app.sh
+upload-secrets.sh
+stark-deploy.yaml
+DEPLOYMENT_CHECKLIST.md
+agent_docs
+_SKILLS
+README.md

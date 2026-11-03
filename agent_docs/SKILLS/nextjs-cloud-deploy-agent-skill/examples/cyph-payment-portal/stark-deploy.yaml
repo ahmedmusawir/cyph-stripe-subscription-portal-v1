@@ -1,0 +1,54 @@
+# stark-deploy.yaml — CyPh Payment Portal v1 (EXAMPLE)
+# Target project confirmed from console 2026-10-30: cyberize-nextjs-staging (524380376459),
+# two prior services (cyber-pharma-prod, cyph-mission-ctrl-prod), base domain already verified.
+#
+# ILLUSTRATIVE: the env var set below is a typical Stripe + Supabase SaaS shape. The agent's
+# Phase 1 reverse check (what the code actually reads) is what makes it real. Fix this file
+# to match the code, never the other way round. Secret NAMES only — never values.
+
+version: 1
+
+app:
+  name: cyph-payment-portal
+  display_name: "CyPh Payment Portal v1"
+
+gcp:
+  project_id: cyberize-nextjs-staging
+  region: us-east1
+  expected_account: moose@cyberizegroup.com
+  service_name: ""              # -> cyph-payment-portal-prod
+
+urls:
+  custom_domain: payment-portal.cyberizedev.com   # baked -> one deploy, Two-Deploy waived
+  backend_url: ""
+
+access:
+  invoker: public               # a payment portal customers reach -> public; Stripe webhooks need it too
+
+secrets:
+  mode: helper
+  env_file: .env.local
+  items:
+    - env: STRIPE_SECRET_KEY
+      secret: ""                # -> cyph-payment-portal-stripe-secret-key
+      scope: runtime
+    - env: STRIPE_WEBHOOK_SECRET
+      secret: ""
+      scope: runtime
+    - env: SUPABASE_SECRET_KEY
+      secret: ""
+      scope: runtime
+
+public_vars:
+  - env: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    value: "pk_test_REPLACE_WITH_REAL_PUBLISHABLE_KEY"
+  - env: NEXT_PUBLIC_SUPABASE_URL
+    value: "https://REPLACE.supabase.co"
+  - env: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    value: "sb_publishable_REPLACE"
+
+runtime:
+  memory: 1Gi
+  max_instances: 1
+  min_instances: 0
+  dynamic_env_access: auto
